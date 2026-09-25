@@ -143,7 +143,6 @@ const section = (key, t) => [rule, `# ${t}`, rule, `[${key}]`].join("\n");
 
 const lines = [];
 lines.push(comment("Quantumult X 离线配置 —— 所有远程资源均指向本仓库 snapshot/ 快照"));
-lines.push(comment(`生成时间：${new Date().toISOString()}`));
 lines.push(comment("用途：上游仓库失效时仍可使用。导入后仍需自行添加订阅链接并信任证书。"));
 lines.push(comment("重新生成：GitHub Actions → Snapshot（每周自动）或本地 `bun tools/fetch-snapshot.mjs`"));
 lines.push("");
@@ -237,8 +236,9 @@ lines.push("p12 = ");
 writeFileSync(join(SNAP, "loon2qx-offline.conf"), lines.join("\n") + "\n");
 
 // ---- machine-readable index -------------------------------------------------
+// No timestamp here on purpose: a volatile field would make every weekly run
+// commit a no-op diff. Use the git commit date as the authoritative "when".
 const index = {
-  generated_at: new Date().toISOString(),
   repository: repoInfo.slug,
   ref: repoInfo.ref,
   total: results.length,
