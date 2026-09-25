@@ -35,6 +35,11 @@ jobs:
       - name: Regenerate profile from manifest
         run: bun tools/build.mjs
 
+      # Converts upstream Loon/Surge rule lists into native QX rules committed
+      # in QuantumultX/rules/, so the profile no longer needs the runtime parser.
+      - name: Vendor Loon/Surge rule lists
+        run: bun tools/vendor-rules.mjs
+
       # Exits 0 even if some upstreams fail (recorded in snapshot/index.json);
       # the final step turns those into a failing run after the commit.
       - name: Mirror upstream resources

@@ -1,0 +1,7 @@
+# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
+# 来源（上游）: https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list
+# 转换说明: Loon/Surge 规则 → Quantumult X 分流格式
+# 规则数: 1
+# 重新生成: bun tools/vendor-rules.mjs
+
+geoip, CN, direct

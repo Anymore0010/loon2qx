@@ -94,6 +94,22 @@ Loon 的 `.lsr` 与 Quantumult X 的 `.list` 是同一套 `host-suffix, x, POLIC
 | QuickSearch.lpx | Loon 专属（Safari 搜索引擎切换），无对应概念 |
 | iRingo.WeatherKit.lpx | 该项目无 Quantumult X 版本 |
 
+## 已移除的分流规则
+
+用户明确不需要，已从 `tools/sources.json` 删除（连同其策略组 `大陆抖音` / `海外抖音`）：
+
+| 原条目 | 内容 |
+|---|---|
+| `Loon/rule/Douyin.list` | 抖音 IP 分流 |
+| `Loon/rule/RedBook.list` | 小红书 IP 分流 |
+| `Loon/rule/KuaiShou.list` | 快手 IP 分流 |
+
+## 规则预转换（不再依赖运行时解析器）
+
+见 README「规则已预转换为 Quantumult X 原生格式」。简言之：`opt-parser=true` 的 3 份文件
+（AI 分流合集、GeoIP_CN、AppleIntelligence）已由 `tools/vendor-rules.mjs` 预转换为
+`QuantumultX/rules/*.list`，理由是没有 fallback 且运行时丢弃规则不可见。
+
 ## 两处有意的语义变更
 
 融合 fmz200 配置时，有两处**行为与原 Loon 不同**，在此显式记录（不要当成遗漏）：

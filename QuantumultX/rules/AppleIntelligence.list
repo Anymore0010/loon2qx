@@ -1,0 +1,17 @@
+# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
+# 来源（上游）: https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list
+# 转换说明: Loon/Surge 规则 → Quantumult X 分流格式
+# 规则数: 11
+# 重新生成: bun tools/vendor-rules.mjs
+
+host-suffix, gateway.icloud.com, 全球手动策略
+host-suffix, apple-relay.apple.com, 全球手动策略
+host-suffix, apple-relay.fastly-edge.com, 全球手动策略
+host-suffix, apple-relay.cloudflare.com, 全球手动策略
+host-suffix, guzzoni.apple.com, 全球手动策略
+host-suffix, cp4.cloudflare.com, 全球手动策略
+host-suffix, gspe1-ssl.ls.apple.com, 全球手动策略
+host-suffix, smoot.apple.com, 全球手动策略
+host-suffix, apple-relay.akamaized.net, 全球手动策略
+host-suffix, apple-relay.mask.apple-dns.net, 全球手动策略
+host-suffix, api-siri-prod.apple.com, 全球手动策略

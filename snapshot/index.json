@@ -1,19 +1,10 @@
 {
   "repository": "Anymore0010/loon2qx",
   "ref": "master",
-  "total": 59,
-  "mirrored": 59,
+  "total": 53,
+  "mirrored": 53,
   "failed": 0,
   "resources": [
-    {
-      "id": "filter-apple-ai",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
-      "snapshot": "snapshot/github.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
-      "upstream_raw": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
-      "status": 200,
-      "error": null
-    },
     {
       "id": "filter-telegram",
       "kind": "filter",
@@ -47,15 +38,6 @@
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
       "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
       "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-ai-fmz",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Loon/rule/AI.list",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list",
       "status": 200,
       "error": null
     },
@@ -177,33 +159,6 @@
       "error": null
     },
     {
-      "id": "filter-douyin",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-redbook",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/RedBook.list",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Loon/rule/RedBook.list",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/RedBook.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-kuaishou",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/KuaiShou.list",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Loon/rule/KuaiShou.list",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/KuaiShou.list",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "filter-talkatone",
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
@@ -236,15 +191,6 @@
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-geoip-cn",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
       "status": 200,
       "error": null
     },

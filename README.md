@@ -100,6 +100,32 @@ bun tools/fetch-snapshot.mjs # 刷新快照 + 离线配置
 
 在线配置用上游最新资源（更新快），离线配置用仓库内快照（不怕上游失效）。两者都由同一个 `sources.json` 生成，不会互相漂移。
 
+## 规则已预转换为 Quantumult X 原生格式
+
+原本有 3 份规则依赖 QX 的**运行时资源解析器**（`opt-parser=true`，即 Loon 格式文件在手机上现转）。
+现已改为**在本仓库内预先转换**，存于 `QuantumultX/rules/`：
+
+| 上游（Loon 格式） | 本仓库（QX 原生） | 规则数 |
+|---|---|---|
+| ddgksf2013 `AppleIntelligence.list` | `rules/AppleIntelligence.list` | 11 |
+| fmz200 `Loon/rule/AI.list` | `rules/AI.list` | 64 |
+| fmz200 `Loon/rule/GeoIP_CN.list` | `rules/GeoIP_CN.list` | 1 |
+
+**为什么预转换，而不是让手机现转：**
+
+1. QX 的远程资源**没有 fallback**——文件 404 或解析器脚本一改，规则就在设备上**静默消失**；
+2. 运行时解析器转换不了的规则会被丢弃，而且**只在 iOS 上弹一条通知**，很容易漏掉。
+   实测 fmz 的 `AI.list` 里有 2 条 `AND` 规则就是这样丢的；
+3. 预转换的结果可以**在 git 里审查**，改动、丢弃都留痕。
+
+丢弃的规则记录在 `QuantumultX/rules/CONVERSION.md`（QX 分流不支持 `AND`/`OR`/`NOT` 组合规则，
+官方 sample.conf 中也不存在这些类型；拆开写会放宽匹配条件，故选择丢弃）。
+
+重新生成：`bun tools/vendor-rules.mjs`（每周 workflow 也会跑）。
+
+> 其余 `filter_remote` 条目用的是 blackmatrix7 / fmz200 的**原生 Quantumult X 规则库**，
+> 本来就不需要解析器，保持上游链接以便自动更新。
+
 ## 融合了 fmz200 日常配置
 
 本配置不止是 Loon 的单向转换，还融合了 [`fmz200/wool_scripts`](https://github.com/fmz200/wool_scripts)

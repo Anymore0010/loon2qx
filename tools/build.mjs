@@ -17,6 +17,17 @@ const OUT = join(ROOT, "QuantumultX", "default.conf");
 
 const src = JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8"));
 
+// Vendored filters live in this repo, not upstream. They are referenced by an
+// absolute URL so Quantumult X can fetch them; the base is resolved from CI env
+// vars or the git remote (never hard-coded).
+const { resolveRepoBase } = await import("./repo-url.mjs");
+const repoBase = resolveRepoBase(ROOT).rawBase;
+
+/** Absolute URL for a filter entry (upstream or vendored-local). */
+function filterUrl(f) {
+  return f.local_file ? `${repoBase}/${f.local_file}` : f.url;
+}
+
 /** Quantumult X comment marker. `#` is only valid as the first character. */
 const comment = (text) => `# ${text}`;
 
@@ -131,7 +142,7 @@ function buildFilterRemote(filters) {
   lines.push(comment("顺序即优先级：CN REGION 必须保持在最后。"));
   lines.push("");
   for (const f of filters) {
-    const parts = [f.url, `tag=${f.tag}`];
+    const parts = [filterUrl(f), `tag=${f.tag}`];
     // 规则自带策略的资源（如分流修正）不设 force-policy，否则会覆盖其原有策略。
     if (f.policy) parts.push(`force-policy=${f.policy}`);
     parts.push("update-interval=86400", `opt-parser=${f.parser}`, `enabled=${f.enabled}`);

@@ -1,0 +1,70 @@
+# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
+# 来源（上游）: https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list
+# 转换说明: Loon/Surge 规则 → Quantumult X 分流格式
+# 规则数: 64  已丢弃: 2（见 rules/CONVERSION.md）
+# 重新生成: bun tools/vendor-rules.mjs
+
+host, chatgpt.livekit.cloud, 人工智能
+host, host.livekit.cloud, 人工智能
+host-suffix, turn.livekit.cloud, 人工智能
+host, openai.com.cdn.cloudflare.net, 人工智能
+host, openaiapi-site.azureedge.net, 人工智能
+host, openaicomproductionae4b.blob.core.windows.net, 人工智能
+host, production-openaicom-storage.azureedge.net, 人工智能
+host-suffix, chat.com, 人工智能
+host-suffix, chatgpt.com, 人工智能
+host-suffix, oaistatic.com, 人工智能
+host-suffix, oaiusercontent.com, 人工智能
+host-suffix, openai.com, 人工智能
+host-suffix, sora.com, 人工智能
+host-suffix, apple-relay.apple.com, 人工智能
+host-suffix, apple-relay.fastly-edge.com, 人工智能
+host-suffix, apple-relay.cloudflare.com, 人工智能
+host-suffix, apple-relay.akamaized.net, 人工智能
+host-suffix, gateway.icloud.com, 人工智能
+host-suffix, guzzoni.apple.com, 人工智能
+host-suffix, cp4.cloudflare.com, 人工智能
+host-suffix, gspe1-ssl.ls.apple.com, 人工智能
+host-suffix, apps.mzstatic.com, 人工智能
+host, api.githubcopilot.com, 人工智能
+host, copilot-proxy.githubusercontent.com, 人工智能
+host, copilot.microsoft.com, 人工智能
+host, sydney.bing.com, 人工智能
+host-suffix, githubcopilot.com, 人工智能
+host, ai.google.dev, 人工智能
+host, aida.googleapis.com, 人工智能
+host, aistudio.google.com, 人工智能
+host, alkalicore-pa.clients6.google.com, 人工智能
+host, alkalimakersuite-pa.clients6.google.com, 人工智能
+host, bard.google.com, 人工智能
+host, deepmind.com, 人工智能
+host, deepmind.google, 人工智能
+host, geller-pa.googleapis.com, 人工智能
+host, gemini.google.com, 人工智能
+host, generativeai.google, 人工智能
+host, generativelanguage.googleapis.com, 人工智能
+host, makersuite.google.com, 人工智能
+host, proactivebackend-pa.googleapis.com, 人工智能
+host-suffix, anthropic.com, 人工智能
+host-suffix, claude.ai, 人工智能
+host-suffix, claude.com, 人工智能
+host-suffix, clau.de, 人工智能
+host-suffix, claudeusercontent.com, 人工智能
+ip-cidr, 160.79.104.0/23, no-resolve, 人工智能
+ip6-cidr, 2607:6bc0::/48, no-resolve, 人工智能
+host-suffix, grazie.ai, 人工智能
+host-suffix, grazie.aws.intellij.net, 人工智能
+host-suffix, jetbrains.ai, 人工智能
+host, imagine.meta.com, 人工智能
+host-suffix, meta.ai, 人工智能
+host-suffix, pplx.ai, 人工智能
+host-suffix, perplexity.ai, 人工智能
+host-suffix, perplexity.com, 人工智能
+host, chat.mistral.ai, 人工智能
+host, console.mistral.ai, 人工智能
+host-suffix, mistral.ai, 人工智能
+host, api.x.ai, 人工智能
+host-suffix, x.ai, 人工智能
+host-suffix, grok.com, 人工智能
+host, trae-api-sg.mchost.guru, 人工智能
+host-suffix, trae.ai, 人工智能

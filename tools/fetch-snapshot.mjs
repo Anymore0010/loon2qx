@@ -46,6 +46,7 @@ function collectResources() {
   };
 
   for (const f of src.filters) {
+    if (f.local_file) continue; // vendored into this repo, nothing external to mirror
     if (f.url.startsWith("FILTER_")) continue; // built-in, cannot be mirrored
     add(f.id, f.url, "filter");
   }
@@ -195,7 +196,9 @@ lines.push("");
 
 lines.push(section("filter_remote", "远程分流"));
 for (const f of src.filters) {
-  const parts = [snapUrl(f.url), `tag=${f.tag}`];
+  // Vendored filters are already in this repo; point at them directly.
+  const u = f.local_file ? `${rawBase}/${f.local_file}` : snapUrl(f.url);
+  const parts = [u, `tag=${f.tag}`];
   if (f.policy) parts.push(`force-policy=${f.policy}`);
   parts.push("update-interval=-1", `opt-parser=${f.parser}`, `enabled=${f.enabled}`);
   lines.push(parts.join(", "));

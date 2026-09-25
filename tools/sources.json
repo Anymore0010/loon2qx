@@ -2,7 +2,6 @@
   "_comment": "Single source of truth for every external resource used by the Quantumult X profile. tools/build.mjs generates QuantumultX/default.conf from this file; tools/fetch-snapshot.mjs mirrors every url into snapshot/ and generates the offline profile. Do not edit the generated .conf files by hand.",
   "_origin": "起点是 loon_config/ 里的 Loon 配置（见 MAPPING.md 的逐插件映射），并融合了 fmz200/wool_scripts 的日常配置（QuantumultX/config/QuanX.conf）。",
   "_merge_note": "fmz 的 rewrite.snippet 是聚合型资源，实测覆盖了原先按 App 拆分的 19/20 个片段（同 URL、同动作）。同时保留两者会让同一个响应体被两个脚本重复处理，因此改为只引用聚合资源，仅保留聚合未覆盖的（微博、高德、B站、京东比价）。",
-
   "general": {
     "profile_img_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/QuantumultX.png",
     "resource_parser_url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
@@ -15,7 +14,6 @@
     "fallback_udp_policy": "direct",
     "udp_drop_list": "443"
   },
-
   "dns": {
     "_comment": "来自 Loon [General] doh-server。ip-mode=dual 表示保留 IPv6，因此刻意不写 no-ipv6。",
     "doh_server": [
@@ -24,7 +22,6 @@
       "https://dns.google/dns-query"
     ]
   },
-
   "policies": {
     "_comment": "regions + selects 来自 Loon（[Remote Filter] 正则 + [Proxy Group]）。groups 是 fmz 配置里的策略组，供融合进来的 fmz 分流规则使用。",
     "regions": [
@@ -70,25 +67,72 @@
       }
     ],
     "selects": [
-      { "name": "全球手动策略", "region": "全球节点" },
-      { "name": "香港手动策略", "region": "香港节点" },
-      { "name": "新国手动策略", "region": "新国节点" },
-      { "name": "日本手动策略", "region": "日本节点" },
-      { "name": "韩国手动策略", "region": "韩国节点" },
-      { "name": "美国手动策略", "region": "美国节点" },
-      { "name": "游戏手动策略", "region": "游戏节点" },
-      { "name": "台湾手动策略", "region": "台湾节点" }
+      {
+        "name": "全球手动策略",
+        "region": "全球节点"
+      },
+      {
+        "name": "香港手动策略",
+        "region": "香港节点"
+      },
+      {
+        "name": "新国手动策略",
+        "region": "新国节点"
+      },
+      {
+        "name": "日本手动策略",
+        "region": "日本节点"
+      },
+      {
+        "name": "韩国手动策略",
+        "region": "韩国节点"
+      },
+      {
+        "name": "美国手动策略",
+        "region": "美国节点"
+      },
+      {
+        "name": "游戏手动策略",
+        "region": "游戏节点"
+      },
+      {
+        "name": "台湾手动策略",
+        "region": "台湾节点"
+      }
     ],
     "groups": [
-      { "name": "人工智能", "region": "美国节点", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png" },
-      { "name": "大陆抖音", "region": "direct", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png" },
-      { "name": "海外抖音", "region": "全球节点", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png" },
-      { "name": "谷歌服务", "region": "新国节点", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/SG.png" },
-      { "name": "电报消息", "region": "全球节点", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png" },
-      { "name": "苹果服务", "region": "direct", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Apple.png" }
+      {
+        "name": "人工智能",
+        "region": "美国节点",
+        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png"
+      },
+      {
+        "name": "大陆抖音",
+        "region": "direct",
+        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png"
+      },
+      {
+        "name": "海外抖音",
+        "region": "全球节点",
+        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png"
+      },
+      {
+        "name": "谷歌服务",
+        "region": "新国节点",
+        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/SG.png"
+      },
+      {
+        "name": "电报消息",
+        "region": "全球节点",
+        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png"
+      },
+      {
+        "name": "苹果服务",
+        "region": "direct",
+        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Apple.png"
+      }
     ]
   },
-
   "filters": [
     {
       "id": "filter-lan",
@@ -101,12 +145,16 @@
     },
     {
       "id": "filter-apple-ai",
-      "url": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
       "tag": "Apple AI",
       "policy": "全球手动策略",
-      "parser": true,
+      "parser": false,
       "enabled": true,
-      "note": "来自 Loon [Remote Rule] 的 AppleIntelligence.list。"
+      "note": "来自 Loon [Remote Rule] 的 AppleIntelligence.list。 已预转换为 Quantumult X 原生规则存于仓库（不再依赖运行时解析器）。",
+      "vendor": true,
+      "vendored_as": "AppleIntelligence.list",
+      "_local": true,
+      "local_file": "rules/AppleIntelligence.list",
+      "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list"
     },
     {
       "id": "filter-telegram",
@@ -142,12 +190,16 @@
     },
     {
       "id": "filter-ai-fmz",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list",
       "tag": "AI 分流合集",
       "policy": "人工智能",
-      "parser": true,
+      "parser": false,
       "enabled": true,
-      "note": "fmz 配置原有；Loon 格式规则，靠 resource_parser_url 转换。"
+      "note": "fmz 配置原有；Loon 格式规则，靠 resource_parser_url 转换。 已预转换为 Quantumult X 原生规则存于仓库（不再依赖运行时解析器）。",
+      "vendor": true,
+      "vendored_as": "AI.list",
+      "_local": true,
+      "local_file": "rules/AI.list",
+      "upstream_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list"
     },
     {
       "id": "filter-apple",
@@ -254,33 +306,6 @@
       "enabled": true
     },
     {
-      "id": "filter-douyin",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list",
-      "tag": "抖音IP",
-      "policy": "direct",
-      "parser": true,
-      "enabled": true,
-      "note": "fmz 配置原有（Loon 格式，需解析器）。"
-    },
-    {
-      "id": "filter-redbook",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/RedBook.list",
-      "tag": "小红书IP",
-      "policy": "direct",
-      "parser": true,
-      "enabled": true,
-      "note": "fmz 配置原有（Loon 格式，需解析器）。"
-    },
-    {
-      "id": "filter-kuaishou",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/KuaiShou.list",
-      "tag": "快手IP",
-      "policy": "direct",
-      "parser": true,
-      "enabled": true,
-      "note": "fmz 配置原有（Loon 格式，需解析器）。"
-    },
-    {
       "id": "filter-talkatone",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
       "tag": "Talkatone",
@@ -318,12 +343,16 @@
     },
     {
       "id": "filter-geoip-cn",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
       "tag": "GeoIP_CN",
       "policy": "direct",
-      "parser": true,
+      "parser": false,
       "enabled": true,
-      "note": "fmz 配置原有（Loon 格式，需解析器）。"
+      "note": "fmz 配置原有（Loon 格式，需解析器）。 已预转换为 Quantumult X 原生规则存于仓库（不再依赖运行时解析器）。",
+      "vendor": true,
+      "vendored_as": "GeoIP_CN.list",
+      "_local": true,
+      "local_file": "rules/GeoIP_CN.list",
+      "upstream_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list"
     },
     {
       "id": "filter-block-apple-update",
@@ -344,7 +373,6 @@
       "note": "Quantumult X 内置资源，等同 Loon 的 REGION_SPLITTER.lsr。必须保持在最后。"
     }
   ],
-
   "rewrites": [
     {
       "id": "rewrite-advertising",
@@ -432,7 +460,6 @@
       "note": "对应 Loon 的 Script-Hub.lpx；fmz 配置亦引用。"
     }
   ],
-
   "tasks": [
     {
       "id": "task-server-info",
@@ -484,7 +511,6 @@
       "enabled": true
     }
   ],
-
   "local_rules": {
     "_comment": "逐条移植自 Loon 的 [Rule] 段。Loon 的 DOMAIN/DOMAIN-SUFFIX/DOMAIN-KEYWORD 对应 Quantumult X 的 host/host-suffix/host-keyword，DIRECT 对应 direct。",
     "rules": [
