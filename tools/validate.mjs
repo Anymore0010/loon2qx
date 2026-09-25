@@ -108,6 +108,27 @@ function checkStrayComments(p) {
   }
 }
 
+/**
+ * [filter_remote] 的顺序有意义：谁先匹配谁决定去向。
+ * 两条硬约束（来自 Loon 原配置与用户 QX 配置）：
+ *   1. CN REGION 必须最后（Loon 注释明确「请勿修改远程 CN REGION 规则的排序」）；
+ *   2. 广告拦截应在最前（用户 QX 配置如此；实测 42 个域名与 App 分流冲突）。
+ */
+function checkFilterOrder(p) {
+  const order = (p.sections.get("filter_remote") ?? []).map((e) => e.line);
+  if (!order.length) return;
+  const tagOf = (l) => (l.match(/tag=([^,]+)/) ?? [])[1] ?? "";
+  const tags = order.map((l) => tagOf(l).includes("CN REGION") ? "CN" : (l.startsWith("FILTER_REGION") ? "CN" : tagOf(l)));
+  const cnIdx = tags.findIndex((t) => t === "CN");
+  if (cnIdx !== -1 && cnIdx !== tags.length - 1) {
+    err(p.path, 0, `CN REGION 不在 [filter_remote] 最后（第 ${cnIdx + 1}/${tags.length} 条）—— Loon 原配置要求它必须最后`);
+  }
+  const adsIdx = tags.findIndex((t) => t.includes("广告拦截") || t === "Advertising");
+  if (adsIdx > 2) {
+    warn(p.path, 0, `广告拦截在第 ${adsIdx + 1} 条，建议放最前（与你的 QX 配置一致）`);
+  }
+}
+
 /** policy= / force-policy= / final must name an existing policy. */
 function checkPolicyReferences(p) {
   const defined = new Set();
@@ -290,6 +311,31 @@ function checkRewriteDuplicates() {
   return dupes;
 }
 
+/**
+ * 本地重写资源若含脚本/jsonjq 规则，必须自带 hostname。
+ *
+ * 这是本项目踩过的坑：从插件提取的规则里大部分是脚本类与 jsonjq 类，
+ * 而 QX 依赖 rewrite_remote 资源自带的 hostname 才会把这些主机名并入 MITM。
+ * 缺了 hostname 行，规则**不报错、也不生效** —— 属于最难发现的一类失效。
+ */
+function checkRewriteHostnames() {
+  const dir = join(ROOT, "QuantumultX", "rules");
+  if (!existsSync(dir)) return 0;
+  let checked = 0;
+  for (const f of readdirSync(dir).filter((x) => x.endsWith(".snippet"))) {
+    const rel = `QuantumultX/rules/${f}`;
+    const lines = readFileSync(join(dir, f), "utf8").split(/\r?\n/);
+    const hasHostname = lines.some((l) => /^hostname\s*=/i.test(l.trim()));
+    // 只统计「需要 MITM 才能工作」的规则
+    const needsMitm = lines.filter((l) => /\surl\s+(script-|jsonjq-)/.test(l)).length;
+    if (needsMitm > 0 && !hasHostname) {
+      err(rel, 0, `含 ${needsMitm} 条 script/jsonjq 规则但缺少 hostname 行 —— 这些规则不会生效（且不报错）`);
+    }
+    if (needsMitm > 0) checked++;
+  }
+  return checked;
+}
+
 /** In the snapshot profile, every referenced snapshot file must exist. */
 function checkSnapshotFiles(p) {
   const seen = new Set();
@@ -324,6 +370,8 @@ const repoSlug = resolveRepoBase(ROOT).slug;
   if (vendored) console.log(`QuantumultX/rules  ${vendored.files} file(s), ${vendored.rules} rules`);
   const dupes = checkRewriteDuplicates();
   console.log(`重写去重检查  跨源重复脚本重写: ${dupes}`);
+  const hn = checkRewriteHostnames();
+  console.log(`MITM 主机名检查  含脚本规则且自带 hostname 的文件: ${hn}`);
 }
 const profiles = [ONLINE, OFFLINE].filter((p) => {
   if (!existsSync(p)) {
@@ -345,9 +393,13 @@ for (const path of profiles) {
   checkRemoteLines({ ...p, path: rel });
   checkTasks({ ...p, path: rel });
   checkNonEmpty({ ...p, path: rel });
+  checkFilterOrder({ ...p, path: rel });
 
+  // 段头必须全部存在 —— Quantumult X 会因为缺少某个模块而拒绝导入
+  // （真实踩过：[server_local] 缺失 -> 导入报「缺少模块 server_local」）。
+  // 段内可以为空，但段头不能少。
   const missing = REQUIRED_SECTIONS.filter((s) => !p.sections.has(s));
-  for (const s of missing) warn(rel, 0, `section [${s}] absent (allowed if unused)`);
+  for (const s of missing) err(rel, 0, `缺少段头 [${s}] —— Quantumult X 会因缺少该模块而无法导入`);
 
   let snapCount = 0;
   if (rel.includes("offline")) snapCount = checkSnapshotFiles({ ...p, path: rel });

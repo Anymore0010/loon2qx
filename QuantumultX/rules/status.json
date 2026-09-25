@@ -2,8 +2,17 @@
   "total": 3,
   "ok": 3,
   "failed": 0,
-  "rules": 76,
+  "rules": 79,
   "resources": [
+    {
+      "id": "filter-geoip-cn",
+      "upstream": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
+      "file": "QuantumultX/rules/GeoIP_CN.list",
+      "rules": 1,
+      "dropped": 0,
+      "adjusted": 0,
+      "error": null
+    },
     {
       "id": "filter-apple-ai",
       "upstream": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
@@ -14,19 +23,10 @@
       "error": null
     },
     {
-      "id": "filter-ai-fmz",
-      "upstream": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list",
+      "id": "merge-ai",
+      "upstream": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
       "file": "QuantumultX/rules/AI.list",
-      "rules": 64,
-      "dropped": 2,
-      "adjusted": 2,
-      "error": null
-    },
-    {
-      "id": "filter-geoip-cn",
-      "upstream": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
-      "file": "QuantumultX/rules/GeoIP_CN.list",
-      "rules": 1,
+      "rules": 67,
       "dropped": 0,
       "adjusted": 0,
       "error": null

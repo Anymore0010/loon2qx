@@ -153,9 +153,18 @@ async function autoBaseline() {
       files.push(join(ROOT, r.local_file));
       continue;
     }
-    const m = (r.url ?? "").match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
+    const u = r.url ?? "";
+    if (!u) continue;
+    const m = u.match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
     if (m) {
       const p = join(ROOT, "snapshot", "github.com", m[1]);
+      if (existsSync(p)) files.push(p);
+      continue;
+    }
+    // 非 raw 上游（如 github.com/.../releases/latest/download/...）：在 snapshot/host/ 下找副本
+    const m2 = u.match(/^https:\/\/([^/]+)\/(.+)$/);
+    if (m2) {
+      const p = join(ROOT, "snapshot", "host", m2[1], m2[2]);
       if (existsSync(p)) files.push(p);
     }
   }
@@ -216,6 +225,19 @@ let unique = converted.filter((l) => {
 });
 
 /**
+ * 插件 [MITM] 段里的 hostname 列表 —— 必须一并提取。
+ *
+ * Quantumult X 的 rewrite_remote 资源需要自带 hostname，QX 才会把主机名并入 MITM。
+ * 缺了它，下面的 script-* / jsonjq-* 规则**永远不会触发**，而且不报错
+ * （表现为「规则在，但不生效」）。
+ */
+const mitmHosts = section(text, "MITM")
+  .filter((l) => /^hostname\s*=/i.test(l))
+  .flatMap((l) => l.replace(/^hostname\s*=/i, "").split(","))
+  .map((x) => x.trim())
+  .filter(Boolean);
+
+/**
  * 与「已在配置里生效」的重写源去重。
  *
  * 为什么必须做：来源（wxs0625/loon-plugins）本身是 fmz 725 个插件 + kelee 33 个插件的
@@ -227,6 +249,10 @@ let unique = converted.filter((l) => {
 function ruleKey(line) {
   const [pat, tail] = line.split(/\s+url\s+/);
   const [action, ...rest] = tail.split(/\s+/);
+  // 脚本类动作：只比 (正则, 动作)，忽略脚本 URL。
+  // 否则同一接口被两个源用不同版本号固定（实测 WeatherKit v3.1.0 vs v3.3.2）时，
+  // 会被判定为「不同规则」而双双保留 —— 同一个响应体仍被处理两次。
+  if (/^script-/.test(action)) return `${pat}|${action}`;
   return `${pat}|${action}|${rest.join(" ").trim()}`;
 }
 
@@ -259,19 +285,23 @@ const removedAsDuplicate = beforeDedupe - unique.length;
 
 const header = [
   "# 由 tools/extract-plugin.mjs 自动生成 —— 请勿手工编辑",
-  `# 来源: ${input}`,
+  `# 来源: ${relative(ROOT, input) || input}`,
   `# 说明: 从 Loon 插件提取的 URL 级 rewrite（域名黑名单无法覆盖的部分）`,
   `# 提取: ${raw.length} 条 -> 转换 ${converted.length} 条 -> 自身去重 ${beforeDedupe} 条`,
   `# 与现有重写源重复已剔除: ${removedAsDuplicate} 条`,
   `# 最终: ${unique.length} 条`,
+  `# 并入的 MITM 主机名: ${mitmHosts.length} 个（缺了这些脚本规则不会生效）`,
   `# 未能转换: ${skipped.length} 条（QX 无对应动作，如 mock-response-body / map-local）`,
-  "# 重新生成: bun tools/extract-plugin.mjs <plugin-file>",
+  "# 重新生成: bun tools/extract-plugin.mjs --all   # 必须带 --all，它才会与已启用重写源去重",
   "",
 ];
 
 const dest = join(ROOT, outPath);
 mkdirSync(dirname(dest), { recursive: true });
-writeFileSync(dest, header.concat(unique).join("\n") + "\n");
+// hostname 放在最后，与其它 QX 重写资源（如 weibo.snippet）的写法一致。
+// 缺了它，上面的 script-* / jsonjq-* 规则永远不会触发（不报错，只是不生效）。
+const body = mitmHosts.length ? unique.concat(["", `hostname = ${mitmHosts.join(", ")}`]) : unique;
+writeFileSync(dest, header.concat(body).join("\n") + "\n");
 
 console.log(`提取 ${raw.length} 条 -> 转换 ${converted.length} -> 自身去重 ${beforeDedupe}`);
 if (removedAsDuplicate) console.log(`与现有重写源重复、已剔除 ${removedAsDuplicate} 条（否则会重复处理响应体）`);

@@ -129,6 +129,23 @@ function buildServerRemote() {
   return lines.join("\n");
 }
 
+/**
+ * [server_local] —— 本地节点。
+ *
+ * Quantumult X 要求这个段存在：缺失时导入会报「缺少模块 server_local」。
+ * 原 Loon 配置的 [Proxy] 段是空的（节点全部来自订阅），所以这里也是空段，
+ * 但必须显式输出段头。官方 sample.conf 的位置在 [server_remote] 之前。
+ */
+function buildServerLocal() {
+  const lines = [section("server_local", "本地节点")];
+  lines.push("");
+  lines.push(comment("原 Loon 配置的 [Proxy] 段为空（节点全部来自订阅），因此这里没有本地节点。"));
+  lines.push(comment("本段必须保留：Quantumult X 缺少 [server_local] 会报「缺少模块 server_local」而无法导入。"));
+  lines.push(comment("如需添加本地节点，按下面的写法（去掉注释符）："));
+  lines.push(comment("    shadowsocks=example.com:443, method=chacha20-ietf-poly1305, password=PWD, udp-relay=true, tag=Local-01"));
+  return lines.join("\n");
+}
+
 function buildFilterLocal(l) {
   const lines = [section("filter_local", "本地分流"), ""];
   lines.push(comment("Loon [Rule] 逐条对应：DOMAIN→host, DOMAIN-SUFFIX→host-suffix, DOMAIN-KEYWORD→host-keyword, DIRECT→direct。"));
@@ -234,6 +251,8 @@ const profile = [
   buildDns(src.dns),
   "",
   buildPolicy(src.policies),
+  "",
+  buildServerLocal(),
   "",
   buildServerRemote(),
   "",

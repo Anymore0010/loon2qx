@@ -29,10 +29,18 @@ const src = JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8")
 const OUT_DIR = join(ROOT, "QuantumultX", "rules");
 mkdirSync(OUT_DIR, { recursive: true });
 
+/**
+ * 合并组：把多个上游规则源合成一个本地文件（用同一个策略）。
+ *
+ * 用途：AI 相关的三条（fmz AI.list + bm7 OpenAI + bm7 Anthropic）本就是同一类分流，
+ * 合成一条便于维护，也避免同一域名被多条规则以不同策略重复命中。
+ */
+const mergeGroups = src.rule_merges ?? [];
+
 /** Filters flagged `vendor: true` are fetched, converted and committed locally. */
 const toVendor = src.filters.filter((f) => f.vendor);
 
-if (toVendor.length === 0) {
+if (toVendor.length === 0 && mergeGroups.length === 0) {
   console.log("No filters marked vendor:true — nothing to do.");
   process.exit(0);
 }
@@ -72,6 +80,48 @@ for (const f of toVendor) {
   writeFileSync(file, body);
   console.log(`${rules.length} rules${dropped.length ? `, ${dropped.length} dropped` : ""}${notes.length ? `, ${notes.length} adjusted` : ""} -> ${f.vendored_as}`);
   report.push({ id: f.id, url: f.upstream_url, ok: true, count: rules.length, dropped, notes, stats, file: f.vendored_as });
+}
+
+// ---- 合并组 ----------------------------------------------------------------
+for (const g of mergeGroups) {
+  process.stdout.write(`合并 ${g.id} … `);
+  const all = [];
+  const seenKeys = new Set();
+  let perSource = [];
+  for (const u of g.sources) {
+    try {
+      const res = await fetch(u, { headers: { "User-Agent": "proxy-profile-vendor/1.0" } });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const { rules } = convertRuleList(await res.text(), { policy: g.policy });
+      let added = 0;
+      for (const r of rules) {
+        if (seenKeys.has(r)) continue; // 跨来源去重（同一域名+同一策略）
+        seenKeys.add(r);
+        all.push(r);
+        added++;
+      }
+      perSource.push(`${u.split("/").slice(-2).join("/")}: ${added}`);
+    } catch (e) {
+      failures++;
+      console.log(`FAILED (${e.message})`);
+      report.push({ id: g.id, url: u, ok: false, error: e.message });
+    }
+  }
+  const header = [
+    "# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑",
+    `# 合并来源（${g.sources.length} 个）:`,
+    ...g.sources.map((u) => `#   ${u}`),
+    `# 统一策略: ${g.policy}`,
+    `# 规则数: ${all.length}（已跨来源去重）`,
+    ...perSource.map((x) => `#   各源贡献 ${x}`),
+    "# 重新生成: bun tools/vendor-rules.mjs",
+    "",
+  ];
+  const file = join(ROOT, "QuantumultX", "rules", g.out);
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, header.concat(all).join("\n") + "\n");
+  console.log(`${all.length} 条 -> ${g.out}`);
+  report.push({ id: g.id, url: g.sources.join(" + "), ok: true, count: all.length, dropped: [], notes: [], file: g.out });
 }
 
 // ---- conversion report -----------------------------------------------------

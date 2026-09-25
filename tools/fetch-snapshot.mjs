@@ -186,6 +186,10 @@ for (const g of src.policies.groups ?? []) {
 }
 lines.push("");
 
+lines.push(section("server_local", "本地节点"));
+lines.push(comment("必须保留：Quantumult X 缺少 [server_local] 会报「缺少模块 server_local」而无法导入。"));
+lines.push("");
+
 lines.push(section("server_remote", "节点订阅"));
 lines.push(comment("订阅链接属于个人敏感信息，需手动添加（风车 → 节点 → 添加订阅）。"));
 lines.push("");

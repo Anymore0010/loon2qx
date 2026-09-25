@@ -1,16 +1,34 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 50,
-  "mirrored": 50,
+  "total": 48,
+  "mirrored": 48,
   "failed": 0,
   "resources": [
     {
-      "id": "filter-telegram",
+      "id": "filter-ads-fmz",
       "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-advertising",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-fix",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
       "status": 200,
       "error": null
     },
@@ -24,20 +42,56 @@
       "error": null
     },
     {
-      "id": "filter-ai-openai",
+      "id": "filter-telegram",
       "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
       "status": 200,
       "error": null
     },
     {
-      "id": "filter-ai-anthropic",
+      "id": "filter-twitter",
       "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-google",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-spotify",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-github",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-talkatone",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
       "status": 200,
       "error": null
     },
@@ -69,15 +123,6 @@
       "error": null
     },
     {
-      "id": "filter-github",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "filter-netflix",
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list",
@@ -105,15 +150,6 @@
       "error": null
     },
     {
-      "id": "filter-twitter",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "filter-facebook",
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list",
@@ -132,65 +168,11 @@
       "error": null
     },
     {
-      "id": "filter-spotify",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-google",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "filter-onedrive",
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OneDrive/OneDrive.list",
       "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OneDrive/OneDrive.list",
       "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OneDrive/OneDrive.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-talkatone",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-ads-fmz",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-advertising",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-fix",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
       "status": 200,
       "error": null
     },

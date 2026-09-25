@@ -1,7 +1,13 @@
 # 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
-# 来源（上游）: https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list
-# 转换说明: Loon/Surge 规则 → Quantumult X 分流格式
-# 规则数: 64  已丢弃: 2（见 rules/CONVERSION.md）
+# 合并来源（3 个）:
+#   https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list
+# 统一策略: 人工智能
+# 规则数: 67（已跨来源去重）
+#   各源贡献 rule/AI.list: 64
+#   各源贡献 OpenAI/OpenAI.list: 3
+#   各源贡献 Anthropic/Anthropic.list: 0
 # 重新生成: bun tools/vendor-rules.mjs
 
 host, chatgpt.livekit.cloud, 人工智能
@@ -68,3 +74,6 @@ host-suffix, x.ai, 人工智能
 host-suffix, grok.com, 人工智能
 host, trae-api-sg.mchost.guru, 人工智能
 host-suffix, trae.ai, 人工智能
+ip-cidr, 24.199.123.28/32, OpenAI
+ip-cidr, 64.23.132.171/32, OpenAI
+ip-asn, 20473, OpenAI
