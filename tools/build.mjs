@@ -69,6 +69,10 @@ function buildDns(d) {
   const lines = [section("dns", "DNS"), ""];
   lines.push(comment("对应 Loon [General] doh-server。设置了 doh-server 后 non-encrypted server 会被忽略。"));
   lines.push(comment("Loon ip-mode = dual / ipv6-vif = auto，因此这里刻意不写 no-ipv6。"));
+  if (d.no_ipv6) {
+    lines.push(comment("禁用 IPv6（只走 A 记录）。对应你原 QX 配置的 no-ipv6。"));
+    lines.push("no-ipv6");
+  }
   lines.push(comment("官方要求多个 doh-server 写在同一行、以逗号分隔（并发查询）。"));
   lines.push(`doh-server=${d.doh_server.join(", ")}`);
   if (d.domain_servers?.length) {

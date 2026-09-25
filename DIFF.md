@@ -46,14 +46,37 @@
 | `no-ipv6` | ✅ 有（禁用 IPv6） | ❌ 没有（Loon 是 `ip-mode=dual`，保留 IPv6） |
 | 按域名指定 DNS | 22 条（路由管理页、dl.google.com 等） | ✅ 已补齐（见下） |
 
-**两处实质差异**：
+**三处实质差异**（前两处是**有意不同**，不是遗漏）：
 
-1. **IPv6**：你的 QX 禁用了 IPv6；本配置保留（因为 Loon 侧 `ip-path=dual`、`ipv6-vif=auto`）。
-   想跟 QX 一致，在 `[dns]` 加一行 `no-ipv6`。
-2. **按域名指定 DNS**：这是 22 条路由管理页（`router.asus.com`、`tplogin.cn`、`miwifi.com`…）
-   和 Google 下载域名的解析规则。官方文档说明 `doh-server` 只忽略**未绑定域名**的普通
-   `server=`，**绑定了域名的仍然生效**——所以这 22 条必须保留，否则你在外网 DNS 下
-   **打不开路由器管理后台**。已从你的配置补进本配置。
+### 1. `no-ipv6`：有意保留差异
+
+| | 你的 QX | 本配置 |
+|---|---|---|
+| `no-ipv6` | 有（禁用 IPv6，只走 A 记录） | **无**（保留 IPv6） |
+
+**判断依据**：Loon 侧是 `ip-mode = dual` + `ipv6-vif = auto`，也就是**明确要双栈**。
+你的 QX 用了 fmz 的 `no-ipv6`，两者语义相反。我选择跟 Loon（转换的起点）一致。
+
+**取舍**：保留 IPv6 的好处是能走 IPv6-only 的线路、部分 CDN 更快；代价是偶尔遇到
+IPv6 质量差的网络会变慢。若你更认同 fmz 的取向，改 `tools/sources.json` 的 `dns` 加
+`"no_ipv6": true` 重新生成即可。
+
+### 2. 按域名指定 DNS：已补齐（原本是缺陷，不是差异）
+
+22 条路由管理页（`router.asus.com`、`tplogin.cn`、`miwifi.com`、`melogin.cn`…）与
+Google 下载域名（`dl.google.com`、`update.googleapis.com`、`*.dl.playstation.net`）的解析规则。
+
+官方 sample.conf 原文：*"system and all other non-encrypted regular(no specific domains are
+bond to it) servers will be ignored"* —— 只忽略**未绑定域名**的 `server=`，
+**绑定了域名的仍然生效**。
+
+**为什么必须补**：这些路由管理页域名只有内网 DNS 能解析。缺了这 22 条，它们的解析会走
+DoH（公网），**你在外网 DNS 下就打不开路由器后台**。已从你的配置逐条补入。
+
+### 3. 裸 `server=` 未照搬（有意）
+
+你 QX 里的 `server=223.5.5.5` / `server=119.29.29.29` 属于「未绑定域名」，
+会被 `doh-server` **静默忽略**——照搬是无效行，所以没抄。
 
 > 你的 QX 里那两条裸 `server=223.5.5.5` / `server=119.29.29.29` 属于「未绑定域名」，
 > 会被 `doh-server` 忽略，因此**没有**照搬（照搬也是无效行）。
