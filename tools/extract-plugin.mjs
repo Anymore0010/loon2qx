@@ -185,12 +185,23 @@ if (auto && !input) {
   mkdirSync(dirname(cache), { recursive: true });
   const res = await fetch(v.url);
   if (!res.ok) {
+    // 不 fail-fast：与 fetch-snapshot 的约定一致 —— 单个上游坏掉不能中断整批刷新。
+    // 失败时保留上一次的插件包与提取结果，错误写进 status 供最后一步统一报出。
     console.error(`下载插件失败: HTTP ${res.status} ${v.url}`);
-    process.exit(1);
+    if (existsSync(cache)) {
+      console.error(`  已保留上一次的插件包，继续用旧内容重新提取`);
+      input = cache;
+    } else {
+      console.error(`  无旧副本可复用，跳过提取（其余快照仍会提交）`);
+      writeFileSync(join(OUT_DIR, "extract-status.json"),
+        JSON.stringify({ ok: false, error: `HTTP ${res.status}`, url: v.url }, null, 2) + "\n");
+      process.exit(0);
+    }
+  } else {
+    writeFileSync(cache, await res.text());
   }
-  writeFileSync(cache, await res.text());
   input = cache;
-  console.log(`已下载插件包 -> ${relative(ROOT, cache)}`);
+  console.log(`插件包就绪 -> ${relative(ROOT, cache)}`);
 }
 if (!input) {
   console.error("usage: bun tools/extract-plugin.mjs <plugin-file> [--out=path]");

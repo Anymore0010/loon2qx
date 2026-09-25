@@ -419,7 +419,11 @@ if (existsSync(join(ROOT, "snapshot", "index.json"))) {
   const idx = JSON.parse(readFileSync(join(ROOT, "snapshot", "index.json"), "utf8"));
   console.log(`snapshot/index.json  ${idx.mirrored}/${idx.total} mirrored, ${idx.failed} failed`);
   if (idx.failed > 0) {
-    for (const r of idx.resources.filter((x) => x.error)) err("snapshot/index.json", 0, `failed: ${r.url} (${r.error})`);
+    for (const r of idx.resources.filter((x) => x.error)) {
+      // 引用脚本失效（上游已 404）不影响规则可用，只告警
+      if (r.kind === "js") warn("snapshot/index.json", 0, `引用脚本取不到（上游可能已删）: ${r.url}`);
+      else err("snapshot/index.json", 0, `failed: ${r.url} (${r.error})`);
+    }
   }
 }
 

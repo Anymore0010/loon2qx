@@ -10,7 +10,7 @@
  *
  *   bun tools/fetch-snapshot.mjs
  */
-import { mkdirSync, writeFileSync, rmSync, existsSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, rmSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveRepoBase } from "./repo-url.mjs";
@@ -39,6 +39,20 @@ function localPathFor(url) {
 }
 
 /** Every fetchable resource in the manifest, deduplicated. */
+const repoInfo = resolveRepoBase(ROOT);
+const rawBase = repoInfo.rawBase;
+
+/** 递归列出目录下所有文件。 */
+function walkFiles(dir) {
+  const out = [];
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) out.push(...walkFiles(p));
+    else out.push(p);
+  }
+  return out;
+}
+
 function collectResources() {
   const out = new Map();
   const add = (id, url, kind) => {
@@ -63,6 +77,27 @@ function collectResources() {
   // geo_location_checker's script half.
   const geo = src.general.geo_location_checker.split(",").map((s) => s.trim())[1];
   if (geo && /^https?:/.test(geo)) add("geo-location-script", geo, "script");
+
+  // 抓取资源里被引用的外部 JS 脚本也一并镜像。
+  // 否则「重写规则兜底了，但规则指向的脚本仍在外面」—— 上游一挂，规则等于废掉。
+  // 说明：kelee.one 的脚本取不到（403，已知），这类只能记录、无法镜像。
+  const scriptRe = /url\s+script-\S+\s+(https?:\/\/\S+)/g;
+  const rulesFiles = [];
+  for (const x of out.values()) if (x.kind !== "icon") rulesFiles.push(x);
+  for (const r of rulesFiles) {
+    const p = join(SNAP, r.local);
+    if (!existsSync(p)) continue;
+    const text = readFileSync(p, "utf8");
+    for (const m of text.matchAll(scriptRe)) {
+      const u = m[1].replace(/["'],$/, "");
+      if (!/^https?:\/\//.test(u)) continue;
+      // 关键：跳过已改写为本仓库地址的脚本。
+      // 写入阶段会把规则里的脚本 URL 改写成 rawBase 前缀，下一轮扫描若不排除，
+      // 就会把这些本仓库地址当成新资源再镜像一遍 -> 目录每周向下嵌套一层。
+      if (u.startsWith(rawBase) || u.includes(repoInfo.slug)) continue;
+      if (!out.has(u)) out.set(u, { id: `script:${u.split("/").pop()}`, url: u, kind: "js", local: localPathFor(u) });
+    }
+  }
 
   return [...out.values()];
 }
@@ -90,8 +125,11 @@ async function fetchOne(res) {
   }
 }
 
-// Rebuild from scratch so deleted upstream resources do not linger.
-if (existsSync(SNAP)) rmSync(SNAP, { recursive: true, force: true });
+// 注意：**不能**先删空 snapshot 再抓。
+// 之前是无条件 rmSync(SNAP) 后重新下载，结果只要中途网络抖动或某个上游超时，
+// 就会留下一个空/残缺的快照 —— 而快照正是「上游挂了还能用」的那份兜底。
+// 现在的策略：先抓全部，成功后才覆盖写入；失败的文件保留旧副本。
+// 这样网络问题只会让内容「保持旧版」，绝不会让兜底副本消失。
 mkdirSync(SNAP, { recursive: true });
 
 const results = [];
@@ -101,17 +139,36 @@ for (let i = 0; i < resources.length; i += CONCURRENCY) {
   results.push(...(await Promise.all(batch.map(fetchOne))));
 }
 
+
+// 脚本 URL -> 镜像记录（写入阶段改写规则文件时使用）
+const byUrlPre = new Map(results.filter((r) => r.ok).map((r) => [r.url, r]));
+const rewriteStats = { local: 0, kept: 0, missing: new Set() };
+
 let ok = 0;
 let failed = 0;
 for (const r of results) {
   if (!r.ok) {
     failed++;
-    console.error(`FAIL ${r.status ?? ""} ${r.error ?? r.reason ?? ""} ${r.url}`);
+    const dest0 = join(SNAP, r.local);
+    const kept = existsSync(dest0) ? "（已保留上一次抓取的副本）" : "（无旧副本）";
+    console.error(`FAIL ${r.status ?? ""} ${r.error ?? r.reason ?? ""} ${r.url} ${kept}`);
     continue;
   }
   const dest = join(SNAP, r.local);
   mkdirSync(dirname(dest), { recursive: true });
-  writeFileSync(dest, r.body);
+
+  // 规则文件里引用的外部脚本，改写成仓库内镜像地址。
+  // 只镜像规则文件是不够的：规则里 `url script-response-body https://外部/x.js` 那段
+  // 仍指向外部，上游一挂规则就等于废掉。取不到的（kelee.one 403）保持原样。
+  let body = r.body;
+  if (/(\.snippet|\.conf|\.list)$/.test(r.local) && /url\s+script-/.test(body)) {
+    const rw = rewriteScriptUrls(body, byUrlPre);
+    body = rw.text;
+    rewriteStats.local += rw.local;
+    rewriteStats.kept += rw.kept;
+    for (const u of rw.missing) rewriteStats.missing.add(u);
+  }
+  writeFileSync(dest, body);
   ok++;
 }
 
@@ -127,13 +184,36 @@ function rawUrlFor(local) {
 // Same profile shape as tools/build.mjs, but every resource points at the copy
 // committed in this repository. The base URL is resolved from CI env vars or the
 // git remote so it can never be baked in as a stale/wrong value.
-const repoInfo = resolveRepoBase(ROOT);
-const rawBase = repoInfo.rawBase;
 
-const byUrl = new Map(results.filter((r) => r.ok).map((r) => [r.url, r]));
+/**
+ * 把规则文本里引用的外部脚本 URL 改写成仓库内的镜像地址。
+ *
+ * 这一步才是「上游挂了也不影响」的关键：光镜像规则文件不够，
+ * 规则里 `url script-response-body https://raw.githubusercontent.com/other/repo/x.js`
+ * 这段仍然指向外部；必须改写成本仓库路径，脚本才真的落地。
+ * 取不到的脚本（kelee.one 403）保持原样，并记入报告。
+ */
+function rewriteScriptUrls(text, byUrl) {
+  let out = text;
+  let local = 0;
+  let kept = 0;
+  const missing = new Set();
+  out = out.replace(/(url\s+script-\S+\s+)(https?:\/\/\S+)/g, (full, prefix, url) => {
+    const clean = url.replace(/["'],$/, "");
+    const r = byUrl.get(clean);
+    if (r) {
+      local++;
+      return prefix + `${rawBase}/snapshot/${r.local.split(/[\\/]/).join("/")}`;
+    }
+    kept++;
+    missing.add(clean);
+    return full; // 取不到 -> 保持原地址
+  });
+  return { text: out, local, kept, missing };
+}
 
 function snapUrl(url) {
-  const r = byUrl.get(url);
+  const r = byUrlPre.get(url);
   return r ? `${rawBase}/snapshot/${r.local.split(/[\\/]/).join("/")}` : url;
 }
 
@@ -216,6 +296,7 @@ lines.push(comment("离线快照模式下，重写内容全部来自下方 rewri
 lines.push("");
 
 lines.push(section("rewrite_remote", "远程重写"));
+lines.push(comment("规则文件里引用的外部脚本已改写成仓库内镜像；取不到的（如 kelee.one 403）保持原样。"));
 for (const r of src.rewrites) {
   const u = r.local_file ? `${rawBase}/${r.local_file}` : snapUrl(r.url);
   lines.push(
@@ -264,13 +345,59 @@ const index = {
 };
 writeFileSync(join(SNAP, "index.json"), JSON.stringify(index, null, 2) + "\n");
 
+// 清理孤儿文件：从 sources.json 移除的源，其快照副本会一直留着。
+// 只在「全部抓取成功」时才清理，避免网络问题导致误删仍需要的副本。
+if (failed === 0) {
+  const expected = new Set(results.map((r) => join(SNAP, r.local)));
+  // 还要保护「被规则文件引用、但本轮未被发现」的镜像脚本。
+  // 原因：写入阶段把规则里的脚本 URL 改写成本仓库地址后，下一轮 discovery 会跳过它们
+  // （见 collectResources 的自引用排除），于是它们不在 results/expected 里，
+  // 会在「清理孤儿」这一步被误删 —— 而规则仍指向它们，等于一周后自动失效。
+  // 这里直接扫描已提交的规则文件，把其中指向本仓库 snapshot 的路径还原成磁盘路径。
+  const referenced = new Set();
+  for (const f of walkFiles(SNAP)) {
+    if (!/(\.snippet|\.conf|\.list)$/.test(f)) continue;
+    let text;
+    try { text = readFileSync(f, "utf8"); } catch { continue; }
+    for (const m of text.matchAll(new RegExp(`${rawBase}/snapshot/([^\\s"',]+)`, "g"))) {
+      referenced.add(join(SNAP, decodeURIComponent(m[1])));
+    }
+  }
+  for (const f of referenced) expected.add(f);
+  const walk = walkFiles;
+  let pruned = 0;
+  for (const f of walk(SNAP)) {
+    // 保留本脚本自己产出的文件
+    const base = f.split(/[\\/]/).pop();
+    if (base === "offline.conf" || base === "index.json") continue; // 本脚本自己产出的文件
+    if (!expected.has(f)) {
+      rmSync(f, { force: true });
+      pruned++;
+    }
+  }
+  if (pruned) console.log(`清理孤儿快照文件: ${pruned} 个（已从 sources.json 移除的源）`);
+}
+
 console.log(`Snapshot: ${ok}/${results.length} mirrored, ${failed} failed`);
+if (rewriteStats.local || rewriteStats.kept) {
+  console.log(`脚本 URL 本仓库化: ${rewriteStats.local} 处已改写, ${rewriteStats.kept} 处保留原地址（取不到）`);
+  if (rewriteStats.missing.size) {
+    console.log(`  取不到的脚本（保持原地址，规则未删）: ${rewriteStats.missing.size} 个`);
+  }
+}
 console.log(`Wrote ${relative(ROOT, join(SNAP, "offline.conf"))}`);
 console.log(`Wrote ${relative(ROOT, join(SNAP, "index.json"))}`);
 // Default: exit 0 even when some upstreams fail, because snapshot/index.json
 // records the failures and the partial mirror is still worth committing.
 // `--strict` exits non-zero for use in a dedicated check step.
+// 只有「规则/脚本主体」失败才算失败；纯脚本镜像取不到（上游已 404）
+// 不影响规则可用性，降级为提示，否则每周任务会因几个死链常年标红。
+const criticalFailures = results.filter((r) => !r.ok && r.kind !== "js").length;
 if (failed > 0) {
-  console.warn(`${failed} upstream resource(s) failed — see snapshot/index.json`);
-  if (process.argv.includes("--strict")) process.exitCode = 1;
+  const notes = failed - criticalFailures;
+  console.warn(`${failed} upstream resource(s) failed（其中 ${criticalFailures} 个为规则/脚本主体，${notes} 个为已失效的引用脚本）— see snapshot/index.json`);
+  if (criticalFailures === 0) {
+    console.warn("仅引用的外部脚本失效，规则与其余资源均正常。");
+  }
+  if (process.argv.includes("--strict") && criticalFailures > 0) process.exitCode = 1;
 }

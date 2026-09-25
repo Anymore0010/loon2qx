@@ -577,5 +577,9 @@
         "apps.mzstatic.com"
       ]
     }
-  ]
+  ],
+  "output": {
+    "prefer_local": true,
+    "_comment": "统一为一份配置：所有资源都指向本仓库快照（prefer_local=true）。代价是上游修正最长延迟 7 天（每周快照任务同步一次）；好处是上游任何仓库失效都不影响使用，且脚本引用也已在快照阶段改写为本仓库地址。若想改回「上游直链（更新更快但依赖上游可用）」，把 prefer_local 设为 false 即可。"
+  }
 }

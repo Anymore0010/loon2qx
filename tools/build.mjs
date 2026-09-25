@@ -23,9 +23,33 @@ const src = JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8")
 const { resolveRepoBase } = await import("./repo-url.mjs");
 const repoBase = resolveRepoBase(ROOT).rawBase;
 
-/** Absolute URL for a filter entry (upstream or vendored-local). */
+/**
+ * prefer_local=true 时，所有资源都指向本仓库快照：
+ * 上游失效不影响使用（代价是最长 7 天的更新延迟）。
+ */
+const PREFER_LOCAL = src.output?.prefer_local === true;
+/** 上游 URL -> 仓库内快照路径（构建时静态推导，避免依赖抓取结果）。 */
+function snapshotLocalFor(url) {
+  const m = (url ?? "").match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
+  if (m) return `snapshot/github.com/${m[1]}`;
+  const m2 = (url ?? "").match(/^https:\/\/([^/]+)\/(.+)$/);
+  return m2 ? `snapshot/host/${m2[1]}/${m2[2]}` : null;
+}
+/** 图标同样指向仓库内镜像（prefer_local 时）。 */
+function iconUrl(u) {
+  if (!PREFER_LOCAL || !u) return u;
+  const p = snapshotLocalFor(u);
+  return p ? `${repoBase}/${p}` : u;
+}
+
+/** Absolute URL for a filter entry (repo-local, vendored, or upstream). */
 function filterUrl(f) {
-  return f.local_file ? `${repoBase}/${f.local_file}` : f.url;
+  if (f.local_file) return `${repoBase}/${f.local_file}`;
+  if (PREFER_LOCAL) {
+    const p = snapshotLocalFor(f.url);
+    if (p) return `${repoBase}/${p}`;
+  }
+  return f.url;
 }
 
 /** Quantumult X comment marker. `#` is only valid as the first character. */
@@ -43,15 +67,19 @@ function section(key, title) {
 function buildGeneral(g) {
   const lines = [section("general", "常规设置"), ""];
   lines.push(comment("从 Loon [General] 转换而来：只保留 Quantumult X 有对应语义的项。"));
-  lines.push(`resource_parser_url=${g.resource_parser_url}`);
-  lines.push(`profile_img_url=${g.profile_img_url}`);
+  lines.push(`resource_parser_url=${PREFER_LOCAL ? `${repoBase}/${snapshotLocalFor(g.resource_parser_url)}` : g.resource_parser_url}`);
+  lines.push(`profile_img_url=${iconUrl(g.profile_img_url)}`);
   lines.push(comment(`节点测速：URL 对应 Loon proxy-test-url，超时 ${g.server_check_timeout}ms`));
   lines.push(`server_check_url=${g.server_check_url}`);
   lines.push(`server_check_timeout=${g.server_check_timeout}`);
   lines.push(comment("对应 Loon internet-test-url"));
   lines.push(`network_check_url=${g.network_check_url}`);
   lines.push(comment("对应 Loon geoip-url / ipasn-url 的用途：节点页顶部信息展示"));
-  lines.push(`geo_location_checker=${g.geo_location_checker}`);
+  {
+    const [, gurl] = g.geo_location_checker.split(",").map((x) => x.trim());
+    const gu = PREFER_LOCAL && gurl && /^https?:/.test(gurl) ? `${repoBase}/${snapshotLocalFor(gurl)}` : gurl;
+    lines.push(`geo_location_checker=${g.geo_location_checker.split(",")[0].trim()}, ${gu}`);
+  }
   lines.push(comment("这些域名不使用 fake-ip，避免本地/内网域名被劫持"));
   lines.push(`dns_exclusion_list=${g.dns_exclusion_list}`);
   lines.push(comment("对应 Loon bypass-tun：这些流量不交给 Quantumult X 处理"));
@@ -91,7 +119,7 @@ function buildPolicy(p) {
   lines.push(comment("resource-tag-regex=. 表示匹配全部节点订阅，与 server-tag-regex 一起决定候选节点。"));
   for (const r of p.regions) {
     lines.push(
-      `static=${r.name}, resource-tag-regex=., server-tag-regex=${r.regex}, img-url=${r.icon}`
+      `static=${r.name}, resource-tag-regex=., server-tag-regex=${r.regex}, img-url=${iconUrl(r.icon)}`
     );
   }
   lines.push("");
@@ -100,7 +128,7 @@ function buildPolicy(p) {
   for (const s of p.selects) {
     const region = regionByName.get(s.region);
     if (!region) throw new Error(`policy "${s.name}" references unknown region "${s.region}"`);
-    lines.push(`static=${s.name}, ${s.region}, img-url=${region.icon}`);
+    lines.push(`static=${s.name}, ${s.region}, img-url=${iconUrl(region.icon)}`);
   }
   // 融合自 fmz200/wool_scripts 配置的策略组，供其分流规则使用。
   if (p.groups?.length) {
@@ -111,7 +139,7 @@ function buildPolicy(p) {
       if (!target && g.region !== "direct") {
         throw new Error(`policy group "${g.name}" references unknown region "${g.region}"`);
       }
-      lines.push(`static=${g.name}, ${g.region}, img-url=${g.icon}`);
+      lines.push(`static=${g.name}, ${g.region}, img-url=${iconUrl(g.icon)}`);
     }
   }
   return lines.join("\n");
@@ -198,8 +226,13 @@ function buildRewriteRemote(rewrites) {
   lines.push(comment("hostname 由这些资源自带，Quantumult X 会自动合并进 MITM 主机名列表。"));
   lines.push("");
   for (const r of rewrites) {
+    let u = r.local_file ? `${repoBase}/${r.local_file}` : r.url;
+    if (!r.local_file && PREFER_LOCAL) {
+      const p = snapshotLocalFor(r.url);
+      if (p) u = `${repoBase}/${p}`;
+    }
     const parts = [
-      r.local_file ? `${repoBase}/${r.local_file}` : r.url,
+      u,
       `tag=${r.tag}`,
       "update-interval=86400",
       `opt-parser=${r.parser}`,
@@ -215,11 +248,16 @@ function buildTasks(tasks) {
   lines.push(comment("event-interaction 表示在 Quantumult X 中手动点击触发，对应 Loon 的节点检测等交互式工具。"));
   lines.push("");
   for (const t of tasks) {
+    let tu = t.url;
+    if (PREFER_LOCAL) {
+      const p = snapshotLocalFor(t.url);
+      if (p) tu = `${repoBase}/${p}`;
+    }
     lines.push(
       [
-        `${t.schedule} ${t.url}`,
+        `${t.schedule} ${tu}`,
         `tag=${t.tag}`,
-        `img-url=${t.icon}`,
+        `img-url=${iconUrl(t.icon)}`,
         `enabled=${t.enabled}`,
       ].join(", ")
     );

@@ -1,8 +1,8 @@
 {
   "total": 3,
-  "ok": 3,
-  "failed": 0,
-  "rules": 70,
+  "ok": 2,
+  "failed": 1,
+  "rules": 59,
   "resources": [
     {
       "id": "filter-geoip-cn",
@@ -15,12 +15,12 @@
     },
     {
       "id": "filter-apple-ai",
-      "upstream": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
-      "file": "QuantumultX/rules/AppleIntelligence.list",
-      "rules": 11,
-      "dropped": 0,
-      "adjusted": 0,
-      "error": null
+      "upstream": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/NOPE.list",
+      "file": null,
+      "rules": null,
+      "dropped": null,
+      "adjusted": null,
+      "error": "HTTP 404"
     },
     {
       "id": "merge-ai",
