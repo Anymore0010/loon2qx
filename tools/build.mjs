@@ -109,11 +109,12 @@ function buildPolicy(p) {
 function buildServerRemote() {
   const lines = [section("server_remote", "节点订阅"), ""];
   lines.push(comment("订阅链接属于个人敏感信息，刻意不写入本仓库。"));
-  lines.push(comment("在 Quantumult X 里手动添加：风车 → 节点 → 添加订阅，或直接粘贴到下面并去掉注释符。"));
+  lines.push(comment("在 Quantumult X 里手动添加：风车 → 节点 → 添加订阅；或在本段末尾新起一行粘贴（不要以 # 开头）。"));
   lines.push(comment("解析器会自动把 Clash / Surge / Loon 等格式的订阅转成 Quantumult X 节点。"));
   lines.push("");
-  lines.push(comment("示例（取消注释并填入你自己的链接）："));
-  lines.push(comment("#https://example.com/your-subscription, tag=MyNodes, opt-parser=true, update-interval=86400, enabled=true"));
+  lines.push(comment("示例（照抄一行并把链接换成你自己的，不需要「取消注释」）："));
+  lines.push(comment("    <你的订阅链接>, tag=MyNodes, opt-parser=true, update-interval=86400, enabled=true"));
+  lines.push(comment("上面这行必须以「链接」开头；若行首带 # 就会被 QX 当成注释而静默忽略。"));
   return lines.join("\n");
 }
 

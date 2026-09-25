@@ -54,6 +54,7 @@ const LOGICAL = /^(and|or|not)\s*,\s*\(/i;
 export function convertRuleList(text, opts = {}) {
   const rules = [];
   const dropped = [];
+  const notes = [];
   const stats = {};
   const seen = new Set();
 
@@ -86,9 +87,12 @@ export function convertRuleList(text, opts = {}) {
 
     const value = parts[1];
 
-    // Options such as `no-resolve` are preserved for CIDR rules.
-    const optionIdx = parts.findIndex((p, i) => i >= 2 && /^no-resolve$/i.test(p));
-    // The policy is the last comma field that is not a known option.
+    // `no-resolve` is a Loon/Surge option with NO Quantumult X equivalent:
+    // the official sample.conf never mentions it, and its ip-cidr lines put the
+    // policy directly in field 3. Emitting it would push the policy out of its
+    // slot and silently break the rule, so it is dropped.
+    const hasNoResolve = parts.some((p, i) => i >= 2 && /^no-resolve$/i.test(p));
+    // The policy is the last comma field that is not an option.
     let policy = null;
     for (let i = parts.length - 1; i >= 2; i--) {
       const p = parts[i];
@@ -103,8 +107,13 @@ export function convertRuleList(text, opts = {}) {
     }
 
     const out = [qxType, value];
-    if (optionIdx !== -1) out.push("no-resolve");
     if (policy) out.push(policy);
+
+    if (hasNoResolve) {
+      // Rule is KEPT; only the unsupported option is removed. Tracked separately
+      // so reports do not overstate how many rules were lost.
+      notes.push({ rule: line, note: "已移除 no-resolve 选项（Quantumult X 无此选项），规则保留" });
+    }
 
     const rule = out.join(", ");
     if (seen.has(rule)) continue; // de-duplicate; QX tolerates but it is noise
@@ -113,7 +122,7 @@ export function convertRuleList(text, opts = {}) {
     stats[qxType] = (stats[qxType] ?? 0) + 1;
   }
 
-  return { rules, dropped, stats };
+  return { rules, dropped, notes, stats };
 }
 
 // ---- CLI -------------------------------------------------------------------
@@ -126,11 +135,12 @@ if (import.meta.main) {
     process.exit(2);
   }
   const text = await Bun.file(input).text();
-  const { rules, dropped, stats } = convertRuleList(text, {
+  const { rules, dropped, notes, stats } = convertRuleList(text, {
     policy: policyArg ? policyArg.split("=")[1] : undefined,
   });
   process.stdout.write(rules.join("\n") + "\n");
-  console.error(`converted ${rules.length} rules; dropped ${dropped.length}`);
+  console.error(`converted ${rules.length} rules; dropped ${dropped.length}; adjusted ${notes.length}`);
   console.error(`  types: ${JSON.stringify(stats)}`);
   for (const d of dropped) console.error(`  dropped: ${d.rule}  (${d.reason})`);
+  for (const n of notes) console.error(`  adjusted: ${n.rule}  (${n.note})`);
 }

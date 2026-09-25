@@ -50,21 +50,23 @@ Loon 和 Quantumult X 的差异不在语法，而在**功能承载方式**：
 
 导入后先把各地区的「手动策略」选好（香港 / 新国 / 日本 / 美国 / 全球），否则规则命中的策略组是空的。
 
-### 启用每周自动刷新（需一次性操作）
+### 自动刷新状态
 
-`.github/workflows/snapshot.yml` 已写好，但**尚未推送**：推送含 workflow 的文件需要 PAT 具备
-`workflow` scope，而当前凭据只有 `public_repo`（GitHub 会直接拒绝）。
+**已启用**：`.github/workflows/snapshot.yml` 已在 master 上并被 GitHub 注册（state: active）。
 
-启用方式二选一：
+- 每周一 **03:17 UTC** 自动刷新（重转规则 → 拉快照 → 校验 → 有变化才提交）；
+- 也可在 **Actions → Snapshot → Run workflow** 手动触发；
+- 任何上游失效都不会中断整批刷新：失败的资源记录在 `snapshot/index.json` 与
+  `QuantumultX/rules/CONVERSION.md`，任务最后一步才会标红提醒。
 
-1. 补齐权限后推送（文件已在本地工作区）：
-   ```bash
-   gh auth refresh -h github.com -s workflow
-   git add .github && git commit -m "ci: 每周刷新快照" && git push
-   ```
-2. 或在 GitHub 网页上手动新建 `.github/workflows/snapshot.yml`，内容见本地同名文件。
+本地手动刷新：
 
-在此之前，快照仍可随时手动刷新：`bun tools/fetch-snapshot.mjs`。
+```bash
+bun tools/vendor-rules.mjs     # 重转 Loon 规则为 QX 原生格式
+bun tools/build.mjs            # 生成 QuantumultX/default.conf
+bun tools/fetch-snapshot.mjs   # 拉取快照 + 生成离线配置
+bun tools/validate.mjs         # 校验
+```
 
 ## 目录结构
 
@@ -94,7 +96,7 @@ bun tools/fetch-snapshot.mjs # 刷新快照 + 离线配置
 
 因此 `snapshot/` 保存了一份冻结副本，`snapshot/loon2qx-offline.conf` 指向仓库内的副本而不是上游：
 
-- **启用后**才会每周一自动刷新（见下方「启用每周自动刷新」；该 workflow 文件因权限限制目前未推送，所以现在还没有自动刷新）；
+- GitHub Actions **每周一 03:17 UTC 自动刷新**（已启用，实测可运行）；
 - 上游挂掉时，改用离线配置即可继续工作；
 - 手动刷新：`bun tools/fetch-snapshot.mjs`。
 

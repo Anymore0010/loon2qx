@@ -58,6 +58,10 @@ jobs:
               raise SystemExit(0)
           i = json.loads(p.read_text())
           print(f"### Snapshot: {i['mirrored']}/{i['total']} mirrored, {i['failed']} failed")
+          vp = pathlib.Path("QuantumultX/rules/status.json")
+          if vp.exists():
+              v = json.loads(vp.read_text())
+              print(f"\n### Rules: {v['ok']}/{v['total']} converted, {v['rules']} rules, {v['failed']} failed")
           bad = [r for r in i["resources"] if r.get("error")]
           if bad:
               print("\n| resource | upstream URL | error |")
@@ -84,12 +88,31 @@ jobs:
         run: |
           python3 - <<'PY'
           import json, pathlib, sys
-          i = json.loads(pathlib.Path("snapshot/index.json").read_text())
-          if i["failed"]:
-              print(f"::error::{i['failed']} upstream resource(s) failed to mirror")
-              for r in i["resources"]:
-                  if r.get("error"):
-                      print(f"::error title={r['id']}::{r['url']} -> {r['error']}")
+          failed = 0
+
+          mirror = pathlib.Path("snapshot/index.json")
+          if mirror.exists():
+              i = json.loads(mirror.read_text())
+              if i["failed"]:
+                  failed += i["failed"]
+                  print(f"::error::{i['failed']} upstream resource(s) failed to mirror")
+                  for r in i["resources"]:
+                      if r.get("error"):
+                          print(f"::error title={r['id']}::{r['url']} -> {r['error']}")
+
+          # Vendored rule lists are a separate pipeline; check them too, otherwise
+          # a deleted upstream would rot silently while the job stayed green.
+          vendored = pathlib.Path("QuantumultX/rules/status.json")
+          if vendored.exists():
+              v = json.loads(vendored.read_text())
+              if v["failed"]:
+                  failed += v["failed"]
+                  print(f"::error::{v['failed']} vendored rule source(s) failed")
+                  for r in v["resources"]:
+                      if r.get("error"):
+                          print(f"::error title={r['id']}::{r['upstream']} -> {r['error']}")
+
+          if failed:
               sys.exit(1)
-          print("All upstream resources mirrored successfully.")
+          print("All upstream resources mirrored and all rule lists converted.")
           PY

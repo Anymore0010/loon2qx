@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/loon2qx",
   "ref": "master",
-  "total": 53,
-  "mirrored": 53,
+  "total": 51,
+  "mirrored": 51,
   "failed": 0,
   "resources": [
     {
@@ -443,24 +443,6 @@
       "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png",
       "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/Global.png",
       "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-大陆抖音",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png",
-      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/CN.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-苹果服务",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Apple.png",
-      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/Apple.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Apple.png",
       "status": 200,
       "error": null
     },

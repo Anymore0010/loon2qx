@@ -11,6 +11,18 @@
 | https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list | `QuantumultX/rules/AI.list` | 64 | 2 |
 | https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list | `QuantumultX/rules/GeoIP_CN.list` | 1 | 0 |
 
+## 选项调整（规则保留）
+
+这些规则**被保留**，只是移除了 Quantumult X 不支持的选项：
+
+### filter-ai-fmz
+
+- `IP-CIDR, 160.79.104.0/23, no-resolve`  
+  已移除 no-resolve 选项（Quantumult X 无此选项），规则保留
+- `IP-CIDR6, 2607:6bc0::/48, no-resolve`  
+  已移除 no-resolve 选项（Quantumult X 无此选项），规则保留
+
+
 ## 丢弃的规则
 
 Quantumult X 的分流不支持 `AND` / `OR` / `NOT` 组合规则（官方 sample.conf 中不存在这些类型）。

@@ -54,7 +54,7 @@ for (const f of toVendor) {
     continue;
   }
 
-  const { rules, dropped, stats } = convertRuleList(text, { policy: f.policy });
+  const { rules, dropped, notes, stats } = convertRuleList(text, { policy: f.policy });
 
   // Header records provenance so the file is self-explanatory when reviewed.
   const header = [
@@ -70,8 +70,8 @@ for (const f of toVendor) {
   const file = join(ROOT, "QuantumultX", "rules", f.vendored_as);
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, body);
-  console.log(`${rules.length} rules${dropped.length ? `, ${dropped.length} dropped` : ""} -> ${f.vendored_as}`);
-  report.push({ id: f.id, url: f.upstream_url, ok: true, count: rules.length, dropped, stats, file: f.vendored_as });
+  console.log(`${rules.length} rules${dropped.length ? `, ${dropped.length} dropped` : ""}${notes.length ? `, ${notes.length} adjusted` : ""} -> ${f.vendored_as}`);
+  report.push({ id: f.id, url: f.upstream_url, ok: true, count: rules.length, dropped, notes, stats, file: f.vendored_as });
 }
 
 // ---- conversion report -----------------------------------------------------
@@ -93,6 +93,18 @@ for (const r of report) {
     lines.push(`| ${r.url} | \`QuantumultX/rules/${r.file}\` | ${r.count} | ${r.dropped.length} |`);
   }
 }
+lines.push("", "## 选项调整（规则保留）", "");
+const withNotes = report.filter((r) => r.ok && (r.notes ?? []).length);
+if (withNotes.length === 0) {
+  lines.push("无。");
+} else {
+  lines.push("这些规则**被保留**，只是移除了 Quantumult X 不支持的选项：", "");
+  for (const r of withNotes) {
+    lines.push(`### ${r.id}`, "");
+    for (const n of r.notes) lines.push(`- \`${n.rule}\`  \n  ${n.note}`);
+    lines.push("");
+  }
+}
 lines.push("", "## 丢弃的规则", "");
 const withDrops = report.filter((r) => r.ok && r.dropped.length);
 if (withDrops.length === 0) {
@@ -106,5 +118,29 @@ if (withDrops.length === 0) {
   }
 }
 writeFileSync(join(OUT_DIR, "CONVERSION.md"), lines.join("\n") + "\n");
+// Machine-readable status so the workflow's failure step can see vendored-rule
+// failures too (it previously only read snapshot/index.json).
+const status = {
+  total: report.length,
+  ok: report.filter((r) => r.ok).length,
+  failed: failures,
+  rules: report.filter((r) => r.ok).reduce((a, r) => a + r.count, 0),
+  resources: report.map((r) => ({
+    id: r.id,
+    upstream: r.url,
+    file: r.ok ? `QuantumultX/rules/${r.file}` : null,
+    rules: r.ok ? r.count : null,
+    dropped: r.ok ? r.dropped.length : null,
+    adjusted: r.ok ? (r.notes ?? []).length : null,
+    error: r.ok ? null : r.error,
+  })),
+};
+writeFileSync(join(OUT_DIR, "status.json"), JSON.stringify(status, null, 2) + "\n");
 console.log(`Wrote ${relative(ROOT, join(OUT_DIR, "CONVERSION.md"))}${failures ? ` (${failures} failure(s))` : ""}`);
-if (failures) process.exitCode = 1;
+// Same policy as fetch-snapshot.mjs: a single broken upstream must not abort the
+// whole weekly refresh. Failures are recorded in the report; `--strict` (used by
+// the workflow's final check) turns them into a non-zero exit.
+if (failures) {
+  console.warn(`${failures} vendored upstream(s) failed — see QuantumultX/rules/CONVERSION.md`);
+  if (process.argv.includes("--strict")) process.exitCode = 1;
+}

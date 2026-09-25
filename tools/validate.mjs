@@ -224,6 +224,18 @@ function checkVendoredRules() {
         err(rel, 0, `not a valid Quantumult X rule type: "${line.slice(0, 60)}"`);
         continue;
       }
+      // Field 3 must be a policy (or `no-resolve`-like option QX actually knows).
+      // Guards against options landing in the policy slot — QX has no `no-resolve`,
+      // and a mis-placed option silently breaks the rule.
+      if (/^(ip-cidr|ip6-cidr|geoip|ip-asn)$/.test(type)) {
+        const fields = line.split(",").map((x) => x.trim());
+        const pol = fields[2];
+        if (!pol) {
+          err(rel, 0, `CIDR/ASN rule has no policy in field 3: "${line.slice(0, 60)}"`);
+        } else if (/^(no-resolve|force-cellular|multi-interface|via-interface)/i.test(pol)) {
+          err(rel, 0, `option "${pol}" is in the policy slot (Quantumult X expects the policy there): "${line.slice(0, 60)}"`);
+        }
+      }
       count++;
     }
     if (count === 0) err(rel, 0, "vendored rule file contains zero rules");

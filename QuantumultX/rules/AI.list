@@ -50,8 +50,8 @@ host-suffix, claude.ai, 人工智能
 host-suffix, claude.com, 人工智能
 host-suffix, clau.de, 人工智能
 host-suffix, claudeusercontent.com, 人工智能
-ip-cidr, 160.79.104.0/23, no-resolve, 人工智能
-ip6-cidr, 2607:6bc0::/48, no-resolve, 人工智能
+ip-cidr, 160.79.104.0/23, 人工智能
+ip6-cidr, 2607:6bc0::/48, 人工智能
 host-suffix, grazie.ai, 人工智能
 host-suffix, grazie.aws.intellij.net, 人工智能
 host-suffix, jetbrains.ai, 人工智能

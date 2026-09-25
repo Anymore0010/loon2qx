@@ -12,3 +12,7 @@ local.secret
 
 # 原始 Loon 配置（含订阅链接与证书私钥），仅保留在本地
 loon_config/.raw/
+
+# 临时工作目录
+_tmp/
+_work/

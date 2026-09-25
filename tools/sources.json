@@ -105,31 +105,6 @@
         "name": "人工智能",
         "region": "美国节点",
         "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png"
-      },
-      {
-        "name": "大陆抖音",
-        "region": "direct",
-        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png"
-      },
-      {
-        "name": "海外抖音",
-        "region": "全球节点",
-        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png"
-      },
-      {
-        "name": "谷歌服务",
-        "region": "新国节点",
-        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/SG.png"
-      },
-      {
-        "name": "电报消息",
-        "region": "全球节点",
-        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png"
-      },
-      {
-        "name": "苹果服务",
-        "region": "direct",
-        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Apple.png"
       }
     ]
   },
