@@ -56,7 +56,7 @@ function buildGeneral(g) {
   lines.push(`dns_exclusion_list=${g.dns_exclusion_list}`);
   lines.push(comment("对应 Loon bypass-tun：这些流量不交给 Quantumult X 处理"));
   lines.push(`excluded_routes=${g.excluded_routes}`);
-  lines.push(comment("UDP 兜底：节点不支持 UDP 中转时使用（Loon 原为 reject，此处沿用融合配置的 direct）"));
+  lines.push(comment("UDP 兜底：节点不支持 UDP 中转时使用。对应 Loon udp-fallback-mode = REJECT。"));
   lines.push(`fallback_udp_policy=${g.fallback_udp_policy}`);
   if (g.udp_drop_list) {
     lines.push(comment("丢弃这些 UDP 端口（QUIC 等），避免与 TCP 分流策略不一致"));

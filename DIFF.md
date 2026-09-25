@@ -15,6 +15,20 @@
 
 ---
 
+## 取值原则：冲突时以 Loon 为准
+
+**Loon 配置是权威来源**。融合 fmz200 的 QX 配置只用于补充 Loon 没有的能力，
+不覆盖 Loon 已设定的取值。已据此修正：
+
+| 项 | 你的 QX（fmz） | Loon（权威） | 本配置 |
+|---|---|---|---|
+| `fallback_udp_policy` | `direct` | `udp-fallback-mode = REJECT` | **`reject`** |
+| `server_check_timeout` | `3000` | `test-timeout = 2`（秒） | **`2000`**（毫秒） |
+
+因此下文凡标注「沿用 fmz」的地方若与 Loon 冲突，**以 Loon 为准**。
+`no-ipv6` 即是一例：Loon 是 `ip-mode = dual`（双栈），所以本配置**不**写 `no-ipv6`
+（与你 QX 的 fmz 取向不同——这是有意的，依据就是 Loon）。
+
 ## 零、`final`：未命中流量的去向（**最容易被忽略、影响最大**）
 
 | | 你的 QX | 本配置 |

@@ -179,5 +179,5 @@ ca-p12 = {{MITM_CA_P12}}
 ca-passphrase = {{MITM_CA_PASSPHRASE}}
 hostname =
 ca-p12 = 
-{{MITM_CA_P12}}-passphrase = 
+ca-passphrase = 
 skip-server-cert-verify = false

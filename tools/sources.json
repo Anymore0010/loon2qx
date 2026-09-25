@@ -7,12 +7,13 @@
     "resource_parser_url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
     "network_check_url": "http://connectivitycheck.platform.hicloud.com/generate_204",
     "server_check_url": "http://www.gstatic.com/generate_204",
-    "server_check_timeout": 3000,
+    "server_check_timeout": 2000,
     "geo_location_checker": "http://ip-api.com/json/?lang=zh-CN, https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
     "dns_exclusion_list": "*.cmpassport.com, *.jegotrip.com.cn, *.icitymobile.mobi, id6.me, *.pingan.com.cn, *.cmbchina.com",
     "excluded_routes": "10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.88.99.0/24, 192.168.0.0/16, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 239.255.255.250/32, 255.255.255.255/32",
-    "fallback_udp_policy": "direct",
-    "udp_drop_list": "443"
+    "fallback_udp_policy": "reject",
+    "udp_drop_list": "443",
+    "_loon_authority": "原则：与 Loon 冲突时一律以 Loon 为准。已据此修正 fallback_udp_policy(reject，Loon udp-fallback-mode=REJECT) 与 server_check_timeout(2000ms，Loon test-timeout=2s)。server_check_url/network_check_url 亦取自 Loon proxy-test-url/internet-test-url。"
   },
   "dns": {
     "_comment": "来自 Loon [General] doh-server。domain_servers 保留原配置中「按域名指定 DNS」的规则：官方文档说明 doh-server 只忽略「未绑定域名」的普通 server，按域名绑定的仍然生效。路由管理页那几条用 system，否则在外网 DNS 下会解析不到、打不开路由器后台。no_ipv6 开关：false=保留 IPv6（对齐 Loon ip-mode=dual，当前值）；true=生成 no-ipv6（对齐 fmz 的 QX 配置）。",

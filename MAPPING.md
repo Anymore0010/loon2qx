@@ -110,22 +110,31 @@ Loon 的 `.lsr` 与 Quantumult X 的 `.list` 是同一套 `host-suffix, x, POLIC
 （AI 分流合集、GeoIP_CN、AppleIntelligence）已由 `tools/vendor-rules.mjs` 预转换为
 `QuantumultX/rules/*.list`，理由是没有 fallback 且运行时丢弃规则不可见。
 
-## 两处有意的语义变更
+## 取值原则：与 Loon 冲突时以 Loon 为准
 
-融合 fmz200 配置时，有两处**行为与原 Loon 不同**，在此显式记录（不要当成遗漏）：
+本配置的**权威来源是 Loon 配置**。融合 fmz200 的 QX 配置只用于**补充 Loon 没有的能力**
+（如域名级 DNS、交互式任务），不覆盖 Loon 已明确设定的取值。
 
-| 项 | Loon 原值 | 本配置 | 说明 |
+据此修正过的两处（原先误用了 fmz 的值）：
+
+| 项 | Loon（权威） | 修正前 | 现在 |
 |---|---|---|---|
-| `fallback_udp_policy` | `REJECT`（`udp-fallback-mode`） | `direct` | 沿用了 fmz 的取值。节点不支持 UDP 中转时，UDP 改为直连而不是丢弃。若你更在意不泄漏 UDP，把这个值改回 `reject` 即可。 |
-| `final` | `DIRECT` | `direct` | 与 Loon 一致。注意 fmz 原配置用的是 `final, 兜底策略`（未命中流量走代理）；此处**没有**跟随，仍未命中即直连。 |
+| `fallback_udp_policy` | `udp-fallback-mode = REJECT` | `direct`（误用 fmz） | **`reject`** ✅ |
+| `server_check_timeout` | `test-timeout = 2`（秒） | `3000`（误用 fmz） | **`2000`**（毫秒）✅ |
 
-其余对齐情况：`server_check_timeout` 采用 fmz 的 3000ms（Loon 为 2s）；
-`dns_exclusion_list` 合并了 fmz 的额外两条（`*.pingan.com.cn`, `*.cmbchina.com`）；
-`excluded_routes` 并入 fmz 的 `239.255.255.250/32`。
+其余与 Loon 的一致性核对：
 
-> DNS 提示：QX 一旦设置 `doh-server` 就会忽略 system 与所有非加密 `server=`。
-> 本配置用 DoH（对应 Loon 的 `doh-server`），因此 fmz 那套 `server=223.5.5.5` /
-> 按域名绑定解析**未并入**，否则会被静默忽略。
+| 项 | Loon | 本配置 |
+|---|---|---|
+| `server_check_url` | `proxy-test-url`（gstatic/generate_204） | ✅ 一致 |
+| `network_check_url` | `internet-test-url`（hicloud/generate_204） | ✅ 一致 |
+| DoH | `doh-server` 三个 | ✅ 一致（同一行逗号分隔） |
+| IPv6 | `ip-mode = dual`（双栈） | ✅ 保留（不写 `no-ipv6`） |
+| `final` | `FINAL,DIRECT` | ✅ `final, direct` |
+| 策略组类型 | 8 组均为 `select`（手动） | ✅ 8 个「…手动策略」static 组 |
+
+**仍与 Loon 不同、且属于能力补充的**：域名级 DNS 22 条（Loon 无对应概念）、
+交互式任务（替代 Loon 插件的节点检测）、`rewrite_remote` 的去广告重写（替代 Loon 插件）。
 
 ## 已知行为差异
 
