@@ -133,6 +133,17 @@ Loon 的 `.lsr` 与 Quantumult X 的 `.list` 是同一套 `host-suffix, x, POLIC
 | `final` | `FINAL,DIRECT` | ✅ `final, direct` |
 | 策略组类型 | 8 组均为 `select`（手动） | ✅ 8 个「…手动策略」static 组 |
 
+### 两个易混项的判定
+
+| 项 | Loon 有吗 | 判定 |
+|---|---|---|
+| `dns_exclusion_list`（含 fmz 加的 `*.pingan.com.cn`、`*.cmbchina.com`） | **无**此概念 | **纯新增，保留**。它只是「这些域名不用 fake-ip」，不覆盖 Loon 任何设置 |
+| `excluded_routes` 里的 `239.255.255.250/32` | Loon `bypass-tun` 无此项 | **已移除**。它已被 Loon 的 `224.0.0.0/4` 完整覆盖（多播段），属冗余 |
+| `excluded_routes` 其余 13 段 | Loon `bypass-tun` | ✅ 逐段一致 |
+
+**判据**：与 Loon **冲突**（同一项取了不同值）→ 以 Loon 为准；
+Loon **没有**该项（纯补充）→ 保留。上表两类正好各一例。
+
 **仍与 Loon 不同、且属于能力补充的**：域名级 DNS 22 条（Loon 无对应概念）、
 交互式任务（替代 Loon 插件的节点检测）、`rewrite_remote` 的去广告重写（替代 Loon 插件）。
 
