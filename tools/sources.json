@@ -4,7 +4,7 @@
   "_merge_note": "fmz 的 rewrite.snippet 是聚合型资源，实测覆盖了原先按 App 拆分的 19/20 个片段（同 URL、同动作）。同时保留两者会让同一个响应体被两个脚本重复处理，因此改为只引用聚合资源，仅保留聚合未覆盖的（微博、高德、B站、京东比价）。",
 
   "general": {
-    "profile_img_url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/QuantumultX.png",
+    "profile_img_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/QuantumultX.png",
     "resource_parser_url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
     "network_check_url": "http://connectivitycheck.platform.hicloud.com/generate_204",
     "server_check_url": "http://www.gstatic.com/generate_204",

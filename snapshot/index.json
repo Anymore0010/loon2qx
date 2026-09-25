@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-25T07:43:38.669Z",
+  "generated_at": "2026-09-25T07:46:48.743Z",
   "repository": "Anymore0010/loon2qx",
   "ref": "master",
-  "total": 46,
-  "mirrored": 46,
+  "total": 57,
+  "mirrored": 57,
   "failed": 0,
   "resources": [
     {
@@ -417,6 +417,105 @@
       "url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
       "snapshot": "snapshot/github.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
       "upstream_raw": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-profile",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/QuantumultX.png",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/QuantumultX.png",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/QuantumultX.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-香港节点",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/HK.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-台湾节点",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/TW.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-日本节点",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/JP.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/JP.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/JP.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-韩国节点",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/KR.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/KR.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/KR.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-新国节点",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/SG.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/SG.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/SG.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-美国节点",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/US.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-游戏节点",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/GAME.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/GAME.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/GAME.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-全球节点",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/Global.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-大陆抖音",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/CN.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-苹果服务",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Apple.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/Apple.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Apple.png",
       "status": 200,
       "error": null
     }

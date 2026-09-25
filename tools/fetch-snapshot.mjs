@@ -54,6 +54,10 @@ function collectResources() {
 
   // The parser is a hard dependency for opt-parser=true resources.
   add("resource-parser", src.general.resource_parser_url, "parser");
+  // Icons: cosmetic, but mirroring them keeps the offline profile fully self-contained.
+  if (src.general.profile_img_url) add("icon-profile", src.general.profile_img_url, "icon");
+  for (const r of src.policies.regions) if (r.icon) add(`icon-${r.name}`, r.icon, "icon");
+  for (const g of src.policies.groups ?? []) if (g.icon) add(`icon-${g.name}`, g.icon, "icon");
   // geo_location_checker's script half.
   const geo = src.general.geo_location_checker.split(",").map((s) => s.trim())[1];
   if (geo && /^https?:/.test(geo)) add("geo-location-script", geo, "script");
@@ -71,6 +75,11 @@ async function fetchOne(res) {
       headers: { "User-Agent": "loon2qx-snapshot/1.0" },
     });
     if (!res0.ok) return { ...res, ok: false, status: res0.status };
+    if (res.kind === "icon") {
+      const buf = Buffer.from(await res0.arrayBuffer());
+      if (buf.length === 0) return { ...res, ok: false, status: res0.status, reason: "empty body" };
+      return { ...res, ok: true, status: res0.status, body: buf };
+    }
     const body = await res0.text();
     if (!body.trim()) return { ...res, ok: false, status: res0.status, reason: "empty body" };
     return { ...res, ok: true, status: res0.status, body };
@@ -140,7 +149,7 @@ lines.push("");
 
 lines.push(section("general", "常规设置"));
 lines.push(`resource_parser_url=${snapUrl(src.general.resource_parser_url)}`);
-lines.push(`profile_img_url=${src.general.profile_img_url}`);
+lines.push(`profile_img_url=${snapUrl(src.general.profile_img_url)}`);
 lines.push(`server_check_url=${src.general.server_check_url}`);
 lines.push(`server_check_timeout=${src.general.server_check_timeout}`);
 lines.push(`network_check_url=${src.general.network_check_url}`);
@@ -162,15 +171,15 @@ lines.push("");
 lines.push(section("policy", "策略组"));
 for (const r of src.policies.regions) {
   lines.push(
-    `static=${r.name}, resource-tag-regex=., server-tag-regex=${r.regex}, img-url=${r.icon}`
+    `static=${r.name}, resource-tag-regex=., server-tag-regex=${r.regex}, img-url=${snapUrl(r.icon)}`
   );
 }
 const regionByName = new Map(src.policies.regions.map((r) => [r.name, r]));
 for (const s of src.policies.selects) {
-  lines.push(`static=${s.name}, ${s.region}, img-url=${regionByName.get(s.region).icon}`);
+  lines.push(`static=${s.name}, ${s.region}, img-url=${snapUrl(regionByName.get(s.region).icon)}`);
 }
 for (const g of src.policies.groups ?? []) {
-  lines.push(`static=${g.name}, ${g.region}, img-url=${g.icon}`);
+  lines.push(`static=${g.name}, ${g.region}, img-url=${snapUrl(g.icon)}`);
 }
 lines.push("");
 
