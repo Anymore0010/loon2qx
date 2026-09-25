@@ -1,0 +1,14 @@
+# 依赖
+node_modules/
+_work/
+
+# 本地私密信息：绝不提交订阅链接、证书
+*.local.conf
+local.secret
+*.p12
+*.mobileconfig
+*.crt
+*.key
+
+# 原始 Loon 配置（含订阅链接与证书私钥），仅保留在本地
+loon_config/.raw/

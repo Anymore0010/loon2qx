@@ -1,0 +1,60 @@
+name: Snapshot
+
+# The profile depends on ~54 third-party resources across several upstream repos.
+# If one is deleted or force-pushed, the profile silently loses rules. This job
+# refreshes the frozen mirror in snapshot/ weekly so there is always a working
+# copy, and regenerates the offline profile that points at the mirror.
+
+on:
+  schedule:
+    # 03:17 UTC every Monday (off the top of the hour to avoid the Actions rush).
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Regenerate profile from manifest
+        run: bun tools/build.mjs
+
+      - name: Mirror upstream resources
+        run: bun tools/fetch-snapshot.mjs
+
+      - name: Validate generated profiles
+        run: bun tools/validate.mjs
+
+      - name: Report upstream failures
+        if: failure()
+        run: |
+          if [ -f snapshot/index.json ]; then
+            echo "### Resources that failed to mirror" >> "$GITHUB_STEP_SUMMARY"
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            bun -e 'const i=require("./snapshot/index.json");console.log(JSON.stringify(i.resources.filter(r=>r.error),null,2))' >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Commit refreshed snapshot
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A snapshot QuantumultX
+          if git diff --cached --quiet; then
+            echo "No upstream changes."
+          else
+            git commit -m "chore(snapshot): weekly refresh $(date -u +%Y-%m-%d)"
+            git push
+          fi

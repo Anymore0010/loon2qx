@@ -1,0 +1,496 @@
+{
+  "generated_at": "2026-09-25T07:37:58.125Z",
+  "repository": "YuCN/loon2qx",
+  "ref": "main",
+  "total": 54,
+  "mirrored": 54,
+  "failed": 0,
+  "resources": [
+    {
+      "id": "filter-apple-ai",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
+      "snapshot": "snapshot/github.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
+      "upstream_raw": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-telegram",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-tiktok",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/TikTok/TikTok.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/TikTok/TikTok.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/TikTok/TikTok.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-ai",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-ai-anthropic",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-apple-push",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-apple-account",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-appstore",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-github",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-netflix",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-youtube",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-disney",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-twitter",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-facebook",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-instagram",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-spotify",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-google",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-onedrive",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OneDrive/OneDrive.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OneDrive/OneDrive.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OneDrive/OneDrive.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-advertising",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-advertising",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-block-httpdns",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-weibo",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-xueqiu",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XueQiu.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XueQiu.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XueQiu.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-jd-price",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
+      "snapshot": "snapshot/github.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-spotify",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/app2smile/rules/master/module/spotify.conf",
+      "snapshot": "snapshot/github.com/app2smile/rules/master/module/spotify.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/module/spotify.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-wechat-unlock",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/UnblockURLinWeChat.conf",
+      "snapshot": "snapshot/github.com/ddgksf2013/Rewrite/master/Function/UnblockURLinWeChat.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/UnblockURLinWeChat.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-pinduoduo",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partP/Pinduoduo.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partP/Pinduoduo.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partP/Pinduoduo.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-fanqie",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partF/FanQieNovel.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partF/FanQieNovel.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partF/FanQieNovel.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-xianyu",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XianYu.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XianYu.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XianYu.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-quark",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Quark.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Quark.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Quark.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-12306",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/part1/12306.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/part1/12306.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/part1/12306.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-taobao",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/Taobao.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/Taobao.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/Taobao.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-jd",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partJ/JD.com.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partJ/JD.com.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partJ/JD.com.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-tencent-video",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/TencentVideo.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/TencentVideo.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/TencentVideo.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-iqiyi",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/iQIYI.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/iQIYI.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/iQIYI.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-aliyun-drive",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/AlibabaCloudDrive.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/AlibabaCloudDrive.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/AlibabaCloudDrive.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-amap",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/AmapAds.conf",
+      "snapshot": "snapshot/github.com/ddgksf2013/Rewrite/master/AdBlock/AmapAds.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/AmapAds.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-qqmusic",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partQ/QQMusic.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partQ/QQMusic.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partQ/QQMusic.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-wechat-official-accounts",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partW/WeChatOfficialAccount.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partW/WeChatOfficialAccount.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partW/WeChatOfficialAccount.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-xiaohongshu",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/Xiaohongshu.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/Xiaohongshu.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/Xiaohongshu.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-smzdm",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partS/SMZDM.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partS/SMZDM.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partS/SMZDM.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-zhihu",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partZ/Zhihu.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partZ/Zhihu.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partZ/Zhihu.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-coolapk",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Coolapk.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Coolapk.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Coolapk.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-bilibili",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/Bilibili_CC.conf",
+      "snapshot": "snapshot/github.com/ddgksf2013/Rewrite/master/Function/Bilibili_CC.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/Bilibili_CC.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-youtube",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partY/YouTube.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partY/YouTube.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partY/YouTube.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-cainiao",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partC/CaiNiaoGuoGuo.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partC/CaiNiaoGuoGuo.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partC/CaiNiaoGuoGuo.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-boxjs",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
+      "snapshot": "snapshot/github.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-sub-store",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
+      "snapshot": "snapshot/github.com/sub-store-org/Sub-Store/master/config/QX.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-script-hub",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
+      "snapshot": "snapshot/github.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "task-server-info",
+      "kind": "task",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/scripts/server_info.js",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/scripts/server_info.js",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/scripts/server_info.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "task-streaming-check",
+      "kind": "task",
+      "url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/streaming-ui-check.js",
+      "snapshot": "snapshot/github.com/KOP-XIAO/QuantumultX/master/Scripts/streaming-ui-check.js",
+      "upstream_raw": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/streaming-ui-check.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "task-node-link-check",
+      "kind": "task",
+      "url": "https://raw.githubusercontent.com/I-am-R-E/Functional-Store-Hub/Master/NodeLinkCheck/Script/NodeLinkCheck.js",
+      "snapshot": "snapshot/github.com/I-am-R-E/Functional-Store-Hub/Master/NodeLinkCheck/Script/NodeLinkCheck.js",
+      "upstream_raw": "https://raw.githubusercontent.com/I-am-R-E/Functional-Store-Hub/Master/NodeLinkCheck/Script/NodeLinkCheck.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "resource-parser",
+      "kind": "parser",
+      "url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
+      "snapshot": "snapshot/github.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
+      "upstream_raw": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "geo-location-script",
+      "kind": "script",
+      "url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
+      "snapshot": "snapshot/github.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
+      "upstream_raw": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
+      "status": 200,
+      "error": null
+    }
+  ]
+}
