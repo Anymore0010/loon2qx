@@ -153,7 +153,7 @@
       "vendor": true,
       "vendored_as": "AppleIntelligence.list",
       "_local": true,
-      "local_file": "rules/AppleIntelligence.list",
+      "local_file": "QuantumultX/rules/AppleIntelligence.list",
       "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list"
     },
     {
@@ -198,7 +198,7 @@
       "vendor": true,
       "vendored_as": "AI.list",
       "_local": true,
-      "local_file": "rules/AI.list",
+      "local_file": "QuantumultX/rules/AI.list",
       "upstream_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list"
     },
     {
@@ -351,7 +351,7 @@
       "vendor": true,
       "vendored_as": "GeoIP_CN.list",
       "_local": true,
-      "local_file": "rules/GeoIP_CN.list",
+      "local_file": "QuantumultX/rules/GeoIP_CN.list",
       "upstream_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list"
     },
     {

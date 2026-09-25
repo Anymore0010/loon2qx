@@ -12,9 +12,10 @@
  *
  *   bun tools/validate.mjs
  */
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveRepoBase } from "./repo-url.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ONLINE = join(ROOT, "QuantumultX", "default.conf");
@@ -38,6 +39,21 @@ const KNOWN_SECTIONS = new Set([
 
 /** Sections that may only appear once. */
 const REQUIRED_SECTIONS = [...KNOWN_SECTIONS];
+
+/** Rule types Quantumult X accepts in filter sections. */
+const QX_RULE_TYPES = new Set([
+  "host",
+  "host-suffix",
+  "host-keyword",
+  "host-wildcard",
+  "ip-cidr",
+  "ip6-cidr",
+  "ip-asn",
+  "geoip",
+  "user-agent",
+  "url-regex",
+  "final",
+]);
 
 const errors = [];
 const warnings = [];
@@ -157,6 +173,65 @@ function checkTasks(p) {
   }
 }
 
+/**
+ * Self-hosted URLs (pointing back at this repo) must resolve to a real file.
+ * Catches path/prefix mistakes such as emitting `/rules/x.list` while the file
+ * lives at `QuantumultX/rules/x.list` — which would silently drop those rules
+ * in Quantumult X.
+ */
+function checkSelfHostedFiles(p, repoSlug) {
+  const seen = new Set();
+  for (const [name, entries] of p.sections) {
+    for (const { n, line } of entries) {
+      for (const m of line.matchAll(/https:\/\/raw\.githubusercontent\.com\/[^,\s]+\/([^,\s]+)/g)) {
+        const url = m[0];
+        if (!url.includes(`/${repoSlug}/`)) continue; // not self-hosted
+        // Strip the "<repoSlug>/<ref>/" prefix to get the in-repo path.
+        const idx = url.indexOf(`/${repoSlug}/`);
+        const afterSlug = url.slice(idx + repoSlug.length + 2);
+        const slash = afterSlug.indexOf("/");
+        const rel = afterSlug.slice(slash + 1);
+        if (seen.has(rel)) continue;
+        seen.add(rel);
+        if (!existsSync(join(ROOT, rel))) {
+          err(p.path, n, `self-hosted URL points at a missing file: ${rel} (in [${name}])`);
+        }
+      }
+    }
+  }
+  return seen.size;
+}
+
+/**
+ * Vendored rules must be valid Quantumult X filter syntax, not HTML error pages
+ * or unconverted Loon rules. A wrong file would silently produce zero rules.
+ */
+function checkVendoredRules() {
+  const dir = join(ROOT, "QuantumultX", "rules");
+  if (!existsSync(dir)) return 0;
+  const files = readdirSync(dir).filter((f) => f.endsWith(".list"));
+  let total = 0;
+  for (const f of files) {
+    const rel = `QuantumultX/rules/${f}`;
+    const lines = readFileSync(join(dir, f), "utf8").split(/\r?\n/);
+    let count = 0;
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line || line.startsWith("#")) continue;
+      // Must be "<type>, <value>[, policy]" with a QX type.
+      const type = line.split(",")[0].trim().toLowerCase();
+      if (!QX_RULE_TYPES.has(type)) {
+        err(rel, 0, `not a valid Quantumult X rule type: "${line.slice(0, 60)}"`);
+        continue;
+      }
+      count++;
+    }
+    if (count === 0) err(rel, 0, "vendored rule file contains zero rules");
+    total += count;
+  }
+  return { files: files.length, rules: total };
+}
+
 /** In the snapshot profile, every referenced snapshot file must exist. */
 function checkSnapshotFiles(p) {
   const seen = new Set();
@@ -182,6 +257,14 @@ function checkNonEmpty(p) {
 }
 
 // ---- run -------------------------------------------------------------------
+// Resolved so self-hosted URLs can be recognised regardless of which machine or
+// CI job runs the check.
+const repoSlug = resolveRepoBase(ROOT).slug;
+
+{
+  const vendored = checkVendoredRules();
+  if (vendored) console.log(`QuantumultX/rules  ${vendored.files} file(s), ${vendored.rules} rules`);
+}
 const profiles = [ONLINE, OFFLINE].filter((p) => {
   if (!existsSync(p)) {
     err(p, 0, "profile does not exist");
@@ -208,9 +291,10 @@ for (const path of profiles) {
 
   let snapCount = 0;
   if (rel.includes("offline")) snapCount = checkSnapshotFiles({ ...p, path: rel });
+  const selfHosted = checkSelfHostedFiles({ ...p, path: rel }, repoSlug);
 
   const counts = [...p.sections].map(([k, v]) => `${k}:${v.length}`).join(" ");
-  console.log(`${rel}  ${counts}${snapCount ? `  snapshot-files:${snapCount}` : ""}`);
+  console.log(`${rel}  ${counts}${snapCount ? `  snapshot-files:${snapCount}` : ""}${selfHosted ? `  self-hosted:${selfHosted}` : ""}`);
 }
 
 // Rule-count sanity: the snapshot must not be an empty mirror.
