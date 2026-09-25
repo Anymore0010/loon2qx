@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-25T07:37:58.125Z",
-  "repository": "YuCN/loon2qx",
-  "ref": "main",
-  "total": 54,
-  "mirrored": 54,
+  "generated_at": "2026-09-25T07:43:38.669Z",
+  "repository": "Anymore0010/loon2qx",
+  "ref": "master",
+  "total": 46,
+  "mirrored": 46,
   "failed": 0,
   "resources": [
     {
@@ -34,7 +34,7 @@
       "error": null
     },
     {
-      "id": "filter-ai",
+      "id": "filter-ai-openai",
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
       "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
@@ -52,7 +52,16 @@
       "error": null
     },
     {
-      "id": "filter-apple-push",
+      "id": "filter-ai-fmz",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Loon/rule/AI.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-apple",
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
       "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
@@ -169,11 +178,83 @@
       "error": null
     },
     {
+      "id": "filter-douyin",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-redbook",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/RedBook.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Loon/rule/RedBook.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/RedBook.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-kuaishou",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/KuaiShou.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Loon/rule/KuaiShou.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/KuaiShou.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-talkatone",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-ads-fmz",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+      "status": 200,
+      "error": null
+    },
+    {
       "id": "filter-advertising",
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
       "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
       "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-fix",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-geoip-cn",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "filter-block-apple-update",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/blockAppleUpdate.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/blockAppleUpdate.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/blockAppleUpdate.list",
       "status": 200,
       "error": null
     },
@@ -196,137 +277,29 @@
       "error": null
     },
     {
+      "id": "rewrite-fmz-ads",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-fmz-cleanup",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/cleanup.snippet",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/cleanup.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/cleanup.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
       "id": "rewrite-weibo",
       "kind": "rewrite",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-xueqiu",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XueQiu.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XueQiu.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XueQiu.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-jd-price",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
-      "snapshot": "snapshot/github.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
-      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-spotify",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/module/spotify.conf",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/module/spotify.conf",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/module/spotify.conf",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-wechat-unlock",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/UnblockURLinWeChat.conf",
-      "snapshot": "snapshot/github.com/ddgksf2013/Rewrite/master/Function/UnblockURLinWeChat.conf",
-      "upstream_raw": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/UnblockURLinWeChat.conf",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-pinduoduo",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partP/Pinduoduo.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partP/Pinduoduo.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partP/Pinduoduo.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-fanqie",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partF/FanQieNovel.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partF/FanQieNovel.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partF/FanQieNovel.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-xianyu",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XianYu.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XianYu.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XianYu.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-quark",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Quark.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Quark.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Quark.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-12306",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/part1/12306.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/part1/12306.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/part1/12306.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-taobao",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/Taobao.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/Taobao.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/Taobao.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-jd",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partJ/JD.com.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partJ/JD.com.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partJ/JD.com.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-tencent-video",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/TencentVideo.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/TencentVideo.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/TencentVideo.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-iqiyi",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/iQIYI.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/iQIYI.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/iQIYI.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-aliyun-drive",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/AlibabaCloudDrive.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/AlibabaCloudDrive.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/AlibabaCloudDrive.snippet",
       "status": 200,
       "error": null
     },
@@ -340,60 +313,6 @@
       "error": null
     },
     {
-      "id": "rewrite-qqmusic",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partQ/QQMusic.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partQ/QQMusic.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partQ/QQMusic.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-wechat-official-accounts",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partW/WeChatOfficialAccount.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partW/WeChatOfficialAccount.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partW/WeChatOfficialAccount.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-xiaohongshu",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/Xiaohongshu.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/Xiaohongshu.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/Xiaohongshu.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-smzdm",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partS/SMZDM.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partS/SMZDM.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partS/SMZDM.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-zhihu",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partZ/Zhihu.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partZ/Zhihu.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partZ/Zhihu.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-coolapk",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Coolapk.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Coolapk.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Coolapk.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "rewrite-bilibili",
       "kind": "rewrite",
       "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/Bilibili_CC.conf",
@@ -403,20 +322,11 @@
       "error": null
     },
     {
-      "id": "rewrite-youtube",
+      "id": "rewrite-jd-tb-price",
       "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partY/YouTube.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partY/YouTube.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partY/YouTube.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-cainiao",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partC/CaiNiaoGuoGuo.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partC/CaiNiaoGuoGuo.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partC/CaiNiaoGuoGuo.snippet",
+      "url": "https://raw.githubusercontent.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
+      "snapshot": "snapshot/github.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
       "status": 200,
       "error": null
     },
@@ -475,20 +385,38 @@
       "error": null
     },
     {
+      "id": "task-server-info-plus",
+      "kind": "task",
+      "url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
+      "snapshot": "snapshot/github.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
+      "upstream_raw": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "task-traffic-check",
+      "kind": "task",
+      "url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/traffic-check.js",
+      "snapshot": "snapshot/github.com/KOP-XIAO/QuantumultX/master/Scripts/traffic-check.js",
+      "upstream_raw": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/traffic-check.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "task-speed-test",
+      "kind": "task",
+      "url": "https://raw.githubusercontent.com/getsomecat/Qx/main/Net_Speed.js",
+      "snapshot": "snapshot/github.com/getsomecat/Qx/main/Net_Speed.js",
+      "upstream_raw": "https://raw.githubusercontent.com/getsomecat/Qx/main/Net_Speed.js",
+      "status": 200,
+      "error": null
+    },
+    {
       "id": "resource-parser",
       "kind": "parser",
       "url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
       "snapshot": "snapshot/github.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
       "upstream_raw": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "geo-location-script",
-      "kind": "script",
-      "url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
-      "snapshot": "snapshot/github.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
-      "upstream_raw": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
       "status": 200,
       "error": null
     }

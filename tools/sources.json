@@ -1,21 +1,23 @@
 {
-  "_comment": "Single source of truth for every external resource used by the Quantumult X profile. tools/build.mjs generates QuantumultX/loon2qx.conf from this file; tools/fetch-snapshot.mjs mirrors every url into snapshot/ and generates the offline profile. Do not edit the generated .conf files by hand.",
-  "_origin": "Converted from the Loon profile in loon_config/ (see MAPPING.md for the plugin-by-plugin rationale).",
+  "_comment": "Single source of truth for every external resource used by the Quantumult X profile. tools/build.mjs generates QuantumultX/default.conf from this file; tools/fetch-snapshot.mjs mirrors every url into snapshot/ and generates the offline profile. Do not edit the generated .conf files by hand.",
+  "_origin": "起点是 loon_config/ 里的 Loon 配置（见 MAPPING.md 的逐插件映射），并融合了 fmz200/wool_scripts 的日常配置（QuantumultX/config/QuanX.conf）。",
+  "_merge_note": "fmz 的 rewrite.snippet 是聚合型资源，实测覆盖了原先按 App 拆分的 19/20 个片段（同 URL、同动作）。同时保留两者会让同一个响应体被两个脚本重复处理，因此改为只引用聚合资源，仅保留聚合未覆盖的（微博、高德、B站、京东比价）。",
 
   "general": {
     "profile_img_url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/QuantumultX.png",
     "resource_parser_url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/resource-parser.js",
     "network_check_url": "http://connectivitycheck.platform.hicloud.com/generate_204",
     "server_check_url": "http://www.gstatic.com/generate_204",
-    "server_check_timeout": 2000,
+    "server_check_timeout": 3000,
     "geo_location_checker": "http://ip-api.com/json/?lang=zh-CN, https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
-    "dns_exclusion_list": "*.cmpassport.com, *.jegotrip.com.cn, *.icitymobile.mobi, id6.me",
-    "excluded_routes": "10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.88.99.0/24, 192.168.0.0/16, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 255.255.255.255/32",
-    "fallback_udp_policy": "reject"
+    "dns_exclusion_list": "*.cmpassport.com, *.jegotrip.com.cn, *.icitymobile.mobi, id6.me, *.pingan.com.cn, *.cmbchina.com",
+    "excluded_routes": "10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.0.2.0/24, 192.88.99.0/24, 192.168.0.0/16, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 239.255.255.250/32, 255.255.255.255/32",
+    "fallback_udp_policy": "direct",
+    "udp_drop_list": "443"
   },
 
   "dns": {
-    "_comment": "From Loon [General] doh-server. ip-mode=dual means IPv6 stays enabled, so no-ipv6 is deliberately NOT set.",
+    "_comment": "来自 Loon [General] doh-server。ip-mode=dual 表示保留 IPv6，因此刻意不写 no-ipv6。",
     "doh_server": [
       "https://dns.alidns.com/dns-query",
       "https://doh.pub/dns-query",
@@ -24,7 +26,7 @@
   },
 
   "policies": {
-    "_comment": "Loon's [Remote Filter] node sets become url-latency-benchmark policies; Loon's [Proxy Group] selects become static policies on top of them. Regexes are carried over verbatim from the Loon profile.",
+    "_comment": "regions + selects 来自 Loon（[Remote Filter] 正则 + [Proxy Group]）。groups 是 fmz 配置里的策略组，供融合进来的 fmz 分流规则使用。",
     "regions": [
       {
         "name": "香港节点",
@@ -76,19 +78,18 @@
       { "name": "美国手动策略", "region": "美国节点" },
       { "name": "游戏手动策略", "region": "游戏节点" },
       { "name": "台湾手动策略", "region": "台湾节点" }
+    ],
+    "groups": [
+      { "name": "人工智能", "region": "美国节点", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png" },
+      { "name": "大陆抖音", "region": "direct", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png" },
+      { "name": "海外抖音", "region": "全球节点", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png" },
+      { "name": "谷歌服务", "region": "新国节点", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/SG.png" },
+      { "name": "电报消息", "region": "全球节点", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Global.png" },
+      { "name": "苹果服务", "region": "direct", "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Apple.png" }
     ]
   },
 
   "filters": [
-    {
-      "id": "filter-cn-region",
-      "url": "FILTER_REGION",
-      "tag": "CN REGION",
-      "policy": "direct",
-      "parser": false,
-      "enabled": true,
-      "note": "Quantumult X built-in equivalent of Loon's REGION_SPLITTER.lsr. MUST stay last."
-    },
     {
       "id": "filter-lan",
       "url": "FILTER_LAN",
@@ -96,7 +97,7 @@
       "policy": "direct",
       "parser": false,
       "enabled": true,
-      "note": "Quantumult X built-in equivalent of Loon's LAN_SPLITTER.lsr."
+      "note": "Quantumult X 内置资源，等同 Loon 的 LAN_SPLITTER.lsr。"
     },
     {
       "id": "filter-apple-ai",
@@ -104,7 +105,8 @@
       "tag": "Apple AI",
       "policy": "全球手动策略",
       "parser": true,
-      "enabled": true
+      "enabled": true,
+      "note": "来自 Loon [Remote Rule] 的 AppleIntelligence.list。"
     },
     {
       "id": "filter-telegram",
@@ -123,7 +125,7 @@
       "enabled": true
     },
     {
-      "id": "filter-ai",
+      "id": "filter-ai-openai",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
       "tag": "AI OpenAI",
       "policy": "美国手动策略",
@@ -139,7 +141,16 @@
       "enabled": true
     },
     {
-      "id": "filter-apple-push",
+      "id": "filter-ai-fmz",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list",
+      "tag": "AI 分流合集",
+      "policy": "人工智能",
+      "parser": true,
+      "enabled": true,
+      "note": "fmz 配置原有；Loon 格式规则，靠 resource_parser_url 转换。"
+    },
+    {
+      "id": "filter-apple",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
       "tag": "Apple Push Notification Service",
       "policy": "direct",
@@ -243,13 +254,94 @@
       "enabled": true
     },
     {
+      "id": "filter-douyin",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/Douyin.list",
+      "tag": "抖音IP",
+      "policy": "direct",
+      "parser": true,
+      "enabled": true,
+      "note": "fmz 配置原有（Loon 格式，需解析器）。"
+    },
+    {
+      "id": "filter-redbook",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/RedBook.list",
+      "tag": "小红书IP",
+      "policy": "direct",
+      "parser": true,
+      "enabled": true,
+      "note": "fmz 配置原有（Loon 格式，需解析器）。"
+    },
+    {
+      "id": "filter-kuaishou",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/KuaiShou.list",
+      "tag": "快手IP",
+      "policy": "direct",
+      "parser": true,
+      "enabled": true,
+      "note": "fmz 配置原有（Loon 格式，需解析器）。"
+    },
+    {
+      "id": "filter-talkatone",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
+      "tag": "Talkatone",
+      "policy": "美国手动策略",
+      "parser": false,
+      "enabled": true,
+      "note": "fmz 配置原有。"
+    },
+    {
+      "id": "filter-ads-fmz",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+      "tag": "广告拦截合集",
+      "policy": "reject",
+      "parser": false,
+      "enabled": true,
+      "note": "fmz 配置原有，约 9700 条 reject 规则。"
+    },
+    {
       "id": "filter-advertising",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
       "tag": "Advertising",
       "policy": "reject",
       "parser": false,
       "enabled": true,
-      "note": "Replaces Loon's BlockAdvertisers.lpx rule half."
+      "note": "替代 Loon 的 BlockAdvertisers.lpx 的分流部分。"
+    },
+    {
+      "id": "filter-fix",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
+      "tag": "分流修正",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "note": "fmz 配置原有。规则自带 direct / proxy 策略，因此不设 force-policy。"
+    },
+    {
+      "id": "filter-geoip-cn",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
+      "tag": "GeoIP_CN",
+      "policy": "direct",
+      "parser": true,
+      "enabled": true,
+      "note": "fmz 配置原有（Loon 格式，需解析器）。"
+    },
+    {
+      "id": "filter-block-apple-update",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/blockAppleUpdate.list",
+      "tag": "苹果屏蔽系统更新",
+      "policy": "reject",
+      "parser": false,
+      "enabled": false,
+      "note": "fmz 配置中原为 disabled，保持一致。"
+    },
+    {
+      "id": "filter-cn-region",
+      "url": "FILTER_REGION",
+      "tag": "CN REGION",
+      "policy": "direct",
+      "parser": false,
+      "enabled": true,
+      "note": "Quantumult X 内置资源，等同 Loon 的 REGION_SPLITTER.lsr。必须保持在最后。"
     }
   ],
 
@@ -269,200 +361,75 @@
       "enabled": true
     },
     {
+      "id": "rewrite-fmz-ads",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
+      "tag": "广告拦截合集",
+      "parser": false,
+      "enabled": true,
+      "note": "fmz 聚合资源，覆盖约 730 款 App。实测包含原先按 App 拆分的 19/20 个片段，因此不再单独引用，避免同一响应体被重复处理。"
+    },
+    {
+      "id": "rewrite-fmz-cleanup",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/cleanup.snippet",
+      "tag": "小程序广告清理",
+      "parser": false,
+      "enabled": true
+    },
+    {
       "id": "rewrite-weibo",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
       "tag": "微博去广告",
       "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-xueqiu",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XueQiu.snippet",
-      "tag": "雪球去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-jd-price",
-      "url": "https://raw.githubusercontent.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
-      "tag": "京东/淘宝比价",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-spotify",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/module/spotify.conf",
-      "tag": "Spotify 去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-wechat-unlock",
-      "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/UnblockURLinWeChat.conf",
-      "tag": "微信外部链接解锁",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-pinduoduo",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partP/Pinduoduo.snippet",
-      "tag": "拼多多去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-fanqie",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partF/FanQieNovel.snippet",
-      "tag": "番茄小说去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-xianyu",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/XianYu.snippet",
-      "tag": "闲鱼去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-quark",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Quark.snippet",
-      "tag": "夸克浏览器去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-12306",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/part1/12306.snippet",
-      "tag": "12306去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-taobao",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/Taobao.snippet",
-      "tag": "淘宝去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-jd",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partJ/JD.com.snippet",
-      "tag": "京东去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-tencent-video",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partT/TencentVideo.snippet",
-      "tag": "腾讯视频去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-iqiyi",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/iQIYI.snippet",
-      "tag": "爱奇艺去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-aliyun-drive",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partA/AlibabaCloudDrive.snippet",
-      "tag": "阿里云盘去广告",
-      "parser": false,
-      "enabled": true
+      "enabled": true,
+      "note": "fmz 聚合资源未覆盖微博，故单独保留。"
     },
     {
       "id": "rewrite-amap",
       "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/AmapAds.conf",
       "tag": "高德地图去广告",
       "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-qqmusic",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partQ/QQMusic.snippet",
-      "tag": "QQ音乐去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-wechat-official-accounts",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partW/WeChatOfficialAccount.snippet",
-      "tag": "微信公众号去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-xiaohongshu",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partX/Xiaohongshu.snippet",
-      "tag": "小红书去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-smzdm",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partS/SMZDM.snippet",
-      "tag": "什么值得买去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-zhihu",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partZ/Zhihu.snippet",
-      "tag": "知乎去广告",
-      "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-coolapk",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partK/Coolapk.snippet",
-      "tag": "酷安去广告",
-      "parser": false,
-      "enabled": true
+      "enabled": true,
+      "note": "fmz 聚合资源未覆盖（18 条规则 0 命中）。"
     },
     {
       "id": "rewrite-bilibili",
       "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/Bilibili_CC.conf",
       "tag": "哔哩哔哩去广告",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "note": "fmz 聚合资源未覆盖。"
     },
     {
-      "id": "rewrite-youtube",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partY/YouTube.snippet",
-      "tag": "YouTube去广告",
+      "id": "rewrite-jd-tb-price",
+      "url": "https://raw.githubusercontent.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
+      "tag": "京东/淘宝比价",
       "parser": false,
-      "enabled": true
-    },
-    {
-      "id": "rewrite-cainiao",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/split/partC/CaiNiaoGuoGuo.snippet",
-      "tag": "菜鸟裹裹去广告",
-      "parser": false,
-      "enabled": true
+      "enabled": true,
+      "note": "对应 Loon 的 JD_Price.lpx；fmz 聚合资源未覆盖。"
     },
     {
       "id": "rewrite-boxjs",
       "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
       "tag": "BoxJs",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "note": "对应 Loon 的 BoxJs.lpx；fmz 配置亦引用。"
     },
     {
       "id": "rewrite-sub-store",
       "url": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
       "tag": "Sub-Store",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "note": "对应 Loon 的 Sub-Store.lpx；fmz 配置亦引用。"
     },
     {
       "id": "rewrite-script-hub",
       "url": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
       "tag": "Script-Hub",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "note": "对应 Loon 的 Script-Hub.lpx；fmz 配置亦引用。"
     }
   ],
 
@@ -491,11 +458,35 @@
       "tag": "代理链路检测",
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Stack.png",
       "enabled": true
+    },
+    {
+      "id": "task-server-info-plus",
+      "schedule": "event-interaction",
+      "url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/server-info-plus.js",
+      "tag": "节点信息查询",
+      "icon": "tag.circle.system",
+      "enabled": true
+    },
+    {
+      "id": "task-traffic-check",
+      "schedule": "event-interaction",
+      "url": "https://raw.githubusercontent.com/KOP-XIAO/QuantumultX/master/Scripts/traffic-check.js",
+      "tag": "策略流量查询",
+      "icon": "arrow.up.arrow.down.circle.system",
+      "enabled": true
+    },
+    {
+      "id": "task-speed-test",
+      "schedule": "event-interaction",
+      "url": "https://raw.githubusercontent.com/getsomecat/Qx/main/Net_Speed.js",
+      "tag": "节点速度测试",
+      "icon": "bolt.square.fill.system",
+      "enabled": true
     }
   ],
 
   "local_rules": {
-    "_comment": "Verbatim port of Loon's [Rule] section. Loon DOMAIN/DOMAIN-SUFFIX/DOMAIN-KEYWORD map to QX host/host-suffix/host-keyword, and DIRECT maps to direct.",
+    "_comment": "逐条移植自 Loon 的 [Rule] 段。Loon 的 DOMAIN/DOMAIN-SUFFIX/DOMAIN-KEYWORD 对应 Quantumult X 的 host/host-suffix/host-keyword，DIRECT 对应 direct。",
     "rules": [
       "host, yimuapp.com, direct",
       "host-suffix, lty01.com, 全球手动策略",
@@ -534,7 +525,8 @@
       "host-suffix, trustwallet.com, 美国手动策略",
       "host-suffix, unsplash.com, 全球手动策略",
       "host-suffix, v2ex.com, 全球手动策略",
-      "host-suffix, api.iturrit.com, 全球手动策略"
+      "host-suffix, api.iturrit.com, 全球手动策略",
+      "host-suffix, local, direct"
     ],
     "final": "direct"
   }

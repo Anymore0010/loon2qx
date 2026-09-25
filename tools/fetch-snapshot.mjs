@@ -13,6 +13,7 @@
 import { mkdirSync, writeFileSync, rmSync, existsSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveRepoBase } from "./repo-url.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SNAP = join(ROOT, "snapshot");
@@ -113,10 +114,10 @@ function rawUrlFor(local) {
 
 // ---- offline profile -------------------------------------------------------
 // Same profile shape as tools/build.mjs, but every resource points at the copy
-// committed in this repository.
-const repoSlug = process.env.GITHUB_REPOSITORY || "<owner>/<repo>";
-const repoRef = process.env.GITHUB_REF_NAME || "main";
-const rawBase = `https://raw.githubusercontent.com/${repoSlug}/${repoRef}`;
+// committed in this repository. The base URL is resolved from CI env vars or the
+// git remote so it can never be baked in as a stale/wrong value.
+const repoInfo = resolveRepoBase(ROOT);
+const rawBase = repoInfo.rawBase;
 
 const byUrl = new Map(results.filter((r) => r.ok).map((r) => [r.url, r]));
 
@@ -151,6 +152,7 @@ lines.push(
 lines.push(`dns_exclusion_list=${src.general.dns_exclusion_list}`);
 lines.push(`excluded_routes=${src.general.excluded_routes}`);
 lines.push(`fallback_udp_policy=${src.general.fallback_udp_policy}`);
+if (src.general.udp_drop_list) lines.push(`udp_drop_list=${src.general.udp_drop_list}`);
 lines.push("");
 
 lines.push(section("dns", "DNS"));
@@ -167,6 +169,9 @@ const regionByName = new Map(src.policies.regions.map((r) => [r.name, r]));
 for (const s of src.policies.selects) {
   lines.push(`static=${s.name}, ${s.region}, img-url=${regionByName.get(s.region).icon}`);
 }
+for (const g of src.policies.groups ?? []) {
+  lines.push(`static=${g.name}, ${g.region}, img-url=${g.icon}`);
+}
 lines.push("");
 
 lines.push(section("server_remote", "节点订阅"));
@@ -181,16 +186,10 @@ lines.push("");
 
 lines.push(section("filter_remote", "远程分流"));
 for (const f of src.filters) {
-  lines.push(
-    [
-      snapUrl(f.url),
-      `tag=${f.tag}`,
-      `force-policy=${f.policy}`,
-      "update-interval=-1",
-      `opt-parser=${f.parser}`,
-      `enabled=${f.enabled}`,
-    ].join(", ")
-  );
+  const parts = [snapUrl(f.url), `tag=${f.tag}`];
+  if (f.policy) parts.push(`force-policy=${f.policy}`);
+  parts.push("update-interval=-1", `opt-parser=${f.parser}`, `enabled=${f.enabled}`);
+  lines.push(parts.join(", "));
 }
 lines.push("");
 
@@ -229,8 +228,8 @@ writeFileSync(join(SNAP, "loon2qx-offline.conf"), lines.join("\n") + "\n");
 // ---- machine-readable index -------------------------------------------------
 const index = {
   generated_at: new Date().toISOString(),
-  repository: repoSlug,
-  ref: repoRef,
+  repository: repoInfo.slug,
+  ref: repoInfo.ref,
   total: results.length,
   mirrored: ok,
   failed: failed,

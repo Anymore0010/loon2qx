@@ -13,7 +13,7 @@ import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const OUT = join(ROOT, "QuantumultX", "loon2qx.conf");
+const OUT = join(ROOT, "QuantumultX", "default.conf");
 
 const src = JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8"));
 
@@ -45,8 +45,12 @@ function buildGeneral(g) {
   lines.push(`dns_exclusion_list=${g.dns_exclusion_list}`);
   lines.push(comment("对应 Loon bypass-tun：这些流量不交给 Quantumult X 处理"));
   lines.push(`excluded_routes=${g.excluded_routes}`);
-  lines.push(comment("对应 Loon udp-fallback-mode = REJECT"));
+  lines.push(comment("UDP 兜底策略：节点不支持 UDP 中转时使用"));
   lines.push(`fallback_udp_policy=${g.fallback_udp_policy}`);
+  if (g.udp_drop_list) {
+    lines.push(comment("丢弃这些 UDP 端口（QUIC 等），避免与 TCP 分流策略不一致"));
+    lines.push(`udp_drop_list=${g.udp_drop_list}`);
+  }
   return lines.join("\n");
 }
 
@@ -75,6 +79,18 @@ function buildPolicy(p) {
     const region = regionByName.get(s.region);
     if (!region) throw new Error(`policy "${s.name}" references unknown region "${s.region}"`);
     lines.push(`static=${s.name}, ${s.region}, img-url=${region.icon}`);
+  }
+  // 融合自 fmz200/wool_scripts 配置的策略组，供其分流规则使用。
+  if (p.groups?.length) {
+    lines.push("");
+    lines.push(comment("以下策略组融合自 fmz200/wool_scripts 的日常配置，供对应分流规则使用。"));
+    for (const g of p.groups) {
+      const target = regionByName.get(g.region) ?? null;
+      if (!target && g.region !== "direct") {
+        throw new Error(`policy group "${g.name}" references unknown region "${g.region}"`);
+      }
+      lines.push(`static=${g.name}, ${g.region}, img-url=${g.icon}`);
+    }
   }
   return lines.join("\n");
 }
@@ -115,14 +131,11 @@ function buildFilterRemote(filters) {
   lines.push(comment("顺序即优先级：CN REGION 必须保持在最后。"));
   lines.push("");
   for (const f of filters) {
-    const parts = [
-      f.url,
-      `tag=${f.tag}`,
-      `force-policy=${f.policy}`,
-      "update-interval=86400",
-      `opt-parser=${f.parser}`,
-      `enabled=${f.enabled}`,
-    ];
+    const parts = [f.url, `tag=${f.tag}`];
+    // 规则自带策略的资源（如分流修正）不设 force-policy，否则会覆盖其原有策略。
+    if (f.policy) parts.push(`force-policy=${f.policy}`);
+    parts.push("update-interval=86400", `opt-parser=${f.parser}`, `enabled=${f.enabled}`);
+    if (f.note) lines.push(comment(f.note));
     lines.push(parts.join(", "));
   }
   return lines.join("\n");

@@ -17,7 +17,7 @@ import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const ONLINE = join(ROOT, "QuantumultX", "loon2qx.conf");
+const ONLINE = join(ROOT, "QuantumultX", "default.conf");
 const OFFLINE = join(ROOT, "snapshot", "loon2qx-offline.conf");
 
 /** Sections Quantumult X understands. Anything else is a fatal import error. */
