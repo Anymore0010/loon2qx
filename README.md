@@ -50,6 +50,22 @@ Loon 和 Quantumult X 的差异不在语法，而在**功能承载方式**：
 
 导入后先把各地区的「手动策略」选好（香港 / 新国 / 日本 / 美国 / 全球），否则规则命中的策略组是空的。
 
+### 启用每周自动刷新（需一次性操作）
+
+`.github/workflows/snapshot.yml` 已写好，但**尚未推送**：推送含 workflow 的文件需要 PAT 具备
+`workflow` scope，而当前凭据只有 `public_repo`（GitHub 会直接拒绝）。
+
+启用方式二选一：
+
+1. 补齐权限后推送（文件已在本地工作区）：
+   ```bash
+   gh auth refresh -h github.com -s workflow
+   git add .github && git commit -m "ci: 每周刷新快照" && git push
+   ```
+2. 或在 GitHub 网页上手动新建 `.github/workflows/snapshot.yml`，内容见本地同名文件。
+
+在此之前，快照仍可随时手动刷新：`bun tools/fetch-snapshot.mjs`。
+
 ## 目录结构
 
 ```

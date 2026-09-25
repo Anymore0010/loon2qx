@@ -259,4 +259,10 @@ writeFileSync(join(SNAP, "index.json"), JSON.stringify(index, null, 2) + "\n");
 console.log(`Snapshot: ${ok}/${results.length} mirrored, ${failed} failed`);
 console.log(`Wrote ${relative(ROOT, join(SNAP, "loon2qx-offline.conf"))}`);
 console.log(`Wrote ${relative(ROOT, join(SNAP, "index.json"))}`);
-if (failed > 0) process.exitCode = 1;
+// Default: exit 0 even when some upstreams fail, because snapshot/index.json
+// records the failures and the partial mirror is still worth committing.
+// `--strict` exits non-zero for use in a dedicated check step.
+if (failed > 0) {
+  console.warn(`${failed} upstream resource(s) failed — see snapshot/index.json`);
+  if (process.argv.includes("--strict")) process.exitCode = 1;
+}
