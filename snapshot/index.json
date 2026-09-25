@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 51,
-  "mirrored": 51,
+  "total": 50,
+  "mirrored": 50,
   "failed": 0,
   "resources": [
     {
@@ -195,15 +195,6 @@
       "error": null
     },
     {
-      "id": "filter-block-apple-update",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/blockAppleUpdate.list",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/blockAppleUpdate.list",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/blockAppleUpdate.list",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "rewrite-advertising",
       "kind": "rewrite",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
@@ -227,15 +218,6 @@
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-fmz-cleanup",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/cleanup.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/cleanup.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/cleanup.snippet",
       "status": 200,
       "error": null
     },
@@ -299,6 +281,15 @@
       "url": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
       "snapshot": "snapshot/github.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
       "upstream_raw": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-irongo-weatherkit",
+      "kind": "rewrite",
+      "url": "https://github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
+      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
+      "upstream_raw": null,
       "status": 200,
       "error": null
     },

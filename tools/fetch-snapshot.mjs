@@ -50,7 +50,7 @@ function collectResources() {
     if (f.url.startsWith("FILTER_")) continue; // built-in, cannot be mirrored
     add(f.id, f.url, "filter");
   }
-  for (const r of src.rewrites) add(r.id, r.url, "rewrite");
+  for (const r of src.rewrites) { if (r.local_file) continue; add(r.id, r.url, "rewrite"); }
   for (const t of src.tasks) add(t.id, t.url, "task");
 
   // The parser is a hard dependency for opt-parser=true resources.
@@ -213,10 +213,9 @@ lines.push("");
 
 lines.push(section("rewrite_remote", "远程重写"));
 for (const r of src.rewrites) {
+  const u = r.local_file ? `${rawBase}/${r.local_file}` : snapUrl(r.url);
   lines.push(
-    [snapUrl(r.url), `tag=${r.tag}`, "update-interval=-1", `opt-parser=${r.parser}`, `enabled=${r.enabled}`].join(
-      ", "
-    )
+    [u, `tag=${r.tag}`, "update-interval=-1", `opt-parser=${r.parser}`, `enabled=${r.enabled}`].join(", ")
   );
 }
 lines.push("");

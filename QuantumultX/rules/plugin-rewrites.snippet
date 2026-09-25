@@ -1,0 +1,431 @@
+# 由 tools/extract-plugin.mjs 自动生成 —— 请勿手工编辑
+# 来源: D:\Projects\loon2qx\_plugin_cache\plugins.plugin
+# 说明: 从 Loon 插件提取的 URL 级 rewrite（域名黑名单无法覆盖的部分）
+# 提取: 2083 条 -> 转换 1972 条 -> 自身去重 1901 条
+# 与现有重写源重复已剔除: 1479 条
+# 最终: 422 条
+# 未能转换: 111 条（QX 无对应动作，如 mock-response-body / map-local）
+# 重新生成: bun tools/extract-plugin.mjs <plugin-file>
+
+^http:\/\/101\.42\.130\.147\/httpdns\/resolve\/ url reject
+^http:\/\/106\.55\.220\.18:8053\/httpdns\/ url reject
+^http:\/\/139\.196\.12\.179:8053\/httpdns\/ url reject
+^http:\/\/54\.222\.159\.138:8053\/httpdns\/ url reject
+^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/pendragon\/ url reject-dict
+^https:\/\/(apissl|az2-api(-js|-idc)?)\.(gifshow|ksapisrv)\.com\/rest\/system\/startup\? url jsonjq-response-body 'del(.reskinConfig, .sidebarExSquareStyle.moreList, .sidebarExSquareStyle.topList)'
+^https:\/\/(mobile|mobilehera|mobwsa)\.ximalaya\.com\/football-portal\/diff2\/batch\? url jsonjq-response-body 'del(.json.ad, .json.toc)'
+^https:\/\/(mobile|mobilehera|mobwsa)\.ximalaya\.com\/mobile-user\/v\d\/homePage\/ url jsonjq-response-body 'del(.data.freeListenV2)'
+^https:\/\/api\.bilibili\.com\/pgc\/page\/channel\? url jsonjq-response-body '.data.modules |= map(select(.type != "TIP") | if .type == "BANNER" then .module_data.items |= map(select(.url | startswith("https://www.bilibili.com/blackboard/era/") | not)) else . end)'
+^https:\/\/api\.bilibili\.com\/pgc\/view\/v2\/app\/season\? url jsonjq-response-body 'del(.data.payment)'
+^https:\/\/api\.bilibili\.com\/x\/pd-proxy\/tracker\? url jsonjq-response-body '.data[][]?="stun.chat.bilibili.com:3478"'
+^https:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v1\/ecommerce-user\/get_shopping_info\? url reject-dict
+^https:\/\/api\.zhihu\.com\/(?:bazaar\/float_window|market\/popovers_v2) url reject-dict
+^https:\/\/api\.zhihu\.com\/(?:moments\/lastread|drama\/hot-drama-list) url reject-dict
+^https:\/\/api\.zhihu\.com\/comment_v5\/(?:articles|answers)\/\d+\/list-headers url reject-dict
+^https:\/\/api\.zhihu\.com\/commercial_api\/(?:answer\/\d+\/bottom-v2|article\/\d+\/bottom-v2|banners_v3\/app_topstory_banner|launch_v2|real_time_launch_v2) url reject-dict
+^https:\/\/api\.zhihu\.com\/search\/(hot_search|preset_words) url reject-dict
+^https:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\? url jsonjq-response-body 'del(.data.common_equip)'
+^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2\? url jsonjq-response-body 'jq-path="https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/jq/bilibili.tab.jq"'
+^https:\/\/app\.bilibili\.com\/x\/v2\/account\/mine(\/ipad)?\? url jsonjq-response-body 'jq-path="https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/jq/bilibili.mine.jq"'
+^https:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\? url jsonjq-response-body '.data.vip |= if . != null and .status == 0 then . + { status: 1, type: 2, due_date: 9005270400000, role: 15 } else . end'
+^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\/story\? url jsonjq-response-body 'if .data.items then .data.items |= map(select((.ad_info == null) and (.card_goto | IN("vertical_ad_av", "vertical_ad_live", "vertical_ad_picture") | not)) | del(.story_cart_icon, .free_flow_toast, .image_infos, .course_info, .game_info)) end'
+^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\? url jsonjq-response-body 'if .data.items then .data.items |= map(select((.banner_item == null) and (.ad_info == null) and (.card_goto == "av") and (.card_type | IN("small_cover_v2", "large_cover_single_v9", "large_cover_v1")))) end'
+^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/(list|show|event\/list2)\? url jsonjq-response-body '.data |= with_entries(if .key | IN("show", "event_list") then .value = [] else . end)'
+^https:\/\/app-conf\.ds\.163\.com\/v\d\/app\/base\/conf\/static\/start-config\? url jsonjq-response-body 'del(.result.updateConfig[2].itemList[94].itemList[2])'
+^https:\/\/beta-luna\.douyin\.com\/luna\/commerce\/v2\/commerce_info\? url reject-dict
+^https:\/\/beta-luna\.douyin\.com\/luna\/more-panel\? url jsonjq-response-body 'del(.blocks[1])'
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/surprisebox\/(?:get_style|open|submit_action) url reject-dict
+^https:\/\/god\.gameyw\.netease\.com\/v\d\/ad url reject
+^https:\/\/god\.gameyw\.netease\.com\/v\d\/app\/static\/conf\/getByModuleNameList$ url reject-dict
+^https:\/\/images\.pinduoduo\.com\/marketing_api\/ url reject
+^https:\/\/images\.pinduoduo\.com\/mrk\/ url reject
+^https:\/\/j1\.pupuapi\.com\/client\/member_card\/index\/my url reject
+^https:\/\/j1\.pupuapi\.com\/client\/notification\/message_center\/unread_number url jsonjq-response-body '.data = []'
+^https:\/\/line3-h5-mobile-api\.biligame\.com\/game\/live\/large_card_material\? url reject-dict
+^https:\/\/link\.zhihu\.com\/\?target=(?:https?)?(?:%3A|:)?(?:\/\/|%2F%2F)?(.*) url 302 http://$1
+^https:\/\/misc-api-prd-mx\.wandafilm\.com\/commend\/common_banner_batch\.api url jsonjq-response-body '.data.objects["OpenAPP-&-FlashAD"] = [] | .data.objects["InTheaters-&-BoxAD"] = []'
+^https:\/\/mobwsa\.ximalaya\.com\/mobile-playpage\/playpage\/tabs\/v2\/ url jsonjq-response-body 'del(.data.playpage.resourceMap.defaultResource, .data.playpage.resourceMap.playPageTip)'
+^https:\/\/music\.y\.qq\.com\/maproxy\/getPbCompressAd url reject
+^https:\/\/t-dsp\.pinduoduo\.com\/dspcb\/i\/mrk_union url reject
+^https:\/\/video-dsp\.pddpic\.com\/market-dsp-video\/ url reject
+^https:\/\/www\.zhihu\.com\/api\/v4/(?:answers|questions)\/\d+/related-readings url reject
+^https:\/\/www\.zhihu\.com\/api\/v4\/search\/related_queries\/(?:article|answer)\/\d+ url reject-dict
+^https?:\/\/ap\.dongdianqiu\.com\/plat\/v4 url reject
+^https?:\/\/api\.xiaoyuzhoufm\.com\/v1\/discovery-feed\/list url jsonjq-response-body '.data |= map(select(.type != "DISCOVERY_HEADER" and .type != "DISCOVERY_BANNER"))'
+^https?:\/\/api-one-wscn\.awtmt\.com\/apiv1\/advertising\/ads\/[0-9]+\/materials url reject-dict
+^https?:\/\/appapi\.51job(app)?\.com\/api\/market\/(adtrace|get_launch|get_prompt) url reject
+^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/init\/startInit url reject-200
+^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.cainiao\.guoguo\.nbnetflow\.ads url reject
+^https?:\/\/interface\d?\.music\.163.com\/eapi\/(mlivestream\/entrance\/playpage|link\/(position\/show\/strategy|scene\/show)|ios\/version|v\d\/content\/exposure\/comment\/banner) url reject-dict
+^https?:\/\/interface\d?\.music\.163.com\/w?e?api\/(search\/(chart|default|rcmd\/keyword|specialkeyword)|resource-exposure\/|activity\/bonus\/playpage\/time\/query) url reject-dict
+^https?:\/\/interface\d?\.music\.163\.com\/eapi\/(resource\/comments?\/musiciansaid|community\/friends\/fans-group\/artist\/group\/get|user\/sub\/artist|music\/songshare\/text\/recommend\/get|mine\/applet\/redpoint|resniche\/position\/play\/new\/get) url reject-dict
+^https?:\/\/interface\d?\.music\.163\.com\/w?e?api\/(side-bar\/mini-program\/music-service\/account|delivery\/(batch-deliver|deliver)|moment\/tab\/info\/get|yunbei\/account\/entrance\/get) url reject-dict
+^https?:\/\/mlol\.qt\.qq\.com\/go\/recommend url reject
+^https?:\/\/p\.kuaidi100\.com\/advertisement\/ url reject-dict
+^https?:\/\/p\.kuaidi100\.com\/apicenter\/card\.dox url reject-dict
+^https?:\/\/p\.kuaidi100\.com\/apicenter\/xcx\.dox url jsonjq-response-body 'del(.data.secondMenuList)'
+^https?:\/\/p\.kuaidi100\.com\/e-commerce\/act\/actInfo\? url reject-dict
+^https?:\/\/p\.kuaidi100\.com\/mobile\/mobileapi\.do$ url jsonjq-response-body 'del(.adsplash, .adIsConsumable, .adProductId, .nologin_tips, .index_banner, .me_banner, .index_banner_shadow, .adshongbao, .adsapp_homepage_ticket_pop, .adsoptimizationsend, .adsapp_activity_ad_array, .adbanner, .adposition, .adShowAgainTime)'
+^https?:\/\/static.psbc.com:8090\/mbank_f\/images\/[0-9]+\.png url reject-200
+^https?:\/\/yunbusiness\.ccb\.com\/clp_service\/txCtrl\?txcode=A3341A(002|006|009|119|120) url reject-200
+^https?:\/\/yunbusiness\.ccb\.com\/clp_service\/txCtrl\?txcode=A3341C147 url reject-200
+^https?:\/\/www\.myusmile\.online\/user\/plaqueTopic\/selectByType url script-response-header https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/usmile.js
+^https:\/\/ad\.12306\.cn\/ad\/ser\/getAdList$ url jsonjq-response-body 'delpaths([["materialsList"]])'
+^https:\/\/(app-v1\.ecoliving168\.com|852b95d36\.xwlpk\.cn)\/api\/v1\/movie\/index_recommend\? url jsonjq-response-body '.data[].list |= map(select(.type != 3)) | .data |= map(select(.layout != "advert_self"))'
+^https:\/\/huichuan\.sm\.cn\/nativead url reject-dict
+^https:\/\/ocean\.shuqireader\.com\/api\/route\/iosReadPage\/adV2 url reject-dict
+^https:\/\/ocean\.shuqireader\.com\/api\/route\/ios\/readPage$ url reject-dict
+^https:\/\/ocean\.shuqireader\.com\/api\/render\/load\/resource url reject
+^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=(searchBoxWord|stationPullService|uniformRecommend[06]) url reject-dict
+^https:\/\/api\.m\.jd\.com\/client\.action\?functionId=basicConfig url jsonjq-response-body 'if (getpath(["data","JDMessage","socketmonitor"]) | has("isSocketEstablishedAhead")) then (setpath(["data","JDMessage","socketmonitor","isSocketEstablishedAhead"]; 0)) else . end'
+^https:\/\/un-acs\.youku\.com\/gw\/mtop\.youku\.play\.ups\.appinfo\.get url jsonjq-response-body 'delpaths([["data","data","ad"]])'
+^https:\/\/push\.m\.youku\.com\/collect-api\/get_push_interval_config_wx\? url jsonjq-response-body 'delpaths([["data","tipContent"]])'
+^https?:\/\/api-access\.pangolin-sdk-toutiao\.com\/api\/ad\/union\/sdk url reject
+^https:\/\/cdn\.web\.chelaile\.net\.cn\/info-flow\/index\.html url reject
+^http:\/\/mercury-gateway\.ixiaochuan\.cn\/mercury\/v1\/ad\/ url reject
+^https?:\/\/api\.m\.mi\.com\/v\d\/app\/start url reject-200
+^https?:\/\/api-mifit\.huami\.com\/discovery\/mi\/discovery\/homepage_ad\? url reject-img
+^https?:\/\/api-mifit\.huami\.com\/discovery\/mi\/discovery\/sleep_ad\? url reject-img
+^https?:\/\/api-mifit\.huami\.com\/discovery\/mi\/discovery\/sport_summary_ad\? url reject-img
+^https?:\/\/api-mifit\.huami\.com\/discovery\/mi\/discovery\/sport_training_ad\? url reject-img
+^https?:\/\/api-mifit\.huami\.com\/discovery\/mi\/discovery\/step_detail_ad\? url reject-img
+^https?:\/\/api-mifit\.huami\.com\/discovery\/mi\/discovery\/training_video_ad\? url reject-img
+^https:\/\/shopapi\.io\.mi\.com\/mtop\/mf\/resource\/homePage\/pageConfig url reject-200
+^https:\/\/api-mifit-cn2\.huami\.com\/discovery\/mi\/cards\/startpage_ad url reject
+^https:\/\/apiwz\.midukanshu\.com\/advert\/getPopup$ url reject
+^https:\/\/apiwz\.midukanshu\.com\/advert\/treasureInfo$ url reject
+^https:\/\/apiwz\.midukanshu\.com\/config\/getAds$ url reject
+^http:\/\/img\.dailmo\.com\/img\/61\/23c7125bfe6166d69f3bff5b0ca4d31e\.jpg url reject
+^http:\/\/img\.dailmo\.com\/img\/50\/edb40c6392f848df37f9c31d8a6f90f6\.jpg url reject
+^http:\/\/img\.dailmo\.com\/img\/6\/90585d9e96c73dd49644af57d8501624\.jpg url reject
+^http:\/\/img\.dailmo\.com\/img\/5\/6cb2aa237ce1f65944aa1ecb29fbdeef\.jpg url reject
+^http:\/\/img\.allahall\.com\/img\/61\/23c7125bfe6166d69f3bff5b0ca4d31e\.jpg url reject
+^http:\/\/img\.allahall\.com\/img\/50\/edb40c6392f848df37f9c31d8a6f90f6\.jpg url reject
+^http:\/\/img\.allahall\.com\/img\/6\/90585d9e96c73dd49644af57d8501624\.jpg url reject
+^http:\/\/img\.allahall\.com\/img\/5\/6cb2aa237ce1f65944aa1ecb29fbdeef\.jpg url reject
+^http:\/\/img\.allahall\.com\/img\/59\/6a13a75dfe46ebfdac96bd27ef098885\.jpg url reject
+^http:\/\/app\.zhoudamozi\.com\/ad\/.+ url reject-200
+^https:\/\/api\.(pinduoduo|yangkeduo)\.com\/api\/cappuccino\/splash url reject
+^https:\/\/gw\.alicdn\.com\/mt\/ url reject
+^https:\/\/gw\.alicdn\.com\/tfs\/.+\d{3,4}-\d{4} url reject
+^https:\/\/gw\.alicdn\.com\/tps\/.+\d{3,4}-\d{4} url reject
+^https:\/\/m\.qianbao\.qq\.com\/services\/walletHome\/getQQshopData\? url reject-dict
+^https:\/\/m\.qianbao\.qq\.com\/services\/walletHome\/getGameData\? url reject-dict
+^https:\/\/m\.qianbao\.qq\.com\/services\/walletHome\/getFootData\? url reject-dict
+^https:\/\/hfapp-service\.qweather\.net\/v2\.0\/app\/ad\/list\? url reject-dict
+^http:\/\/home\.umetrip\.com\/gateway\/api\/umetrip\/native url reject
+^http:\/\/umerp\.umetrip\.com\/gateway\/api\/umetrip\/native url reject
+^https:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/init\/startInit$ url reject
+^https:\/\/dict\.youdao\.com\/course\/tab\/translateTab url reject-dict
+^https:\/\/dict\.youdao\.com\/homepage\/tile url reject-dict
+^https:\/\/api-overmind\.youdao\.com\/openapi\/get\/luna\/dict\/dict-mobile\/prod\/dictCommonConfig url reject-dict
+^https:\/\/cdke\.youdao\.com\/course3\/recommend\/dict\/startup url reject-dict
+^https:\/\/dict\.youdao\.com\/commonsearch url reject-dict
+^https:\/\/dict\.youdao\.com\/vip\/activity\/couponinfo url reject-dict
+^https:\/\/dict\.youdao\.com\/dictusertask\/system url reject-dict
+^http?:\/\/sfo\.mddcloud\.com\.cn\/api\/v2\/sfo\/popup_displays? url reject-dict
+^https:\/\/p0\.pipi\.cn\/(adAdmin|mediaplus\/maoyantong_ads_fe)\/\w+\.jpg\?imageMogr2\/quality\/ url reject-dict
+^https:\/\/p0\.pipi\.cn\/(adAdmin|mediaplus\/maoyantong_ads_fe)\/\w+\.(jpg|png)\?imageMogr2\/thumbnail\/(860x0|!165x165|!1049x1169) url reject-dict
+^https:\/\/api\.zcool\.com\.cn\/v\d\.\d\.\d/common\/open-screen url reject-dict
+^https:\/\/shealthyapi\.senssun\.com\/v1\/app\/banner\/findByType\?type=bottom$ url reject-dict
+^https:\/\/lanfanapp\.com\/api\/v1\/ads\/ url reject-dict
+^https:\/\/client-api-v2\.oray\.com\/materials\/SLCC_IOS_STARTUP url reject-dict
+^https:\/\/client-api-v2\.oray\.com\/materials\/SLCC_IOS_DEVICE url reject-dict
+^https:\/\/client-api-v2\.oray\.com\/materials\/SUNLOGIN_CLIENT_IOS_PROMOTION url reject-dict
+^https:\/\/app\.10099\.com\.cn\/contact-web\/api\/version\/getFlashScreenPage url reject
+^https:\/\/api\.xiangji\.qq\.com\/splash$ url reject-dict
+^https:\/\/cdn\.cmgadx\.com\/sdk\/pool\/ url reject-dict
+^https:\/\/qadx\.qinlinad\.com\/ad\/ url reject-dict
+^https:\/\/watch\.iot\.mi\.com\/cgi-op\/api\/v1\/watch\/health\/resource\?business=MI_WATCH_SPORT url reject-dict
+^https:\/\/watch\.iot\.mi\.com\/cgi-op\/api\/v1\/watch\/health\/resource\?business=MI_HEALTH_DEVICE_TAB_PAGE url reject-dict
+^https:\/\/acs\.m\.taobao\.com\/gw\/mtop\.film\.mtopadvertiseapi\.queryloadingbanner\/ url reject-dict
+^https:\/\/acs\.m\.taobao\.com\/gw\/mtop\.film\.life\.popup\.get\/ url reject-dict
+^https:\/\/d\.socdm\.com\/adsv\/ url reject-dict
+^https?:\/\/api\.fenxianglife\.com\/njia\/index\/popup\/v2 url jsonjq-response-body '.data.list=[]'
+^https:\/\/ci\.xiaohongshu\.com\/system_config\/watermark url reject-img
+^https:\/\/www\.xiaohongshu\.com\/api\/marketing\/box\/trigger\? url reject-dict
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/(?:v2\/guide\/user_banner|v3\/note\/guide) url reject-dict
+^https:\/\/www\.xiaohongshu\.com\/api\/sns\/(?:v1\/ads\/resource|v2\/hey\/\w+\/hey_gallery) url reject-dict
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/search\/banner_list$ url jsonjq-response-body 'if (getpath([]) | has("data")) then (setpath(["data"]; {})) else . end'
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/search\/hot_list$ url jsonjq-response-body 'if (getpath(["data"]) | has("items")) then (setpath(["data","items"]; [])) else . end'
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v4\/search\/hint url jsonjq-response-body 'if (getpath(["data"]) | has("hint_words")) then (setpath(["data","hint_words"]; [])) else . end'
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v4\/search\/trending\? url jsonjq-response-body 'if (getpath(["data"]) | has("queries")) then (setpath(["data","queries"]; [])) else . end'
+^https:\/\/api\.xiaoheihe\.cn\/account\/get_ads_info_v2 url reject-dict
+^https:\/\/api\.xiaoheihe\.cn\/bbs\/app\/feeds\/news url jsonjq-response-body '.result.links |= map(if .content_type == 27 then del(.title, .ad_pm, .img_gif, .idea_id, .ad_report, .label, .source, .intranet_only, .ad_cm, .content_type, .PROTOCOL, .img, .ad_ratio) else . end)'
+^https:\/\/mp\.weixin\.qq\.com\/mp\/(cps_product_info|getappmsgad|jsmonitor|masonryfeed|relatedarticle)\? url reject-dict
+^https:\/\/mp\.weixin\.qq\.com\/mp\/relatedsearchword url reject-dict
+^https:\/\/webapi\.qmai\.cn\/web\/catering\/advertising\/ url reject-dict
+^https:\/\/webapi\.qmai\.cn\/web\/cmk-center\/marketing\/canvas\/advert-reach url reject
+^https:\/\/creditcardapp\.bankcomm\.com\/cnsvPmpaMdbcardWeb\/page\/getGuidePageAds url reject
+^https:\/\/mbmodule-openapi\.paas\.cmbchina\.com\/graphic\/v2\/module\/graphic url reject
+^https:\/\/webchatapp\.fcbox\.com\/fcboxactivityweb\/api\/v2\/clientPage\/modulesAggregated\? url reject-dict
+^https:\/\/webchatapp\.fcbox\.com\/fcboxactivityweb\/api\/v2\/clientPage\/getHomeLiveInfo$ url reject-dict
+^https:\/\/dsp\.fcbox\.com\/adSearch\/ url reject-dict
+^https:\/\/webchatapp\.fcbox\.com\/post\/suggestion\/query$ url reject-dict
+^https:\/\/webchatapp\.fcbox\.com\/fcboxactivityweb\/marketingEntrance\/v2\/infoWithItems$ url reject-dict
+^https:\/\/webchatapp\.fcbox\.com\/fcboxactivityweb\/marketingEntrance\/info$ url reject-dict
+^https:\/\/app\.95504\.net\/app\/json\/page_ad\/initPageAd\?ver= url reject
+^https:\/\/minipro\.95504\.net\/app\/json\/ad\/getPopAdData url reject
+^https:\/\/minipro\.95504\.net\/app\/json\/ad\/getIndexAdData url reject
+^https:\/\/flow\.dmall\.com\/app\/home\/pops url reject
+^https:\/\/api\.yonghuivip\.com\/api\/fp\/homepage\/pop url reject
+^https:\/\/activity\.yonghuivip\.com\/api\/app\/fp\/homepage\/pop url reject
+^https:\/\/activity\.yonghuivip\.com\/api\/\/web\/shensuan\/ad url reject
+^https:\/\/sauron-report\.yonghuivip\.com\/collect url reject
+^https:\/\/res\.pizzahut\.com\.cn\/CRM url reject-dict
+^https:\/\/ump\.ems\.com\.cn\/mailAd$ url reject
+^https:\/\/r2\.gzyct\.com\/qrcode\/advert url reject-dict
+^https:\/\/ne\.gdsz\.sinopec\.com\/gateway\/api\/omp\/mt\/appAdvertising url reject-dict
+^https:\/\/dock\.tenchii\.com\/DockCard\/api\/mini\/card\/list url reject-dict
+^https:\/\/hdgateway\.zto\.com\/getApolloConfig url reject
+^https:\/\/hdgateway\.zto\.com\/track url reject
+^https:\/\/hdgateway\.zto\.com\/getAdInfo url reject
+^https:\/\/hdgateway\.zto\.com\/listJumperShow url reject
+^https:\/\/fscdn\.zto\.com\/fs1 url reject
+^https:\/\/api-marketing\.zhinengxiyifang\.cn\/api\/v2\/cloudcode\/wechat\/bid url reject
+^https:\/\/api\.songguo7\.com\/(\w{3})?mp\/v2\/misc\/(toast|user_operate_info|unlock_without_order|unlock_operate_info) url reject-dict
+^https:\/\/lawsonapi\.yorentown\.com\/area\/sh-lawson\/app\/v1\/mina\/systemSetting url reject-dict
+^https:\/\/api\.prod\.dj\.mstand\.cn\/scrm\/app\/mdm\/index\/listAdv\?types url reject-dict
+^https:\/\/mkt-gateway\.tuhu\.cn\/mkt-scene-marketing-service\/api\/scene\/queryScheme url reject-dict
+^https:\/\/api\.hengdianfilm\.com\/\/cinema\/queryAvailableBannerInfo\/2\?cid= url reject-dict
+^https:\/\/api\.hengdianfilm\.com\/\/cinema\/queryAvailableBannerInfo\/4\?cid= url reject-dict
+^https:\/\/tbgapplet\.carlsberg\.asia\/tuborg\/banner\/(loading|index) url reject-dict
+^https:\/\/api\.pinduoduo\.com\/api\/ktt_gateway\/activity\/feeds\/personal_home_page\/ url reject
+^https:\/\/ucmp\.sf-express\.com\/proxy\/operation-platform\/info-flow-adver\/query url reject-dict
+^https:\/\/ucmp\.sf-express\.com\/proxy\/esgcempcore\/memberGoods\/pointMallService\/goodsList url reject-dict
+^https:\/\/as\.xiaojukeji\.com\/ep\/as\/conf\?ns=daijia-front&name= url reject-dict
+^https:\/\/daijia\.kuaidadi\.com\/gateway\?api=prado\.cms\.delivery\.batch&apiVe url reject-dict
+^https:\/\/api\.szbgcx\.cn\/account\/adv\/ url reject
+^https:\/\/mobile\.12306\.cn\/wxxcx\/openplatform-inner\/miniprogram\/wifiapps\/appFrontEnd\/v2\/lounge\/open-smooth-common\/qrCode\/getAdvInfo$ url reject-dict
+^https:\/\/mobile\.12306\.cn\/wxxcx\/openplatform-inner\/miniprogram\/wifiapps\/tourism\/tourismBase\/api\/scenic\/getThemeProduct? url reject-dict
+^https:\/\/mobile\.12306\.cn\/wxxcx\/openplatform-inner\/miniprogram\/wifiapps\/appFrontEnd\/v2\/lounge\/open-smooth-common\/carService\/getCivilzedSlogan url reject-dict
+^https:\/\/wx\.online-cmcc\.cn\/contactpoint\/customer\/api\/list\? url reject-dict
+^https:\/\/wx\.10086\.cn\/qwhdhub\/activity\/info url reject-dict
+^https:\/\/mcsp\.cloudpnr\.com\/api\/miniapp\/popular\/T_MINIAPP$ url jsonjq-response-body 'delpaths([["data"]])'
+^https:\/\/saas-ad\.cloudpnr\.com\/huifuad-base-api\/api\/tactics\/ad$ url jsonjq-response-body 'delpaths([["data",0]])'
+^https:\/\/rms\.meituan\.com\/api\/v1\/rmsmina\/c\/queryShopPortalInfo\? url jsonjq-response-body 'delpaths([["data","popUpWindows"]])'
+^https:\/\/chong\.qq\.com\/tws\/wxmobile\/GetProduct4App\? url jsonjq-response-body 'del(.respInfo.reserveProductList) | .respInfo.shortcut |= map(select(.name != "充流量" and .name != "领话费券"))'
+^https:\/\/chong\.qq\.com\/tws\/wxmobile4app\/GetSecondProduct\? url jsonjq-response-body 'del(.respInfo.productList) | .respInfo.shortcut |= map(select(.name != "充流量" and .name != "领话费券"))'
+^https:\/\/chong\.qq\.com\/tws\/usernumberinfo\/GetUserInfo\? url jsonjq-response-body 'delpaths([["data","request","number","markSeat","servicehallOperList"]])'
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/commerce\/upsells_config\? url reject-dict
+^https:\/\/(api|api5-lq)\.qishui\.com\/luna\/ads\/ url reject-dict
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/ads\/ url reject-dict
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/treasure\/entrance\/config\? url reject-dict
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/activities\? url reject-dict
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/media_ads\? url reject-dict
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/commerce\/upsells\? url reject-dict
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/commerce\/v2\/commerce_info\? url reject-dict
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/listen-video\/reminder\? url reject-dict
+^https:\/\/tnc\d-(bjlgy|ali[a-z]{2})\d?\.zijieapi\.com\/get_domains\/v\d\/\? url jsonjq-response-body 'if (getpath(["data"]) | has("opaque_data_enabled")) then (setpath(["data","opaque_data_enabled"]; 0)) else . end'
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/me\? url jsonjq-response-body 'delpaths([["reward_ad_banner"]])'
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/feed\/song-tab\? url jsonjq-response-body 'del(.items[] | select(.type == "video_track_mix"))'
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/card\? url jsonjq-response-body 'delpaths([["preview_guide"]])'
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/more-panel\? url jsonjq-response-body '.blocks |= map(select(.type != "related_video"))'
+^https:\/\/(?:gw|heic)\.alicdn\.com\/imgextra\/i\d\/\d*\/?[\w!]+-\d-(?:octopus|tps)-(?:1080|1125)-\d{4}\.(?:jpg|png)_(?:1\d{3}|9\d{2})x(?:\d|1\d{3}|9\d{2})q[59]0 url reject-dict
+^https?:\/\/iface2\.iqiyi\.com\/control\/3\.0\/init_proxy\? url reject-dict
+^https:\/\/cards\.iqiyi\.com\/views_home\/3\.0\/qy_home\? url jsonjq-response-body 'delpaths([["base","statistics"]])'
+^https:\/\/cards\.iqiyi\.com\/views_category\/3\.0\/category_home\? url jsonjq-response-body 'del(.base.statistics | select(.ad_str)) | del(.cards[] | select(.alias_name == "entrence_focus" or .alias_name == "ad_trueview"))'
+^https:\/\/cards\.iqiyi\.com\/waterfall(-plt)?\/3\.0\/feed\? url jsonjq-response-body 'del(.base.statistics | select(.ad_str)) | del(.. | select(.block_class?))'
+^https:\/\/cards\.iqiyi\.com\/views_plt\/3\.0\/player_tabs_v2\? url jsonjq-response-body 'delpaths([["kv_pair","activity_tab"]])'
+^https:\/\/cards\.iqiyi\.com\/views_search\/3\.0\/hot_query_search\? url jsonjq-response-body '.cards |= map(select(.alias_name as $name | $name != "ad_trueview" and $name != "ad_mobile_flow" and $name != "search_mid_text_ad")) | if .base.statistics.ad_str? then del(.base.statistics) else . end'
+^https?:\/\/comment-card\.iqiyi\.com\/views_comment\/3\.0\/long_video_comments\? url jsonjq-response-body '.cards |= map(select(has("alias_name")))'
+^https?:\/\/iface2\.iqiyi\.com\/views_menus\/3\.0\/bottom_theme\? url jsonjq-response-body 'delpaths([["theme_list"]])'
+^https?:\/\/iface2\.iqiyi\.com\/views_menus\/3\.0\/home_top_menu\? url jsonjq-response-body '.nav_group_data[].nav_list |= map(select(. == "0" or . == "2" or . == "1007" or . == "1" or . == "6" or . == "3"))'
+^https?:\/\/iface2\.iqiyi\.com\/fusion\/3\.0\/common_switch\? url jsonjq-response-body 'delpaths([["content","resource","cast_device_ad"]])'
+^https?:\/\/(kjp|t7z)\.cupid\.iqiyi\.com\/mixer\? url jsonjq-response-body 'delpaths([["adSlots"]])'
+^https?:\/\/search\.video\.iqiyi\.com\/q\? url jsonjq-response-body 'delpaths([["data"]])'
+^https?:\/\/iface2\.iqiyi\.com\/aggregate\/3\.0\/getMyMenus\? url jsonjq-response-body '.data |= map(select(.statistic.block != "wd_liebiao_2") | select(all(.menuList[]?.statistic2.block; . != "wd_liebiao_3")))'
+^https:\/\/api\.zhihu\.com\/commercial_api\/ url reject-dict
+^https:\/\/api\.zhihu\.com\/next-render\?id=\d+&type=answer url reject-dict
+^https:\/\/api\.zhihu\.com\/search\/preset_words\? url reject-dict
+^https:\/\/api\.zhihu\.com\/search\/related_queries\/question\/\d+$ url reject-dict
+^https:\/\/zhida\.zhihu\.com\/ai_ingress\/knowledge\/square\/categories\/feeds\?categoryId=1%7D$ url reject-dict
+^https:\/\/zhida\.zhihu\.com\/ai_ingress\/ai_chat\/guidance$ url reject-dict
+^https:\/\/api\.zhihu\.com\/content-distribution-core\/bubble\/common\/show$ url reject-dict
+^https:\/\/www\.zhihu\.com\/api\/v\d\/members\/homepage_card$ url reject-dict
+^https:\/\/api\.zhihu\.com\/people\/homepage_entry_v\d$ url reject-dict
+^https:\/\/api\.zhihu\.com\/kvip\/right\/my_card\? url reject-dict
+^https:\/\/api\.zhihu\.com\/unlimited\/go\/my_card\/v\d\? url reject-dict
+^https:\/\/m-cloud\.zhihu\.com\/api\/cloud\/zhihu\/config\/all\? url jsonjq-response-body 'def drop_keys: {"km_httpdns_new_config_tars":true,"preFetchHttpDns":true,"httpdns_detector_use_concurrent":true,"httpdns_use_memory_cache":true,"httpdns_new_config_tars":true,"coreNetworkConf_useTars":true,"km_coreNetworkConf_useTars":true,"sugarQuicConfig":true,"quic_dns_detect_enable":true,"quicMixAB":true,"quic_downgrade_enable":true,"quic_priority_strategy":true,"quic_check_health_enable":true,"tquic_configuration":true,"networkExprimentList":true,"tars_ab_list":true,"zaSetExtraRequestHeader":true}; .data.configs |= map(select((drop_keys[.configKey]// false) | not) | if (.configValue | type) == "object" then del(.configValue.delayHttpdns, .configValue.dnsParser, .configValue.HTTPDNS) else . end)'
+^https:\/\/api\.zhihu\.com\/root\/tab\/v\d(?:\?.+)?$ url jsonjq-response-body '.tab_list |= map(select(.tab_type == "follow" or .tab_type == "recommend" or .tab_type == "hot" or .tab_type == "ring_tab"))'
+^https:\/\/api\.zhihu\.com\/topstory\/recommend\? url jsonjq-response-body '.data |= map(select(.type == "ComponentCard"))'
+^https:\/\/api\.zhihu\.com\/questions\/\d+\/feeds\? url jsonjq-response-body 'delpaths([["ad_info"]])'
+^https:\/\/api\.zhihu\.com\/comment_v\d\/(answers|pins)\/\d+\/root_comment\? url jsonjq-response-body 'delpaths([["atmosphere_voting_config"]])'
+^https:\/\/(api|page-info)(?:\.zhihu)?\.com\/answers\/v\d\/\d+(?:\?.*)?$ url jsonjq-response-body 'delpaths([["third_business"]])'
+^https:\/\/api\.zhihu\.com\/(articles|answers|pins)\/v\d\/\d+\? url jsonjq-response-body 'delpaths([["third_business"]])'
+^https:\/\/api\.zhihu\.com\/comment_v\d\/answers\/\d+\/list-headers$ url jsonjq-response-body 'delpaths([["continuous_consumption_module"]])'
+^https:\/\/api\.zhihu\.com\/podcasts\/hub\/v\d$ url jsonjq-response-body 'delpaths([["banners"]])'
+^https:\/\/api\.zhihu\.com\/search\/recommend_query\/v\d\? url jsonjq-response-body '.recommend_queries.queries |= map(select(.type == "normal"))'
+^https:\/\/api\.zhihu\.com\/search_v\d\? url jsonjq-response-body 'delpaths([["pendant"]])'
+^https:\/\/api\.zhihu\.com\/search\/tabs\? url jsonjq-response-body '.data |= map(select(.t | IN("general", "ai_zhida", "recent", "people", "zvideo", "ring", "topic", "podcast", "column", "pin", "favlist")))'
+^https:\/\/api\.zhihu\.com\/people\/self$ url jsonjq-response-body 'delpaths([["vip_info","entrance_new","right_button"]])'
+^https:\/\/bbs-api(-ab)?\.miyoushe\.com\/apihub\/api\/getAppSplash$ url reject-dict
+^https:\/\/bbs-api(-ab)?\.miyoushe\.com\/apihub\/api\/getHotKeywordAndEvent$ url reject-dict
+^https:\/\/bbs-api-static\.miyoushe\.com\/search\/api\/search\/pre_keyword\? url reject-dict
+^https:\/\/bbs-api(-ab)?\.miyoushe\.com\/apihub\/api\/getAppStartupData$ url jsonjq-response-body 'delpaths([["data","resp_map","/teenager/api/info"]])'
+^https:\/\/bbs-api(-ab)?\.miyoushe\.com\/apihub\/api\/getAppConfig$ url jsonjq-response-body 'if (getpath(["data","config"]) | has("teenager_popup_freq_type")) then (setpath(["data","config","teenager_popup_freq_type"]; 0)) else . end'
+^https:\/\/bbs-api-ab\.miyoushe\.com\/teenager\/api\/info$ url jsonjq-response-body 'if (getpath(["data"]) | has("is_enabled")) then (setpath(["data","is_enabled"]; false)) else . end'
+^https:\/\/api1\.zongheng\.com\/iosapi\/system\/startup$ url reject
+^https:\/\/api2\.zongheng\.com\/api\/giftBag\/bindingBag$ url reject-dict
+^https?:\/\/interface\d?\.music\.163\.com\/eapi\/(?:delivery\/(batch-)?deliver|moment\/tab\/info\/|side-bar\/mini-program\/music-service\/account|yunbei\/account\/entrance\/) url reject-dict
+^https?:\/\/interface\d?\.music\.163\.com\/eapi\/(?:community\/friends\/fans-group\/artist\/group\/|mine\/applet\/redpoint|music\/songshare\/text\/recommend\/|resniche\/position\/play\/new\/|resniche\/tspopup\/show|resource\/comments?\/musiciansaid\/|user\/sub\/artist) url reject-dict
+^https?:\/\/interface\d?\.music\.163\.com\/eapi\/(?:ios\/version|mlivestream\/entrance\/playpage\/|link\/position\/show\/strategy|link\/scene\/show\/resource|v1\/content\/exposure\/comment\/banner\/) url reject-dict
+^https?:\/\/interface\d?\.music\.163\.com\/w?eapi\/(?:activity\/bonus\/playpage\/time\/query|resource-exposure\/|search\/(?:chart\/|rcmd\/keyword\/|specialkeyword\/)) url reject-dict
+^https:\/\/interface\d\.music\.163\.com\/eapi\/my\/podcast\/tab\/recommend url reject-dict
+^https:\/\/appconf\.mail\.163\.com\/mailmaster\/api\/http\/urlConfig\.do$ url reject-dict
+^https:\/\/dashi\.163\.com\/task-center-api\/fapi\/task\/list$ url reject-dict
+^https:\/\/appconf\.mail\.163\.com\/mailoperating\/mailmaster\/api\/operator\/get$ url reject-dict
+^https:\/\/appconf\.mail\.163\.com\/mailmaster\/api\/page\/v2\/conf\.do$ url jsonjq-response-body 'delpaths([["data","functionOperatorInfoList"]])'
+^https:\/\/appconf\.mail\.163\.com\/mailmaster\/api\/config\/function\.do$ url jsonjq-response-body '.data.config[] |= if .result.tools then .result.tools |= map(select(.name == "邮件追踪" or .name == "替身邮箱")) else . end | del(.data.config[] | select(.functionName == "Function-AD"))'
+^https:\/\/api\.posters\.meitu\.com\/common\/init\.json url jsonjq-response-body 'delpaths([["data","vip"]])'
+^https:\/\/tianshu\.qq\.com\/open\/ts_access\/GetAds\? url reject-dict
+^https:\/\/h5\.qzone\.qq\.com\/p\/adboss\/api\/json\/ts_access\/GetAds$ url reject-dict
+^https?:\/\/vv\.video\.qq\.com\/(diff|get)vmind url reject-dict
+^https:\/\/nbcps-mtop\.cainiao\.com\/gw\/mtop\.cainiao\.nbcps\.presentation\.fetch\.cn url reject
+^https:\/\/netflow-mtop\.cainiao\.com\/gw\/mtop\.cainiao\.guoguo\.nbnetflow\.ads\.index url reject
+^https:\/\/cn-acs\.m\.cainiao\.com\/gw\/mtop\.cainiao\.adkeyword\.get\.cn url reject
+^https:\/\/cn-acs\.m\.cainiao\.com\/gw\/mtop\.cainiao\.guoguo\.nbnetflow\.ads\.m?show url reject
+^https:\/\/(cn-acs\.m|e2e-mtop)\.cainiao\.com\/gw\/mtop\.cainiao\.app\.e2e\.engine\.page\.fetch url jsonjq-response-body 'del(.data.data.data.mainSearch.bizData.searchContents, .data.data.data.operationList)'
+^https:\/\/e2e-mtop\.cainiao\.com\/gw\/mtop\.cainiao\.app\.e2e\.engine\.page\.fetch\.cn url jsonjq-response-body 'del(.data.data.banner, .data.data.activity, .data.data.vip)'
+^https:\/\/longquan-mtop\.cainiao\.com\/gw\/mtop\.com\.cainiao\.longquan\.place\.getpageresourcecontent\.cn url jsonjq-response-body 'del(.data.result.placeContentMap["780001"].contentList)'
+^https:\/\/netflow-mtop\.cainiao\.com\/gw\/mtop\.cainiao\.guoguo\.nbnetflow\.ads url jsonjq-response-body 'if .data.result[0].materialId == "39017" then . else .data = {} end'
+^https:\/\/app\.zhuanzhuan\.com\/zz\/v2\/zzlogic\/getOpenScreen$ url reject-dict
+^https:\/\/app\.zhuanzhuan\.com\/zz\/v2\/zzinfoshow\/getwindvanecardv2$ url reject-dict
+^https:\/\/app\.zhuanzhuan\.com\/zzopen\/popwindow\/getallpopwin\? url reject-dict
+^https:\/\/app\.zhuanzhuan\.com\/zzopen\/zzbmlogic\/queryFrontPageWindowInfo\? url reject-dict
+^https:\/\/app\.zhuanzhuan\.com\/zzopen\/ptuserlogic\/subscribehotrecommend$ url reject-dict
+^https:\/\/app\.zhuanzhuan\.com\/zzopen\/ypmall\/listData$ url reject-dict
+^https:\/\/app\.zhuanzhuan\.com\/zz\/v2\/zzusercenter\/myprofilevariouscards$ url reject-dict
+^https:\/\/app\.zhuanzhuan\.com\/zz\/v2\/zzlogic\/mycontinenthomepage\? url jsonjq-response-body 'delpaths([["respData","topOpera","leftOpera"]])'
+^https:\/\/app\.zhuanzhuan\.com\/zzx\/transfer\/getConfigInfo\? url jsonjq-response-body 'delpaths([["respData","freeMarketTabLeadPop"]])'
+^https:\/\/app\.zhuanzhuan\.com\/zz\/v2\/zzinfoshow\/getfeedflowinfo\? url jsonjq-response-body 'if .respData.userRed.campName == "OCD挂件" then del(.respData.userRed) else . end | .respData.infoData |= map(del(.rotateResource,.appRecommendResource,."cargoGroupCardV2"))'
+^https:\/\/app\.zhuanzhuan\.com\/zz\/transfer\/getmymoretools$ url jsonjq-response-body 'walk(if type == "object" and .name == "免流量特权" then empty else . end) | del(.respData.groupList[] | select(.groupName == "活动参与" or .groupName == "金融工具"))'
+^https:\/\/app\.zhuanzhuan\.com\/zz\/transfer\/getmyprofilev3$ url jsonjq-response-body 'delpaths([["respData","bmNewInfo"]])'
+^https:\/\/api\.coolapk\.com\/v6\/search\?.*type=hotSearch url reject-dict
+^https:\/\/api\.coolapk\.com\/v6\/feed\/detail\? url jsonjq-response-body '.data.hotReplyRows |= if . then map(select(.id?)) else . end | .data.topReplyRows |= if . then map(select(.id?)) else . end | reduce ("detailSponsorCard", "include_goods", "include_goods_ids") as $key (.; .data[$key]=[])'
+^https:\/\/api\.coolapk\.com\/v6\/feed\/replyList url jsonjq-response-body 'if .data? and ((.data | type) == "array") and (.data | length > 0) then .data |= map(select(.id?)) else . end'
+^https:\/\/api\.coolapk\.com\/v6\/main\/dataList url jsonjq-response-body '.data |= (if (type=="array" and length>0) then map(select((.entityTemplate!="sponsorCard") and (.title!="精选配件"))) else . end)'
+^https:\/\/api\.coolapk\.com\/v6\/page\/dataList url jsonjq-response-body 'if (.data | length > 0) then .data |= map(select((.title? != "酷安热搜") and (.entityTemplate? != "imageScaleCard") and (.entityTemplate? != "sponsorCard"))) else . end'
+^https:\/\/api\.coolapk\.com\/v6\/main\/indexV8 url jsonjq-response-body '.data |= (if length > 0 then map(select((.entityTemplate != "sponsorCard") and ([8639,29349,33006,32557] | index(.entityId) | not) and ((.title// "" | test("值得买|红包")) | not))) else . end)'
+^https:\/\/api\.coolapk\.com\/v6\/main\/init url jsonjq-response-body '.data |= map(select(.entityId? | [944,945,6390] | index(.) | not) | if .entityId == 20131 then .entities |= map(select(.title != "酷品")) else . end)'
+^https:\/\/gateway\.kugou\.com\/ads\.service\/ url reject-dict
+^https:\/\/gateway\.kugou\.com\/youth\/v1\/start_img\/last\? url reject-dict
+^https:\/\/gateway\.kugou\.com\/ads\.gateway\/ url reject-dict
+^http:\/\/mobilelog\.kugou\.com\/adtrackconfig\.json$ url reject-dict
+^https:\/\/gateway\.kugou\.com\/youth\/v1\/experiment\/get_params\? url reject-dict
+^https:\/\/gateway\.kugou\.com\/youth\/api\/user\/v1\/init\? url reject-dict
+^https:\/\/gateway\.kugou\.com\/youth\/v2\/activity\/task_list\? url reject-dict
+^https:\/\/gateway\.kugou\.com\/youth\/v1\/channel\/tab_list\? url reject-dict
+^https:\/\/gateway\.kugou\.com\/goddess\/v1\/content\/biz_list\? url reject-dict
+^https:\/\/gateway\.kugou\.com\/youth\/v1\/yueku\/tab\? url jsonjq-response-body '.data.responses |= map(select(.module == "new_song_publish" or .module == "song_rank"))'
+^https:\/\/www\.kdocs\.cn\/kdg\/api\/v1\/cards\/type\/3\?iosVer=\d+\.\d+\.\d+&isGetList=1 url reject-dict
+^https:\/\/www\.kdocs\.cn\/kdg\/api\/v1\/cards\/type\/27\?iosVer=\d+\.\d+\.\d+&isGetList=1 url reject-dict
+^https:\/\/f-api\.kdocs\.cn\/godfather\/api\/thirdparty\/v1\/viewpager\?showLocal=mobileWebIndex url reject-dict
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlecommerce\.splash\.ads\/ url reject-dict
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.local\.near\.by\.corner\.info\/ url reject-dict
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.item\.buy\.feeds\/ url reject-dict
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.playboy\.recommend\/ url reject-dict
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.home\.nextfresh\/ url jsonjq-response-body '.data.homeTopList |= map(select(.sectionType == "kingkongDo")) | .data.sections |= map(select(.data.clickParam.args.cardType as $ct | $ct != "homeMultiBanner" and $ct != "mamaAD")) | .data.sections |= map(select((.template.name|type=="string")and(.template.name=="idlefish_home_new_commodity_card"or(.template.name|contains("fish_home_tags_item_card")))))'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.widget\.refresh\.get\/ url jsonjq-response-body '.data.homeTopList |= map(select(.sectionType == "kingkongDo"))'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.home\.whale\.modulet\/ url jsonjq-response-body '.data.container.sections |= map(select(.template.name == "fish_home_miniapp"))'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.fun\.follow\.feed\.list\/ url jsonjq-response-body '.data.sections|=map(select(.cardType==2001))'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.home\.community\/ url jsonjq-response-body '.data.feedsList |= map(select(.template.name == "idlefish_home_new_commodity_card" or .template.name == "idlefish_home_new_content_card"))'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.home\.newitem\.page\/ url jsonjq-response-body '.data.sections |= map(select(.data.clickParam.args.cardType as $ct | $ct != "banner" and $ct != "mamaAD"))'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.local\.flow\.plat\.section\/ url jsonjq-response-body '.data.data.components |= map(select(.data and (.data|type=="object") and .data.template and (.data.template|type=="object") and .data.template.name and (.data.template.name|type=="string") and (.data.template.name|contains("fish_city_kingkong"))))'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.local\.home\.top\/ url jsonjq-response-body '.data.data.components |= map(select(.key == "fish_home_second_stage_top_cardV3"))'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.local\.home\/ url jsonjq-response-body '.data.sections |= map(select((.template.cardEnum != "ads") and (.cardType == "common")))'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.idle\.user\.page\.my\.adapter\/ url jsonjq-response-body '.data.container.sections |= map(select(.template.name | test("^my_fy[0-9]+_(header|user_info|trade|appraise|tools)$"))) | .data.container.sections |= map(.item |= (if .level and .level.exContent and (.level.exContent | has("tips")) then del(.level) else . end)) | .data.container.sections|=map(if .sectionBizCode=="entry2025" then .item.tool.exContent.tools|=[[.[][]|select(.exContent.id as $id|$id==1 or $id==2 or $id==3 or $id==5 or $id==29 or $id==32 or $id==38)]|sort_by(. as $item|([5,2,3,32,38,1,29]|index($item.exContent.id)))|[range(0;length;5) as $i|.[$i:$i+5]]][] else . end)'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.home\.circle\.list\/ url jsonjq-response-body '.data.circleList[]?.showInfo |= del(.titleImage, .atmosphereImageUrl) | .data.next.headList |= map(select(.bizCode == "main" or .bizCode == "market" or .bizCode == "IDLE_CIRCLE")) | del(.data.next.headList[]?.showInfo.rightTagImage)'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.magic\.home\.page\.list\/ url jsonjq-response-body 'delpaths([["data","topList"]])'
+^https:\/\/g-acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.search\/ url jsonjq-response-body '.data.resultList |= map(if .data.item.main.exContent.dislikeFeedback.clickParam.args.bizType == "ad" then empty else . end)'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.search\.discover\/ url jsonjq-response-body '.data.resultList |= map(select(.type != "MarketHotSpot"))'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.item\.search\.activate\/ url jsonjq-response-body '.data.cardList |= map(if has("cardData") and (.cardData | has("hotwords")) then .cardData |= del(.hotwords) else . end)'
+^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.trade\.full\.info\/ url jsonjq-response-body '.data.components |= map(select(.render | . == "orderStatusVO" or . == "addressInfoVO" or . == "orderInfoVO"))'
+^https:\/\/m5\.amap\.com\/ws\/shield\/search\/new_hotword\? url reject-dict
+^https:\/\/m5\.amap\.com\/ws\/faas\/amap-navigation\/card-service-(?:car-end|route-plan) url reject-dict
+^https:\/\/m5\.amap\.com\/ws\/shield\/search_poi\/tips_adv\? url reject-dict
+^https:\/\/oss\.amap\.com\/ws\/banner\/lists\/\? url reject-dict
+^https:\/\/ai\.amap\.com\/v1\/ai_rec\/ url reject-dict
+^https:\/\/m5\.amap\.com\/ws\/aos\/main\/page\/product\/list\? url reject-dict
+^https:\/\/m5\.amap\.com\/ws\/faas\/amap-navigation\/(?:main-page-assets|main-page-location|ridewalk-end-fc|usr-profile-fc\/homeV2) url reject-dict
+^https:\/\/m5\.amap\.com\/ws\/(?:mapapi\/hint_text\/offline_data|message\/notice\/list|shield\/search\/new_hotword) url reject-dict
+^https:\/\/m5\.amap\.com\/ws\/shield\/scene\/recommend\? url reject-dict
+^https:\/\/m5\.amap\.com\/ws\/valueadded\/weather\/v2\? url reject-dict
+^https:\/\/sns\.amap\.com\/ws\/msgbox\/pull_mp\? url reject-dict
+^https:\/\/m5-zb\.amap\.com\/ws\/boss\/(?:order\/car\/(?:feedback\/get_card_questions|feedback\/viptips|king_toolbox_car_bubble|remark\/satisfactionConf|rights_information)|tips\/onscene_visual_optimization) url reject-dict
+^https:\/\/m5-zb\.amap\.com\/ws\/boss\/(?:pay\/web\/paySuccess\/info\/request|transportation\/diversion\/resource\/driving) url reject-dict
+^https:\/\/m5\.amap\.com\/ws\/shield\/search_business\/process\/marketingOperationStructured\? url jsonjq-response-body 'delpaths([["data","commonMaterial"]])'
+^https:\/\/m5\.amap\.com\/ws\/shield\/search_poi\/homepage\? url jsonjq-response-body 'delpaths([["history_tags"]])'
+^https:\/\/m5-zb\.amap\.com\/ws\/sharedtrip\/taxi\/order_detail_car_tips\? url jsonjq-response-body 'delpaths([["data","carTips","data","popupInfo"]])'
+^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.(app\.viewunite\.v1\.View\/View|main\.community\.reply\.v1\.Reply\/MainList)$ url script-request-body https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.request.js
+^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.community\.service\.dm\.v1\.DM\/DmSegMobile$ url script-request-body https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.request.js
+^https:\/\/www\.coolapk\.com\/link.* url script-request-header https://raw.githubusercontent.com/VenenoSix24/Ivy-Script/refs/heads/main/Loon/script/Coolapk_Redirect.js
+^https?:\/\/ad\.12306\.cn\/ad\/ser\/getAdList url script-request-body https://raw.githubusercontent.com/kokoryh/Script/master/js/12306.js
+^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/(?:bootstrap|user-customization-service) url script-response-body https://raw.githubusercontent.com/001ProMax/Surge/refs/heads/main/Script/Spotify.Crack.Dev.js
+^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.(app\.(show\.v1\.Popular\/Index|dynamic\.v2\.Dynamic\/DynAll|view(unite)?\.v1\.View\/(View|ViewProgress|RelatesFeed)|playurl\.v1\.PlayURL\/PlayView|playerunite\.v1\.Player\/PlayViewUnite)|polymer\.app\.search\.v1\.Search\/SearchAll|community\.service\.dm\.v1\.DM\/DmView|main\.community\.reply\.v1\.Reply\/MainList|pgc\.gateway\.player\.v2\.PlayURL\/PlayView)$ url script-response-body https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.response.js
+^https:\/\/api\.bevol\.com\/(?:appmain\/app\/home\/page|usercenter\/account\/info|personal\/page|appmain\/app\/home\/launch|trialbox\/shop\/app\/homePage)$ url script-response-body https://raw.githubusercontent.com/Yu9191/Rewrite/refs/heads/main/mlxx.js
+^https:\/\/api\.live\.bilibili\.com\/xlive\/(app-interface\/v2\/index\/feed|app-room\/v1\/index\/getInfoBy(Room|User))\? url script-response-body https://raw.githubusercontent.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.json.js
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/(v5\/note\/comment\/list|v3\/note\/comment\/sub_comments)\? url script-response-body https://github.com/fmz200/wool_scripts/raw/main/Scripts/xiaohongshu/xiaohongshu.js
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/interaction\/comment\/video\/download\? url script-response-body https://github.com/fmz200/wool_scripts/raw/main/Scripts/xiaohongshu/xiaohongshu.js
+^https:\/\/j1\.pupuapi\.com\/client\/a朴朴超市, url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/PupuSplashAds.js
+^https?:\/\/(ipv4|interface\d?)\.music\.163\.com\/e?api\/(batch|v\d\/resource\/comment\/floor\/get) url script-response-body https://raw.githubusercontent.com/Keywos/rule/main/script/wy/js/wyres.js
+^https?:\/\/(ipv4|interface\d?)\.music\.163\.com\/e?api\/(homepage\/block\/page|link\/page\/rcmd\/(resource\/show|block\/resource\/multi\/refresh)) url script-response-body https://raw.githubusercontent.com/Keywos/rule/main/script/wy/js/wyres.js
+^https?:\/\/(ipv4|interface\d?)\.music\.163\.com\/e?api\/link\/home\/framework\/tab url script-response-body https://raw.githubusercontent.com/Keywos/rule/main/script/wy/js/wyres.js
+^https?:\/\/(ipv4|interface\d?)\.music\.163\.com\/e?api\/link\/page\/discovery\/resource\/show url script-response-body https://raw.githubusercontent.com/Keywos/rule/main/script/wy/js/wyres.js
+^https?:\/\/(ipv4|interface\d?)\.music\.163\.com\/e?api\/link\/position\/show\/resource url script-response-body https://raw.githubusercontent.com/Keywos/rule/main/script/wy/js/wyres.js
+^https?:\/\/(ipv4|interface\d?)\.music\.163\.com\/e?api\/user\/follow\/users\/mixed\/get url script-response-body https://raw.githubusercontent.com/Keywos/rule/main/script/wy/js/wyres.js
+^https?:\/\/amdc\.m\.taobao\.com\/amdc\/mobileDispatch$ url script-response-header https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/header.js
+^https?:\/\/api\.gotokeep\.com\/config\/v\d\/basic url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/keep.js
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/(banner|hot)_list url script-response-body https://github.com/fmz200/wool_scripts/raw/main/Scripts/xiaohongshu/xiaohongshu.js
+^https?:\/\/yunbusiness\.ccb\.com\/basic_service\/txCtrl\?txcode=A3341AB04 url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/ccbLife/ccbLifeAds.js
+^https:\/\/mobile\.12306\.cn\/otsmobile\/app\/mgs\/mgw\.htm$ url script-request-header https://kelee.one/Resource/JavaScript/12306/12306_remove_ads.js
+^https?:\/\/weatherkit\.apple\.com\/api\/v1\/availability\/ url script-response-body https://github.com/NSRingo/WeatherKit/releases/download/v3.1.0/response.bundle.js
+^https?:\/\/weatherkit\.apple\.com\/api\/v2\/weather\/ url script-response-body https://github.com/NSRingo/WeatherKit/releases/download/v3.1.0/response.bundle.js
+^https:\/\/ocean\.shuqireader\.com\/sqios\/render\/render\/page\/bookstore$ url script-response-body https://kelee.one/Resource/JavaScript/ShuQiCenterReader/ShuQiCenterReader_remove_ads.js
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/note\/(?:imagefeed|live_photo\/save) url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/system\/service\/ui\/config\? url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/system_service\/config\? url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v2\/system_service\/splash_config url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v2\/(?:note\/widgets|user\/followings\/followfeed) url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v4\/followfeed\? url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v5\/recommend\/user\/follow_recommend\? url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/(?:v1\/interaction\/comment\/video\/download|v5\/note\/comment\/list) url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/(?:v2\/note\/feed|v3\/note\/videofeed) url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/(?:edith|rec)\.xiaohongshu\.com\/api\/sns\/v6\/homefeed\? url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/(?:edith|so)\.xiaohongshu\.com\/api\/sns\/v10\/search\/notes\? url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/(?:v4\/note\/videofeed|v10\/note\/video\/save) url script-response-body https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js
+^https:\/\/webapi\.qmai\.cn\/web\/catering\/design\/homePage-Config url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/kff/kff.js
+^https:\/\/ump\.ems\.com\.cn\/new-generation-extend\/redis\/pageInfoByChannel url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/ems/ems.js
+^https:\/\/mapi\.xiaotucc\.com\/(mall\/main|main_page\/index\/getActivity) url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/xiaotucc/xiaotucc.js
+^https:\/\/minifm\.maxxipoint\.com\/banner\/list url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/FamilyMart/FamilyMart.js
+^https:\/\/lawsonapi\.yorentown\.com\/area\/sh-lawson\/app\/v1\/home url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/lawson/lawson.js
+^https:\/\/miniapp\.sexytea2013\.com\/cms\/slot\/queryByCodes\?codes=INDEX_TOP_BANNER url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/chayanyuese/chayanyuese_remove_ads.js
+^https:\/\/coco-com\.e\.verystar\.net\/v1\/home\/info url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/coco/coco.js
+^https:\/\/htwkop\.xiaojukeji\.com\/gateway\?api=hm\.fa\.homeConfig url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/qingju/qingju.js
+^https:\/\/cappapi\.alittle-tea\.com\/open\?method=catering\.set\.ad url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/alittle-tea/alittle-tea.js
+^https:\/\/api\.prod\.dj\.mstand\.cn\/scrm\/mini\/app\/index\/info url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/M_Stand/M_Stand.js
+^https:\/\/passenger\.t3go\.cn\/(solution\-|common\-)?(passenger\-)?(activity\-|app\-)?api\/notoken\/(trip\/)?api\/(home\/|common\/)?(v[1-3]\/)?(ad\/getNegativescreen|solution\/passenger\/open\/getHomeMenu|leftmenu|getHomeInfoGlobal) url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/T3/T3.js
+^https:\/\/newton\.gumingnc\.com\/newton-buyer\/newton\/buyer\/(ump|touch|external\/front) url script-response-body https://kelee.one/Resource/JavaScript/WexinMiniPrograms/ming/ming.js
+^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/me\/recently-played-media\? url script-response-body https://kelee.one/Resource/JavaScript/SodaMusic/SodaMusic_remove_ads.js
+^https?:\/\/interface\d?\.music\.163\.com\/eapi\/(?:batch|v2\/resource\/comment\/floor\/get) url script-response-body https://kelee.one/Resource/JavaScript/NeteaseCloudMusic/NeteaseCloudMusic_remove_ads.js
+^https?:\/\/interface\d?\.music\.163\.com\/eapi\/(?:homepage\/block\/page|link\/page\/rcmd\/(?:block\/resource\/multi\/refresh|resource\/show)) url script-response-body https://kelee.one/Resource/JavaScript/NeteaseCloudMusic/NeteaseCloudMusic_remove_ads.js
+^https?:\/\/interface\d?\.music\.163\.com\/eapi\/link\/home\/framework\/tab url script-response-body https://kelee.one/Resource/JavaScript/NeteaseCloudMusic/NeteaseCloudMusic_remove_ads.js
+^https?:\/\/interface\d?\.music\.163\.com\/eapi\/link\/page\/discovery\/resource\/show url script-response-body https://kelee.one/Resource/JavaScript/NeteaseCloudMusic/NeteaseCloudMusic_remove_ads.js
+^https?:\/\/interface\d?\.music\.163\.com\/eapi\/link\/position\/show\/resource url script-response-body https://kelee.one/Resource/JavaScript/NeteaseCloudMusic/NeteaseCloudMusic_remove_ads.js
+^https?:\/\/interface\d?\.music\.163\.com\/eapi\/user\/follow\/users\/mixed\/get url script-response-body https://kelee.one/Resource/JavaScript/NeteaseCloudMusic/NeteaseCloudMusic_remove_ads.js
+^https?:\/\/vv\.video\.qq\.com\/getvinfo url script-request-body https://kelee.one/Resource/JavaScript/CommonScript/replace-body.js
+^https:\/\/(biz)?api\.alipan\.com\/apps\/v\d\/users?\/home\/(news|widgets) url script-response-body https://kelee.one/Resource/JavaScript/AliYunDrive/AliYunDrive_remove_ads.js
+^https:\/\/m5\.amap\.com\/ws\/aos\/perception\/publicTravel\/beforeNavi\? url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5\.amap\.com\/ws\/bus\/plan\/integrate\? url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5\.amap\.com\/ws\/c3frontend\/(?:af-(?:hotel|launch)\/page\/main|af-nearby\/nearby) url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5\.amap\.com\/ws\/perception\/drive\/(?:routeInfo|routePlan) url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5\.amap\.com\/ws\/shield\/search_bff\/hotword\? url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5\.amap\.com\/ws\/shield\/search_poi\/(?:mps|search\/sp|sug|tips_operation_location) url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5\.amap\.com\/ws\/faas\/amap-navigation\/(?:card-service-plan-home|main-page) url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5\.amap\.com\/ws\/shield\/frogserver\/aocs\/updatable\/1\? url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5\.amap\.com\/ws\/shield\/dsp\/profile\/index\/nodefaasv3\? url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5\.amap\.com\/ws\/shield\/search\/nearbyrec_smart\? url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5\.amap\.com\/ws\/valueadded\/alimama\/splash_screen\? url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5-zb\.amap\.com\/ws\/boss\/(?:car\/order\/content_info|order_web\/friendly_information) url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/m5-zb\.amap\.com\/ws\/promotion-web\/resource(\/home)?\? url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js
+^https:\/\/(?:info|m5)\.amap\.com\/ws\/shield\/search\/(?:common\/coupon\/info|poi\/detail) url script-response-body https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js

@@ -357,15 +357,6 @@
       "upstream_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list"
     },
     {
-      "id": "filter-block-apple-update",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/blockAppleUpdate.list",
-      "tag": "苹果屏蔽系统更新",
-      "policy": "reject",
-      "parser": false,
-      "enabled": false,
-      "note": "fmz 配置中原为 disabled，保持一致。"
-    },
-    {
       "id": "filter-cn-region",
       "url": "FILTER_REGION",
       "tag": "CN REGION",
@@ -397,13 +388,6 @@
       "parser": false,
       "enabled": true,
       "note": "fmz 聚合资源，覆盖约 730 款 App。实测包含原先按 App 拆分的 19/20 个片段，因此不再单独引用，避免同一响应体被重复处理。"
-    },
-    {
-      "id": "rewrite-fmz-cleanup",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/cleanup.snippet",
-      "tag": "小程序广告清理",
-      "parser": false,
-      "enabled": true
     },
     {
       "id": "rewrite-weibo",
@@ -460,6 +444,25 @@
       "parser": false,
       "enabled": true,
       "note": "对应 Loon 的 Script-Hub.lpx；fmz 配置亦引用。"
+    },
+    {
+      "id": "rewrite-irongo-weatherkit",
+      "url": "https://github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
+      "tag": "iRingo WeatherKit",
+      "parser": false,
+      "enabled": true,
+      "note": "替代 Loon 的 iRingo.WeatherKit.lpx。该项目自带 Quantumult X 版 snippet（官方文档有 QX 安装页），因此不再属于「未迁移」。注意它自带 hostname，QX 会自动并入 MITM。"
+    },
+    {
+      "id": "rewrite-plugin-extracted",
+      "url": null,
+      "local_file": "QuantumultX/rules/plugin-rewrites.snippet",
+      "tag": "插件提取重写",
+      "parser": false,
+      "enabled": true,
+      "generated_by": "tools/extract-plugin.mjs",
+      "note": "从 Loon 插件包提取的 URL 级 rewrite（451 条，已与现有重写源去重）。这类规则按域名拦截的规则库在原理上抓不到，是「原插件功能」真正能救回来的部分。来源：wxs0625/loon-plugins 的 kelee 合并包（kelee.one 本身对 curl/无头浏览器均 403）。重要：提取时会与所有已启用重写源比对（同正则+同动作+同脚本即视为重复），否则同一响应体会被重复处理。",
+      "count": 451
     }
   ],
   "tasks": [
@@ -559,5 +562,13 @@
       "host-suffix, local, direct"
     ],
     "final": "direct"
-  }
+  },
+  "vendor_plugins": [
+    {
+      "id": "kelee-merged",
+      "url": "https://raw.githubusercontent.com/wxs0625/loon-plugins/main/Loon_All_In_One_kelee_merged_2026-08-11.plugin",
+      "out": "QuantumultX/rules/plugin-rewrites.snippet",
+      "note": "kelee.one 的 33 个插件被此仓库合并进一个包（kelee.one 本身对 curl/无头浏览器均返回 Cloudflare 403，无法直取）。"
+    }
+  ]
 }

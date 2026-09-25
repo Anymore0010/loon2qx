@@ -1,0 +1,111 @@
+^(http:\/\/www\.vgtime\.com\/app\/topic\/\d+\.jhtml\?.*?&close_ad=)false(&page=\d&sign=\w+&timestamp=\d+&font_size=\d$) $1true$2 302
+^https://www\.tailgdd\.com/v8/smart/app/config/get$ response-body-json-replace data {}
+^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/artistview\/v1\/artist\/(.*)&platform=iphone header https://spclient.wg.spotify.com/artistview/v1/artist/$1&platform=ipad
+^https:\/\/(m|mwsa)\.ximalaya\.com\/community\/square\/v\d\/stream\? mock-response-body data-type=json data="{"data":{"cards":[{"content":{},"type":"RECOMMENDS"}]},"ret":0}" status-code=200
+^https:\/\/ap[ip]\.bilibili\.com\/x\/(resource\/(top\/activity|patch\/tab(\/v2)?)|v2\/search\/square|vip\/ads\/materials)\? mock-response-body data-type=text status-code=200 data="{"code":-404,"message":"-404","ttl":1,"data":null}"
+^https:\/\/api\.bilibili\.com\/pgc\/activity\/deliver\/material\/receive\? mock-response-body data-type=text status-code=200 data="{"code":0,"data":{"closeType":"close_win","container":[],"showTime":""},"message":"success"}"
+^https:\/\/api\.zhihu\.com\/search\/recommend_query\/v2\? response-body-replace-regex "recommend_queries":\{.+\} "recommend_queries":{}
+^https:\/\/beta-luna\.douyin\.com\/luna\/card\? response-body-json-replace card_items[0].priority_display false card_items[0].is_show false preview_guide null
+^https:\/\/grpc\.biliapi\.net\/bilibili\.app\.(interface\.v1\.(Teenagers\/ModeStatus|Search\/DefaultWords)|view\.v1\.View\/TFInfo|viewunite\.v1\.View\/ViewEndPage)$ response-header-add grpc-status 0
+^https:\/\/grpc\.biliapi\.net\/bilibili\.app\.(view\.v1\.View\/TFInfo|viewunite\.v1\.View\/ViewEndPage)$ mock-response-body data-type=text data="AAAAAAA=" mock-data-is-base64=true
+^https:\/\/grpc\.biliapi\.net\/bilibili\.app\.interface\.v1\.Search\/DefaultWords$ mock-response-body data-type=text data="AAAAACEaHeaQnOe0ouinhumikeOAgeeVquWJp+aIlnVw5Li7KAE=" mock-data-is-base64=true
+^https:\/\/grpc\.biliapi\.net\/bilibili\.app\.interface\.v1\.Teenagers\/ModeStatus$ mock-response-body data-type=text data="AAAAABMKEQgCEgl0ZWVuYWdlcnMgAioA" mock-data-is-base64=true
+^https?:\/\/(cl-)?gateway\.tuhu\.cn(\/cl)?\/cl-common-api\/api\/personalCenter\/getAutoSuperConfig - reject
+^https?:\/\/(cl-)?gateway\.tuhu\.cn(\/cl)?\/ext-website-cl-beauty-api\/beautyIndex\/getBeautyIndex - reject
+^https?:\/\/(cl-)?gateway\.tuhu\.cn(\/cl)?\/ext-website-cl-beauty-api\/channelPage\/v\d\/channelPageCouponPromptComponent - reject
+^https?:\/\/(ec|c)api\.lkcoffee\.com\/resource\/m\/eorder\/product\/popAppTagProductList mock-response-body data-type=json data="{"status":"SUCCESS"}"
+^https?:\/\/(mkt-)?gateway\.tuhu\.cn(\/mkt)?\/[a-z-]+\/recommend - reject-dict
+^https?:\/\/(mkt-)?gateway\.tuhu\.cn(\/mkt)?\/mkt-cms\/circle\/recommend\/ - reject
+^https?:\/\/(mkt-)?gateway\.tuhu\.cn(\/mkt)?\/mkt-push-message-box\/banner\/cms\/getIndexBanner - reject
+^https?:\/\/(mkt-)?gateway\.tuhu\.cn(\/mkt)?\/mkt-scene-marketing-service\/api\/scene\/queryScheme - reject
+^https?:\/\/(mkt-)?gateway\.tuhu\.cn(\/mkt)?\/mlp-product-search-api\/search\/helper\/defaultAndHotWord - reject
+^https?:\/\/103\.37\.155\.60\/fetch - reject
+^https?:\/\/47\.100\.65\.202\/api\/mobile\/index\.php\?version=\d&mobile=yes&module=basicdata&type=forumlist response-body-replace-regex adv fmz200
+^https?:\/\/adservice\.sigmob\.cn\/extconfig response-body-replace-regex false true
+^https?:\/\/api\.hengdianfilm\.com\/\/cinema\/queryAvailableBannerInfo\/1 https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/hengdian.json 302
+^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=lite_advertising response-body-replace-regex jdLiteAdvertisingVO  fmz200
+^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=lite_SmartPush response-body-replace-regex pushData fmz200
+^https?:\/\/app\.zhuanzhuan\.com\/zz\/v2\/zzinfoshow\/getchoicegoodsinfos response-body-replace-regex infoData fmz200
+^https?:\/\/app\.zhuanzhuan\.com\/zz\/v2\/zzinfoshow\/getfeedflowinfo\? response-body-replace-regex userRed fmz200
+^https?:\/\/app-izz\.zhengzhou\.gov\.cn:10019\/bizgw\/gateway\.do response-body-replace-regex "imgUrl19_5x9":".+?" "imgUrl19_5x9":""
+^https?:\/\/awp-assets\.meituan\.net\/hfe\/fep\/\w+\.json - reject
+^https?:\/\/beta-api\.crunchyroll\.com\/cms response-body-replace-regex offset_ms":\d+ offset_ms":99999999999999
+^https?:\/\/capi\.lkcoffee\.com\/resource\/m\/sys\/app\/adposNew response-body-replace-regex \{.+\} {"status":"SUCCESS"}
+^https?:\/\/catdot\.dianping\.com\/broker-service\/hijack - reject
+^https?:\/\/catfront\.dianping\.com\/api\/metric\?v=\d&p=rn_gcbu_mrn-joy-poidetail - reject
+^https?:\/\/chl\.tf\.cn\/channelmg\/sys\/socso\/order\/queryOrderInfo response-body-replace-regex "imgUrl" response-body "fmz200"
+^https?:\/\/client\.tujia\.com\/bnbapp-node\/app\/portal\/getportalconfig\/bnb\/v2 response-body-replace-regex "banners":\[.+\], "banners":[],
+^https?:\/\/ddplus\.meituan\.net\/v\d\/mss_\w+\/(?>ehc|titansx|ddblue|edfu)\/ - reject
+^https?:\/\/dyncdn\.me\/static\/\d{0,2}\/js\/showads\.js$ response-body-replace-regex true false
+^https?:\/\/i\d\.hdslb\.com\/bfs\/fawkes - reject-dict
+^https?:\/\/i\d\.hdslb\.com\/bfs\/manga-static\/\w+\.(?>jpg|png)$ - reject-200
+^https?:\/\/i\d\.hdslb\.com\/bfs\/manga-static\/\w+\.(?>jpg|png)@1200w_1500h_1e_1c - reject-200
+^https?:\/\/img\.meituan\.net\/goodsawardpic\/\w+\.gif - reject-img
+^https?:\/\/lcen\.xiaote\.net\/api\/graphql response-body-replace-regex screenSplashAd fmz200
+^https?:\/\/m\.lkcoffee\.com\/capi\/resource\/m\/growUp\/main response-body-replace-regex "popTitle":".+?" "popTitle":""
+^https?:\/\/m\.lkcoffee\.com\/ecapi\/resource\/m\/member\/exchange\/page response-body-replace-regex \{.+\} {"status":"SUCCESS"}
+^https?:\/\/maicai\.api\.ddxq\.mobi\/homeApi\/newDetails response-body-replace-regex suspension fmz200
+^https?:\/\/mall\.meituan\.com\/api\/c\/homepage\/bubble\/operate\/info mock-response-body data-type=json data="{"code": 0}"
+^https?:\/\/manga\.bilibili\.com\/twirp\/comic\.v\d\.Comic\/(?>Recommend|MoreRecommend|Flash|ListFlash|GetBubbles|GetActivityTab|GetCommonBanner|GetComicConfigPicList|SearchBanner|AppInit) - reject-200
+^https?:\/\/manga\.bilibili\.com\/twirp\/comic\.v\d\.Shop\/GetShopItems - reject-dict
+^https?:\/\/manga\.bilibili\.com\/twirp\/novel\.v\d\.Novel\/MoreRecommend - reject-dict
+^https?:\/\/manga\.bilibili\.com\/twirp\/user\.v\d\.Read\/ActInfo - reject-200
+^https?:\/\/manga\.bilibili\.com\/twirp\/user\.v\d\.SeasonV\d\/GetSeasonInfo - reject-dict
+^https?:\/\/mapi\.dianping\.com\/adshopping - reject
+^https?:\/\/mapi\.dianping\.com\/mapi\/intelliindex - reject-dict
+^https?:\/\/mapi\.dianping\.com\/mapi\/operating\/(?>indexopsmodules|loadsplashconfig) - reject
+^https?:\/\/mapi\.dianping\.com\/wdrpreload\/userprediction - reject
+^https?:\/\/misc-api-prd-mx\.wandafilm\.com\/commend\/common_banner_batch\.api\?bannerInfos=%5B%7B%22cinemaI response-body-replace-regex "WX_index_mp-&-boxAD" "fmz200"
+^https?:\/\/mobile\.yangkeduo\.com\/proxy\/api\/api\/express\/post\/waybill\/red_packet\/goods_list$ response-body-replace-regex "list":\[.+\] "list":[]
+^https?:\/\/mp\.weixin\.qq\.com\/mp\/getappmsgad response-body-replace-regex advertisement fmz200
+^https?:\/\/p\.meituan\.com\/api\/privacy\/config - reject
+^https?:\/\/p\d\.meituan\.net\/nrpresourcevenus\/\w+\.gif - reject-img
+^https?:\/\/p\d\.meituan\.net\/travelcube\/(?!c129a661)\w+\.gif - reject-img
+^https?:\/\/portal\.zjzwfw\.gov\.cn\/app_api\/appHome\/selectStartPic response-body-json-replace data {}
+^https?:\/\/rms\.meituan\.com\/api\/v\d\/rmsmina\/c\/queryWechatAdvertisement - reject-dict
+^https?:\/\/s3plus\.meituan\.net\/ocean-blk-index\/index\/blk_conf - reject
+^https?:\/\/tft-app\.cdtft\.cn\/gateway-customer\/tftapp\/tft-ams\/api\/appAd response-body-replace-regex officialAdvertResultVo fmz200
+^https?:\/\/waimai-guide\.ele\.me\/\w+\/mtop\.venus\.shopresourceservice\.getshopresource response-body-replace-regex posterList fmz200
+^https?:\/\/wrapper\.cyapi\.cn\/v1\/activity\? mock-response-body data-type=json data-path="https://raw.githubusercontent.com/Keywos/rule/main/mocks/caiyun.json" status-code=200
+^https?:\/\/www\.dpfile\.com\/app\/fecommonservice-lottie\/ugc-write-done\/media - reject
+^https?:\/\/www\.dpfile\.com\/picasso\/picasso-qa\/src\/AnswerList\/AnswerList-bundle - reject
+^https?:\/\/www\.dpfile\.com\/sc\/indexpromotion - reject
+^https?:\/\/www\.i3zh\.com response-body-replace-regex cm-pop-up-banners fmz200
+^https?:\/\/yunbusiness\.ccb\.com\/basic_service\/txCtrl\? response-body-replace-regex "TAG_AD_INFO" "fmz200"
+^https?:\/\/yunbusiness\.ccb\.com\/basic_service\/txCtrl\?txcode=A3341AB05 mock-response-body data-type=json data-path="https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/ccbLife/A3341AB05.json" status-code=200
+DOMAIN, appcloud.zhihu.com, REJECT
+DOMAIN, appcloud2.in.zhihu.com, REJECT
+DOMAIN, crash2.zhihu.com, REJECT
+DOMAIN, mqtt.zhihu.com, REJECT
+DOMAIN, sugar.zhihu.com, REJECT
+DOMAIN, zxid-m.mobileservice.cn, REJECT
+IP-CIDR, 103.41.167.237/32, REJECT, no-resolve
+IP-CIDR, 118.89.204.198/32, REJECT, no-resolve
+IP-CIDR6, 2402:4e00:1200:ed00:0:9089:6dac:96b6/128, REJECT, no-resolve
+^https?:\/\/cmds\.omesoft\.com\/HypnotistWS\.asmx response-body-replace-regex <GetADResult>\.\*\?<\/GetADResult> <GetADResult>{"ret":0,"msg":"正常","err_code":0,"data":{"ad":[]}}</GetADResult>
+^https?:\/\/m\.client\.10010\.com\/mobileService\/customer\/accountListData\.htm mock-response-body data-type=text data="{"imgIndex":"0","adv":{"startup_adv":{"advCntList":[],"buttonList":[]}},"respCode":"0000"}"
+^https:\/\/comment-card\.iqiyi\.com\/views_comment\/3\.0\/long_video_comments\? response-body-json-jq ''
+^https?:\/\/interface\d?\.music\.163\.com\/e?api\/(ocpc\/)?ad\/ mock-response-body data-type=text data=""
+^https?:\/\/interface\d?\.music\.163.com\/w?e?api\/search\/default mock-response-body data-type=text data=""
+^https:\/\/app\.zhuanzhuan\.com\/zzopen\/ptsimpleshow\/recommendbymyloveinfo\? mock-response-body data-type=text data="{"respCode":0,"errorMsg":"null","errMsg":""}"
+^https:\/\/app\.zhuanzhuan\.com\/zz\/v2\/zzinfoshow\/footprintsamerecommend\? mock-response-body data-type=text data="{"respCode":0,"errorMsg":"","errMsg":""}"
+^https:\/\/app\.zhuanzhuan\.com\/zz\/v2\/zzinfoshow\/getchoicegoodsinfos\? mock-response-body data-type=text data="{"respCode":0,"respData":{},"errorMsg":"","errMsg":""}"
+http-response ^https:\/\/(?:api|page-info)\.zhihu\.com\/(?:answers|articles)\/v2\/\d+ script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎移除首页推广, enable={vihu_enable}
+http-response ^https:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.local\.home\/ script-path = https://raw.githubusercontent.com/ishowshu/qx/refs/heads/main/script/goofish.js, requires-body = true, tag = 定位地区页面的信息流广告
+http-response ^https:\/\/(g-)?acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.home\.nextfresh\/ script-path = https://raw.githubusercontent.com/ishowshu/qx/refs/heads/main/script/goofish.js, requires-body = true, tag = 商品信息流广告
+http-response ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.idle\.user\.page\.my\.adapter\/ script-path = https://raw.githubusercontent.com/ishowshu/qx/refs/heads/main/script/goofish.js, requires-body = true, tag = 个人主页
+http-response ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.local\.flow\.plat\.section script-path = https://raw.githubusercontent.com/ishowshu/qx/refs/heads/main/script/goofish.js, requires-body = true, tag = 同城页横幅广告
+http-response ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.local\.nearby\.itemdetail\.enter\/1\.0 script-path = https://raw.githubusercontent.com/ishowshu/qx/refs/heads/main/script/goofish.js, requires-body = true, tag = 商品详情页周边推荐
+http-response ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.home\.circle\.list\/1\.0 script-path = https://raw.githubusercontent.com/ishowshu/qx/refs/heads/main/script/goofish.js, requires-body = true, tag = 首页顶部频道菜单
+http-response ^https:\/\/api\.zhihu\.com\/(?:moments_v3|topstory\/hot-lists\/total|topstory\/recommend) script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎移除首页推广, enable={vihu_enable}
+http-response ^https:\/\/api\.zhihu\.com\/bazaar\/vip_tab\/header\? script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎移除会员页面推广, enable={vihu_enable}
+http-response ^https:\/\/api\.zhihu\.com\/commercial_api\/app_float_layer script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎移除首页推广, enable={vihu_enable}
+http-response ^https:\/\/api\.zhihu\.com\/feed\/render\/tab\/config\? script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎移除首页推广, enable={vihu_enable}
+http-response ^https:\/\/api\.zhihu\.com\/next-(?:bff|data|render) script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎移除回答详情页推广, enable={vihu_enable}
+http-response ^https:\/\/api\.zhihu\.com\/questions\/\d+(?:\/answers|\/feeds|\?include=) script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎移除回答详情页推广, enable={vihu_enable}
+http-response ^https:\/\/api\.zhihu\.com\/root\/tab script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎精简顶部标签, enable={vihu_enable}
+http-response ^https:\/\/api\.zhihu\.com\/v2\/topstory\/hot-lists\/everyone-seeing\? script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎移除首页推广, enable={vihu_enable}
+http-response ^https:\/\/appcloud2\.zhihu\.com\/v3\/config script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎拦截服务器推送配置, enable={vihu_enable}
+http-response ^https:\/\/g-acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.search\/ script-path = https://raw.githubusercontent.com/ishowshu/qx/refs/heads/main/script/goofish.js, requires-body = true, tag = 搜索结果信息流广告
+http-response ^https:\/\/m-cloud\.zhihu\.com\/api\/cloud\/config\/all\? script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎拦截服务器推送配置, enable={vihu_enable}
+http-response ^https:\/\/www\.zhihu\.com\/api\/v4\/(?:articles|answers)\/\d+\/recommendations?\? script-path = https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js, requires-body = true, tag = 知乎移除回答详情页推广, enable={vihu_enable}

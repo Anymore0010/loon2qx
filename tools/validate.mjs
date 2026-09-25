@@ -244,6 +244,52 @@ function checkVendoredRules() {
   return { files: files.length, rules: total };
 }
 
+/**
+ * 跨重写源检测「同一响应体被重复处理」。
+ *
+ * 这是本项目踩过的真坑：从插件提取的规则与 fmz 聚合资源大量重叠（实测 1454 条），
+ * 两条同时启用时，同一个响应体会被两个 script-response-body 依次处理，结果不可预期。
+ * QX 自己不会报错，所以必须在提交前拦住。
+ *
+ * 检查范围：每一个已启用的重写源（上游的从 snapshot 读，本仓库自带的直接读）。
+ */
+function checkRewriteDuplicates() {
+  const src = JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8"));
+  const seen = new Map(); // 规则键 -> 来源文件
+  let dupes = 0;
+
+  for (const r of src.rewrites) {
+    if (!r.enabled) continue;
+    let file = null;
+    if (r.local_file) {
+      file = join(ROOT, r.local_file);
+    } else {
+      const m = (r.url ?? "").match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
+      if (m) {
+        const cand = join(ROOT, "snapshot", "github.com", m[1]);
+        if (existsSync(cand)) file = cand;
+      }
+    }
+    if (!file || !existsSync(file)) continue; // 无本地副本（如 releases 直链）则跳过
+
+    for (const raw of readFileSync(file, "utf8").split(/\r?\n/)) {
+      const t = raw.trim();
+      if (!t || t.startsWith("#") || !/\surl\s/.test(t)) continue;
+      // 只有脚本类动作会「处理响应体」，重复才是危险的
+      if (!/url\s+script-/.test(t)) continue;
+      const key = t;
+      const from = (relative(ROOT, file) || file).replace(/\\/g, "/");
+      if (seen.has(key) && seen.get(key) !== from) {
+        err("tools/sources.json", 0, `同一脚本重写同时来自两个源（响应体会被处理两次）:\n      ${t.slice(0, 90)}\n      ${seen.get(key)}  <->  ${from}`);
+        dupes++;
+      } else if (!seen.has(key)) {
+        seen.set(key, from);
+      }
+    }
+  }
+  return dupes;
+}
+
 /** In the snapshot profile, every referenced snapshot file must exist. */
 function checkSnapshotFiles(p) {
   const seen = new Set();
@@ -276,6 +322,8 @@ const repoSlug = resolveRepoBase(ROOT).slug;
 {
   const vendored = checkVendoredRules();
   if (vendored) console.log(`QuantumultX/rules  ${vendored.files} file(s), ${vendored.rules} rules`);
+  const dupes = checkRewriteDuplicates();
+  console.log(`重写去重检查  跨源重复脚本重写: ${dupes}`);
 }
 const profiles = [ONLINE, OFFLINE].filter((p) => {
   if (!existsSync(p)) {

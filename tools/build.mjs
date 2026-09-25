@@ -178,7 +178,7 @@ function buildRewriteRemote(rewrites) {
   lines.push("");
   for (const r of rewrites) {
     const parts = [
-      r.url,
+      r.local_file ? `${repoBase}/${r.local_file}` : r.url,
       `tag=${r.tag}`,
       "update-interval=86400",
       `opt-parser=${r.parser}`,
