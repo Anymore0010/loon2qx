@@ -93,8 +93,13 @@ for (const g of mergeGroups) {
       const res = await fetch(u, { headers: { "User-Agent": "proxy-profile-vendor/1.0" } });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const { rules } = convertRuleList(await res.text(), { policy: g.policy });
+      // exclude_domains：这些域名由别的条目负责，合并时必须剔除，
+      // 否则会因顺序把它们抢到本策略下（实测 Apple relay 域名被抢到「人工智能」）。
+      const excluded = new Set((g.exclude_domains ?? []).map((x) => x.toLowerCase()));
       let added = 0;
       for (const r of rules) {
+        const dom = r.split(",")[1]?.trim().toLowerCase();
+        if (dom && excluded.has(dom)) continue;
         if (seenKeys.has(r)) continue; // 跨来源去重（同一域名+同一策略）
         seenKeys.add(r);
         all.push(r);

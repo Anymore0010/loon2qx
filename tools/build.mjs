@@ -165,6 +165,10 @@ function buildFilterLocal(l) {
 }
 
 function buildFilterRemote(filters) {
+  // parser 必须是布尔：缺失时曾生成 "opt-parser=undefined"，QX 会解析失败。
+  for (const f of filters) {
+    if (f.parser !== true && f.parser !== false) f.parser = false;
+  }
   const lines = [section("filter_remote", "远程分流"), ""];
   lines.push(comment("opt-parser=true 表示交给 resource_parser_url 转换（读取 Loon/Surge/Clash 格式的规则文件）。"));
   lines.push(comment("FILTER_REGION / FILTER_LAN 是 Quantumult X 内置资源，等同于 Loon 的 REGION_SPLITTER / LAN_SPLITTER。"));

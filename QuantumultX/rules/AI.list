@@ -4,8 +4,8 @@
 #   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
 #   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list
 # 统一策略: 人工智能
-# 规则数: 67（已跨来源去重）
-#   各源贡献 rule/AI.list: 64
+# 规则数: 58（已跨来源去重）
+#   各源贡献 rule/AI.list: 55
 #   各源贡献 OpenAI/OpenAI.list: 3
 #   各源贡献 Anthropic/Anthropic.list: 0
 # 重新生成: bun tools/vendor-rules.mjs
@@ -23,15 +23,6 @@ host-suffix, oaistatic.com, 人工智能
 host-suffix, oaiusercontent.com, 人工智能
 host-suffix, openai.com, 人工智能
 host-suffix, sora.com, 人工智能
-host-suffix, apple-relay.apple.com, 人工智能
-host-suffix, apple-relay.fastly-edge.com, 人工智能
-host-suffix, apple-relay.cloudflare.com, 人工智能
-host-suffix, apple-relay.akamaized.net, 人工智能
-host-suffix, gateway.icloud.com, 人工智能
-host-suffix, guzzoni.apple.com, 人工智能
-host-suffix, cp4.cloudflare.com, 人工智能
-host-suffix, gspe1-ssl.ls.apple.com, 人工智能
-host-suffix, apps.mzstatic.com, 人工智能
 host, api.githubcopilot.com, 人工智能
 host, copilot-proxy.githubusercontent.com, 人工智能
 host, copilot.microsoft.com, 人工智能

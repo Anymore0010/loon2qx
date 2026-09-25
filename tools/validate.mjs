@@ -178,6 +178,11 @@ function checkRemoteLines(p) {
       for (const kv of line.split(",").slice(1)) {
         const t = kv.trim();
         if (t && !/^[a-zA-Z_-]+=/.test(t)) err(p.path, n, `[${name}] malformed parameter "${t}"`);
+        // 布尔参数必须是 true/false —— 曾生成 "opt-parser=undefined" 导致 QX 解析异常
+        const bm = t.match(/^(enabled|opt-parser|inserted-resource)=(.*)$/);
+        if (bm && bm[2] !== "true" && bm[2] !== "false") {
+          err(p.path, n, `[${name}] ${bm[1]} 必须是 true 或 false，实际是 "${bm[2]}"`);
+        }
       }
     }
   }

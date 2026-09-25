@@ -9,7 +9,7 @@
 |---|---|---|---|
 | https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list | `QuantumultX/rules/GeoIP_CN.list` | 1 | 0 |
 | https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list | `QuantumultX/rules/AppleIntelligence.list` | 11 | 0 |
-| https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list | `QuantumultX/rules/AI.list` | 67 | 0 |
+| https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list | `QuantumultX/rules/AI.list` | 58 | 0 |
 
 ## 选项调整（规则保留）
 

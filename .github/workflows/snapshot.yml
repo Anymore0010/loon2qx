@@ -45,6 +45,11 @@ jobs:
       - name: Mirror upstream resources
         run: bun tools/fetch-snapshot.mjs
 
+      # 从插件包重新提取 URL 级重写（会与上面同步过的快照去重，
+      # 所以必须在 fetch-snapshot 之后跑）。缺这一步，这 400+ 条规则永不刷新。
+      - name: Re-extract plugin rewrites
+        run: bun tools/extract-plugin.mjs --all
+
       - name: Validate generated profiles
         run: bun tools/validate.mjs
 

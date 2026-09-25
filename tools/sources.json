@@ -171,7 +171,8 @@
       "note": "由 rule_merges 的 merge-ai 生成（fmz AI.list + bm7 OpenAI + bm7 Anthropic 合并）。",
       "vendored_as": "AI.list",
       "_local": true,
-      "local_file": "QuantumultX/rules/AI.list"
+      "local_file": "QuantumultX/rules/AI.list",
+      "parser": false
     },
     {
       "id": "filter-tiktok",
@@ -563,7 +564,18 @@
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list"
       ],
-      "note": "三条 AI 分流本是同一类（fmz AI 合集 + bm7 OpenAI + bm7 Anthropic），合并为一个文件、统一走「人工智能」策略组，避免同一域名被多条规则以不同策略重复命中。"
+      "note": "三条 AI 分流本是同一类（fmz AI 合集 + bm7 OpenAI + bm7 Anthropic），合并为一个文件、统一走「人工智能」策略组，避免同一域名被多条规则以不同策略重复命中。 排除 Apple Intelligence 相关域名（apple-relay.*/gateway.icloud.com/guzzoni.apple.com 等 9 个）：它们由独立的「Apple AI」条目负责（策略 全球手动策略），若同时出现在 AI 列表里、且 AI 在前，会把它们抢到「人工智能」策略，与原 Loon 行为不符。",
+      "exclude_domains": [
+        "apple-relay.apple.com",
+        "apple-relay.fastly-edge.com",
+        "apple-relay.cloudflare.com",
+        "apple-relay.akamaized.net",
+        "gateway.icloud.com",
+        "guzzoni.apple.com",
+        "cp4.cloudflare.com",
+        "gspe1-ssl.ls.apple.com",
+        "apps.mzstatic.com"
+      ]
     }
   ]
 }
