@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-25T07:46:48.743Z",
+  "generated_at": "2026-09-25T07:48:32.864Z",
   "repository": "Anymore0010/loon2qx",
   "ref": "master",
-  "total": 57,
-  "mirrored": 57,
+  "total": 59,
+  "mirrored": 59,
   "failed": 0,
   "resources": [
     {
@@ -516,6 +516,24 @@
       "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Apple.png",
       "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/Apple.png",
       "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/Apple.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-task-server-info",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/ipInfo.png",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/ipInfo.png",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/ipInfo.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-task-node-link-check",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Stack.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Stack.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Stack.png",
       "status": 200,
       "error": null
     }

@@ -58,6 +58,7 @@ function collectResources() {
   if (src.general.profile_img_url) add("icon-profile", src.general.profile_img_url, "icon");
   for (const r of src.policies.regions) if (r.icon) add(`icon-${r.name}`, r.icon, "icon");
   for (const g of src.policies.groups ?? []) if (g.icon) add(`icon-${g.name}`, g.icon, "icon");
+  for (const t of src.tasks) if (t.icon && /^https?:/.test(t.icon)) add(`icon-${t.id}`, t.icon, "icon");
   // geo_location_checker's script half.
   const geo = src.general.geo_location_checker.split(",").map((s) => s.trim())[1];
   if (geo && /^https?:/.test(geo)) add("geo-location-script", geo, "script");
@@ -218,8 +219,9 @@ lines.push("");
 
 lines.push(section("task_local", "任务"));
 for (const t of src.tasks) {
+  const icon = /^https?:/.test(t.icon) ? snapUrl(t.icon) : t.icon; // SF Symbols keep their name
   lines.push(
-    [`${t.schedule} ${snapUrl(t.url)}`, `tag=${t.tag}`, `img-url=${t.icon}`, `enabled=${t.enabled}`].join(", ")
+    [`${t.schedule} ${snapUrl(t.url)}`, `tag=${t.tag}`, `img-url=${icon}`, `enabled=${t.enabled}`].join(", ")
   );
 }
 lines.push("");
