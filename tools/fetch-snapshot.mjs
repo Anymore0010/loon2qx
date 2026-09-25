@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /**
  * Mirrors every external resource referenced by tools/sources.json into
- * snapshot/, and generates snapshot/loon2qx-offline.conf which points at the
+ * snapshot/, and generates snapshot/offline.conf which points at the
  * local copies instead of the upstream URLs.
  *
  * Why: the profile depends on ~50 third-party resources. If an upstream repo is
@@ -74,7 +74,7 @@ async function fetchOne(res) {
   try {
     const res0 = await fetch(res.url, {
       redirect: "follow",
-      headers: { "User-Agent": "loon2qx-snapshot/1.0" },
+      headers: { "User-Agent": "proxy-profile-snapshot/1.0" },
     });
     if (!res0.ok) return { ...res, ok: false, status: res0.status };
     if (res.kind === "icon") {
@@ -238,7 +238,7 @@ lines.push(comment("证书需在本机生成并信任。"));
 lines.push("passphrase = ");
 lines.push("p12 = ");
 
-writeFileSync(join(SNAP, "loon2qx-offline.conf"), lines.join("\n") + "\n");
+writeFileSync(join(SNAP, "offline.conf"), lines.join("\n") + "\n");
 
 // ---- machine-readable index -------------------------------------------------
 // No timestamp here on purpose: a volatile field would make every weekly run
@@ -262,7 +262,7 @@ const index = {
 writeFileSync(join(SNAP, "index.json"), JSON.stringify(index, null, 2) + "\n");
 
 console.log(`Snapshot: ${ok}/${results.length} mirrored, ${failed} failed`);
-console.log(`Wrote ${relative(ROOT, join(SNAP, "loon2qx-offline.conf"))}`);
+console.log(`Wrote ${relative(ROOT, join(SNAP, "offline.conf"))}`);
 console.log(`Wrote ${relative(ROOT, join(SNAP, "index.json"))}`);
 // Default: exit 0 even when some upstreams fail, because snapshot/index.json
 // records the failures and the partial mirror is still worth committing.

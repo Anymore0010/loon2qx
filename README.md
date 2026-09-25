@@ -1,8 +1,22 @@
-# loon2qx
+# proxy-profile
 
-把一份 Loon 配置（`loon_config/*.lcf`）转换成可用的 Quantumult X 配置。
+自用的代理配置仓库：**以 Quantumult X 为主**，从 Loon 配置转换并融合现有 QX 配置而来。
 
-生成的配置文件：**`QuantumultX/default.conf`**（另有 `snapshot/loon2qx-offline.conf` 离线版）
+生成的配置：**`QuantumultX/default.conf`**（在线版）与 `snapshot/offline.conf`（离线版）。
+
+| 文件 | 作用 |
+|---|---|
+| `QuantumultX/default.conf` | **日常导入用的配置** |
+| `QuantumultX/rules/` | 预转换的 QX 原生规则（不依赖运行时解析器） |
+| `snapshot/` | 全部上游资源的冻结副本 + 离线配置 |
+| `legacy/loon/` | 原始 Loon 配置（转换来源，保留备查） |
+| `legacy/quantumultx/` | 本机在用的 QX 配置（对比基准） |
+| `MAPPING.md` | Loon 插件 → Quantumult X 资源逐条映射 |
+| `DIFF.md` | **本配置 vs 你的 Loon vs 你的 QX** 逐段差异 |
+
+> 起点是 Loon 转换，但本仓库的目标是**维护一套长期可用的自用 QX 配置**：
+> 像 `fmz200/wool_scripts` 那样，把规则、重写、快照与生成脚本都放在版本控制下，
+> 上游变化时靠每周任务自动跟进，而不是手工改配置。
 
 ## 为什么不是简单的格式翻译
 
@@ -26,7 +40,7 @@ Loon 和 Quantumult X 的差异不在语法，而在**功能承载方式**：
 - **风车 → 配置文件 → 添加配置**，或直接打开链接导入：
 
   ```
-  https://raw.githubusercontent.com/Anymore0010/loon2qx/master/QuantumultX/default.conf
+  https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/QuantumultX/default.conf
   ```
 
 ### 2. 添加订阅链接
@@ -72,13 +86,14 @@ bun tools/validate.mjs         # 校验
 
 ```
 QuantumultX/default.conf          在线配置（从 sources.json 生成，勿手改）
-snapshot/loon2qx-offline.conf     离线配置（所有资源指向仓库内快照）
+snapshot/offline.conf              离线配置（所有资源指向仓库内快照）
 snapshot/index.json               快照清单：每个资源的来源、状态
 tools/sources.json                唯一事实来源：所有外部资源与本地规则
 tools/build.mjs                   生成在线配置
 tools/fetch-snapshot.mjs          拉取快照 + 生成离线配置
 tools/validate.mjs                校验生成的配置
-loon_config/                      原始 Loon 配置
+legacy/loon/                       原始 Loon 配置（转换来源）
+legacy/quantumultx/                你本机在用的 QX 配置（对比基准）
 MAPPING.md                        插件 → Quantumult X 资源逐条映射
 ```
 
@@ -94,7 +109,7 @@ bun tools/fetch-snapshot.mjs # 刷新快照 + 离线配置
 
 配置文件依赖 59 个第三方资源（含图标）。任何一个上游仓库被删或强推，配置就会**静默地少掉规则**。
 
-因此 `snapshot/` 保存了一份冻结副本，`snapshot/loon2qx-offline.conf` 指向仓库内的副本而不是上游：
+因此 `snapshot/` 保存了一份冻结副本，`snapshot/offline.conf` 指向仓库内的副本而不是上游：
 
 - GitHub Actions **每周一 03:17 UTC 自动刷新**（已启用，实测可运行）；
 - 上游挂掉时，改用离线配置即可继续工作；

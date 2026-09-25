@@ -1,11 +1,11 @@
 #!/usr/bin/env bun
 /**
- * Generates QuantumultX/loon2qx.conf from tools/sources.json.
+ * Generates QuantumultX/default.conf from tools/sources.json.
  *
  * The profile is generated, never hand-edited: sources.json is the single
  * source of truth so the online profile and the offline snapshot cannot drift.
  *
- *   bun tools/build.mjs           # write QuantumultX/loon2qx.conf
+ *   bun tools/build.mjs           # write QuantumultX/default.conf
  *   bun tools/build.mjs --check   # fail if the committed file is stale
  */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -226,7 +226,7 @@ function buildMitm() {
 const profile = [
   comment("Quantumult X 配置 —— 由 Loon 配置转换而来"),
   comment("生成来源：tools/sources.json（请勿手工编辑本文件，改 sources.json 后运行 `bun tools/build.mjs`）"),
-  comment("原始 Loon 配置：loon_config/*.lcf"),
+  comment("原始 Loon 配置：legacy/loon/*.lcf"),
   comment("插件替换说明：MAPPING.md"),
   "",
   buildGeneral(src.general),

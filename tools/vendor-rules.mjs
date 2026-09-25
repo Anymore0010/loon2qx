@@ -44,7 +44,7 @@ for (const f of toVendor) {
   process.stdout.write(`vendoring ${f.id} … `);
   let text;
   try {
-    const res = await fetch(f.upstream_url, { headers: { "User-Agent": "loon2qx-vendor/1.0" } });
+    const res = await fetch(f.upstream_url, { headers: { "User-Agent": "proxy-profile-vendor/1.0" } });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     text = await res.text();
   } catch (e) {

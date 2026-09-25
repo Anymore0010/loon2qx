@@ -19,7 +19,7 @@ import { resolveRepoBase } from "./repo-url.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ONLINE = join(ROOT, "QuantumultX", "default.conf");
-const OFFLINE = join(ROOT, "snapshot", "loon2qx-offline.conf");
+const OFFLINE = join(ROOT, "snapshot", "offline.conf");
 
 /** Sections Quantumult X understands. Anything else is a fatal import error. */
 const KNOWN_SECTIONS = new Set([

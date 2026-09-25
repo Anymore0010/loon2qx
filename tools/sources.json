@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of truth for every external resource used by the Quantumult X profile. tools/build.mjs generates QuantumultX/default.conf from this file; tools/fetch-snapshot.mjs mirrors every url into snapshot/ and generates the offline profile. Do not edit the generated .conf files by hand.",
-  "_origin": "起点是 loon_config/ 里的 Loon 配置（见 MAPPING.md 的逐插件映射），并融合了 fmz200/wool_scripts 的日常配置（QuantumultX/config/QuanX.conf）。",
+  "_origin": "起点是 legacy/loon/ 里的 Loon 配置（见 MAPPING.md 的逐插件映射），并融合了 fmz200/wool_scripts 的日常配置（QuantumultX/config/QuanX.conf）。",
   "_merge_note": "fmz 的 rewrite.snippet 是聚合型资源，实测覆盖了原先按 App 拆分的 19/20 个片段（同 URL、同动作）。同时保留两者会让同一个响应体被两个脚本重复处理，因此改为只引用聚合资源，仅保留聚合未覆盖的（微博、高德、B站、京东比价）。",
   "general": {
     "profile_img_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/QuantumultX.png",

@@ -6,8 +6,8 @@
 
 | 简称 | 文件 | 说明 |
 |---|---|---|
-| **Loon** | `loon_config/*.lcf` | 你给的 Loon 配置，是本次转换的起点 |
-| **你的 QX** | `qx_config/*.conf` | 你本机实际在用的配置（来源：fmz200 的默认配置 + 你自己加了订阅） |
+| **Loon** | `legacy/loon/*.lcf` | 你给的 Loon 配置，是本次转换的起点 |
+| **你的 QX** | `legacy/quantumultx/*.conf` | 你本机实际在用的配置（来源：fmz200 的默认配置 + 你自己加了订阅） |
 | **本配置** | `QuantumultX/default.conf` | 本仓库生成 |
 
 > 注意：你的 QX 配置本身**就是** fmz200 那套默认配置（文件头写着 `项目地址：…/fmz200/wool_scripts/…/QuanX.conf`），
