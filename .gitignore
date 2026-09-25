@@ -16,3 +16,6 @@ loon_config/.raw/
 # 临时工作目录
 _tmp/
 _work/
+
+# 本机 QX 配置的原始副本（含订阅 token），仅本地保留
+qx_config/.raw/

@@ -167,6 +167,7 @@ lines.push("");
 
 lines.push(section("dns", "DNS"));
 lines.push(`doh-server=${src.dns.doh_server.join(", ")}`);
+for (const s of src.dns.domain_servers ?? []) lines.push(s);
 lines.push("");
 
 lines.push(section("policy", "策略组"));

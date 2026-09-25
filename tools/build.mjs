@@ -71,6 +71,12 @@ function buildDns(d) {
   lines.push(comment("Loon ip-mode = dual / ipv6-vif = auto，因此这里刻意不写 no-ipv6。"));
   lines.push(comment("官方要求多个 doh-server 写在同一行、以逗号分隔（并发查询）。"));
   lines.push(`doh-server=${d.doh_server.join(", ")}`);
+  if (d.domain_servers?.length) {
+    lines.push("");
+    lines.push(comment("按域名指定 DNS。官方文档：doh-server 只忽略「未绑定域名」的普通 server，"));
+    lines.push(comment("这些绑定了域名的规则仍然生效。路由管理页用 system，避免在外网 DNS 下打不开后台。"));
+    for (const s of d.domain_servers) lines.push(s);
+  }
   return lines.join("\n");
 }
 
