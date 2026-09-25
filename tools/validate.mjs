@@ -95,9 +95,16 @@ function checkStrayComments(p) {
 /** policy= / force-policy= / final must name an existing policy. */
 function checkPolicyReferences(p) {
   const defined = new Set();
-  for (const { line } of p.sections.get("policy") ?? []) {
+  const seen = new Map();
+  for (const { n, line } of p.sections.get("policy") ?? []) {
     const m = line.match(/^(static|available|round-robin|dest-hash|url-latency-benchmark|ssid)\s*=\s*([^,]+)/);
-    if (m) defined.add(m[2].trim());
+    if (!m) continue;
+    const name = m[2].trim();
+    // Duplicate policy names make QX behaviour undefined, and are easy to
+    // introduce when merging two configs that each define e.g. 香港节点.
+    if (seen.has(name)) err(p.path, n, `duplicate policy "${name}" (first at line ${seen.get(name)})`);
+    seen.set(name, n);
+    defined.add(name);
   }
   const builtin = new Set(["direct", "reject", "proxy"]);
 

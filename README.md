@@ -90,13 +90,13 @@ bun tools/fetch-snapshot.mjs # 刷新快照 + 离线配置
 
 ## 快照机制
 
-配置文件依赖约 54 个第三方资源。任何一个上游仓库被删或强推，配置就会**静默地少掉规则**。
+配置文件依赖 59 个第三方资源（含图标）。任何一个上游仓库被删或强推，配置就会**静默地少掉规则**。
 
 因此 `snapshot/` 保存了一份冻结副本，`snapshot/loon2qx-offline.conf` 指向仓库内的副本而不是上游：
 
-- GitHub Actions **每周一自动刷新**（`.github/workflows/snapshot.yml`），有失败会标记出来；
+- **启用后**才会每周一自动刷新（见下方「启用每周自动刷新」；该 workflow 文件因权限限制目前未推送，所以现在还没有自动刷新）；
 - 上游挂掉时，改用离线配置即可继续工作；
-- 也可以手动在 Actions 页面点 **Snapshot → Run workflow**。
+- 手动刷新：`bun tools/fetch-snapshot.mjs`。
 
 在线配置用上游最新资源（更新快），离线配置用仓库内快照（不怕上游失效）。两者都由同一个 `sources.json` 生成，不会互相漂移。
 
@@ -121,6 +121,24 @@ fmz 的 `rewrite.snippet` 是聚合资源（覆盖约 730 款 App）。实测它
 - 京东/淘宝比价
 
 `blackmatrix7` 的两份重写（Advertising / BlockHTTPDNS）是纯 `reject` 规则、不含脚本，重复不会造成二次处理，故保留。
+
+## 分流规则体积说明
+
+`[filter_remote]` 同时引用了两份广告黑名单，实测体量：
+
+| 资源 | 域名数 | 体积 |
+|---|---|---|
+| blackmatrix7 `Advertising/Advertising.list` | 285,592 | **12.2 MB** |
+| fmz200 `filter/filter.list` | 2,624 | 123 KB |
+
+两份重合 1,811 条（fmz 的 69% 被 bm7 覆盖），fmz 另有 **813 条独有**域名。
+QX 启动时要把它们全部载入内存匹配，12 MB 那份在手机上是可感知的开销。
+
+**默认两者都保留**（覆盖优先）。若觉得卡顿，二选一：
+
+- 想要轻量：把 `tools/sources.json` 里 `filter-advertising` 的 url 换成
+  `.../AdvertisingLite/AdvertisingLite.list`（1.4 MB），再跑 `bun tools/build.mjs`；
+- 或直接删除 `filter-advertising` 条目（省 12 MB，但会丢掉那 813 条以外的大量拦截）。
 
 ## 相对原配置的取舍
 

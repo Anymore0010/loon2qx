@@ -526,6 +526,8 @@
       "host-suffix, unsplash.com, 全球手动策略",
       "host-suffix, v2ex.com, 全球手动策略",
       "host-suffix, api.iturrit.com, 全球手动策略",
+      "host, localhost, direct",
+      "host, e.crashlynatics.com, direct",
       "host-suffix, local, direct"
     ],
     "final": "direct"

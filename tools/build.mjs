@@ -34,7 +34,7 @@ function buildGeneral(g) {
   lines.push(comment("从 Loon [General] 转换而来：只保留 Quantumult X 有对应语义的项。"));
   lines.push(`resource_parser_url=${g.resource_parser_url}`);
   lines.push(`profile_img_url=${g.profile_img_url}`);
-  lines.push(comment("对应 Loon proxy-test-url / test-timeout=2（毫秒）"));
+  lines.push(comment(`节点测速：URL 对应 Loon proxy-test-url，超时 ${g.server_check_timeout}ms`));
   lines.push(`server_check_url=${g.server_check_url}`);
   lines.push(`server_check_timeout=${g.server_check_timeout}`);
   lines.push(comment("对应 Loon internet-test-url"));
@@ -45,7 +45,7 @@ function buildGeneral(g) {
   lines.push(`dns_exclusion_list=${g.dns_exclusion_list}`);
   lines.push(comment("对应 Loon bypass-tun：这些流量不交给 Quantumult X 处理"));
   lines.push(`excluded_routes=${g.excluded_routes}`);
-  lines.push(comment("UDP 兜底策略：节点不支持 UDP 中转时使用"));
+  lines.push(comment("UDP 兜底：节点不支持 UDP 中转时使用（Loon 原为 reject，此处沿用融合配置的 direct）"));
   lines.push(`fallback_udp_policy=${g.fallback_udp_policy}`);
   if (g.udp_drop_list) {
     lines.push(comment("丢弃这些 UDP 端口（QUIC 等），避免与 TCP 分流策略不一致"));

@@ -1,0 +1,90 @@
+name: Snapshot
+
+# The profile depends on ~59 third-party resources across several upstream repos.
+# If one is deleted or force-pushed, the profile silently loses rules. This job
+# refreshes the frozen mirror in snapshot/ weekly so there is always a working
+# copy, and regenerates the offline profile that points at the mirror.
+#
+# A single broken upstream must NOT block the refresh: the other resources are
+# still worth mirroring. So the job commits whatever succeeded and only then
+# reports failure (which emails the repo owner).
+
+on:
+  schedule:
+    # 03:17 UTC every Monday (off the top of the hour to avoid the Actions rush).
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Regenerate profile from manifest
+        run: bun tools/build.mjs
+
+      # Exits 0 even if some upstreams fail (recorded in snapshot/index.json);
+      # the final step turns those into a failing run after the commit.
+      - name: Mirror upstream resources
+        run: bun tools/fetch-snapshot.mjs
+
+      - name: Validate generated profiles
+        run: bun tools/validate.mjs
+
+      - name: Summarise mirror result
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, pathlib
+          p = pathlib.Path("snapshot/index.json")
+          if not p.exists():
+              print("### Snapshot failed: snapshot/index.json missing")
+              raise SystemExit(0)
+          i = json.loads(p.read_text())
+          print(f"### Snapshot: {i['mirrored']}/{i['total']} mirrored, {i['failed']} failed")
+          bad = [r for r in i["resources"] if r.get("error")]
+          if bad:
+              print("\n| resource | upstream URL | error |")
+              print("|---|---|---|")
+              for r in bad:
+                  print(f"| `{r['id']}` | {r['url']} | {r['error']} |")
+          PY
+
+      - name: Commit refreshed snapshot
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A snapshot QuantumultX
+          if git diff --cached --quiet; then
+            echo "No upstream changes."
+          else
+            git commit -m "chore(snapshot): weekly refresh $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      # Runs after the commit so a broken upstream still leaves a usable snapshot,
+      # while still marking the run red so it gets noticed.
+      - name: Fail if any upstream resource is broken
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, sys
+          i = json.loads(pathlib.Path("snapshot/index.json").read_text())
+          if i["failed"]:
+              print(f"::error::{i['failed']} upstream resource(s) failed to mirror")
+              for r in i["resources"]:
+                  if r.get("error"):
+                      print(f"::error title={r['id']}::{r['url']} -> {r['error']}")
+              sys.exit(1)
+          print("All upstream resources mirrored successfully.")
+          PY

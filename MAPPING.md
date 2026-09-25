@@ -43,39 +43,37 @@ Loon 的 `.lsr` 与 Quantumult X 的 `.list` 是同一套 `host-suffix, x, POLIC
 
 ## 去广告 / 脚本插件（Loon `[Plugin]`）
 
-| Loon 插件 | Quantumult X 替代 | 来源 |
-|---|---|---|
-| Block_HTTPDNS.lpx（HTTPDNS 拦截器，所有去广告插件的依赖） | `rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf` | blackmatrix7 |
-| BlockAdvertisers.lpx（广告平台拦截器）+ Remove_ads_by_keli.lpx | bm7 `rewrite/QuantumultX/Advertising/Advertising.conf`（重写）+ `rule/QuantumultX/Advertising/Advertising.list`（分流，`reject`） | blackmatrix7 |
-| Weibo_remove_ads.lpx | `QuantumultX/rewrite/weibo.snippet` | fmz200 |
-| Snowball_remove_ads.lpx（雪球） | `QuantumultX/rewrite/split/partX/XueQiu.snippet` | fmz200 |
-| JD_Price.lpx（京东比价） | `JD_TB_price.conf` | Orz-3 |
-| Spotify_remove_ads.lpx | `module/spotify.conf` | app2smile |
-| Spotify_lyrics_translation.lpx | 同上（`spotify.conf` 内含歌词增强） | app2smile |
-| Weixin_external_links_unlock.lpx | `Function/UnblockURLinWeChat.conf` | ddgksf2013 |
-| PinDuoDuo_remove_ads.lpx | `split/partP/Pinduoduo.snippet` | fmz200 |
-| DragonRead_remove_ads.lpx（番茄小说） | `split/partF/FanQieNovel.snippet` | fmz200 |
-| FleaMarket_remove_ads.lpx（闲鱼） | `split/partX/XianYu.snippet` | fmz200 |
-| QuarkBrowser_remove_ads.lpx | `split/partK/Quark.snippet` | fmz200 |
-| 12306_remove_ads.lpx | `split/part1/12306.snippet` | fmz200 |
-| Taobao_remove_ads.lpx | `split/partT/Taobao.snippet` | fmz200 |
-| JD_remove_ads.lpx | `split/partJ/JD.com.snippet` | fmz200 |
-| Tencent_Video_remove_ads.lpx | `split/partT/TencentVideo.snippet` | fmz200 |
-| iQiYi_Video_remove_ads.lpx | `split/partA/iQIYI.snippet` | fmz200 |
-| AliYunDrive_remove_ads.lpx | `split/partA/AlibabaCloudDrive.snippet` | fmz200 |
-| Amap_remove_ads.lpx | `AdBlock/AmapAds.conf` | ddgksf2013 |
-| QQMusic_remove_ads.lpx | `split/partQ/QQMusic.snippet` | fmz200 |
-| Weixin_Official_Accounts_remove_ads.lpx | `split/partW/WeChatOfficialAccount.snippet` | fmz200 |
-| RedPaper_remove_ads.lpx（小红书） | `split/partX/Xiaohongshu.snippet` | fmz200 |
-| smzdm_remove_ads.lpx | `split/partS/SMZDM.snippet` | fmz200 |
-| Zhihu_remove_ads.lpx | `split/partZ/Zhihu.snippet` | fmz200 |
-| CoolApk_remove_ads.lpx | `split/partK/Coolapk.snippet` | fmz200 |
-| bilibili.lpx（kokoryh/Sparkle）+ Bilibili_remove_ads.lpx | `Function/Bilibili_CC.conf` | ddgksf2013 |
-| YouTube_remove_ads.lpx | `split/partY/YouTube.snippet` | fmz200 |
-| Cainiao_remove_ads.lpx | `split/partC/CaiNiaoGuoGuo.snippet` | fmz200 |
-| BoxJs.lpx（原配置 disabled） | `box/rewrite/boxjs.rewrite.quanx.conf` | chavyleung |
-| Sub-Store.lpx（原配置 disabled） | `config/QX.snippet` | sub-store-org |
-| Script-Hub.lpx | `modules/script-hub.beta.qx.conf` | Script-Hub-Org |
+**重要：这些 App 由 fmz 聚合资源统一覆盖，不要再按 App 添加拆分片段。**
+
+原配置的插件绝大多数是「某 App 去广告」，而 fmz 的
+`QuantumultX/rewrite/rewrite.snippet` 是一个**聚合资源**（约 730 款 App）。实测它包含原先
+按 App 拆分的 20 个片段中的 **19 个**（同 URL、同动作），因此配置里**只引用聚合资源**。
+
+> 为什么不能两种都留：同一个响应体会被两个 `script-response-body` 依次处理，
+> 结果不可预期。这是**重复脚本**问题，不是"多一份更保险"。
+
+因此 `[rewrite_remote]` 里只剩聚合资源未覆盖的少量条目：
+
+| 用途 | Quantumult X 资源 | 来源 | 原因 |
+|---|---|---|---|
+| 通用去广告 | `rewrite/QuantumultX/Advertising/Advertising.conf` | blackmatrix7 | 纯 reject，无脚本，无重复处理风险 |
+| HTTPDNS 拦截器 | `rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf` | blackmatrix7 | 同上 |
+| 730 款 App 去广告 | `QuantumultX/rewrite/rewrite.snippet` | fmz200 | 聚合主体 |
+| 小程序广告清理 | `QuantumultX/rewrite/cleanup.snippet` | fmz200 | 聚合未含 |
+| 微博去广告 | `QuantumultX/rewrite/weibo.snippet` | fmz200 | 聚合未覆盖 |
+| 高德地图去广告 | `AdBlock/AmapAds.conf` | ddgksf2013 | 聚合未覆盖（18 条规则 0 命中） |
+| 哔哩哔哩去广告 | `Function/Bilibili_CC.conf` | ddgksf2013 | 聚合未覆盖 |
+| 京东/淘宝比价 | `JD_TB_price.conf` | Orz-3 | 对应 JD_Price.lpx，聚合未覆盖 |
+| BoxJs | `box/rewrite/boxjs.rewrite.quanx.conf` | chavyleung | 工具类 |
+| Sub-Store | `config/QX.snippet` | sub-store-org | 工具类 |
+| Script-Hub | `modules/script-hub.beta.qx.conf` | Script-Hub-Org | 工具类 |
+
+由聚合资源覆盖、**不再单独列出**的 App（原配置插件的对应项）：
+雪球、Spotify（含歌词）、微信外链解锁、拼多多、番茄小说、闲鱼、夸克、12306、淘宝、京东、
+腾讯视频、爱奇艺、阿里云盘、QQ音乐、微信公众号、小红书、什么值得买、知乎、酷安、YouTube、菜鸟裹裹。
+
+如需核对某一 App 是否被覆盖，直接在上游聚合文件里搜其域名即可：
+<https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet>
 
 ## 工具类插件
 
@@ -95,6 +93,23 @@ Loon 的 `.lsr` 与 Quantumult X 的 `.list` 是同一套 `host-suffix, x, POLIC
 | LoonGallery.lpx | Loon 专属插件商店，无对应概念 |
 | QuickSearch.lpx | Loon 专属（Safari 搜索引擎切换），无对应概念 |
 | iRingo.WeatherKit.lpx | 该项目无 Quantumult X 版本 |
+
+## 两处有意的语义变更
+
+融合 fmz200 配置时，有两处**行为与原 Loon 不同**，在此显式记录（不要当成遗漏）：
+
+| 项 | Loon 原值 | 本配置 | 说明 |
+|---|---|---|---|
+| `fallback_udp_policy` | `REJECT`（`udp-fallback-mode`） | `direct` | 沿用了 fmz 的取值。节点不支持 UDP 中转时，UDP 改为直连而不是丢弃。若你更在意不泄漏 UDP，把这个值改回 `reject` 即可。 |
+| `final` | `DIRECT` | `direct` | 与 Loon 一致。注意 fmz 原配置用的是 `final, 兜底策略`（未命中流量走代理）；此处**没有**跟随，仍未命中即直连。 |
+
+其余对齐情况：`server_check_timeout` 采用 fmz 的 3000ms（Loon 为 2s）；
+`dns_exclusion_list` 合并了 fmz 的额外两条（`*.pingan.com.cn`, `*.cmbchina.com`）；
+`excluded_routes` 并入 fmz 的 `239.255.255.250/32`。
+
+> DNS 提示：QX 一旦设置 `doh-server` 就会忽略 system 与所有非加密 `server=`。
+> 本配置用 DoH（对应 Loon 的 `doh-server`），因此 fmz 那套 `server=223.5.5.5` /
+> 按域名绑定解析**未并入**，否则会被静默忽略。
 
 ## 已知行为差异
 
