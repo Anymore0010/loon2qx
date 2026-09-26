@@ -1,0 +1,23 @@
+# 微信解除链接限制（QX 重写资源，可直接用 URL 订阅）
+#
+# 对应你原 Loon 的 Weixin_external_links_unlock.lpx。
+# 内容取自 fmz200/wool_scripts 的 QuantumultX/rewrite/split/partW/WeChatUnlockLinkRestrict.snippet
+# （QX 原生，无需解析器）；脚本来自 zZPiglet/Task（517★）。
+#
+# 作用：微信里打开的外链被拦截时，跳过「即将离开微信」中间页；
+#       支付宝链接 / 被封禁链接弹窗跳转；可选在微信内用快照显示被封禁链接、
+#       或强制重定向（群聊与扫码均可）。
+#
+# ---- 用法（任选其一）----
+# A. 直接在 QX 里加这一条 URL（推荐，不必改配置文件）：
+#      https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/QuantumultX/rules/wechat-unlock.snippet
+# B. 或把本文件加入 sources.json 的 rewrites 后重新生成。
+#
+# 需要在 MITM 里包含这两个主机名（本文件已自带 hostname 行，QX 会自动并入）：
+#      weixin110.qq.com, security.wechat.com
+#
+# 可选参数：脚本第 2、3 行的 useCache / forceRedirect，或改 BoxJs 里的
+# UnblockURLinWeChat 节点（useCache=true 在微信内用快照显示；forceRedirect=true 强制重定向）。
+^https\:\/\/(weixin110\.qq|security.wechat)\.com\/cgi-bin\/mmspamsupport-bin\/newredirectconfirmcgi\? url script-response-body https://raw.githubusercontent.com/zZPiglet/Task/master/asset/UnblockURLinWeChat.js
+
+hostname = weixin110.qq.com, security.wechat.com
