@@ -139,6 +139,40 @@ function checkFilterOrder(p) {
   }
 }
 
+/**
+ * 本仓库自带规则文件（QuantumultX/rules/*）里引用的脚本 URL 必须指向本仓库。
+ *
+ * 否则「全部走本仓库」的目标就名不副实：上游删文件或被墙即静默失效，
+ * 也不受快照兜底保护（真实踩过：JD 比价的两条脚本曾直链 githubdulong）。
+ */
+function checkLocalRuleScriptsAreSelfHosted(repoSlug) {
+  const dir = join(ROOT, "QuantumultX", "rules");
+  if (!existsSync(dir)) return 0;
+  let checked = 0;
+  for (const f of readdirSync(dir)) {
+    if (!/\.(snippet|conf|list)$/.test(f)) continue;
+    const rel = `QuantumultX/rules/${f}`;
+    for (const raw of readFileSync(join(dir, f), "utf8").split(/\r?\n/)) {
+      const line = raw.trim();
+      if (!line || line.startsWith("#")) continue;
+      const m = line.match(/url(?:-and-header)?\s+script-\S+\s+(https?:\/\/\S+)/);
+      if (!m) continue;
+      const u = m[1].replace(/["'],$/, "");
+      checked++;
+      if (!u.includes(repoSlug)) {
+        // kelee.one 的脚本对 CI 返回 403（Cloudflare 拦机器人），但设备端可取，
+        // 因此是**有意保留**的例外 —— 只告警，不报错（与 Loon 行为一致）。
+        if (/kelee\.one/i.test(u)) {
+          warn(rel, 0, `脚本保留 kelee.one 原始地址（CI 取不到，设备端可用）: ${u.split("/").pop()}`);
+        } else {
+          err(rel, 0, `脚本 URL 未指向本仓库（上游失效即静默失败）: ${u.slice(0, 80)}`);
+        }
+      }
+    }
+  }
+  return checked;
+}
+
 /** policy= / force-policy= / final must name an existing policy. */
 function checkPolicyReferences(p) {
   const defined = new Set();
@@ -273,6 +307,13 @@ function checkVendoredRules() {
         count++;
         continue;
       }
+      // Surge/Loon 关键字出现在预转换产物里 = 转换漏做，QX 会静默丢弃这些规则。
+      // （真实踩过：AWAvenue 的文件名含 QuantumultX 但内容是 Surge 语法）
+      const surgeKw = line.split(",")[0].trim();
+      if (/^(DOMAIN|DOMAIN-SUFFIX|DOMAIN-KEYWORD|IP-CIDR6|URL-REGEX|RULE-SET)$/i.test(surgeKw)) {
+        err(rel, 0, `预转换产物里出现 Surge/Loon 关键字 "${surgeKw}"（QX 不认，会被静默丢弃）: ${line.slice(0, 60)}`);
+        continue;
+      }
       const type = line.split(",")[0].trim().toLowerCase();
       if (!QX_RULE_TYPES.has(type)) {
         err(rel, 0, `not a valid Quantumult X rule type: "${line.slice(0, 60)}"`);
@@ -385,6 +426,8 @@ function checkNonEmpty(p) {
 const repoSlug = resolveRepoBase(ROOT).slug;
 
 {
+  const localScripts = checkLocalRuleScriptsAreSelfHosted(resolveRepoBase(ROOT).slug);
+  console.log(`本仓库规则文件的脚本 URL  已校验: ${localScripts}`);
   const vendored = checkVendoredRules();
   if (vendored) console.log(`QuantumultX/rules  ${vendored.files} file(s), ${vendored.rules} rules`);
   const dupes = checkRewriteDuplicates();
