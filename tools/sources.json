@@ -64,6 +64,60 @@
     "groups": [],
     "services": [
       {
+        "name": "Apple",
+        "members": [
+          "direct",
+          "proxy",
+          "香港节点",
+          "新国节点",
+          "日本节点",
+          "韩国节点",
+          "美国节点",
+          "全球节点"
+        ],
+        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
+      },
+      {
+        "name": "APNs",
+        "members": [
+          "direct",
+          "proxy",
+          "香港节点",
+          "新国节点",
+          "日本节点",
+          "韩国节点",
+          "美国节点",
+          "全球节点"
+        ],
+        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
+      },
+      {
+        "name": "Apple AI",
+        "members": [
+          "全球节点",
+          "美国节点",
+          "proxy",
+          "香港节点",
+          "新国节点",
+          "日本节点",
+          "韩国节点"
+        ],
+        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
+      },
+      {
+        "name": "OpenAI & Anthropic",
+        "members": [
+          "proxy",
+          "香港节点",
+          "新国节点",
+          "日本节点",
+          "韩国节点",
+          "美国节点",
+          "全球节点"
+        ],
+        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png"
+      },
+      {
         "name": "Google",
         "members": [
           "proxy",
@@ -167,74 +221,10 @@
           "全球节点"
         ],
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png"
-      },
-      {
-        "name": "Apple",
-        "members": [
-          "direct",
-          "proxy",
-          "香港节点",
-          "新国节点",
-          "日本节点",
-          "韩国节点",
-          "美国节点",
-          "全球节点"
-        ],
-        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
-      },
-      {
-        "name": "APNs",
-        "members": [
-          "direct",
-          "proxy",
-          "香港节点",
-          "新国节点",
-          "日本节点",
-          "韩国节点",
-          "美国节点",
-          "全球节点"
-        ],
-        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
-      },
-      {
-        "name": "OpenAI & Anthropic",
-        "members": [
-          "proxy",
-          "香港节点",
-          "新国节点",
-          "日本节点",
-          "韩国节点",
-          "美国节点",
-          "全球节点"
-        ],
-        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png"
-      },
-      {
-        "name": "Apple AI",
-        "members": [
-          "全球节点",
-          "美国节点",
-          "proxy",
-          "香港节点",
-          "新国节点",
-          "日本节点",
-          "韩国节点"
-        ],
-        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
       }
     ]
   },
   "filters": [
-    {
-      "id": "filter-fix",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
-      "tag": "分流修正",
-      "policy": null,
-      "parser": false,
-      "enabled": true,
-      "note": "fmz 配置原有。规则自带 direct / proxy 策略，因此不设 force-policy。",
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png"
-    },
     {
       "id": "filter-ads-fmz",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
@@ -267,6 +257,20 @@
       "vendored_as": "AWAvenue.list",
       "local_file": "QuantumultX/rules/AWAvenue.list",
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png"
+    },
+    {
+      "id": "filter-fix",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
+      "tag": "分流修正",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "note": "fmz 配置原有。规则自带 direct / proxy 策略，因此不设 force-policy。已排除两条与广告拦截冲突的规则（api-adservices.apple.com、msg.umengcloud.com —— 它们把本该 reject 的广告域改成 direct）。",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png",
+      "exclude_rule_patterns": [
+        "api-adservices\\.apple\\.com",
+        "msg\\.umengcloud\\.com"
+      ]
     },
     {
       "id": "filter-ai-fmz",
@@ -314,7 +318,7 @@
       "_local": true,
       "local_file": "QuantumultX/rules/Apple.list",
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png",
-      "note": "由 rule_merges 的 merge-apple 生成（bm7 Apple + AppleID + AppStore）。"
+      "note": "由 rule_merges 的 merge-apple 生成（**Apple Account + App Store**，内容对应 Loon 端的两个列表；不再并入 bm7 的 1878 条大列表）。"
     },
     {
       "id": "filter-google",

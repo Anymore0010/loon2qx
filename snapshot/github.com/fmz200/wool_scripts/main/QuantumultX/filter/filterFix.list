@@ -89,7 +89,6 @@ host, init.ess.apple.com, direct
 host, smp-device-content.apple.com, direct
 host-keyword, ssl.apple.com, direct
 host-keyword, humb.apple.com, direct
-host-keyword, api-adservices.apple.com, direct
 host-keyword, ls.apple.com, direct
 host-keyword, gsa.apple.com, direct
 host-keyword, ess.apple.com, direct
@@ -122,7 +121,6 @@ host,vi.l.qq.com, direct
 # >>>>>>>>>>>>>>> ✅ U ✅ <<<<<<<<<<<<<<
 # > Umeng
 host,msg.umeng.com, direct
-host,msg.umengcloud.com, direct
 
 
 

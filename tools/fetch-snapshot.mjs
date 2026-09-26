@@ -244,15 +244,27 @@ for (const r of results) {
   // 会被两套 script-response-body 依次处理。改由独立条目负责，故把聚合里的排除掉。
   // 排除是**按 sources.json 声明**做的，并且带「必须真的排掉」的断言 —— 否则
   // 上游一改写法，排除就会静默失效，重复处理又回来了。
-  const excl = src.rewrites.find((x) => x.exclude_rule_patterns && x.url === r.url);
+  const excl = [...src.rewrites, ...src.filters].find(
+    (x) => x.exclude_rule_patterns && x.url === r.url,
+  );
   if (excl && /(\.snippet|\.conf|\.list)$/.test(r.local)) {
     const res = excl.exclude_rule_patterns.map((p) => new RegExp(p));
-    const before = body.split(/\r?\n/).length;
     const kept = [];
     let dropped = 0;
     for (const line of body.split(/\r?\n/)) {
       const t = line.trim();
-      if (t && !t.startsWith("#") && /\surl\s/.test(t) && res.some((re) => re.test(t))) { dropped++; continue; }
+      // 匹配任何「规则行」（重写的 `url ...` 或分流的 `host-keyword, x, direct`），
+      // 但不匹配注释/空行/hostname 行。原先只匹配含 " url " 的行，
+      // 所以对「分流修正」这类纯分流资源的排除声明无效（静默失效）。
+      // 两类规则行都要覆盖：重写（`... url script-...`，**通常不含逗号**）
+      // 与分流（`host-keyword, x, direct`，靠逗号）。
+      // 只判逗号会把重写行漏掉（实测导致 Spotify 排除静默失效）。
+      const isRule =
+        t &&
+        !t.startsWith("#") &&
+        !/^hostname\s*=/i.test(t) &&
+        (t.includes(",") || /\s+url(?:-and-header)?\s+/.test(t));
+      if (isRule && res.some((re) => re.test(t))) { dropped++; continue; }
       kept.push(line);
     }
     if (dropped === 0) {
