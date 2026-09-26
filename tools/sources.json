@@ -17,7 +17,7 @@
     "_dns_exclusion_note": "dns_exclusion_list 来自 fmz（Loon 无对应概念），属纯新增：这些域名不使用 fake-ip。excluded_routes 以 Loon bypass-tun 为准；fmz 额外加的 239.255.255.250/32 已被 Loon 的 224.0.0.0/4 覆盖，属冗余，已移除。"
   },
   "dns": {
-    "_comment": "DoH 双源并发（阿里 + 腾讯），加 prefer-doh3 优先 HTTP/3。Google DoH 已按用户要求移除（内地常被墙，留着反而拖慢查询）。 另加「兜底 UDP DNS」：见 udp_dns_servers。",
+    "_comment": "DoH 双源并发（阿里 + 腾讯），加 prefer-doh3 优先 HTTP/3。Google DoH 已按用户要求移除（内地常被墙）。",
     "doh_server": [
       "https://dns.alidns.com/dns-query",
       "https://doh.pub/dns-query"
@@ -25,11 +25,11 @@
     "no_ipv6": false,
     "domain_servers": [],
     "prefer_doh3": true,
+    "_udp_dns_note": "明文 UDP DNS 兜底（223.5.5.5 阿里 / 119.29.29.29 腾讯）。保留原因（用户明确要求）：作为 DoH 不可用时的保险。注意官方文档 sample.conf 的表述：「设置 doh-server 后，system 与所有未绑定域名的明文 server 会被忽略」—— 即按文档，它们可能不参与解析。但其代价为零，且部分 QX 版本/场景下会回落到明文 server，故保留作为安全网。**不要删除**（除非确认不需要这层保险）。",
     "udp_dns_servers": [
       "223.5.5.5",
       "119.29.29.29"
-    ],
-    "_udp_dns_note": "兜底 UDP DNS（明文 53 端口）。为什么要它：QX 官方说明——设置了 doh-server 后，system 与所有「未绑定域名的普通非加密 server」都会被忽略；而 DoH 一旦不可用（网络限制/证书问题），就只剩 QX 内置的 system DNS 兜底，行为不可控。这里显式给出两个国内明文 UDP DNS 作为兜底：223.5.5.5（阿里）、119.29.29.29（腾讯，与 dns.pub/DoH 同源）。二者与上面 DoH 的解析口径一致，避免「加密不可用时解析结果突变」。注意（实测 QX sample.conf:58）：这**不**等于「DoH 失败时改用 UDP」——配了 doh-server 后，普通 server 仅用于「绑定了域名的场景」，故它实际是一条备用链路，而非自动降级。若要自动降级需把域名显式绑到明文 server（server = /域名/IP），但那会绕过加密，本配置不采用。"
+    ]
   },
   "policies": {
     "_comment": "regions + selects 来自 Loon（[Remote Filter] 正则 + [Proxy Group]）。groups 是 fmz 配置里的策略组，供融合进来的 fmz 分流规则使用。",
@@ -261,7 +261,7 @@
       "policy": "reject",
       "parser": false,
       "enabled": true,
-      "note": "替代 Loon 的 BlockAdvertisers.lpx 的分流部分。",
+      "note": "通用广告域名拦截（与上方广告拦截合集互补）。",
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png"
     },
     {
@@ -270,7 +270,7 @@
       "policy": "reject",
       "parser": false,
       "enabled": true,
-      "note": "965 条广告拦截规则。**注意：上游虽是 .list 且名为 QuantumultX，实为 Surge 语法**（DOMAIN,/DOMAIN-SUFFIX,/DOMAIN-KEYWORD,），QX 只认 host,/host-suffix,/host-keyword,，直链会被静默丢弃。故已预转换为 QX 原生格式存于本仓库。",
+      "note": "965 条广告拦截规则（上游实为 Surge 语法，已预转换为 QX 原生格式）。",
       "upstream_url": "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
       "vendor": true,
       "vendored_as": "AWAvenue.list",
@@ -282,7 +282,7 @@
       "tag": "OpenAI & Anthropic",
       "policy": "OpenAI & Anthropic",
       "enabled": true,
-      "note": "由 rule_merges 的 merge-ai 生成（fmz AI.list + bm7 OpenAI + bm7 Anthropic 合并）。（原名「AI 分流合集」；内容为 fmz AI.list + bm7 OpenAI + bm7 Anthropic 合并，不含 Apple Intelligence —— 后者是独立条目「Apple AI」）",
+      "note": "AI 相关分流（fmz AI.list + bm7 OpenAI + bm7 Anthropic 合并）。",
       "vendored_as": "AI.list",
       "_local": true,
       "local_file": "QuantumultX/rules/AI.list",
@@ -295,7 +295,7 @@
       "policy": "Apple AI",
       "parser": false,
       "enabled": true,
-      "note": "来自 Loon [Remote Rule] 的 AppleIntelligence.list。 已预转换为 Quantumult X 原生规则存于仓库（不再依赖运行时解析器）。",
+      "note": "Apple Intelligence 相关域名。",
       "vendor": true,
       "vendored_as": "AppleIntelligence.list",
       "_local": true,
@@ -323,7 +323,7 @@
       "_local": true,
       "local_file": "QuantumultX/rules/Apple.list",
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png",
-      "note": "由 rule_merges 的 merge-apple 生成（**Apple Account + App Store**，内容对应 Loon 端的两个列表；不再并入 bm7 的 1878 条大列表）。"
+      "note": "由 rule_merges 的 merge-apple 生成（Apple Account + App Store；不含 APNs 与 Apple AI，它们是独立条目）。"
     },
     {
       "id": "filter-google",
@@ -332,7 +332,7 @@
       "parser": false,
       "enabled": true,
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png",
-      "note": "由 rule_merges 的 merge-google 生成（bm7 Google + bm7 YouTube 合并）。两者本来是同一策略「新国节点」，且 Google.list 不含 youtube.com/googlevideo.com/ytimg.com，只有并进来才不会让 YouTube 掉到兜底策略。",
+      "note": "Google + YouTube 合并（bm7）。",
       "_local": true,
       "local_file": "QuantumultX/rules/Google.list"
     },
@@ -381,7 +381,7 @@
       "_local": true,
       "local_file": "QuantumultX/rules/Meta.list",
       "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/meta.png",
-      "note": "由 rule_merges 的 merge-meta 生成（bm7 Facebook + bm7 Instagram）。**必须设 force-policy**：两个上游列表的规则里内联的策略名是各自的组名（Facebook/Instagram），这些组在本配置里不存在 —— 没有 force-policy 覆盖，规则会指向空策略。取「全球节点」（原 Facebook 的策略；Facebook 规则量占绝大多数）。若要 Instagram 单独走美国，把 Meta 的策略组改指「美国节点」即可。"
+      "note": "Facebook + Instagram 合并（bm7）。"
     },
     {
       "id": "filter-netflix",
@@ -408,7 +408,7 @@
       "policy": "direct",
       "parser": false,
       "enabled": true,
-      "note": "Quantumult X 内置资源，等同 Loon 的 LAN_SPLITTER.lsr。",
+      "note": "Quantumult X 内置资源（局域网直连）。",
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Available.png"
     },
     {
@@ -418,7 +418,7 @@
       "policy": "direct",
       "parser": false,
       "enabled": true,
-      "note": "Quantumult X 内置资源，等同 Loon 的 REGION_SPLITTER.lsr。必须保持在最后。",
+      "note": "Quantumult X 内置资源（国内直连）。须保持在 [filter_remote] 末尾。",
       "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png"
     }
   ],

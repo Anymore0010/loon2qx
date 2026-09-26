@@ -72,15 +72,14 @@ function section(key, title) {
 
 function buildGeneral(g) {
   const lines = [section("general", "常规设置"), ""];
-  lines.push(comment("从 Loon [General] 转换而来：只保留 Quantumult X 有对应语义的项。"));
   lines.push(`resource_parser_url=${PREFER_LOCAL ? `${repoBase}/${snapshotLocalFor(g.resource_parser_url)}` : g.resource_parser_url}`);
   lines.push(`profile_img_url=${iconUrl(g.profile_img_url)}`);
-  lines.push(comment(`节点测速：URL 对应 Loon proxy-test-url，超时 ${g.server_check_timeout}ms`));
+  lines.push(comment(`节点测速 URL，超时 ${g.server_check_timeout}ms`));
   lines.push(`server_check_url=${g.server_check_url}`);
   lines.push(`server_check_timeout=${g.server_check_timeout}`);
-  lines.push(comment("对应 Loon internet-test-url"));
+  lines.push(comment("网络连通性检测 URL"));
   lines.push(`network_check_url=${g.network_check_url}`);
-  lines.push(comment("对应 Loon geoip-url / ipasn-url 的用途：节点页顶部信息展示"));
+  lines.push(comment("节点页顶部的地理位置信息展示"));
   {
     const [, gurl] = g.geo_location_checker.split(",").map((x) => x.trim());
     const gu = PREFER_LOCAL && gurl && /^https?:/.test(gurl) ? `${repoBase}/${snapshotLocalFor(gurl)}` : gurl;
@@ -88,9 +87,9 @@ function buildGeneral(g) {
   }
   lines.push(comment("这些域名不使用 fake-ip，避免本地/内网域名被劫持"));
   lines.push(`dns_exclusion_list=${g.dns_exclusion_list}`);
-  lines.push(comment("对应 Loon bypass-tun：这些流量不交给 Quantumult X 处理"));
+  lines.push(comment("这些流量不交给 Quantumult X 处理"));
   lines.push(`excluded_routes=${g.excluded_routes}`);
-  lines.push(comment("UDP 兜底：节点不支持 UDP 中转时使用。对应 Loon udp-fallback-mode = REJECT。"));
+  lines.push(comment("UDP 兜底：节点不支持 UDP 中转时使用。"));
   lines.push(`fallback_udp_policy=${g.fallback_udp_policy}`);
   if (g.udp_drop_list) {
     lines.push(comment("丢弃这些 UDP 端口（QUIC 等），避免与 TCP 分流策略不一致"));
@@ -101,12 +100,12 @@ function buildGeneral(g) {
 
 function buildDns(d) {
   const lines = [section("dns", "DNS"), ""];
-  lines.push(comment("对应 Loon [General] doh-server。设置了 doh-server 后 non-encrypted server 会被忽略。"));
+  lines.push(comment("加密 DNS（DoH）。注意：设置后将忽略未绑定域名的明文 server；兜底走系统 DNS。"));
   if (d.no_ipv6) {
     lines.push(comment("禁用 IPv6（只走 A 记录）。对应你原 QX 配置的 no-ipv6。"));
     lines.push("no-ipv6");
   } else {
-    lines.push(comment("Loon ip-mode = dual / ipv6-vif = auto，因此这里不写 no-ipv6，保留 IPv6。"));
+    lines.push(comment("保留 IPv6（不写 no-ipv6）。"));
   }
   if (d.prefer_doh3) {
     lines.push(comment("优先使用 DNS over HTTP/3；失败时自动回落 HTTP/2（QX 内置回落）。"));
@@ -114,14 +113,13 @@ function buildDns(d) {
   }
   lines.push(comment("多个 doh-server 写在同一行、逗号分隔（并发查询，多路提高可用性）。"));
   lines.push(`doh-server=${d.doh_server.join(", ")}`);
-  // 兜底 UDP DNS（明文）。QX 语义：配了 doh-server 后，未绑定域名的普通 server 会被忽略，
-  // 但显式写出来可作为备用链路 + 让「无 DoH 时」的行为可预期（否则只剩内置 system DNS）。
+  // 明文 UDP DNS 兜底（用户要求保留）。按官方文档，设了 doh-server 后未绑定域名的明文
+  // server 会被忽略；但它们代价为零，且部分版本/场景下会回落到明文 server，故留作安全网。
   if (d.udp_dns_servers?.length) {
     lines.push("");
-    lines.push(comment("兜底 UDP DNS（明文，53 端口）：DoH 不可用时的备用链路，"));
-    lines.push(comment("避免只剩 QX 内置 system DNS 导致解析行为不可控。与上面 DoH 同源同口径。"));
-    lines.push(comment("注意：这不是「DoH 失败自动降级」——配了 doh-server 后普通 server 仅对"));
-    lines.push(comment("「绑定了域名的场景」生效（QX 官方文档）。要自动降级需把域名绑到明文 server。"));
+    lines.push(comment("明文 UDP DNS 兜底安全网（保留，勿删）："));
+    lines.push(comment("官方文档称设了 doh-server 后未绑定域名的明文 server 会被忽略；"));
+    lines.push(comment("保留是因为代价为零，且 DoH 异常时可回落。"));
     for (const s of d.udp_dns_servers) lines.push(`server = ${s}`);
   }
   if (d.domain_servers?.length) {
@@ -135,7 +133,7 @@ function buildDns(d) {
 
 function buildPolicy(p) {
   const lines = [section("policy", "策略组"), ""];
-  lines.push(comment("对应 Loon [Remote Filter]：按节点名正则筛选出可手动选择的节点集合。"));
+  lines.push(comment("按节点名正则筛选出的可选节点集合。"));
   lines.push(comment("resource-tag-regex=. 表示匹配全部节点订阅，与 server-tag-regex 一起决定候选节点。"));
   for (const r of p.regions) {
     lines.push(
@@ -143,7 +141,7 @@ function buildPolicy(p) {
     );
   }
   lines.push("");
-  lines.push(comment("对应 Loon [Proxy Group] select：手动指定走哪个区域集合。"));
+  lines.push(comment("手动策略组：指定走哪个区域集合。"));
   const regionByName = new Map(p.regions.map((r) => [r.name, r]));
   for (const s of p.selects) {
     const region = regionByName.get(s.region);
@@ -181,7 +179,7 @@ function buildServerRemote() {
   const lines = [section("server_remote", "节点订阅"), ""];
   lines.push(comment("订阅链接属于个人敏感信息，刻意不写入本仓库。"));
   lines.push(comment("在 Quantumult X 里手动添加：风车 → 节点 → 添加订阅；或在本段末尾新起一行粘贴（不要以 # 开头）。"));
-  lines.push(comment("解析器会自动把 Clash / Surge / Loon 等格式的订阅转成 Quantumult X 节点。"));
+  lines.push(comment("解析器会自动把 Clash / Surge 等格式的订阅转成 Quantumult X 节点。"));
   lines.push("");
   lines.push(comment("示例（照抄一行并把链接换成你自己的，不需要「取消注释」）："));
   lines.push(comment("    <你的订阅链接>, tag=MyNodes, opt-parser=true, update-interval=86400, enabled=true"));
@@ -199,7 +197,7 @@ function buildServerRemote() {
 function buildServerLocal() {
   const lines = [section("server_local", "本地节点")];
   lines.push("");
-  lines.push(comment("原 Loon 配置的 [Proxy] 段为空（节点全部来自订阅），因此这里没有本地节点。"));
+  lines.push(comment("本配置无本地节点（节点全部来自订阅）。"));
   lines.push(comment("本段必须保留：Quantumult X 缺少 [server_local] 会报「缺少模块 server_local」而无法导入。"));
   lines.push(comment("如需添加本地节点，按下面的写法（去掉注释符）："));
   lines.push(comment("    shadowsocks=example.com:443, method=chacha20-ietf-poly1305, password=PWD, udp-relay=true, tag=Local-01"));
@@ -208,18 +206,12 @@ function buildServerLocal() {
 
 function buildFilterLocal(l) {
   const lines = [section("filter_local", "本地分流"), ""];
-  lines.push(comment("Loon [Rule] 逐条对应：DOMAIN→host, DOMAIN-SUFFIX→host-suffix, DOMAIN-KEYWORD→host-keyword, DIRECT→direct。"));
   lines.push(comment("本地规则优先于同名远程规则。"));
   lines.push("");
   for (const rule of l.rules) lines.push(rule);
   lines.push("");
-  lines.push(comment("以下为 Loon [Rule] 中被注释的模板，保留供参考："));
-  lines.push(comment("ip-cidr, 192.168.0.0/16, direct"));
-  lines.push(comment("ip-cidr, 10.0.0.0/8, direct"));
-  lines.push(comment("ip-cidr, 172.16.0.0/12, direct"));
-  lines.push(comment("ip-cidr, 127.0.0.0/8, direct"));
-  lines.push("");
-  lines.push(comment("未被任何规则命中的流量。对应 Loon FINAL,DIRECT。"));
+  lines.push(comment("如需屏蔽内网段，可加 ip-cidr, 10.0.0.0/8, direct 之类。"));
+  lines.push(comment("未被任何规则命中的流量。"));
   lines.push(`final, ${l.final}`);
   return lines.join("\n");
 }
@@ -230,8 +222,8 @@ function buildFilterRemote(filters) {
     if (f.parser !== true && f.parser !== false) f.parser = false;
   }
   const lines = [section("filter_remote", "远程分流"), ""];
-  lines.push(comment("opt-parser=true 表示交给 resource_parser_url 转换（读取 Loon/Surge/Clash 格式的规则文件）。"));
-  lines.push(comment("FILTER_REGION / FILTER_LAN 是 Quantumult X 内置资源，等同于 Loon 的 REGION_SPLITTER / LAN_SPLITTER。"));
+  lines.push(comment("opt-parser=true 表示交给 resource_parser_url 转换（Surge/Clash 等格式的规则文件）。"));
+  lines.push(comment("FILTER_REGION / FILTER_LAN 是 Quantumult X 内置资源。"));
   lines.push(comment("顺序即优先级：CN REGION 必须保持在最后。"));
   lines.push("");
   for (const f of filters) {
@@ -248,14 +240,13 @@ function buildFilterRemote(filters) {
 
 function buildRewriteLocal() {
   const lines = [section("rewrite_local", "本地重写"), ""];
-  lines.push(comment("Loon 的插件（.lpx）无法在 Quantumult X 运行，且 [Rewrite]/[Script] 段落全部由插件注入，"));
-  lines.push(comment("所以 Loon 配置本体没有可平移的本地重写。所有重写都在下面的 rewrite_remote 中以 Quantumult X 原生资源替代。"));
+  lines.push(comment("本段留空：所有重写都在下面的 [rewrite_remote] 中以远程资源提供。"));
   return lines.join("\n");
 }
 
 function buildRewriteRemote(rewrites) {
   const lines = [section("rewrite_remote", "远程重写"), ""];
-  lines.push(comment("每个条目都对应原 Loon 配置里的一个插件，映射理由见 MAPPING.md。"));
+  lines.push(comment("每个条目对应一类 App/服务。"));
   lines.push(comment("hostname 由这些资源自带，Quantumult X 会自动合并进 MITM 主机名列表。"));
   lines.push("");
   for (const r of rewrites) {
@@ -279,7 +270,7 @@ function buildRewriteRemote(rewrites) {
 
 function buildTasks(tasks) {
   const lines = [section("task_local", "任务"), ""];
-  lines.push(comment("event-interaction 表示在 Quantumult X 中手动点击触发，对应 Loon 的节点检测等交互式工具。"));
+  lines.push(comment("event-interaction 表示在 Quantumult X 中手动点击触发。"));
   lines.push("");
   for (const t of tasks) {
     let tu = t.url;
@@ -317,10 +308,8 @@ function buildMitm() {
 }
 
 const profile = [
-  comment("Quantumult X 配置 —— 由 Loon 配置转换而来"),
-  comment("生成来源：tools/sources.json（请勿手工编辑本文件，改 sources.json 后运行 `bun tools/build.mjs`）"),
-  comment("原始 Loon 配置：legacy/loon/*.lcf"),
-  comment("插件替换说明：MAPPING.md"),
+  comment("Quantumult X 配置 —— 自动生成，请勿手工编辑"),
+  comment("改 tools/sources.json 后运行 `bun tools/build.mjs` 重新生成。"),
   "",
   buildGeneral(src.general),
   "",
