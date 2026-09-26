@@ -16,19 +16,35 @@
  *   (when imported, use convertRuleList() directly)
  */
 
-/** Loon/Surge rule type -> Quantumult X rule type. */
+/**
+ * Loon/Surge rule type -> Quantumult X rule type.
+ *
+ * 必须同时收录 Quantumult X **自身**的类型名（host / host-suffix / ...），
+ * 因为合并组的上游里混着两类文件：
+ *   - Loon/Surge 语法（domain-suffix, ...）—— fmz 的 AI.list 等
+ *   - Quantumult X 原生语法（HOST-SUFFIX, ...）—— bm7 的 QuantumultX/*.list
+ * 之前只收了前者，于是所有 QX 原生列表在合并时被整批丢弃
+ * （实测 Google.list 711 条只活下来 8 条，703 条被当成「不支持的规则类型」）。
+ * 这里把 QX 原生名做成恒等映射。查表时已统一 toLowerCase()。
+ */
 const TYPE_MAP = {
-  domain: "host",
-  "domain-suffix": "host-suffix",
-  "domain-keyword": "host-keyword",
-  "domain-wildcard": "host-wildcard",
+  // Quantumult X 原生类型（恒等映射）
+  host: "host",
+  "host-suffix": "host-suffix",
+  "host-keyword": "host-keyword",
+  "host-wildcard": "host-wildcard",
   "ip-cidr": "ip-cidr",
-  "ip-cidr6": "ip6-cidr",
   "ip6-cidr": "ip6-cidr",
   "ip-asn": "ip-asn",
   geoip: "geoip",
   "user-agent": "user-agent",
   "url-regex": "url-regex",
+  // Loon / Surge 类型 -> Quantumult X
+  domain: "host",
+  "domain-suffix": "host-suffix",
+  "domain-keyword": "host-keyword",
+  "domain-wildcard": "host-wildcard",
+  "ip-cidr6": "ip6-cidr",
 };
 
 /** Policy value -> Quantumult X policy value. */

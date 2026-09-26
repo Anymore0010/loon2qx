@@ -264,9 +264,10 @@ const mitmHosts = section(text, "MITM")
   // "xxx.comhostname = yyy.com"。这类条目含 "=" 或 "hostname" 字样，是非法主机名，
   // QX 解析该行会报错 —— 必须剔除（并去重）。
   .filter((x) => x && !x.includes("=") && !/hostname/i.test(x) && /^[A-Za-z0-9*?._-]+$/.test(x))
-  // 剔除银行/支付/微信类：这类 App 普遍证书固定（cert pinning），MITM 不会生效，
-  // 只会增加解密开销、甚至干扰这些 App（实测 36 个，含 icbc/cmbchina/bankcomm/psbc/tenpay 等）。
-  .filter((x) => !/(icbc|cmbchina|bankcomm|psbc|abchina|bankofbeijing|jlbank|cgbank|95598pay|tenpay|ysepay|unionpay|weixin|wechat|wechatpay|alipay|mybank|jdpay)/i.test(x));
+  // 注意：曾在此处按「银行/支付类证书固定、MITM 无效」过滤 hostname，**已撤销**。
+  // 该假设未经验证且与事实矛盾：上游专门维护 ccbLifeAds.js（建行生活）、CloudQuickPass
+  // （云闪付）等脚本，说明银行系生活 App 的去广告是能生效的。
+  // 是否要缩小 MITM 范围应由使用者决定，不应在提取阶段静默裁掉。
 const mitmDedup = [...new Set(mitmHosts)];
 
 /**
@@ -359,10 +360,19 @@ const rewriteScripts = (line) =>
     return existsSync(join(ROOT, local)) ? prefix + `${repoBase}/${local}` : full;
   });
 const outRules = unique.map(rewriteScripts);
-// 规则若引用已剔除的敏感域，一并去掉（否则规则留着但 MITM 不覆盖 -> 静默无效）
-const SENS_RULE = /(icbc|cmbchina|bankcomm|psbc|abchina|bankofbeijing|jlbank|cgbank|95598pay|tenpay|ysepay|unionpay|weixin|wechat|alipay|mybank|jdpay)/i;
-const finalRules = outRules.filter((l) => !SENS_RULE.test(l.split(/\s+url(?:-and-header)?\s+/)[0]));
-if (finalRules.length !== outRules.length) console.log(`剔除引用敏感域的规则 ${outRules.length - finalRules.length} 条`);
+// 剔除依赖 kelee.one 脚本的规则。三重理由：
+//   1. 脚本取不到（Cloudflare 403），无法纳入快照 -> 不享受兜底；仅 49 个 warning 噪音
+//   2. 与现有可信源**重复处理**：实测至少 4 组（高德 splash_screen/frogserver/promotion-web）
+//      与 ddgksf AmapAds.conf 命中同一 URL，但正则文本不同 -> 文本去重漏判，
+//      同一响应体会被两个 script-response-body 依次处理
+//   3. 这些内容上游（fmz QX 原生 rewrite.snippet / ddgksf）已覆盖
+const keleeRules = outRules.filter((l) => /kelee\.one/.test(l));
+const finalRules = outRules.filter((l) => !/kelee\.one/.test(l));
+if (keleeRules.length) console.log(`剔除依赖 kelee.one 脚本的规则 ${keleeRules.length} 条（取不到 + 与现有源重复）`);
+// 保留完整 hostname 列表。曾试图按规则正则反推「用不到的 hostname」并精简，
+// 实测**不可行**：正则里的域名是转义的（\. ）且常带非捕获组，朴素抽取只命中 16/1038；
+// 而 QX 的 rewrite 要看到 HTTPS 的 URL 路径**必须 MITM**，hostname 少一个就静默失效一条规则。
+// 宁多勿少 —— 多解密一个域名的代价远小于规则静默失效。
 const body = mitmDedup.length ? finalRules.concat(["", `hostname = ${mitmDedup.join(", ")}`]) : finalRules;
 writeFileSync(dest, header.concat(body).join("\n") + "\n");
 

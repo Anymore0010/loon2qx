@@ -170,12 +170,25 @@
     },
     {
       "id": "filter-google",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
       "tag": "Google",
       "policy": "新国手动策略",
       "parser": false,
       "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png"
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png",
+      "note": "由 rule_merges 的 merge-google 生成（bm7 Google + bm7 YouTube 合并）。两者本来是同一策略「新国手动策略」，且 Google.list 不含 youtube.com/googlevideo.com/ytimg.com，只有并进来才不会让 YouTube 掉到兜底策略。",
+      "_local": true,
+      "local_file": "QuantumultX/rules/Google.list"
+    },
+    {
+      "id": "filter-meta",
+      "tag": "Meta",
+      "policy": "全球手动策略",
+      "parser": false,
+      "enabled": true,
+      "_local": true,
+      "local_file": "QuantumultX/rules/Meta.list",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
+      "note": "由 rule_merges 的 merge-meta 生成（bm7 Facebook + bm7 Instagram）。**必须设 force-policy**：两个上游列表的规则里内联的策略名是各自的组名（Facebook/Instagram），这些组在本配置里不存在 —— 没有 force-policy 覆盖，规则会指向空策略。取「全球手动策略」（原 Facebook 的策略；Facebook 规则量占绝大多数）。若要 Instagram 单独走美国，把 Meta 的策略组改指「美国手动策略」即可。"
     },
     {
       "id": "filter-spotify",
@@ -260,15 +273,6 @@
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png"
     },
     {
-      "id": "filter-youtube",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list",
-      "tag": "YouTube",
-      "policy": "全球手动策略",
-      "parser": false,
-      "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png"
-    },
-    {
       "id": "filter-disney",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
       "tag": "Disney",
@@ -276,24 +280,6 @@
       "parser": false,
       "enabled": true,
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png"
-    },
-    {
-      "id": "filter-facebook",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list",
-      "tag": "Facebook",
-      "policy": "全球手动策略",
-      "parser": false,
-      "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png"
-    },
-    {
-      "id": "filter-instagram",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list",
-      "tag": "Instagram",
-      "policy": "美国手动策略",
-      "parser": false,
-      "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Instagram.png"
     },
     {
       "id": "filter-onedrive",
@@ -379,6 +365,16 @@
       "enabled": true,
       "note": "用户明确需要。QX 原生语法（含 jsonjq-response-body 改布局）。来源 ZenmoFeiShi/Qx。",
       "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png"
+    },
+    {
+      "id": "rewrite-spotify-lyric",
+      "url": null,
+      "local_file": "QuantumultX/rules/spotify-lyric.snippet",
+      "tag": "Spotify 歌词翻译",
+      "parser": false,
+      "enabled": false,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png",
+      "note": "对应你 Loon 的 Spotify_lyrics_translation.lpx —— 实测这是唯一**真正缺失**的 Spotify 功能：去广告/解锁已在「广告拦截合集」(fmz 聚合)里生效（4 条规则 + app2smile 同源脚本）。**默认关闭**：需先去百度翻译申请 appid + securityKey（免费版 5 万字符/月），把密钥填进 QuantumultX/rules/spotify-lyric.snippet 再启用。注意 QX 不像 Surge/Loon 有 argument= 字段，密钥只能写进脚本本体。"
     },
     {
       "id": "rewrite-plugin-extracted",
@@ -547,10 +543,10 @@
   },
   "vendor_plugins": [
     {
-      "id": "kelee-merged",
-      "url": "https://raw.githubusercontent.com/wxs0625/loon-plugins/main/Loon_All_In_One_kelee_merged_2026-08-11.plugin",
+      "id": "fmz-blockads",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/plugin/blockAds.plugin",
       "out": "QuantumultX/rules/plugin-rewrites.snippet",
-      "note": "kelee.one 的 33 个插件被此仓库合并进一个包（kelee.one 本身对 curl/无头浏览器均返回 Cloudflare 403，无法直取）。"
+      "note": "fmz200 官方「广告拦截&净化合集」(Loon 插件，官方聚合 1615 条，覆盖约 730 款 App)。**替换自 0 星的 wxs0625/loon-plugins 合并包** —— 后者虽然内容主体也是 fmz 的，但来源不可信、合并过程不可验证（实测含 2 处破损行），且混入了 zirawell/Keywos/VenenoSix24 等低星仓库的脚本。现改为直接取 fmz200 官方（5704★）。"
     }
   ],
   "_filter_order_note": "顺序依据你的两份原配置：先取 QX [filter_remote] 的顺序（广告拦截 → 分流修正 → App 规则），再按 Loon [Remote Rule] 的顺序补上 Loon 独有的条目；CN REGION 固定最后（Loon 原配置明确要求勿改排序）。顺序有实际影响：实测 42 个域名同时出现在广告黑名单与 App 分流里（Google 35、Apple 5、YouTube 2），先匹配者决定去向。",
@@ -590,6 +586,26 @@
         "hostname = in.m.jd.com, apapia-sqk-weblogic.manmanbuy.com"
       ],
       "note": "京东比价（替代 Loon 的 JD_Price.lpx）。来源 githubdulong/Script，脚本宿主存活。用法：需先安装「慢慢买」App，在[我的]页面捕获 Cookie 后，商品详情页才会显示比价。CK 捕获脚本 MmmCK.js 读 $request.body，因此必须是 script-request-body（写成 header 版会静默失败）。"
+    },
+    {
+      "id": "merge-meta",
+      "out": "Meta.list",
+      "policy": null,
+      "sources": [
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list"
+      ],
+      "note": "Facebook 与 Instagram 同属 Meta，合并为一个列表、单一策略（全球手动策略），避免同一域被两条规则以不同策略重复命中。"
+    },
+    {
+      "id": "merge-google",
+      "out": "Google.list",
+      "policy": "新国手动策略",
+      "sources": [
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list"
+      ],
+      "note": "Google 与 YouTube 同属 Google 系、同走「新国手动策略」，合并为一个列表（原 Loon 里 googlevideo.com/youtube.com 就是 新国手动策略）。"
     }
   ],
   "output": {

@@ -1,8 +1,8 @@
 {
-  "total": 5,
-  "ok": 5,
+  "total": 7,
+  "ok": 7,
   "failed": 0,
-  "rules": 1037,
+  "rules": 2553,
   "resources": [
     {
       "id": "filter-awavenue",
@@ -35,7 +35,7 @@
       "id": "merge-ai",
       "upstream": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
       "file": "QuantumultX/rules/AI.list",
-      "rules": 58,
+      "rules": 93,
       "dropped": 0,
       "adjusted": 0,
       "error": null
@@ -45,6 +45,24 @@
       "upstream": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
       "file": "QuantumultX/rules/JD_price.list",
       "rules": 2,
+      "dropped": 0,
+      "adjusted": 0,
+      "error": null
+    },
+    {
+      "id": "merge-meta",
+      "upstream": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list",
+      "file": "QuantumultX/rules/Meta.list",
+      "rules": 574,
+      "dropped": 0,
+      "adjusted": 0,
+      "error": null
+    },
+    {
+      "id": "merge-google",
+      "upstream": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list",
+      "file": "QuantumultX/rules/Google.list",
+      "rules": 907,
       "dropped": 0,
       "adjusted": 0,
       "error": null

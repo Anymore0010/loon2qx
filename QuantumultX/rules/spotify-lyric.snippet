@@ -1,0 +1,18 @@
+# Spotify 歌词翻译 —— 对应 Loon 的 Spotify_lyrics_translation.lpx
+# 来源: app2smile/rules (https://github.com/app2smile/rules) 的 js/spotify-lyric.js
+#
+# 启用前必做两步：
+#   1) 去百度翻译开放平台申请「通用翻译」API（https://fanyi-api.baidu.com/choose）
+#      标准版免费额度 5 万字符/月，单次最长 1000 字符；高级版 100 万字符/月、单次 6000 字符。
+#      注册：http://api.fanyi.baidu.com/register
+#   2) 把下面的 <APPID> 与 <SECURITY_KEY> 换成你自己的（不要提交到仓库！）
+#
+# 然后把这个条目的 enabled 在 tools/sources.json 里改为 true，并重新 bun tools/build.mjs。
+#
+# 注意：脚本会读取 Spotify 的 protobuf 歌词响应（binary-body），需要 MITM 解密
+#       spclient.wg.spotify.com —— 上面的「Spotify 解锁」条目已包含该 hostname。
+#
+# 正则取自脚本头部的官方说明（QX 段）：类型 script-response-body
+^https:\/\/spclient\.wg\.spotify\.com\/color-lyrics\/v2\/track\/ url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-lyric.js
+
+hostname = spclient.wg.spotify.com

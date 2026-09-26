@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 189,
-  "mirrored": 169,
+  "total": 167,
+  "mirrored": 167,
   "failed": 0,
   "resources": [
     {
@@ -47,15 +47,6 @@
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
       "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
       "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-google",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
       "status": 200,
       "error": null
     },
@@ -114,38 +105,11 @@
       "error": null
     },
     {
-      "id": "filter-youtube",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "filter-disney",
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
       "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
       "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-facebook",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-instagram",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list",
       "status": 200,
       "error": null
     },
@@ -200,6 +164,15 @@
       "url": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Pinduoduo.snippet",
       "snapshot": "snapshot/github.com/ZenmoFeiShi/Qx/main/Pinduoduo.snippet",
       "upstream_raw": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Pinduoduo.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-spotify",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/app2smile/rules/master/module/spotify.conf",
+      "snapshot": "snapshot/github.com/app2smile/rules/master/module/spotify.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/module/spotify.conf",
       "status": 200,
       "error": null
     },
@@ -465,6 +438,15 @@
       "error": null
     },
     {
+      "id": "icon-filter-meta",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
+      "status": 200,
+      "error": null
+    },
+    {
       "id": "icon-filter-spotify",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png",
@@ -519,38 +501,11 @@
       "error": null
     },
     {
-      "id": "icon-filter-youtube",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png",
-      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/YouTube.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "icon-filter-disney",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png",
       "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Disney.png",
       "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-filter-facebook",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
-      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-filter-instagram",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Instagram.png",
-      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Instagram.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Instagram.png",
       "status": 200,
       "error": null
     },
@@ -1527,184 +1482,31 @@
       "error": null
     },
     {
-      "id": "script:12306_remove_ads.js",
+      "id": "script:MmmCK.js",
       "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/12306/12306_remove_ads.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
+      "url": "https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
+      "snapshot": "snapshot/github.com/githubdulong/Script/master/MmmCK.js",
+      "upstream_raw": "https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
+      "status": 200,
+      "error": null
     },
     {
-      "id": "script:ShuQiCenterReader_remove_ads.js",
+      "id": "script:jd_price.js",
       "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/ShuQiCenterReader/ShuQiCenterReader_remove_ads.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
+      "url": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
+      "snapshot": "snapshot/github.com/githubdulong/Script/master/jd_price.js",
+      "upstream_raw": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
+      "status": 200,
+      "error": null
     },
     {
-      "id": "script:RedPaper_remove_ads.js",
+      "id": "script:spotify-lyric.js",
       "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:kff.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/kff/kff.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:ems.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/ems/ems.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:xiaotucc.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/xiaotucc/xiaotucc.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:FamilyMart.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/FamilyMart/FamilyMart.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:lawson.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/lawson/lawson.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:chayanyuese_remove_ads.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/chayanyuese/chayanyuese_remove_ads.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:coco.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/coco/coco.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:qingju.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/qingju/qingju.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:alittle-tea.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/alittle-tea/alittle-tea.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:M_Stand.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/M_Stand/M_Stand.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:T3.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/T3/T3.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:ming.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/ming/ming.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:SodaMusic_remove_ads.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/SodaMusic/SodaMusic_remove_ads.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:NeteaseCloudMusic_remove_ads.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/NeteaseCloudMusic/NeteaseCloudMusic_remove_ads.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:replace-body.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/CommonScript/replace-body.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:AliYunDrive_remove_ads.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/AliYunDrive/AliYunDrive_remove_ads.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
-    },
-    {
-      "id": "script:Amap_remove_ads.js",
-      "kind": "js",
-      "url": "https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 403,
-      "error": "HTTP 403"
+      "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-lyric.js",
+      "snapshot": "snapshot/github.com/app2smile/rules/master/js/spotify-lyric.js",
+      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-lyric.js",
+      "status": 200,
+      "error": null
     }
   ]
 }
