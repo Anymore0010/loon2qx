@@ -140,6 +140,18 @@ function buildPolicy(p) {
     if (!region) throw new Error(`policy "${s.name}" references unknown region "${s.region}"`);
     lines.push(`static=${s.name}, ${s.region}, img-url=${iconUrl(region.icon)}`);
   }
+  // 每个服务一条独立的 select 组：这样每条分流都能**单独**换节点，
+  // 而不是被 force-policy 锁死到某个区域组。参考原 QX 配置的写法
+  // （static=谷歌服务, proxy, 香港节点… 用户在组里自选）。
+  if (p.services?.length) {
+    lines.push("");
+    lines.push(comment("以下为「每服务一条」的可选策略组：分流条目指向这些组，"));
+    lines.push(comment("你可以在 QX 界面里逐条选择走哪个节点/区域，互不影响。"));
+    for (const g of p.services) {
+      const members = g.members.filter((m) => m === "direct" || m === "proxy" || regionByName.has(m));
+      lines.push(`static=${g.name}, ${members.join(", ")}, img-url=${iconUrl(g.icon)}`);
+    }
+  }
   // 融合自 fmz200/wool_scripts 配置的策略组，供其分流规则使用。
   if (p.groups?.length) {
     lines.push("");
