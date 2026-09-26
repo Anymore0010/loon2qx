@@ -290,6 +290,17 @@
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png"
     },
     {
+      "id": "filter-pdd-ads",
+      "tag": "拼多多去广告(分流)",
+      "policy": "reject",
+      "parser": false,
+      "enabled": true,
+      "_local": true,
+      "local_file": "QuantumultX/rules/Pinduoduo-ads.list",
+      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png",
+      "note": "从 Pinduoduo.snippet 拆出的分流规则（2 个广告域名 + 7 个广告 IP 段）。原先与重写规则混在同一文件里、且以 rewrite_remote 加载，故这些分流行被 QX 静默忽略、从未生效。"
+    },
+    {
       "id": "filter-apple-ai",
       "tag": "Apple AI",
       "policy": "Apple AI",
