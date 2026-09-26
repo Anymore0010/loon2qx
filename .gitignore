@@ -45,3 +45,6 @@ _check.py
 # CI 流程是 convert-plugins 先跑、fetch-snapshot 后跑并**读取 _exclusions.json**
 # 来排掉与 kelee 重叠的规则。若它被 `_*.json` 忽略、没入库，
 # CI 上「kelee 胜出」就完全不生效（实测就是这个原因，重复处理照样存在）。
+
+# CI 序列的临时模拟目录
+_sim/
