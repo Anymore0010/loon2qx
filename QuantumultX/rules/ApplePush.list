@@ -1,18 +1,20 @@
 # 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
 # 参考来源: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list
-# 规则数: 13
+# 规则数: 15
 # 重新生成: bun tools/vendor-rules.mjs
 
 # Apple Push Notification Service（APNs）—— 推送中继，默认直连。
-# 上游无独立 APNs 列表（fmz/bm7 实测 404），故从 bm7 Apple 列表提取 + 补 APNs 正式端点。
-# 关键补充：真正的 APNs 端点形如 N-courier.push.apple.com（1..50），
-#   bm7 的列表里**没有**这条，缺了它这些主机会落到兜底策略（走代理）——与「直连更稳」相反。
-# 来源参考: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list
+# 内容与 Loon 端 ApplePushNotificationService.lsr 对齐（2 域名 + 9 IP 段）。
+# 说明：`host-suffix, push.apple.com` 覆盖 N-courier.push.apple.com 等真实端点；
+#       IP 段取自 Apple 官方 ip-ranges（17.x / 2620:149 / 2403:300 / 2a01:b740）。
 host-suffix, push.apple.com, APNs
-host, courier-push-apple.com.akadns.net, APNs
-host, init-p01md-lb.push-apple.com.akadns.net, APNs
-host, init-p01st-lb.push-apple.com.akadns.net, APNs
-host, init-s01st-lb.push-apple.com.akadns.net, APNs
-host, push-apple.com.akadns.net, APNs
-host-wildcard, init*.push-apple.com.akadns.net, APNs
-host-wildcard, init*.push.apple.com, APNs
+host, identity.apple.com, APNs
+ip-cidr, 17.249.0.0/16, APNs
+ip-cidr, 17.252.0.0/16, APNs
+ip-cidr, 17.57.144.0/22, APNs
+ip-cidr, 17.188.128.0/18, APNs
+ip-cidr, 17.188.20.0/23, APNs
+ip6-cidr, 2620:149:a44::/48, APNs
+ip6-cidr, 2403:300:a42::/48, APNs
+ip6-cidr, 2403:300:a51::/48, APNs
+ip6-cidr, 2a01:b740:a42::/48, APNs

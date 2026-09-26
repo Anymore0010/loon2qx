@@ -2,7 +2,7 @@
   "total": 8,
   "ok": 8,
   "failed": 0,
-  "rules": 4443,
+  "rules": 4445,
   "resources": [
     {
       "id": "filter-awavenue",
@@ -71,7 +71,7 @@
       "id": "merge-apns",
       "upstream": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
       "file": "QuantumultX/rules/ApplePush.list",
-      "rules": 13,
+      "rules": 15,
       "dropped": 0,
       "adjusted": 0,
       "error": null

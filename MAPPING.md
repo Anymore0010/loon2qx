@@ -19,22 +19,22 @@ Loon 的 `.lsr` 与 Quantumult X 的 `.list` 是同一套 `host-suffix, x, POLIC
 
 | Loon 远程规则 | Quantumult X 替代 | 策略 |
 |---|---|---|
-| AppleIntelligence.list（ddgksf2013） | 同源，`opt-parser=true` | 全球手动策略 |
-| Telegram.lsr | bm7 `Telegram/Telegram.list` | 全球手动策略 |
+| AppleIntelligence.list（ddgksf2013） | 同源，`opt-parser=true` | X / Meta / Spotify / GitHub / Disney（各自服务组） |
+| Telegram.lsr | bm7 `Telegram/Telegram.list` | X / Meta / Spotify / GitHub / Disney（各自服务组） |
 | ~~TikTok.lsr~~ | ❌ 未迁移（用户确认不需要） | — |
-| AI.lsr | bm7 `OpenAI` + `Anthropic` | 美国手动策略 |
-| ApplePushNotificationService.lsr | 从 bm7 `Apple/Apple.list` **提取** push/courier 域（上游无独立 APNs 列表） | 苹果推送（可选组） |
+| AI.lsr | bm7 `OpenAI` + `Anthropic` | Meta / Apple AI（各自服务组） |
+| ApplePushNotificationService.lsr | 从 bm7 `Apple/Apple.list` **提取** push/courier 域（上游无独立 APNs 列表） | APNs（可选组） |
 | AppleAccount.lsr | bm7 `AppleID/AppleID.list` | direct |
 | AppStore.lsr | bm7 `AppStore/AppStore.list` | direct |
-| GitHub.lsr | bm7 `GitHub/GitHub.list` | 全球手动策略 |
-| Netflix.lsr | bm7 `Netflix/Netflix.list` | 新国手动策略 |
-| YouTube.lsr | bm7 `YouTube/YouTube.list` | 全球手动策略 |
-| Disney.lsr | bm7 `Disney/Disney.list` | 全球手动策略 |
-| Twitter.lsr | bm7 `Twitter/Twitter.list` | 全球手动策略 |
-| Facebook.lsr | bm7 `Facebook/Facebook.list` | 全球手动策略 |
-| Instagram.lsr | bm7 `Instagram/Instagram.list` | 美国手动策略 |
-| Spotify.lsr | bm7 `Spotify/Spotify.list` | 全球手动策略 |
-| Google.lsr | bm7 `Google/Google.list` | 新国手动策略 |
+| GitHub.lsr | bm7 `GitHub/GitHub.list` | X / Meta / Spotify / GitHub / Disney（各自服务组） |
+| Netflix.lsr | bm7 `Netflix/Netflix.list` | Google / Netflix（各自服务组） |
+| YouTube.lsr | bm7 `YouTube/YouTube.list` | X / Meta / Spotify / GitHub / Disney（各自服务组） |
+| Disney.lsr | bm7 `Disney/Disney.list` | X / Meta / Spotify / GitHub / Disney（各自服务组） |
+| Twitter.lsr | bm7 `Twitter/Twitter.list` | X / Meta / Spotify / GitHub / Disney（各自服务组） |
+| Facebook.lsr | bm7 `Facebook/Facebook.list` | X / Meta / Spotify / GitHub / Disney（各自服务组） |
+| Instagram.lsr | bm7 `Instagram/Instagram.list` | Meta / Apple AI（各自服务组） |
+| Spotify.lsr | bm7 `Spotify/Spotify.list` | X / Meta / Spotify / GitHub / Disney（各自服务组） |
+| Google.lsr | bm7 `Google/Google.list` | Google / Netflix（各自服务组） |
 | OneDrive.lsr | bm7 `OneDrive/OneDrive.list` | direct |
 | LAN_SPLITTER.lsr | Quantumult X 内置 `FILTER_LAN` | direct |
 | REGION_SPLITTER.lsr | Quantumult X 内置 `FILTER_REGION`（CN REGION） | direct |
@@ -132,7 +132,7 @@ Loon 的 `.lsr` 与 Quantumult X 的 `.list` 是同一套 `host-suffix, x, POLIC
 | IPv6 | `ip-mode = dual`（双栈） | ✅ 保留（不写 `no-ipv6`） |
 | 域名级 DNS | 无此概念 | ⚠️ **有意偏离**：已按用户要求清空（含路由器管理页那批） |
 | `final` | `FINAL,DIRECT` | ✅ `final, direct` |
-| 策略组类型 | 8 组均为 `select`（手动） | ✅ 8 个「…手动策略」static 组 |
+| 策略组类型 | 8 组均为 `select`（手动） | ✅ 6 个地区节点组 + 12 个服务组（均为 static/select） |
 
 ### 两个易混项的判定
 

@@ -40,7 +40,7 @@
 这是两份配置**行为差异最大**的一处：
 
 - **你的 QX**：只有被规则明确命中的流量才分流，**其余全部走代理**。所以你平时上网
-  默认是挂代理的，国内网站靠 `CN REGION`/`GeoIP_CN` 等规则排除。
+  默认是挂代理的，国内网站靠 `CN REGION` 规则排除。
 - **本配置**：沿用了 Loon 的 `FINAL,DIRECT`——**未命中即直连**，只有被规则命中的才走代理。
   换言之「默认不挂代理」。
 
@@ -59,20 +59,22 @@
 |---|---|---|
 | 地区组类型 | `url-latency-benchmark`（**自动选延迟最低**） | `static` + `server-tag-regex`（**手动选**） |
 | 正则 | `港\|HK\|Hong\|🇭🇰`（宽松） | Loon 的完整正则（含 `回国/校园/游戏` 排除） |
-| 组名 | 香港/台湾/美国/日本/韩国/狮城**节点** | 香港/台湾/美国/日本/韩国/**新国**/游戏/**全球**节点 + 8 个「…手动策略」 |
+| 组名 | 香港/台湾/美国/日本/韩国/狮城**节点** | 香港/日本/韩国/新国/美国/全球**节点**（6 个）+ 12 个服务组（Google/Telegram/X/Meta/Spotify/GitHub/Netflix/Disney/Apple/APNs/OpenAI & Anthropic/Apple AI） |
 
 **为什么不同**：你的 Loon 配置里 8 个组全是 `select`（手动选择），本次转换忠实保留了这个语义。
 你的 QX 配置用的是自动择优，两者行为不同：
 
 - 你的 QX：选中「香港节点」后，每次请求自动走香港里**延迟最低**的那个；
-- 本配置：选中「香港手动策略」后，走**你手动指定的那个**；「香港节点」是可再选的集合。
+- 本配置：**已删除「…手动策略」中间层** —— 它只是 `select → 地区节点组` 的转发，而地区节点组本身可在 QX 里选节点。现在规则直接指向地区节点组或服务组。
 
 如果你的实际偏好是自动择优，把 `tools/sources.json` 里 `policies.regions` 的 `static` 改成
 `url-latency-benchmark` 即可（改一行类型的活）。
 
-**本配置多出来的组**：`游戏节点`（Loon 有，你 QX 没有）、`全球节点`（兜底集合）、
-以及全部 8 个 `…手动策略`。`人工智能` 是唯一从你 QX 侧保留的组——因为你 QX 里
-`AI分流合集` 规则在用 `force-policy=人工智能`。
+**本配置多出来的组**：`全球节点`（兜底集合）、以及 12 个「服务组」
+（Google/Telegram/X/Meta/Spotify/GitHub/Netflix/Disney/Apple/APNs/
+OpenAI & Anthropic/Apple AI）—— 每个服务一条，便于**逐条**选节点。
+原先的 8 个 `…手动策略` **已删除**：它们只是 `select → 地区节点组` 的转发层，
+而地区节点组本身可在 QX 里选节点，故属冗余。
 
 ---
 
@@ -137,7 +139,7 @@ DoH（公网），**你在外网 DNS 下就打不开路由器后台**。已从�
 | Google | bm7 Google | ✅ 同 |
 | Spotify | bm7 Spotify | ✅ 同 |
 | Talkatone | fmz talkatone | ❌ **未迁移**（用户确认不需要） |
-| GeoIP_CN | fmz `GeoIP_CN.list` | ✅ 同源，已预转换 |
+| GeoIP_CN | — | ❌ **已删除**（与 CN REGION 等效，用户确认不需要） |
 | 苹果屏蔽系统更新 | fmz `blockAppleUpdate`（disabled） | ✅ 同（保持 disabled） |
 
 ### 本配置新增
@@ -162,7 +164,7 @@ DoH（公网），**你在外网 DNS 下就打不开路由器后台**。已从�
 
 **分流目标（force-policy）差异**需注意：你的 QX 里 `Github@bm7` 走 `proxy`、
 `Spotify@bm7` **没有**设 force-policy（即跟随 final）；本配置里它们走具体的地区组
-（`全球手动策略` / `新国手动策略`），便于策略可预测。
+（现改为直接指向地区节点组 / 服务组）。
 
 > ⚠️ 注意 `final` 本身不同（见第零节）：你的 `final` 是 `兜底策略`（走代理），
 > 本配置是 `direct`。所以「跟随 final」这两者**并不等价**——同样的 Spotify 规则，

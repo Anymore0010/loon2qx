@@ -3,68 +3,68 @@
 #   https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list
 #   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
 #   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list
-# 统一策略: 人工智能
+# 统一策略: OpenAI & Anthropic
 # 规则数: 93（已跨来源去重）
 #   各源贡献 rule/AI.list: 55
 #   各源贡献 OpenAI/OpenAI.list: 35
 #   各源贡献 Anthropic/Anthropic.list: 3
 # 重新生成: bun tools/vendor-rules.mjs
 
-host, chatgpt.livekit.cloud, 人工智能
-host, host.livekit.cloud, 人工智能
-host-suffix, turn.livekit.cloud, 人工智能
-host, openai.com.cdn.cloudflare.net, 人工智能
-host, openaiapi-site.azureedge.net, 人工智能
-host, openaicomproductionae4b.blob.core.windows.net, 人工智能
-host, production-openaicom-storage.azureedge.net, 人工智能
-host-suffix, chat.com, 人工智能
-host-suffix, chatgpt.com, 人工智能
-host-suffix, oaistatic.com, 人工智能
-host-suffix, oaiusercontent.com, 人工智能
-host-suffix, openai.com, 人工智能
-host-suffix, sora.com, 人工智能
-host, api.githubcopilot.com, 人工智能
-host, copilot-proxy.githubusercontent.com, 人工智能
-host, copilot.microsoft.com, 人工智能
-host, sydney.bing.com, 人工智能
-host-suffix, githubcopilot.com, 人工智能
-host, ai.google.dev, 人工智能
-host, aida.googleapis.com, 人工智能
-host, aistudio.google.com, 人工智能
-host, alkalicore-pa.clients6.google.com, 人工智能
-host, alkalimakersuite-pa.clients6.google.com, 人工智能
-host, bard.google.com, 人工智能
-host, deepmind.com, 人工智能
-host, deepmind.google, 人工智能
-host, geller-pa.googleapis.com, 人工智能
-host, gemini.google.com, 人工智能
-host, generativeai.google, 人工智能
-host, generativelanguage.googleapis.com, 人工智能
-host, makersuite.google.com, 人工智能
-host, proactivebackend-pa.googleapis.com, 人工智能
-host-suffix, anthropic.com, 人工智能
-host-suffix, claude.ai, 人工智能
-host-suffix, claude.com, 人工智能
-host-suffix, clau.de, 人工智能
-host-suffix, claudeusercontent.com, 人工智能
-ip-cidr, 160.79.104.0/23, 人工智能
-ip6-cidr, 2607:6bc0::/48, 人工智能
-host-suffix, grazie.ai, 人工智能
-host-suffix, grazie.aws.intellij.net, 人工智能
-host-suffix, jetbrains.ai, 人工智能
-host, imagine.meta.com, 人工智能
-host-suffix, meta.ai, 人工智能
-host-suffix, pplx.ai, 人工智能
-host-suffix, perplexity.ai, 人工智能
-host-suffix, perplexity.com, 人工智能
-host, chat.mistral.ai, 人工智能
-host, console.mistral.ai, 人工智能
-host-suffix, mistral.ai, 人工智能
-host, api.x.ai, 人工智能
-host-suffix, x.ai, 人工智能
-host-suffix, grok.com, 人工智能
-host, trae-api-sg.mchost.guru, 人工智能
-host-suffix, trae.ai, 人工智能
+host, chatgpt.livekit.cloud, OpenAI & Anthropic
+host, host.livekit.cloud, OpenAI & Anthropic
+host-suffix, turn.livekit.cloud, OpenAI & Anthropic
+host, openai.com.cdn.cloudflare.net, OpenAI & Anthropic
+host, openaiapi-site.azureedge.net, OpenAI & Anthropic
+host, openaicomproductionae4b.blob.core.windows.net, OpenAI & Anthropic
+host, production-openaicom-storage.azureedge.net, OpenAI & Anthropic
+host-suffix, chat.com, OpenAI & Anthropic
+host-suffix, chatgpt.com, OpenAI & Anthropic
+host-suffix, oaistatic.com, OpenAI & Anthropic
+host-suffix, oaiusercontent.com, OpenAI & Anthropic
+host-suffix, openai.com, OpenAI & Anthropic
+host-suffix, sora.com, OpenAI & Anthropic
+host, api.githubcopilot.com, OpenAI & Anthropic
+host, copilot-proxy.githubusercontent.com, OpenAI & Anthropic
+host, copilot.microsoft.com, OpenAI & Anthropic
+host, sydney.bing.com, OpenAI & Anthropic
+host-suffix, githubcopilot.com, OpenAI & Anthropic
+host, ai.google.dev, OpenAI & Anthropic
+host, aida.googleapis.com, OpenAI & Anthropic
+host, aistudio.google.com, OpenAI & Anthropic
+host, alkalicore-pa.clients6.google.com, OpenAI & Anthropic
+host, alkalimakersuite-pa.clients6.google.com, OpenAI & Anthropic
+host, bard.google.com, OpenAI & Anthropic
+host, deepmind.com, OpenAI & Anthropic
+host, deepmind.google, OpenAI & Anthropic
+host, geller-pa.googleapis.com, OpenAI & Anthropic
+host, gemini.google.com, OpenAI & Anthropic
+host, generativeai.google, OpenAI & Anthropic
+host, generativelanguage.googleapis.com, OpenAI & Anthropic
+host, makersuite.google.com, OpenAI & Anthropic
+host, proactivebackend-pa.googleapis.com, OpenAI & Anthropic
+host-suffix, anthropic.com, OpenAI & Anthropic
+host-suffix, claude.ai, OpenAI & Anthropic
+host-suffix, claude.com, OpenAI & Anthropic
+host-suffix, clau.de, OpenAI & Anthropic
+host-suffix, claudeusercontent.com, OpenAI & Anthropic
+ip-cidr, 160.79.104.0/23, OpenAI & Anthropic
+ip6-cidr, 2607:6bc0::/48, OpenAI & Anthropic
+host-suffix, grazie.ai, OpenAI & Anthropic
+host-suffix, grazie.aws.intellij.net, OpenAI & Anthropic
+host-suffix, jetbrains.ai, OpenAI & Anthropic
+host, imagine.meta.com, OpenAI & Anthropic
+host-suffix, meta.ai, OpenAI & Anthropic
+host-suffix, pplx.ai, OpenAI & Anthropic
+host-suffix, perplexity.ai, OpenAI & Anthropic
+host-suffix, perplexity.com, OpenAI & Anthropic
+host, chat.mistral.ai, OpenAI & Anthropic
+host, console.mistral.ai, OpenAI & Anthropic
+host-suffix, mistral.ai, OpenAI & Anthropic
+host, api.x.ai, OpenAI & Anthropic
+host-suffix, x.ai, OpenAI & Anthropic
+host-suffix, grok.com, OpenAI & Anthropic
+host, trae-api-sg.mchost.guru, OpenAI & Anthropic
+host-suffix, trae.ai, OpenAI & Anthropic
 host, browser-intake-datadoghq.com, OpenAI
 host, chat.openai.com.cdn.cloudflare.net, OpenAI
 host, openai-api.arkoselabs.com, OpenAI
