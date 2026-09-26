@@ -1,9 +1,9 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 163,
-  "mirrored": 163,
-  "failed": 0,
+  "total": 161,
+  "mirrored": 160,
+  "failed": 1,
   "exclusionMisses": [],
   "resources": [
     {
@@ -109,10 +109,10 @@
       "id": "rewrite-irongo-weatherkit",
       "kind": "rewrite",
       "url": "https://github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
-      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
+      "snapshot": null,
       "upstream_raw": null,
-      "status": 200,
-      "error": null
+      "status": null,
+      "error": "The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"
     },
     {
       "id": "rewrite-boxjs",
@@ -1443,24 +1443,6 @@
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhuanzhuan/zhuanzhuan.js",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/zhuanzhuan/zhuanzhuan.js",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhuanzhuan/zhuanzhuan.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:response.bundle.js",
-      "kind": "js",
-      "url": "https://github.com/NSRingo/WeatherKit/releases/download/v3.3.2/response.bundle.js",
-      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/download/v3.3.2/response.bundle.js",
-      "upstream_raw": null,
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:request.bundle.js",
-      "kind": "js",
-      "url": "https://github.com/NSRingo/WeatherKit/releases/download/v3.3.2/request.bundle.js",
-      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/download/v3.3.2/request.bundle.js",
-      "upstream_raw": null,
       "status": 200,
       "error": null
     },

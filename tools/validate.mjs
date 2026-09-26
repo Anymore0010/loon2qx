@@ -483,9 +483,18 @@ function checkRewriteHostnames() {
   const dir = join(ROOT, "QuantumultX", "rules");
   if (!existsSync(dir)) return 0;
   let checked = 0;
-  for (const f of readdirSync(dir).filter((x) => x.endsWith(".snippet"))) {
+  // 必须**递归**且同时接受 .conf：kelee 转换产物是 QuantumultX/rules/kelee/*.conf，
+  // 只扫顶层 .snippet 的话它们一个都不被检查（实测打印「…的文件: 1」就是这个盲区）。
+  // 这一条在 [mitm] 不再写全局 hostname 之后变得**关键**：资源自带的 hostname
+  // 是 MITM 覆盖的唯一来源，漏写就等于静默失效。
+  const files = readdirSync(dir, { recursive: true })
+    .map((f) => String(f).replace(/\\/g, "/"))
+    .filter((f) => /\.(snippet|conf|list)$/.test(f) && !f.split("/").pop().startsWith("_"));
+  for (const f of files) {
     const rel = `QuantumultX/rules/${f}`;
-    const lines = readFileSync(join(dir, f), "utf8").split(/\r?\n/);
+    let text;
+    try { text = readFileSync(join(dir, f), "utf8"); } catch { continue; }
+    const lines = text.split(/\r?\n/);
     const hasHostname = lines.some((l) => /^hostname\s*=/i.test(l.trim()));
     // 只统计「需要 MITM 才能工作」的规则
     const needsMitm = lines.filter((l) => /\surl\s+(script-|jsonjq-)/.test(l)).length;

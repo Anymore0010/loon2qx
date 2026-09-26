@@ -318,11 +318,16 @@ for (const r of results) {
   // -> 下轮不再排除 -> fmz 重新下载的原文回灌 -> 清单再满：形成每周振荡，
   // 而链上每个断言都会通过（清单空则无 per-pattern 断言），CI 全绿。
   // 因此原始副本单独存一份，排除只作用于对外那一份。
-  const rawDest = join(SNAP, "_raw", r.local);
-  try {
-    mkdirSync(dirname(rawDest), { recursive: true });
-    writeFileSync(rawDest, r.body);
-  } catch { /* 原始副本只是给转换器用，失败不影响主流程 */ }
+  // 只对**规则文件**落盘：tools/convert-plugins.mjs 只读 src.rewrites 的规则
+  // 来做重叠判定。对脚本/图标也存一份会让仓库文件数翻倍、每周 diff 跟着翻倍，
+  // 而那些副本没有任何读取方。
+  if (/\.(snippet|conf|list)$/.test(r.local)) {
+    const rawDest = join(SNAP, "_raw", r.local);
+    try {
+      mkdirSync(dirname(rawDest), { recursive: true });
+      writeFileSync(rawDest, r.body);
+    } catch { /* 原始副本只是给转换器用，失败不影响主流程 */ }
+  }
 
   // 从某个上游资源里排除若干规则行（按正则匹配 URL 正则部分）。
   // 用途：fmz 聚合与独立的 Spotify 条目命中同一批 URL，同一条 protobuf 响应体
@@ -421,9 +426,14 @@ function rawUrlFor(local) {
 // ---- machine-readable index -------------------------------------------------
 // No timestamp here on purpose: a volatile field would make every weekly run
 // commit a no-op diff. Use the git commit date as the authoritative "when".
-// 只有规则/脚本主体失败才算致命；引用脚本失效（上游已删）不影响可用性
+// 只有规则/脚本主体失败才算致命。
+// - js（引用脚本，上游已删）：不影响可用性
+// - icon（纯装饰）：失败时旧副本保留，不影响任何功能
+// 若把 icon 也算致命，一个图标 URL 的 socket 抖动就会让当周 CI 报错并**跳过整周刷新**
+// —— 实测连续多轮都被 IconResource 的 png 超时卡住，等于把「每周跟 kelee 更新」白废掉。
 const criticalFailures =
-  results.filter((r) => !r.ok && r.kind !== "js").length + exclusionMisses.length;
+  results.filter((r) => !r.ok && r.kind !== "js" && r.kind !== "icon").length + exclusionMisses.length;
+const iconFailures = results.filter((r) => !r.ok && r.kind === "icon").length;
 
 const index = {
   repository: repoInfo.slug,
@@ -489,7 +499,7 @@ if (criticalFailures === 0) {
   if (pruned) console.log(`清理孤儿快照文件: ${pruned} 个（已从 sources.json 移除的源）`);
 }
 
-console.log(`Snapshot: ${ok}/${results.length} mirrored, ${failed} failed`);
+console.log(`Snapshot: ${ok}/${results.length} mirrored, ${criticalFailures} failed${iconFailures ? ` (+${iconFailures} 个图标失败，非致命)` : ""}`);
 if (rewriteStats.local || rewriteStats.kept) {
   console.log(`脚本 URL 本仓库化: ${rewriteStats.local} 处已改写, ${rewriteStats.kept} 处保留原地址（取不到）`);
   if (rewriteStats.missing.size) {

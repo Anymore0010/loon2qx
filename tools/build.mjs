@@ -300,61 +300,21 @@ function buildMitm() {
   lines.push(comment("Quantumult X：风车 → 设置 → MITM → 生成证书 → 安装描述文件 → 到「设置-通用-关于本机-证书信任设置」开启信任。"));
   lines.push(comment("重导配置**不会**清除已生成的证书；若每次都要重新生成，那是证书本身没被信任。"));
   lines.push("");
+  // 这里**刻意不写 hostname**：QX 会把 [rewrite_remote] 各资源自带的 hostname 行
+  // 自动并入 MITM（用户在 QX 的 MITM 页面上直接看到过这些主机名），
+  // 且用户原配置的 [mitm] 也只有 `hostname = -www.google.com` 一行，重写照常生效。
+  // 再写一份 1300+ 主机名的清单纯属冗余：只会把配置撑大、把 MITM 页面塞满。
+  // 每个重写资源自带 hostname 这一点由 validate 的 checkRewriteHostnames 强制保证。
+  lines.push(comment("本段不写 hostname：各 rewrite_remote 资源自带 hostname，QX 会自动并入 MITM。"));
+  lines.push(comment("若确需额外主机名（资源没声明的），请在 QX 界面的 MITM 页面添加，或在此写 hostname = a.com, *.b.com。"));
+  lines.push("");
   lines.push(comment("与 fmz 的 QuanX.conf、用户原 QX 配置保持一致（两边都显式设了 true）。"));
   lines.push("skip_validating_cert = true");
   lines.push("passphrase = ");
   lines.push("p12 = ");
-  lines.push("");
-  // 显式列出所有重写资源声明的 hostname（本仓库自己的重写资源 + 转换产物）。
-  //
-  // 事实：Quantumult X **会**把 rewrite_remote 资源自带的 hostname 自动并入 [mitm]
-  // （用户在 QX 界面的 MITM 页面上直接看到了这些主机名；其原配置的 [mitm] 也只有
-  // `hostname = -www.google.com` 一行，而重写照常生效）。
-  //
-  // 所以这一行是**冗余保险**，不是必需品：它让 MITM 覆盖范围在配置里可审计、
-  // 也便于「某个域名没生效」时直接对照。删掉它配置仍能工作。
-  const hosts = collectMitmHostnames();
-  lines.push(comment(`以下 ${hosts.count} 个主机名来自本仓库重写资源（含 kelee 转换产物）的 hostname 声明。`));
-  for (const h of hosts.lines) lines.push(h);
   return lines.join("\n");
 }
 
-/**
- * 汇总本仓库所有 rewrite_remote 资源（本地文件 + 快照）声明的 hostname。
- *
- * ⚠ 必须输出**一行**：Quantumult X 的配置是逐行 `key = value`，官方文档对同类多值项
- * （doh-server）明确要求「多个必须写在**一行**、逗号分隔」，可见不支持续行。
- * 折行的后果是只有第一行生效、其余主机名静默不进 MITM —— 而 MITM 决定所有重写成败。
- * fmz 的 QuanX.conf 与官方 sample.conf 的 hostname 也都是单行（fmz 那条上万字符照样单行）。
- */
-function collectMitmHostnames() {
-  const urls = []; // 自托管 URL / 上游 URL
-  for (const r of src.rewrites) {
-    if (!r.enabled) continue;
-    if (r.local_file) urls.push(join(ROOT, r.local_file));
-    else {
-      const p = snapshotLocalFor(r.url);
-      if (p) urls.push(join(ROOT, p));
-    }
-  }
-  const all = new Set();
-  for (const abs of urls) {
-    if (!existsSync(abs)) continue;
-    let text;
-    try { text = readFileSync(abs, "utf8"); } catch { continue; }
-    for (const line of text.split(/\r?\n/)) {
-      const m = line.match(/^\s*hostname\s*=\s*(.+)$/i);
-      if (!m) continue;
-      for (const h of m[1].split(",")) {
-        const v = h.trim();
-        if (v && /^[A-Za-z0-9*?._-]+$/.test(v) && !v.startsWith("-")) all.add(v);
-      }
-    }
-  }
-  const sorted = [...all].sort();
-  if (!sorted.length) return { lines: [comment("（没有找到任何重写资源声明 hostname）")], count: 0 };
-  return { lines: [`hostname = ${sorted.join(", ")}`], count: sorted.length };
-}
 
 const profile = [
   comment("Quantumult X 配置 —— 自动生成，请勿手工编辑"),
