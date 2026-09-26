@@ -283,12 +283,16 @@ const baselineFiles = [
 ];
 
 const existing = new Set();
+// 同时收集「已存在源的 URL 正则」：即便动作不同，同一 URL 被两条规则命中
+// 也可能造成重复处理（实测 2 例：myusmile 与 12306）。
+const existingPatterns = new Set();
 for (const f of baselineFiles) {
   try {
     for (const l of readFileSync(f, "utf8").replace(/^\uFEFF/, "").split(/\r?\n/)) {
       const t = l.trim();
       if (!t || t.startsWith("#") || !/\surl\s/.test(t)) continue;
       existing.add(ruleKey(t));
+      existingPatterns.add(t.split(/\s+url\s+/)[0]);
     }
   } catch (e) {
     console.warn(`  跳过 ${f}: ${e.message}`);
@@ -297,6 +301,11 @@ for (const f of baselineFiles) {
 const beforeDedupe = unique.length;
 if (existing.size) {
   unique = unique.filter((l) => !existing.has(ruleKey(l)));
+  // 同一 URL 已由其它源处理 -> 剔除，避免重复处理（动作不同也算）
+  const before2 = unique.length;
+  unique = unique.filter((l) => !existingPatterns.has(l.split(/\s+url\s+/)[0]));
+  const removedByPattern = before2 - unique.length;
+  if (removedByPattern) console.log(`同 URL 已被其它源处理、已剔除 ${removedByPattern} 条`);
 }
 const removedAsDuplicate = beforeDedupe - unique.length;
 

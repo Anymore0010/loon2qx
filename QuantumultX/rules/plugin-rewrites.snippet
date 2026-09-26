@@ -2,20 +2,14 @@
 # 来源: _plugin_cache\plugins.plugin
 # 说明: 从 Loon 插件提取的 URL 级 rewrite（域名黑名单无法覆盖的部分）
 # 提取: 2083 条 -> 转换 1972 条 -> 自身去重 1901 条
-# 与现有重写源重复已剔除: 1473 条
-# 最终: 428 条
+# 与现有重写源重复已剔除: 1501 条
+# 最终: 400 条
 # 并入的 MITM 主机名: 1038 个（已剔除上游破损条目并去重）
 # 未能转换: 111 条（QX 无对应动作，如 mock-response-body / map-local）
 # 重新生成: bun tools/extract-plugin.mjs --all   # 必须带 --all，它才会与已启用重写源去重
 
-^http:\/\/101\.42\.130\.147\/httpdns\/resolve\/ url reject
-^http:\/\/106\.55\.220\.18:8053\/httpdns\/ url reject
-^http:\/\/139\.196\.12\.179:8053\/httpdns\/ url reject
-^http:\/\/54\.222\.159\.138:8053\/httpdns\/ url reject
 ^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/pendragon\/ url reject-dict
-^https:\/\/(apissl|az2-api(-js|-idc)?)\.(gifshow|ksapisrv)\.com\/rest\/system\/startup\? url jsonjq-response-body 'del(.reskinConfig, .sidebarExSquareStyle.moreList, .sidebarExSquareStyle.topList)'
 ^https:\/\/(mobile|mobilehera|mobwsa)\.ximalaya\.com\/football-portal\/diff2\/batch\? url jsonjq-response-body 'del(.json.ad, .json.toc)'
-^https:\/\/(mobile|mobilehera|mobwsa)\.ximalaya\.com\/mobile-user\/v\d\/homePage\/ url jsonjq-response-body 'del(.data.freeListenV2)'
 ^https:\/\/api\.bilibili\.com\/pgc\/page\/channel\? url jsonjq-response-body '.data.modules |= map(select(.type != "TIP") | if .type == "BANNER" then .module_data.items |= map(select(.url | startswith("https://www.bilibili.com/blackboard/era/") | not)) else . end)'
 ^https:\/\/api\.bilibili\.com\/pgc\/view\/v2\/app\/season\? url jsonjq-response-body 'del(.data.payment)'
 ^https:\/\/api\.bilibili\.com\/x\/pd-proxy\/tracker\? url jsonjq-response-body '.data[][]?="stun.chat.bilibili.com:3478"'
@@ -40,8 +34,6 @@
 ^https:\/\/god\.gameyw\.netease\.com\/v\d\/app\/static\/conf\/getByModuleNameList$ url reject-dict
 ^https:\/\/images\.pinduoduo\.com\/marketing_api\/ url reject
 ^https:\/\/images\.pinduoduo\.com\/mrk\/ url reject
-^https:\/\/j1\.pupuapi\.com\/client\/member_card\/index\/my url reject
-^https:\/\/j1\.pupuapi\.com\/client\/notification\/message_center\/unread_number url jsonjq-response-body '.data = []'
 ^https:\/\/line3-h5-mobile-api\.biligame\.com\/game\/live\/large_card_material\? url reject-dict
 ^https:\/\/link\.zhihu\.com\/\?target=(?:https?)?(?:%3A|:)?(?:\/\/|%2F%2F)?(.*) url 302 http://$1
 ^https:\/\/misc-api-prd-mx\.wandafilm\.com\/commend\/common_banner_batch\.api url jsonjq-response-body '.data.objects["OpenAPP-&-FlashAD"] = [] | .data.objects["InTheaters-&-BoxAD"] = []'
@@ -52,16 +44,13 @@
 ^https:\/\/www\.zhihu\.com\/api\/v4/(?:answers|questions)\/\d+/related-readings url reject
 ^https:\/\/www\.zhihu\.com\/api\/v4\/search\/related_queries\/(?:article|answer)\/\d+ url reject-dict
 ^https?:\/\/ap\.dongdianqiu\.com\/plat\/v4 url reject
-^https?:\/\/api\.xiaoyuzhoufm\.com\/v1\/discovery-feed\/list url jsonjq-response-body '.data |= map(select(.type != "DISCOVERY_HEADER" and .type != "DISCOVERY_BANNER"))'
 ^https?:\/\/api-one-wscn\.awtmt\.com\/apiv1\/advertising\/ads\/[0-9]+\/materials url reject-dict
 ^https?:\/\/appapi\.51job(app)?\.com\/api\/market\/(adtrace|get_launch|get_prompt) url reject
-^https?:\/\/client\.app\.coc\.10086\.cn\/biz-orange\/DN\/init\/startInit url reject-200
 ^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.cainiao\.guoguo\.nbnetflow\.ads url reject
 ^https?:\/\/interface\d?\.music\.163.com\/eapi\/(mlivestream\/entrance\/playpage|link\/(position\/show\/strategy|scene\/show)|ios\/version|v\d\/content\/exposure\/comment\/banner) url reject-dict
 ^https?:\/\/interface\d?\.music\.163.com\/w?e?api\/(search\/(chart|default|rcmd\/keyword|specialkeyword)|resource-exposure\/|activity\/bonus\/playpage\/time\/query) url reject-dict
 ^https?:\/\/interface\d?\.music\.163\.com\/eapi\/(resource\/comments?\/musiciansaid|community\/friends\/fans-group\/artist\/group\/get|user\/sub\/artist|music\/songshare\/text\/recommend\/get|mine\/applet\/redpoint|resniche\/position\/play\/new\/get) url reject-dict
 ^https?:\/\/interface\d?\.music\.163\.com\/w?e?api\/(side-bar\/mini-program\/music-service\/account|delivery\/(batch-deliver|deliver)|moment\/tab\/info\/get|yunbei\/account\/entrance\/get) url reject-dict
-^https?:\/\/mlol\.qt\.qq\.com\/go\/recommend url reject
 ^https?:\/\/p\.kuaidi100\.com\/advertisement\/ url reject-dict
 ^https?:\/\/p\.kuaidi100\.com\/apicenter\/card\.dox url reject-dict
 ^https?:\/\/p\.kuaidi100\.com\/apicenter\/xcx\.dox url jsonjq-response-body 'del(.data.secondMenuList)'
@@ -70,7 +59,6 @@
 ^https?:\/\/static.psbc.com:8090\/mbank_f\/images\/[0-9]+\.png url reject-200
 ^https?:\/\/yunbusiness\.ccb\.com\/clp_service\/txCtrl\?txcode=A3341A(002|006|009|119|120) url reject-200
 ^https?:\/\/yunbusiness\.ccb\.com\/clp_service\/txCtrl\?txcode=A3341C147 url reject-200
-^https?:\/\/www\.myusmile\.online\/user\/plaqueTopic\/selectByType url script-response-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/usmile.js
 ^https:\/\/ad\.12306\.cn\/ad\/ser\/getAdList$ url jsonjq-response-body 'delpaths([["materialsList"]])'
 ^https:\/\/(app-v1\.ecoliving168\.com|852b95d36\.xwlpk\.cn)\/api\/v1\/movie\/index_recommend\? url jsonjq-response-body '.data[].list |= map(select(.type != 3)) | .data |= map(select(.layout != "advert_self"))'
 ^https:\/\/huichuan\.sm\.cn\/nativead url reject-dict
@@ -84,7 +72,6 @@
 ^https?:\/\/api-access\.pangolin-sdk-toutiao\.com\/api\/ad\/union\/sdk url reject
 ^https:\/\/cdn\.web\.chelaile\.net\.cn\/info-flow\/index\.html url reject
 ^http:\/\/mercury-gateway\.ixiaochuan\.cn\/mercury\/v1\/ad\/ url reject
-^https?:\/\/api\.m\.mi\.com\/v\d\/app\/start url reject-200
 ^https?:\/\/api-mifit\.huami\.com\/discovery\/mi\/discovery\/homepage_ad\? url reject-img
 ^https?:\/\/api-mifit\.huami\.com\/discovery\/mi\/discovery\/sleep_ad\? url reject-img
 ^https?:\/\/api-mifit\.huami\.com\/discovery\/mi\/discovery\/sport_summary_ad\? url reject-img
@@ -120,7 +107,6 @@
 ^https:\/\/dict\.youdao\.com\/course\/tab\/translateTab url reject-dict
 ^https:\/\/dict\.youdao\.com\/homepage\/tile url reject-dict
 ^https:\/\/api-overmind\.youdao\.com\/openapi\/get\/luna\/dict\/dict-mobile\/prod\/dictCommonConfig url reject-dict
-^https:\/\/cdke\.youdao\.com\/course3\/recommend\/dict\/startup url reject-dict
 ^https:\/\/dict\.youdao\.com\/commonsearch url reject-dict
 ^https:\/\/dict\.youdao\.com\/vip\/activity\/couponinfo url reject-dict
 ^https:\/\/dict\.youdao\.com\/dictusertask\/system url reject-dict
@@ -182,10 +168,6 @@
 ^https:\/\/api\.hellobike\.com\/api\?adx url reject-dict
 ^https:\/\/ne\.gdsz\.sinopec\.com\/gateway\/api\/omp\/mt\/appAdvertising url reject-dict
 ^https:\/\/dock\.tenchii\.com\/DockCard\/api\/mini\/card\/list url reject-dict
-^https:\/\/hdgateway\.zto\.com\/getApolloConfig url reject
-^https:\/\/hdgateway\.zto\.com\/track url reject
-^https:\/\/hdgateway\.zto\.com\/getAdInfo url reject
-^https:\/\/hdgateway\.zto\.com\/listJumperShow url reject
 ^https:\/\/fscdn\.zto\.com\/fs1 url reject
 ^https:\/\/aag\.enmonster\.com\/apa\/index\/advert\/skin url reject
 ^https:\/\/api-marketing\.zhinengxiyifang\.cn\/api\/v2\/cloudcode\/wechat\/bid url reject
@@ -211,7 +193,6 @@
 ^https:\/\/mobile\.12306\.cn\/wxxcx\/openplatform-inner\/miniprogram\/wifiapps\/appFrontEnd\/v2\/lounge\/open-smooth-common\/carService\/getCivilzedSlogan url reject-dict
 ^https:\/\/wx\.online-cmcc\.cn\/contactpoint\/customer\/api\/list\? url reject-dict
 ^https:\/\/wx\.10086\.cn\/qwhdhub\/activity\/info url reject-dict
-^https:\/\/mcsp\.cloudpnr\.com\/api\/miniapp\/popular\/T_MINIAPP$ url jsonjq-response-body 'delpaths([["data"]])'
 ^https:\/\/saas-ad\.cloudpnr\.com\/huifuad-base-api\/api\/tactics\/ad$ url jsonjq-response-body 'delpaths([["data",0]])'
 ^https:\/\/rms\.meituan\.com\/api\/v1\/rmsmina\/c\/queryShopPortalInfo\? url jsonjq-response-body 'delpaths([["data","popUpWindows"]])'
 ^https:\/\/chong\.qq\.com\/tws\/wxmobile\/GetProduct4App\? url jsonjq-response-body 'del(.respInfo.reserveProductList) | .respInfo.shortcut |= map(select(.name != "充流量" and .name != "领话费券"))'
@@ -232,19 +213,13 @@
 ^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/card\? url jsonjq-response-body 'delpaths([["preview_guide"]])'
 ^https:\/\/(beta-luna\.douyin|api5-lq\.qishui)\.com\/luna\/more-panel\? url jsonjq-response-body '.blocks |= map(select(.type != "related_video"))'
 ^https:\/\/(?:gw|heic)\.alicdn\.com\/imgextra\/i\d\/\d*\/?[\w!]+-\d-(?:octopus|tps)-(?:1080|1125)-\d{4}\.(?:jpg|png)_(?:1\d{3}|9\d{2})x(?:\d|1\d{3}|9\d{2})q[59]0 url reject-dict
-^https?:\/\/iface2\.iqiyi\.com\/control\/3\.0\/init_proxy\? url reject-dict
 ^https:\/\/cards\.iqiyi\.com\/views_home\/3\.0\/qy_home\? url jsonjq-response-body 'delpaths([["base","statistics"]])'
 ^https:\/\/cards\.iqiyi\.com\/views_category\/3\.0\/category_home\? url jsonjq-response-body 'del(.base.statistics | select(.ad_str)) | del(.cards[] | select(.alias_name == "entrence_focus" or .alias_name == "ad_trueview"))'
 ^https:\/\/cards\.iqiyi\.com\/waterfall(-plt)?\/3\.0\/feed\? url jsonjq-response-body 'del(.base.statistics | select(.ad_str)) | del(.. | select(.block_class?))'
 ^https:\/\/cards\.iqiyi\.com\/views_plt\/3\.0\/player_tabs_v2\? url jsonjq-response-body 'delpaths([["kv_pair","activity_tab"]])'
 ^https:\/\/cards\.iqiyi\.com\/views_search\/3\.0\/hot_query_search\? url jsonjq-response-body '.cards |= map(select(.alias_name as $name | $name != "ad_trueview" and $name != "ad_mobile_flow" and $name != "search_mid_text_ad")) | if .base.statistics.ad_str? then del(.base.statistics) else . end'
-^https?:\/\/comment-card\.iqiyi\.com\/views_comment\/3\.0\/long_video_comments\? url jsonjq-response-body '.cards |= map(select(has("alias_name")))'
 ^https?:\/\/iface2\.iqiyi\.com\/views_menus\/3\.0\/bottom_theme\? url jsonjq-response-body 'delpaths([["theme_list"]])'
 ^https?:\/\/iface2\.iqiyi\.com\/views_menus\/3\.0\/home_top_menu\? url jsonjq-response-body '.nav_group_data[].nav_list |= map(select(. == "0" or . == "2" or . == "1007" or . == "1" or . == "6" or . == "3"))'
-^https?:\/\/iface2\.iqiyi\.com\/fusion\/3\.0\/common_switch\? url jsonjq-response-body 'delpaths([["content","resource","cast_device_ad"]])'
-^https?:\/\/(kjp|t7z)\.cupid\.iqiyi\.com\/mixer\? url jsonjq-response-body 'delpaths([["adSlots"]])'
-^https?:\/\/search\.video\.iqiyi\.com\/q\? url jsonjq-response-body 'delpaths([["data"]])'
-^https?:\/\/iface2\.iqiyi\.com\/aggregate\/3\.0\/getMyMenus\? url jsonjq-response-body '.data |= map(select(.statistic.block != "wd_liebiao_2") | select(all(.menuList[]?.statistic2.block; . != "wd_liebiao_3")))'
 ^https:\/\/api\.zhihu\.com\/commercial_api\/ url reject-dict
 ^https:\/\/api\.zhihu\.com\/next-render\?id=\d+&type=answer url reject-dict
 ^https:\/\/api\.zhihu\.com\/search\/preset_words\? url reject-dict
@@ -344,10 +319,8 @@
 ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.local\.flow\.plat\.section\/ url jsonjq-response-body '.data.data.components |= map(select(.data and (.data|type=="object") and .data.template and (.data.template|type=="object") and .data.template.name and (.data.template.name|type=="string") and (.data.template.name|contains("fish_city_kingkong"))))'
 ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.local\.home\.top\/ url jsonjq-response-body '.data.data.components |= map(select(.key == "fish_home_second_stage_top_cardV3"))'
 ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.local\.home\/ url jsonjq-response-body '.data.sections |= map(select((.template.cardEnum != "ads") and (.cardType == "common")))'
-^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.idle\.user\.page\.my\.adapter\/ url jsonjq-response-body '.data.container.sections |= map(select(.template.name | test("^my_fy[0-9]+_(header|user_info|trade|appraise|tools)$"))) | .data.container.sections |= map(.item |= (if .level and .level.exContent and (.level.exContent | has("tips")) then del(.level) else . end)) | .data.container.sections|=map(if .sectionBizCode=="entry2025" then .item.tool.exContent.tools|=[[.[][]|select(.exContent.id as $id|$id==1 or $id==2 or $id==3 or $id==5 or $id==29 or $id==32 or $id==38)]|sort_by(. as $item|([5,2,3,32,38,1,29]|index($item.exContent.id)))|[range(0;length;5) as $i|.[$i:$i+5]]][] else . end)'
 ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.home\.circle\.list\/ url jsonjq-response-body '.data.circleList[]?.showInfo |= del(.titleImage, .atmosphereImageUrl) | .data.next.headList |= map(select(.bizCode == "main" or .bizCode == "market" or .bizCode == "IDLE_CIRCLE")) | del(.data.next.headList[]?.showInfo.rightTagImage)'
 ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlehome\.magic\.home\.page\.list\/ url jsonjq-response-body 'delpaths([["data","topList"]])'
-^https:\/\/g-acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.search\/ url jsonjq-response-body '.data.resultList |= map(if .data.item.main.exContent.dislikeFeedback.clickParam.args.bizType == "ad" then empty else . end)'
 ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.search\.discover\/ url jsonjq-response-body '.data.resultList |= map(select(.type != "MarketHotSpot"))'
 ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlemtopsearch\.item\.search\.activate\/ url jsonjq-response-body '.data.cardList |= map(if has("cardData") and (.cardData | has("hotwords")) then .cardData |= del(.hotwords) else . end)'
 ^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idle\.trade\.full\.info\/ url jsonjq-response-body '.data.components |= map(select(.render | . == "orderStatusVO" or . == "addressInfoVO" or . == "orderInfoVO"))'
@@ -370,7 +343,6 @@
 ^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.(app\.viewunite\.v1\.View\/View|main\.community\.reply\.v1\.Reply\/MainList)$ url script-request-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.request.js
 ^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.community\.service\.dm\.v1\.DM\/DmSegMobile$ url script-request-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.request.js
 ^https:\/\/www\.coolapk\.com\/link.* url script-request-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/VenenoSix24/Ivy-Script/refs/heads/main/Loon/script/Coolapk_Redirect.js
-^https?:\/\/ad\.12306\.cn\/ad\/ser\/getAdList url script-request-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/kokoryh/Script/master/js/12306.js
 ^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/(?:bootstrap|user-customization-service) url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/001ProMax/Surge/refs/heads/main/Script/Spotify.Crack.Dev.js
 ^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.(app\.(show\.v1\.Popular\/Index|dynamic\.v2\.Dynamic\/DynAll|view(unite)?\.v1\.View\/(View|ViewProgress|RelatesFeed)|playurl\.v1\.PlayURL\/PlayView|playerunite\.v1\.Player\/PlayViewUnite)|polymer\.app\.search\.v1\.Search\/SearchAll|community\.service\.dm\.v1\.DM\/DmView|main\.community\.reply\.v1\.Reply\/MainList|pgc\.gateway\.player\.v2\.PlayURL\/PlayView)$ url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.response.js
 ^https:\/\/api\.live\.bilibili\.com\/xlive\/(app-interface\/v2\/index\/feed|app-room\/v1\/index\/getInfoBy(Room|User))\? url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.json.js

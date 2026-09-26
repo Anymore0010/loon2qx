@@ -287,8 +287,10 @@ const index = {
 writeFileSync(join(SNAP, "index.json"), JSON.stringify(index, null, 2) + "\n");
 
 // 清理孤儿文件：从 sources.json 移除的源，其快照副本会一直留着。
-// 只在「全部抓取成功」时才清理，避免网络问题导致误删仍需要的副本。
-if (failed === 0) {
+// 门禁用 criticalFailures（规则/资源主体失败）而非 failed：
+// failed 含 kelee.one 等永久 403 的引用脚本，若用它当门禁则 prune 永不执行，
+// 已删除源的副本会无限堆积。
+if (criticalFailures === 0) {
   const expected = new Set(results.map((r) => join(SNAP, r.local)));
   // 还要保护「被规则文件引用、但本轮未被发现」的镜像脚本。
   // 原因：写入阶段把规则里的脚本 URL 改写成本仓库地址后，下一轮 discovery 会跳过它们

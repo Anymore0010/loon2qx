@@ -8,7 +8,7 @@
  *   bun tools/build.mjs           # write QuantumultX/default.conf
  *   bun tools/build.mjs --check   # fail if the committed file is stale
  */
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -39,7 +39,13 @@ function snapshotLocalFor(url) {
 function iconUrl(u) {
   if (!PREFER_LOCAL || !u) return u;
   const p = snapshotLocalFor(u);
-  return p ? `${repoBase}/${p}` : u;
+  if (!p) return u;
+  // 只有快照里确实存在该图标时才指向本仓库；否则会变成 404 死链
+  // （图标是装饰性的，指向上游反而更可靠）。
+  try {
+    if (!existsSync(join(ROOT, p))) return u;
+  } catch { return u; }
+  return `${repoBase}/${p}`;
 }
 
 /** Absolute URL for a filter entry (repo-local, vendored, or upstream). */
@@ -210,6 +216,7 @@ function buildFilterRemote(filters) {
     const parts = [filterUrl(f), `tag=${f.tag}`];
     // 规则自带策略的资源（如分流修正）不设 force-policy，否则会覆盖其原有策略。
     if (f.policy) parts.push(`force-policy=${f.policy}`);
+    if (f.icon) parts.push(`img-url=${iconUrl(f.icon)}`);
     parts.push("update-interval=86400", `opt-parser=${f.parser}`, `enabled=${f.enabled}`);
     if (f.note) lines.push(comment(f.note));
     lines.push(parts.join(", "));
@@ -238,6 +245,7 @@ function buildRewriteRemote(rewrites) {
     const parts = [
       u,
       `tag=${r.tag}`,
+      ...(r.icon ? [`img-url=${iconUrl(r.icon)}`] : []),
       "update-interval=86400",
       `opt-parser=${r.parser}`,
       `enabled=${r.enabled}`,

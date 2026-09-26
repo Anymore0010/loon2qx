@@ -102,7 +102,8 @@
       "policy": "reject",
       "parser": false,
       "enabled": true,
-      "note": "fmz 配置原有，约 9700 条 reject 规则。"
+      "note": "fmz 配置原有，约 9700 条 reject 规则。",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png"
     },
     {
       "id": "filter-advertising",
@@ -111,7 +112,8 @@
       "policy": "reject",
       "parser": false,
       "enabled": true,
-      "note": "替代 Loon 的 BlockAdvertisers.lpx 的分流部分。"
+      "note": "替代 Loon 的 BlockAdvertisers.lpx 的分流部分。",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png"
     },
     {
       "id": "filter-awavenue",
@@ -123,7 +125,8 @@
       "upstream_url": "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
       "vendor": true,
       "vendored_as": "AWAvenue.list",
-      "local_file": "QuantumultX/rules/AWAvenue.list"
+      "local_file": "QuantumultX/rules/AWAvenue.list",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png"
     },
     {
       "id": "filter-fix",
@@ -132,7 +135,8 @@
       "policy": null,
       "parser": false,
       "enabled": true,
-      "note": "fmz 配置原有。规则自带 direct / proxy 策略，因此不设 force-policy。"
+      "note": "fmz 配置原有。规则自带 direct / proxy 策略，因此不设 force-policy。",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png"
     },
     {
       "id": "filter-ai-fmz",
@@ -143,7 +147,8 @@
       "vendored_as": "AI.list",
       "_local": true,
       "local_file": "QuantumultX/rules/AI.list",
-      "parser": false
+      "parser": false,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png"
     },
     {
       "id": "filter-telegram",
@@ -151,7 +156,8 @@
       "tag": "Telegram",
       "policy": "全球手动策略",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png"
     },
     {
       "id": "filter-twitter",
@@ -159,7 +165,8 @@
       "tag": "Twitter",
       "policy": "全球手动策略",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png"
     },
     {
       "id": "filter-google",
@@ -167,7 +174,8 @@
       "tag": "Google",
       "policy": "新国手动策略",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png"
     },
     {
       "id": "filter-spotify",
@@ -175,7 +183,8 @@
       "tag": "Spotify",
       "policy": "全球手动策略",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png"
     },
     {
       "id": "filter-github",
@@ -183,7 +192,8 @@
       "tag": "GitHub",
       "policy": "全球手动策略",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png"
     },
     {
       "id": "filter-geoip-cn",
@@ -196,7 +206,8 @@
       "vendored_as": "GeoIP_CN.list",
       "_local": true,
       "local_file": "QuantumultX/rules/GeoIP_CN.list",
-      "upstream_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list"
+      "upstream_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
+      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png"
     },
     {
       "id": "filter-apple-ai",
@@ -209,7 +220,8 @@
       "vendored_as": "AppleIntelligence.list",
       "_local": true,
       "local_file": "QuantumultX/rules/AppleIntelligence.list",
-      "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list"
+      "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
     },
     {
       "id": "filter-apple",
@@ -217,7 +229,8 @@
       "tag": "Apple Push Notification Service",
       "policy": "direct",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
     },
     {
       "id": "filter-apple-account",
@@ -225,7 +238,8 @@
       "tag": "Apple Account",
       "policy": "direct",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
     },
     {
       "id": "filter-appstore",
@@ -233,7 +247,8 @@
       "tag": "App Store",
       "policy": "direct",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/appstore.png"
     },
     {
       "id": "filter-netflix",
@@ -241,7 +256,8 @@
       "tag": "Netflix",
       "policy": "新国手动策略",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png"
     },
     {
       "id": "filter-youtube",
@@ -249,7 +265,8 @@
       "tag": "YouTube",
       "policy": "全球手动策略",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png"
     },
     {
       "id": "filter-disney",
@@ -257,7 +274,8 @@
       "tag": "Disney",
       "policy": "全球手动策略",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png"
     },
     {
       "id": "filter-facebook",
@@ -265,7 +283,8 @@
       "tag": "Facebook",
       "policy": "全球手动策略",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png"
     },
     {
       "id": "filter-instagram",
@@ -273,7 +292,8 @@
       "tag": "Instagram",
       "policy": "美国手动策略",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Instagram.png"
     },
     {
       "id": "filter-onedrive",
@@ -281,7 +301,8 @@
       "tag": "OneDrive",
       "policy": "direct",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/OneDrive.png"
     },
     {
       "id": "filter-lan",
@@ -290,7 +311,8 @@
       "policy": "direct",
       "parser": false,
       "enabled": true,
-      "note": "Quantumult X 内置资源，等同 Loon 的 LAN_SPLITTER.lsr。"
+      "note": "Quantumult X 内置资源，等同 Loon 的 LAN_SPLITTER.lsr。",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Available.png"
     },
     {
       "id": "filter-cn-region",
@@ -299,7 +321,8 @@
       "policy": "direct",
       "parser": false,
       "enabled": true,
-      "note": "Quantumult X 内置资源，等同 Loon 的 REGION_SPLITTER.lsr。必须保持在最后。"
+      "note": "Quantumult X 内置资源，等同 Loon 的 REGION_SPLITTER.lsr。必须保持在最后。",
+      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png"
     }
   ],
   "rewrites": [
@@ -308,14 +331,16 @@
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
       "tag": "HTTPDNS拦截器",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png"
     },
     {
       "id": "rewrite-advertising",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
       "tag": "广告拦截(通用)",
       "parser": false,
-      "enabled": true
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png"
     },
     {
       "id": "rewrite-fmz-ads",
@@ -323,7 +348,8 @@
       "tag": "广告拦截合集",
       "parser": false,
       "enabled": true,
-      "note": "fmz 聚合资源，覆盖约 730 款 App。实测包含原先按 App 拆分的 19/20 个片段，因此不再单独引用，避免同一响应体被重复处理。"
+      "note": "fmz 聚合资源，覆盖约 730 款 App。实测包含原先按 App 拆分的 19/20 个片段，因此不再单独引用，避免同一响应体被重复处理。",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png"
     },
     {
       "id": "rewrite-irongo-weatherkit",
@@ -331,7 +357,8 @@
       "tag": "iRingo WeatherKit",
       "parser": false,
       "enabled": true,
-      "note": "替代 Loon 的 iRingo.WeatherKit.lpx。该项目自带 Quantumult X 版 snippet（官方文档有 QX 安装页），因此不再属于「未迁移」。注意它自带 hostname，QX 会自动并入 MITM。"
+      "note": "替代 Loon 的 iRingo.WeatherKit.lpx。该项目自带 Quantumult X 版 snippet（官方文档有 QX 安装页），因此不再属于「未迁移」。注意它自带 hostname，QX 会自动并入 MITM。",
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png"
     },
     {
       "id": "rewrite-jd-price",
@@ -341,7 +368,17 @@
       "parser": false,
       "enabled": true,
       "generated_by": "tools/vendor-rules.mjs",
-      "note": "由 rule_merges 的 merge-jd-price 生成。需先装「慢慢买」App 抓 Cookie。"
+      "note": "由 rule_merges 的 merge-jd-price 生成。需先装「慢慢买」App 抓 Cookie。",
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/JD.png"
+    },
+    {
+      "id": "rewrite-pinduoduo",
+      "url": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Pinduoduo.snippet",
+      "tag": "拼多多布局净化",
+      "parser": false,
+      "enabled": true,
+      "note": "用户明确需要。QX 原生语法（含 jsonjq-response-body 改布局）。来源 ZenmoFeiShi/Qx。",
+      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png"
     },
     {
       "id": "rewrite-weibo",
@@ -349,7 +386,8 @@
       "tag": "微博去广告",
       "parser": false,
       "enabled": true,
-      "note": "fmz 聚合资源未覆盖微博，故单独保留。"
+      "note": "fmz 聚合资源未覆盖微博，故单独保留。",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Weibo.png"
     },
     {
       "id": "rewrite-amap",
@@ -357,7 +395,8 @@
       "tag": "高德地图去广告",
       "parser": false,
       "enabled": true,
-      "note": "fmz 聚合资源未覆盖（18 条规则 0 命中）。"
+      "note": "fmz 聚合资源未覆盖（18 条规则 0 命中）。",
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/GaodeMap.jpg"
     },
     {
       "id": "rewrite-bilibili",
@@ -365,7 +404,8 @@
       "tag": "哔哩哔哩去广告",
       "parser": false,
       "enabled": true,
-      "note": "fmz 聚合资源未覆盖。"
+      "note": "fmz 聚合资源未覆盖。",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/bilibili.png"
     },
     {
       "id": "rewrite-boxjs",
@@ -373,7 +413,8 @@
       "tag": "BoxJs",
       "parser": false,
       "enabled": false,
-      "note": "对应 Loon 的 BoxJs.lpx；fmz 配置亦引用。"
+      "note": "对应 Loon 的 BoxJs.lpx；fmz 配置亦引用。",
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/BoxJS.png"
     },
     {
       "id": "rewrite-script-hub",
@@ -381,7 +422,8 @@
       "tag": "Script-Hub",
       "parser": false,
       "enabled": false,
-      "note": "对应 Loon 的 Script-Hub.lpx；fmz 配置亦引用。"
+      "note": "对应 Loon 的 Script-Hub.lpx；fmz 配置亦引用。",
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png"
     },
     {
       "id": "rewrite-sub-store",
@@ -389,7 +431,8 @@
       "tag": "Sub-Store",
       "parser": false,
       "enabled": false,
-      "note": "对应 Loon 的 Sub-Store.lpx；fmz 配置亦引用。"
+      "note": "对应 Loon 的 Sub-Store.lpx；fmz 配置亦引用。",
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/SubStore.png"
     },
     {
       "id": "rewrite-plugin-extracted",
@@ -400,7 +443,8 @@
       "enabled": true,
       "generated_by": "tools/extract-plugin.mjs",
       "note": "从 Loon 插件包提取的 URL 级 rewrite（451 条，已与现有重写源去重）。这类规则按域名拦截的规则库在原理上抓不到，是「原插件功能」真正能救回来的部分。来源：wxs0625/loon-plugins 的 kelee 合并包（kelee.one 本身对 curl/无头浏览器均 403）。重要：提取时会与所有已启用重写源比对（同正则+同动作+同脚本即视为重复），否则同一响应体会被重复处理。",
-      "count": 451
+      "count": 451,
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png"
     }
   ],
   "tasks": [
