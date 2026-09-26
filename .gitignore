@@ -29,3 +29,9 @@ _*.json
 _*.conf
 _*.snippet
 _*.png
+
+# 本地临时/脚本产物（不属于仓库内容）
+__pycache__/
+*.pyc
+*.tmp
+_check.py

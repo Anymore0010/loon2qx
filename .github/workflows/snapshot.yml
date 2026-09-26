@@ -35,6 +35,16 @@ jobs:
       - name: Regenerate profile from manifest
         run: bun tools/build.mjs
 
+      # 抓取源 Loon 配置里 40 个 kelee 插件的原样副本（kelee.one 只对 Loon 的 UA 放行）。
+      # 已存在则跳过，不产生无谓改动。
+      - name: Fetch Loon plugins (vendored copies)
+        run: bun tools/fetch-plugins.mjs
+
+      # 转换为 QX 原生资源，并把插件引用的脚本镜像进本仓库
+      # （kelee.one 对 Quantumult X 的 UA 返回 403，直链会静默失效）。
+      - name: Convert Loon plugins to Quantumult X resources
+        run: bun tools/convert-plugins.mjs
+
       # Converts upstream Loon/Surge rule lists into native QX rules committed
       # in QuantumultX/rules/, so the profile no longer needs the runtime parser.
       # Exits 0 even if some upstreams fail (recorded in snapshot/index.json);

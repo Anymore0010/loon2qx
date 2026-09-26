@@ -10,7 +10,7 @@
  *
  *   bun tools/fetch-snapshot.mjs
  */
-import { mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, rmSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, rmSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveRepoBase } from "./repo-url.mjs";
@@ -105,7 +105,9 @@ async function fetchOne(res) {
   try {
     const res0 = await fetch(res.url, {
       redirect: "follow",
-      headers: { "User-Agent": "proxy-profile-snapshot/1.0" },
+      // kelee.one（用户源配置里 33 个插件的来源）对普通 UA 返回 Cloudflare 403，
+      // 只有 Loon 的 User-Agent 能过。用它才能镜像到 kelee 的规则与脚本。
+      headers: { "User-Agent": "Loon/998 CFNetwork/3896.200.41 Darwin/27.2.0" },
     });
     if (!res0.ok) return { ...res, ok: false, status: res0.status };
     if (res.kind === "icon") {
@@ -138,6 +140,16 @@ for (let i = 0; i < resources.length; i += CONCURRENCY) {
 
 // 脚本 URL -> 镜像记录（写入阶段改写规则文件时使用）
 
+/** 递归列出 QuantumultX/rules 下的规则文件（含 kelee 子目录）。 */
+function walkRules(dir, out = []) {
+  for (const n of readdirSync(dir)) {
+    const p = join(dir, n);
+    if (statSync(p).isDirectory()) walkRules(p, out);
+    else if (/\.(snippet|conf|list)$/.test(n)) out.push(p);
+  }
+  return out;
+}
+
 const rewriteStats = { local: 0, kept: 0, missing: new Set() };
 /**
  * 声明了 exclude_rule_patterns、但一行都没排掉的上游。
@@ -161,12 +173,13 @@ const scriptTargets = new Map(); // url -> {url, kind, local}
     if (!/(\.snippet|\.conf|\.list)$/.test(r.local)) continue;
     bodies.push(r.body);
   }
-  // 本仓库自带的规则文件（如插件提取重写）也要参与
+  // 本仓库自带的规则文件（如插件提取重写）也要参与。
+  // 必须**递归**：kelee 插件产物在 QuantumultX/rules/kelee/ 子目录里，
+  // 非递归扫描会漏掉它们，导致这些脚本引用一直直链上游（kelee.one 对 QX UA 403）。
   const localRulesDir = join(ROOT, "QuantumultX", "rules");
   if (existsSync(localRulesDir)) {
-    for (const f of readdirSync(localRulesDir)) {
-      if (!/\.(snippet|conf|list)$/.test(f)) continue;
-      try { bodies.push(readFileSync(join(localRulesDir, f), "utf8")); } catch {}
+    for (const p0 of walkRules(localRulesDir)) {
+      try { bodies.push(readFileSync(p0, "utf8")); } catch {}
     }
   }
   for (const text of bodies) {
@@ -292,9 +305,7 @@ for (const r of results) {
 {
   const localRulesDir = join(ROOT, "QuantumultX", "rules");
   if (existsSync(localRulesDir)) {
-    for (const f of readdirSync(localRulesDir)) {
-      if (!/\.(snippet|conf|list)$/.test(f)) continue;
-      const p0 = join(localRulesDir, f);
+    for (const p0 of walkRules(localRulesDir)) {
       const before = readFileSync(p0, "utf8");
       if (!/url(?:-and-header)?\s+script-/.test(before)) continue;
       const rw = rewriteScriptUrls(before, byUrlPre);

@@ -1,0 +1,27 @@
+# DNS防泄露  —— 由 vendor/loon-plugins/Prevent_DNS_Leaks.lpx 自动转换（tools/convert-plugins.mjs）
+# 源插件: https://kelee.one/Tool/Loon/Lpx/Prevent_DNS_Leaks.lpx
+# 源配置里 enabled=true
+# 请勿手工编辑：改源插件后重新运行 bun tools/fetch-plugins.mjs && bun tools/convert-plugins.mjs
+
+host-suffix, dnsleaktest.com, proxy
+host-suffix, dnsleak.com, proxy
+host-suffix, expressvpn.com, proxy
+host-suffix, nordvpn.com, proxy
+host-suffix, surfshark.com, proxy
+host-suffix, ipleak.net, proxy
+host-suffix, perfect-privacy.com, proxy
+host-suffix, browserleaks.com, proxy
+host-suffix, browserleaks.org, proxy
+host-suffix, vpnunlimited.com, proxy
+host-suffix, whoer.net, proxy
+host-suffix, whrq.net, proxy
+host-suffix, astrill.com, proxy
+host-suffix, astrill.org, proxy
+host-suffix, dnsleak.asn247.net, proxy
+host-suffix, surfshark.com, proxy
+host-suffix, surfsharkdns.com, proxy
+host-suffix, pixelscan.net, proxy
+host, ipv4.ping0.cc, proxy
+host, ipv6.ping0.cc, proxy
+host-suffix, ipapi.co, proxy
+host, ip-scan.adspower.net, proxy

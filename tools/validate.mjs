@@ -451,6 +451,38 @@ function checkNonEmpty(p) {
   }
 }
 
+/**
+ * 已生成、但没有任何 [filter_remote]/[rewrite_remote] 条目引用的资源文件。
+ *
+ * 这次真实踩过：清理「被取代条目」时按 tag 删除，结果把新生成的 kelee 条目
+ * 连同同名的社区条目一起删掉 —— 京东比价、高德、微博、B站 的**响应体重写全部消失**，
+ * 而缺条目不产生任何错误，validate 依旧 0 error 全绿。
+ * 所以必须反向检查「磁盘上的规则文件是否都有人引用」。
+ */
+function checkOrphanedRuleFiles(p) {
+  const dir = join(ROOT, "QuantumultX", "rules");
+  if (!existsSync(dir)) return 0;
+  // 直接找「行里是否出现 QuantumultX/rules/<相对路径>」——生成的是自托管绝对 URL，
+  // 中间夹着分支名（.../proxy-profile/master/QuantumultX/rules/...），
+  // 用 slug 正则去截会把分支名一起captured，匹配不到。
+  const lines = [];
+  for (const name of ["filter_remote", "rewrite_remote"]) {
+    for (const e of p.sections.get(name) ?? []) lines.push(e.line);
+  }
+  const blob = lines.join("\n");
+  let orphans = 0;
+  for (const f of readdirSync(dir, { recursive: true })) {
+    const s = String(f).replace(/\\/g, "/");
+    if (!/\.(conf|list|snippet)$/.test(s)) continue;
+    const base = s.split("/").pop();
+    if (base.startsWith("_")) continue; // _hostnames.conf 等辅助产物，本就不需要被引用
+    if (blob.includes(`QuantumultX/rules/${s}`)) continue;
+    orphans++;
+    err(p.path, 0, `规则文件已生成但无人引用（功能等同被删除）: QuantumultX/rules/${s}`);
+  }
+  return orphans;
+}
+
 // ---- run -------------------------------------------------------------------
 // Resolved so self-hosted URLs can be recognised regardless of which machine or
 // CI job runs the check.
@@ -496,6 +528,7 @@ for (const path of profiles) {
 
 
   const selfHosted = checkSelfHostedFiles({ ...p, path: rel }, repoSlug);
+  const orphans = checkOrphanedRuleFiles({ ...p, path: rel });
 
   const counts = [...p.sections].map(([k, v]) => `${k}:${v.length}`).join(" ");
   console.log(`${rel}  ${counts}${selfHosted ? `  self-hosted:${selfHosted}` : ""}`);

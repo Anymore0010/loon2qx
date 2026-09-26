@@ -300,8 +300,10 @@ function buildMitm() {
   lines.push(comment("Quantumult X：风车 → 设置 → MITM → 生成证书 → 安装描述文件 → 到「设置-通用-关于本机-证书信任设置」开启信任。"));
   lines.push(comment("这里刻意不写 hostname：rewrite_remote 提供的重写资源自带 hostname，"));
   lines.push(comment("Quantumult X 会自动汇总；写一个空的 hostname= 反而会覆盖它。"));
-  lines.push(comment("如需额外主机名，请在 Quantumult X 界面的 MITM 页面添加，或在此写 hostname = a.com, *.b.com。"));
+  lines.push(comment("如需额外主机名，请在 Quantumult X 界面的 MITM 页面添加。"));
   lines.push("");
+  lines.push(comment("与 fmz 的 QuanX.conf、用户原 QX 配置保持一致（两边都显式设了 true）。"));
+  lines.push("skip_validating_cert = true");
   lines.push("passphrase = ");
   lines.push("p12 = ");
   return lines.join("\n");

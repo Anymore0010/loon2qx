@@ -29,7 +29,39 @@ Loon 和 Quantumult X 的差异不在语法，而在**功能承载方式**：
 | 分流规则 | `[Rule]` / `[Remote Rule]`（`.lsr`） | `[filter_local]` / `[filter_remote]` |
 | 证书 | `[Mitm]` 内嵌 p12 | 必须在 App 内现场生成 |
 
-原配置里有 **40 多个 kelee.one 的 `.lpx` 插件**。这些插件是 Loon 专用的（作者在插件中心明确写着「所有插件均为 Loon 专用，不建议其他工具转换使用」），无法在 Quantumult X 运行，所以这部分**不是翻译，而是用功能等价的 Quantumult X 原生资源替代**。
+原配置里有 **40 个 kelee.one 的 `.lpx` 插件**。这些插件是 Loon 专用的，无法在 Quantumult X 里直接运行，所以这部分**不是简单翻译，而是逐插件转换**：
+
+- `vendor/loon-plugins/` 保存了这 40 个插件的**原样副本**（唯一事实来源）。
+- `tools/convert-plugins.mjs` 把每个插件的 `[Rule]` / `[Rewrite]` / `[Script]` / `[MitM]` 转换成 Quantumult X 的 `[filter_remote]` / `[rewrite_remote]` 资源，产物在 `QuantumultX/rules/kelee/`。
+- **脚本一律镜像进本仓库**（`snapshot/host/kelee.one/...`）。原因：kelee.one 只对 Loon 的 User-Agent 放行，Quantumult X 抓脚本时用的是它自己的 UA，会拿到 **403**，脚本静默不执行、功能表现为「没生效」——必须换成仓库内地址。
+
+转换的实测结果（`QuantumultX/rules/kelee/_conversion-report.json` 有逐条明细）：
+
+| 项 | 数量 |
+| --- | --- |
+| 插件 | 40（33 启用 / 7 禁用，与源配置一致） |
+| 转换出的分流规则 | 632 |
+| 转换出的重写规则 | 347 |
+| 汇总的 MITM 主机名 | 148 |
+| 跨源去重跳过 | 71（与 fmz 聚合 / 自用增强命中同一响应体） |
+| 无法转换、已记账的 | 86（QX 无对应语法，见下） |
+
+QX 无对应语法、**必须显式跳过**的（转换器逐条记账，绝不静默丢弃）：
+
+- `AND/OR/NOT` 组合规则 —— QX 分流不支持逻辑组合（14 条）
+- `URL-REGEX` / `USER-AGENT` / `DEST-PORT` / `PROTOCOL` —— QX 分流词表里没有（31 条）
+- `request/response if ${url} ~= ...` —— Loon 的脚本化写法（11 + 19 条）
+- `mock-response-body` / `response-header-add` 等 QX 不存在的动作名（9 条）
+- `jq-path="..."` 外链 jq 文件 —— 那些 `.jq` 是多行且含 `#` 注释，内联进单行 rewrite 会把行拆断（3 条）
+
+**关于抓取插件需要 Loon 的 User-Agent**：kelee.one 对 `curl` / 无头浏览器一律返回 Cloudflare 403，只有 `Loon/998 CFNetwork/...` 能过。`tools/fetch-plugins.mjs` 与 `tools/fetch-snapshot.mjs` 都已带上该 UA。
+
+重新生成：
+
+```bash
+bun tools/fetch-plugins.mjs     # 抓/更新 40 个 .lpx 原样副本
+bun tools/convert-plugins.mjs   # 转换为 QX 资源（含脚本镜像 + 跨源去重）
+```
 
 ## 使用步骤
 
@@ -78,6 +110,8 @@ Loon 和 Quantumult X 的差异不在语法，而在**功能承载方式**：
 ```bash
 bun tools/vendor-rules.mjs     # 重转 Loon 规则为 QX 原生格式
 bun tools/build.mjs            # 生成 QuantumultX/default.conf
+bun tools/fetch-plugins.mjs    # 抓取 40 个 kelee 插件的原样副本
+bun tools/convert-plugins.mjs  # 把插件转换成 QX 资源（含脚本镜像）
 bun tools/fetch-snapshot.mjs   # 拉取快照 + 生成离线配置
 bun tools/validate.mjs         # 校验
 ```
@@ -91,6 +125,10 @@ tools/sources.json                唯一事实来源：所有外部资源与本�
 tools/build.mjs                   生成在线配置
 tools/fetch-snapshot.mjs          拉取快照 + 生成离线配置
 tools/validate.mjs                校验生成的配置
+tools/fetch-plugins.mjs           抓取 kelee 插件（需 Loon 的 User-Agent）
+tools/convert-plugins.mjs         插件 -> QX 重写/分流资源 + 脚本镜像
+vendor/loon-plugins/              40 个 .lpx 的原样副本 + index.json（sha256）
+QuantumultX/rules/kelee/          转换产物（.conf 重写 / .list 分流）
 legacy/loon/                       原始 Loon 配置（转换来源）
 legacy/quantumultx/                你本机在用的 QX 配置（对比基准）
 MAPPING.md                        插件 → Quantumult X 资源逐条映射

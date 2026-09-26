@@ -1,8 +1,0 @@
-# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
-# 参考来源: https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js
-# 规则数: 2
-# 重新生成: bun tools/vendor-rules.mjs
-
-^https?://apapia-sqk-weblogic\.manmanbuy\.com/baoliao/center/menu url script-request-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/githubdulong/Script/master/MmmCK.js
-^https://in\.m\.jd\.com/product/graphext/\d+\.html url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/githubdulong/Script/master/jd_price.js
-hostname = in.m.jd.com, apapia-sqk-weblogic.manmanbuy.com

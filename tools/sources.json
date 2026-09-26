@@ -255,6 +255,237 @@
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png"
     },
     {
+      "id": "filter-kelee-12306_remove_ads",
+      "tag": "12306去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/12306_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "12306_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/12306.png",
+      "note": "移植自 Loon 插件 12306_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-AliYunDrive_remove_ads",
+      "tag": "阿里云盘去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/AliYunDrive_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "AliYunDrive_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/AliYunDrive.png",
+      "note": "移植自 Loon 插件 AliYunDrive_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-Amap_remove_ads",
+      "tag": "高德地图去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/Amap_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Amap_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Amap.png",
+      "note": "移植自 Loon 插件 Amap_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-Bilibili_remove_ads",
+      "tag": "哔哩哔哩去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/Bilibili_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Bilibili_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Bilibili.png",
+      "note": "移植自 Loon 插件 Bilibili_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-BlockAdvertisers",
+      "tag": "广告平台拦截器(分流)",
+      "local_file": "QuantumultX/rules/kelee/BlockAdvertisers.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "BlockAdvertisers.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/Website_icon/120px/TencentAd.png",
+      "note": "移植自 Loon 插件 BlockAdvertisers.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-Block_HTTPDNS",
+      "tag": "HTTPDNS拦截器(分流)",
+      "local_file": "QuantumultX/rules/kelee/Block_HTTPDNS.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Block_HTTPDNS.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/HTTPDNS.png",
+      "note": "移植自 Loon 插件 Block_HTTPDNS.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-DragonRead_remove_ads",
+      "tag": "番茄小说去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/DragonRead_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "DragonRead_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/DragonRead.png",
+      "note": "移植自 Loon 插件 DragonRead_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-LoonGallery",
+      "tag": "插件仓库(分流)",
+      "local_file": "QuantumultX/rules/kelee/LoonGallery.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "LoonGallery.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Loon.png",
+      "note": "移植自 Loon 插件 LoonGallery.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-PinDuoDuo_remove_ads",
+      "tag": "拼多多去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/PinDuoDuo_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "PinDuoDuo_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/PinDuoDuo.png",
+      "note": "移植自 Loon 插件 PinDuoDuo_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-Prevent_DNS_Leaks",
+      "tag": "DNS防泄露(分流)",
+      "local_file": "QuantumultX/rules/kelee/Prevent_DNS_Leaks.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Prevent_DNS_Leaks.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/Prevent_DNS_Leaks.png",
+      "note": "移植自 Loon 插件 Prevent_DNS_Leaks.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-QQMusic_remove_ads",
+      "tag": "QQ音乐去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/QQMusic_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "QQMusic_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QQMusic.png",
+      "note": "移植自 Loon 插件 QQMusic_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-Remove_ads_by_keli",
+      "tag": "可莉广告过滤器(分流)",
+      "local_file": "QuantumultX/rules/kelee/Remove_ads_by_keli.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Remove_ads_by_keli.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/KeLee.png",
+      "note": "移植自 Loon 插件 Remove_ads_by_keli.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-Script-Hub",
+      "tag": "Script-Hub(分流)",
+      "local_file": "QuantumultX/rules/kelee/Script-Hub.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Script-Hub.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/Script-Hub.png",
+      "note": "移植自 Loon 插件 Script-Hub.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-Taobao_remove_ads",
+      "tag": "淘宝去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/Taobao_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Taobao_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Taobao.png",
+      "note": "移植自 Loon 插件 Taobao_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-Tencent_Video_remove_ads",
+      "tag": "腾讯视频去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/Tencent_Video_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Tencent_Video_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Tencent_Video.png",
+      "note": "移植自 Loon 插件 Tencent_Video_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-Weibo_remove_ads",
+      "tag": "微博去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/Weibo_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Weibo_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weibo.png",
+      "note": "移植自 Loon 插件 Weibo_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-Weixin_Official_Accounts_remove_ads",
+      "tag": "微信公众号去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/Weixin_Official_Accounts_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Weixin_Official_Accounts_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weixin.png",
+      "note": "移植自 Loon 插件 Weixin_Official_Accounts_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-bilibili",
+      "tag": "哔哩哔哩增强(分流)",
+      "local_file": "QuantumultX/rules/kelee/bilibili.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "bilibili.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Bilibili.png",
+      "note": "移植自 Loon 插件 bilibili.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-iQiYi_Video_remove_ads",
+      "tag": "爱奇艺去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/iQiYi_Video_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "iQiYi_Video_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/iQiYi_Video.png",
+      "note": "移植自 Loon 插件 iQiYi_Video_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-iRingo.WeatherKit",
+      "tag": " iRingo: 🌤 WeatherKit(分流)",
+      "local_file": "QuantumultX/rules/kelee/iRingo.WeatherKit.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "iRingo.WeatherKit.lpx",
+      "icon": "https://developer.apple.com/assets/elements/icons/weatherkit/weatherkit-128x128.png",
+      "note": "移植自 Loon 插件 iRingo.WeatherKit.lpx 的 [Rule] 段。"
+    },
+    {
+      "id": "filter-kelee-smzdm_remove_ads",
+      "tag": "什么值得买去广告(分流)",
+      "local_file": "QuantumultX/rules/kelee/smzdm_remove_ads.list",
+      "policy": null,
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "smzdm_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/smzdm.png",
+      "note": "移植自 Loon 插件 smzdm_remove_ads.lpx 的 [Rule] 段。"
+    },
+    {
       "id": "filter-advertising",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
       "tag": "Advertising",
@@ -288,17 +519,6 @@
       "local_file": "QuantumultX/rules/AI.list",
       "parser": false,
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png"
-    },
-    {
-      "id": "filter-pdd-ads",
-      "tag": "拼多多去广告(分流)",
-      "policy": "reject",
-      "parser": false,
-      "enabled": true,
-      "_local": true,
-      "local_file": "QuantumultX/rules/Pinduoduo-ads.list",
-      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png",
-      "note": "从 Pinduoduo.snippet 拆出的分流规则（2 个广告域名 + 7 个广告 IP 段）。原先与重写规则混在同一文件里、且以 rewrite_remote 加载，故这些分流行被 QX 静默忽略、从未生效。"
     },
     {
       "id": "filter-apple-ai",
@@ -437,7 +657,7 @@
     {
       "id": "rewrite-block-httpdns",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
-      "tag": "HTTPDNS拦截器",
+      "tag": "HTTPDNS拦截器(社区)",
       "parser": false,
       "enabled": true,
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png"
@@ -472,34 +692,323 @@
       "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png"
     },
     {
-      "id": "rewrite-jd-price",
-      "url": null,
-      "local_file": "QuantumultX/rules/JD_price.list",
-      "tag": "京东比价",
+      "id": "rewrite-kelee-12306_remove_ads",
+      "tag": "12306去广告",
+      "local_file": "QuantumultX/rules/kelee/12306_remove_ads.conf",
       "parser": false,
       "enabled": true,
-      "generated_by": "tools/vendor-rules.mjs",
-      "note": "由 rule_merges 的 merge-jd-price 生成。需先装「慢慢买」App 抓 Cookie。 [图标: 本地托管 PNG（原 fmz jpg 无法在 QX 渲染/长期 404 缓存，已自托管）]",
-      "icon": "https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/QuantumultX/icons/JD-v2.png"
+      "kelee_plugin": "12306_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/12306_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/12306.png",
+      "note": "移植自 Loon 插件 12306_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
     },
     {
-      "id": "rewrite-pinduoduo",
-      "url": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Pinduoduo.snippet",
-      "tag": "拼多多布局净化",
+      "id": "rewrite-kelee-AliYunDrive_remove_ads",
+      "tag": "阿里云盘去广告",
+      "local_file": "QuantumultX/rules/kelee/AliYunDrive_remove_ads.conf",
       "parser": false,
       "enabled": true,
-      "note": "用户明确需要。QX 原生语法（含 jsonjq-response-body 改布局）。来源 ZenmoFeiShi/Qx。",
-      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png"
+      "kelee_plugin": "AliYunDrive_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/AliYunDrive_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/AliYunDrive.png",
+      "note": "移植自 Loon 插件 AliYunDrive_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
     },
     {
-      "id": "rewrite-spotify",
-      "url": null,
-      "local_file": "QuantumultX/rules/spotify.snippet",
-      "tag": "Spotify 解锁+歌词",
+      "id": "rewrite-kelee-BlockAdvertisers",
+      "tag": "广告平台拦截器",
+      "local_file": "QuantumultX/rules/kelee/BlockAdvertisers.conf",
       "parser": false,
       "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png",
-      "note": "对应你 Loon 的 Spotify_remove_ads.lpx + Spotify_lyrics_translation.lpx，合成一个条目。解锁部分取自 app2smile 官方 spotify.conf（4127★，QX 原生）：1.去播放广告 2.歌手/专辑列表正常展示 3.去随机播放。歌词翻译取自同仓库 js/spotify-lyric.js。**歌词需自填百度翻译密钥**（见文件内注释）：QX 无 Surge/Loon 的 argument= 字段，密钥只能写进脚本本体；不填也能用 —— 只是歌词不翻译（会在请求 /color-lyrics 时记一条日志）。注意两条规则的 URL 互不相交（解锁走 /bootstrap、/user-customization-service；歌词走 /color-lyrics），因此合在一个文件不会互相覆盖。为免与「广告拦截合集」重复处理，已把该聚合里的 Spotify 规则排除。"
+      "kelee_plugin": "BlockAdvertisers.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/BlockAdvertisers.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/Website_icon/120px/TencentAd.png",
+      "note": "移植自 Loon 插件 BlockAdvertisers.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Block_HTTPDNS",
+      "tag": "HTTPDNS拦截器(kelee)",
+      "local_file": "QuantumultX/rules/kelee/Block_HTTPDNS.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Block_HTTPDNS.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Block_HTTPDNS.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/HTTPDNS.png",
+      "note": "移植自 Loon 插件 Block_HTTPDNS.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Cainiao_remove_ads",
+      "tag": "菜鸟去广告",
+      "local_file": "QuantumultX/rules/kelee/Cainiao_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Cainiao_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Cainiao_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Cainiao.png",
+      "note": "移植自 Loon 插件 Cainiao_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-CoolApk_remove_ads",
+      "tag": "酷安去广告",
+      "local_file": "QuantumultX/rules/kelee/CoolApk_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "CoolApk_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/CoolApk_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/CoolApk.png",
+      "note": "移植自 Loon 插件 CoolApk_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-FleaMarket_remove_ads",
+      "tag": "闲鱼去广告",
+      "local_file": "QuantumultX/rules/kelee/FleaMarket_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "FleaMarket_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/FleaMarket_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/FleaMarket.png",
+      "note": "移植自 Loon 插件 FleaMarket_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-JD_remove_ads",
+      "tag": "京东去广告",
+      "local_file": "QuantumultX/rules/kelee/JD_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "JD_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/JD_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png",
+      "note": "移植自 Loon 插件 JD_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-LoonGallery",
+      "tag": "插件仓库",
+      "local_file": "QuantumultX/rules/kelee/LoonGallery.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "LoonGallery.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/LoonGallery.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Loon.png",
+      "note": "移植自 Loon 插件 LoonGallery.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-PinDuoDuo_remove_ads",
+      "tag": "拼多多去广告",
+      "local_file": "QuantumultX/rules/kelee/PinDuoDuo_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "PinDuoDuo_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/PinDuoDuo_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/PinDuoDuo.png",
+      "note": "移植自 Loon 插件 PinDuoDuo_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-QuarkBrowser_remove_ads",
+      "tag": "夸克去广告",
+      "local_file": "QuantumultX/rules/kelee/QuarkBrowser_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "QuarkBrowser_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/QuarkBrowser_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QuarkBrowser.png",
+      "note": "移植自 Loon 插件 QuarkBrowser_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-QuickSearch",
+      "tag": "快捷搜索",
+      "local_file": "QuantumultX/rules/kelee/QuickSearch.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "QuickSearch.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/QuickSearch.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Safari.png",
+      "note": "移植自 Loon 插件 QuickSearch.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-RedPaper_remove_ads",
+      "tag": "小红书去广告",
+      "local_file": "QuantumultX/rules/kelee/RedPaper_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "RedPaper_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/RedPaper_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RedPaper.png",
+      "note": "移植自 Loon 插件 RedPaper_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Remove_ads_by_keli",
+      "tag": "可莉广告过滤器",
+      "local_file": "QuantumultX/rules/kelee/Remove_ads_by_keli.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Remove_ads_by_keli.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Remove_ads_by_keli.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/KeLee.png",
+      "note": "移植自 Loon 插件 Remove_ads_by_keli.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-RiskBird_remove_ads",
+      "tag": "风鸟去广告",
+      "local_file": "QuantumultX/rules/kelee/RiskBird_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "RiskBird_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/RiskBird_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RiskBird.png",
+      "note": "移植自 Loon 插件 RiskBird_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Script-Hub",
+      "tag": "Script-Hub",
+      "local_file": "QuantumultX/rules/kelee/Script-Hub.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Script-Hub.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Script-Hub.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/Script-Hub.png",
+      "note": "移植自 Loon 插件 Script-Hub.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Snowball_remove_ads",
+      "tag": "雪球去广告",
+      "local_file": "QuantumultX/rules/kelee/Snowball_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Snowball_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Snowball_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Snowball.png",
+      "note": "移植自 Loon 插件 Snowball_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Spotify_lyrics_translation",
+      "tag": "Spotify歌词增强",
+      "local_file": "QuantumultX/rules/kelee/Spotify_lyrics_translation.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Spotify_lyrics_translation.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Spotify_lyrics_translation.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Spotify.png",
+      "note": "移植自 Loon 插件 Spotify_lyrics_translation.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Spotify_remove_ads",
+      "tag": "Spotify去广告",
+      "local_file": "QuantumultX/rules/kelee/Spotify_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Spotify_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Spotify_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Spotify.png",
+      "note": "移植自 Loon 插件 Spotify_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Taobao_remove_ads",
+      "tag": "淘宝去广告",
+      "local_file": "QuantumultX/rules/kelee/Taobao_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Taobao_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Taobao_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Taobao.png",
+      "note": "移植自 Loon 插件 Taobao_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Tencent_Video_remove_ads",
+      "tag": "腾讯视频去广告",
+      "local_file": "QuantumultX/rules/kelee/Tencent_Video_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Tencent_Video_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Tencent_Video_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Tencent_Video.png",
+      "note": "移植自 Loon 插件 Tencent_Video_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Weixin_Official_Accounts_remove_ads",
+      "tag": "微信公众号去广告",
+      "local_file": "QuantumultX/rules/kelee/Weixin_Official_Accounts_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Weixin_Official_Accounts_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Weixin_Official_Accounts_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weixin.png",
+      "note": "移植自 Loon 插件 Weixin_Official_Accounts_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Weixin_external_links_unlock",
+      "tag": "微信外部链接解锁",
+      "local_file": "QuantumultX/rules/kelee/Weixin_external_links_unlock.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Weixin_external_links_unlock.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Weixin_external_links_unlock.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weixin.png",
+      "note": "移植自 Loon 插件 Weixin_external_links_unlock.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-XiaoHeiHe_remove_ads",
+      "tag": "小黑盒去广告",
+      "local_file": "QuantumultX/rules/kelee/XiaoHeiHe_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "XiaoHeiHe_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/XiaoHeiHe_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/XiaoHeiHe.png",
+      "note": "移植自 Loon 插件 XiaoHeiHe_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-YouTube_remove_ads",
+      "tag": "YouTube去广告",
+      "local_file": "QuantumultX/rules/kelee/YouTube_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "YouTube_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/YouTube_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/YouTube.png",
+      "note": "移植自 Loon 插件 YouTube_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-Zhihu_remove_ads",
+      "tag": "知乎去广告",
+      "local_file": "QuantumultX/rules/kelee/Zhihu_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Zhihu_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Zhihu_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Zhihu.png",
+      "note": "移植自 Loon 插件 Zhihu_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-iQiYi_Video_remove_ads",
+      "tag": "爱奇艺去广告",
+      "local_file": "QuantumultX/rules/kelee/iQiYi_Video_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "iQiYi_Video_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/iQiYi_Video_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/iQiYi_Video.png",
+      "note": "移植自 Loon 插件 iQiYi_Video_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-iRingo.WeatherKit",
+      "tag": " iRingo: 🌤 WeatherKit",
+      "local_file": "QuantumultX/rules/kelee/iRingo.WeatherKit.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "iRingo.WeatherKit.lpx",
+      "source_url": "https://github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.lpx",
+      "icon": "https://developer.apple.com/assets/elements/icons/weatherkit/weatherkit-128x128.png",
+      "note": "移植自 Loon 插件 iRingo.WeatherKit.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+    },
+    {
+      "id": "rewrite-kelee-smzdm_remove_ads",
+      "tag": "什么值得买去广告",
+      "local_file": "QuantumultX/rules/kelee/smzdm_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "smzdm_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/smzdm_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/smzdm.png",
+      "note": "移植自 Loon 插件 smzdm_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
     },
     {
       "id": "rewrite-anymore-enhance",
@@ -514,33 +1023,6 @@
       "note": "手工维护的自用增强规则（不再自动生成，也不再有上游）。直接编辑 QuantumultX/rules/AnymoreEnhance.snippet。"
     },
     {
-      "id": "rewrite-weibo",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
-      "tag": "微博去广告",
-      "parser": false,
-      "enabled": true,
-      "note": "fmz 聚合资源未覆盖微博，故单独保留。",
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Weibo.png"
-    },
-    {
-      "id": "rewrite-amap",
-      "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/AmapAds.conf",
-      "tag": "高德地图去广告",
-      "parser": false,
-      "enabled": true,
-      "note": "fmz 聚合资源未覆盖（18 条规则 0 命中）。 [图标: 原 fmz GaodeMap.jpg 是 JPEG（QX 只认 PNG），已转为 PNG 并改本地托管]",
-      "icon": "https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/QuantumultX/icons/GaodeMap-v2.png"
-    },
-    {
-      "id": "rewrite-bilibili",
-      "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/Bilibili_CC.conf",
-      "tag": "哔哩哔哩去广告",
-      "parser": false,
-      "enabled": true,
-      "note": "fmz 聚合资源未覆盖。",
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/bilibili.png"
-    },
-    {
       "id": "rewrite-boxjs",
       "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
       "tag": "BoxJs",
@@ -550,32 +1032,48 @@
       "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/BoxJS.png"
     },
     {
-      "id": "rewrite-script-hub",
-      "url": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
-      "tag": "Script-Hub",
+      "id": "rewrite-kelee-Amap_remove_ads",
+      "tag": "高德地图去广告",
+      "local_file": "QuantumultX/rules/kelee/Amap_remove_ads.conf",
       "parser": false,
-      "enabled": false,
-      "note": "对应 Loon 的 Script-Hub.lpx；fmz 配置亦引用。",
-      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png"
+      "enabled": true,
+      "kelee_plugin": "Amap_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Amap_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Amap.png",
+      "note": "移植自 Loon 插件 Amap_remove_ads.lpx（kelee.one）。脚本已镜像到本仓库（kelee.one 对 QX 的 UA 返回 403）。"
     },
     {
-      "id": "rewrite-sub-store",
-      "url": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
-      "tag": "Sub-Store",
+      "id": "rewrite-kelee-Bilibili_remove_ads",
+      "tag": "哔哩哔哩去广告",
+      "local_file": "QuantumultX/rules/kelee/Bilibili_remove_ads.conf",
       "parser": false,
-      "enabled": false,
-      "note": "对应 Loon 的 Sub-Store.lpx；fmz 配置亦引用。",
-      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/SubStore.png"
+      "enabled": true,
+      "kelee_plugin": "Bilibili_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Bilibili_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Bilibili.png",
+      "note": "移植自 Loon 插件 Bilibili_remove_ads.lpx（kelee.one）。脚本已镜像到本仓库（kelee.one 对 QX 的 UA 返回 403）。"
     },
     {
-      "id": "rewrite-wechat-unlock",
-      "url": null,
-      "local_file": "QuantumultX/rules/wechat-unlock.snippet",
-      "tag": "微信解除链接限制",
+      "id": "rewrite-kelee-JD_Price",
+      "tag": "京东比价",
+      "local_file": "QuantumultX/rules/kelee/JD_Price.conf",
       "parser": false,
-      "enabled": false,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WeChat.png",
-      "note": "对应 Loon 的 Weixin_external_links_unlock.lpx。enabled=false：不写进 default.conf，作为独立的规则链接使用（用户偏好：直接加 URL，不重装配置）。放在 sources.json 里的目的是让 fetch-snapshot 镜像其脚本并改写成本仓库地址，否则脚本直链上游，上游失效即静默失败。"
+      "enabled": true,
+      "kelee_plugin": "JD_Price.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/JD_Price.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png",
+      "note": "移植自 Loon 插件 JD_Price.lpx（kelee.one）。脚本已镜像到本仓库（kelee.one 对 QX 的 UA 返回 403）。"
+    },
+    {
+      "id": "rewrite-kelee-Weibo_remove_ads",
+      "tag": "微博去广告",
+      "local_file": "QuantumultX/rules/kelee/Weibo_remove_ads.conf",
+      "parser": false,
+      "enabled": true,
+      "kelee_plugin": "Weibo_remove_ads.lpx",
+      "source_url": "https://kelee.one/Tool/Loon/Lpx/Weibo_remove_ads.lpx",
+      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weibo.png",
+      "note": "移植自 Loon 插件 Weibo_remove_ads.lpx（kelee.one）。脚本已镜像到本仓库（kelee.one 对 QX 的 UA 返回 403）。"
     }
   ],
   "tasks": [
@@ -699,20 +1197,6 @@
         "gspe1-ssl.ls.apple.com",
         "apps.mzstatic.com"
       ]
-    },
-    {
-      "id": "merge-jd-price",
-      "out": "JD_price.list",
-      "policy": null,
-      "sources": [
-        "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js"
-      ],
-      "raw_rewrite": [
-        "^https?://apapia-sqk-weblogic\\.manmanbuy\\.com/baoliao/center/menu url script-request-body https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
-        "^https://in\\.m\\.jd\\.com/product/graphext/\\d+\\.html url script-response-body https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
-        "hostname = in.m.jd.com, apapia-sqk-weblogic.manmanbuy.com"
-      ],
-      "note": "京东比价（替代 Loon 的 JD_Price.lpx）。来源 githubdulong/Script，脚本宿主存活。用法：需先安装「慢慢买」App，在[我的]页面捕获 Cookie 后，商品详情页才会显示比价。CK 捕获脚本 MmmCK.js 读 $request.body，因此必须是 script-request-body（写成 header 版会静默失败）。"
     },
     {
       "id": "merge-meta",
