@@ -167,7 +167,7 @@
           "美国节点",
           "全球节点"
         ],
-        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png"
+        "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/meta.png"
       },
       {
         "name": "Spotify",
@@ -193,7 +193,7 @@
           "美国节点",
           "全球节点"
         ],
-        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png"
+        "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/github_01.png"
       },
       {
         "name": "Netflix",
@@ -352,7 +352,7 @@
       "policy": "GitHub",
       "parser": false,
       "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/github.png"
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/github_01.png"
     },
     {
       "id": "filter-twitter",
@@ -478,7 +478,7 @@
       "enabled": true,
       "generated_by": "tools/vendor-rules.mjs",
       "note": "由 rule_merges 的 merge-jd-price 生成。需先装「慢慢买」App 抓 Cookie。 [图标: 本地托管 PNG（原 fmz jpg 无法在 QX 渲染/长期 404 缓存，已自托管）]",
-      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/jd.png"
+      "icon": "https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/QuantumultX/icons/JD-v2.png"
     },
     {
       "id": "rewrite-pinduoduo",
@@ -527,7 +527,7 @@
       "parser": false,
       "enabled": true,
       "note": "fmz 聚合资源未覆盖（18 条规则 0 命中）。 [图标: 原 fmz GaodeMap.jpg 是 JPEG（QX 只认 PNG），已转为 PNG 并改本地托管]",
-      "icon": "https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/QuantumultX/icons/GaodeMap.png"
+      "icon": "https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/QuantumultX/icons/GaodeMap-v2.png"
     },
     {
       "id": "rewrite-bilibili",
