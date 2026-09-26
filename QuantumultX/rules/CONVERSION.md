@@ -8,6 +8,7 @@
 | 上游来源 | 转换后文件 | 规则数 | 丢弃 |
 |---|---|---|---|
 | https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list | `QuantumultX/rules/filter/AppleIntelligence.list` | 11 | 0 |
+| https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list | `QuantumultX/rules/filter/AWAvenue.list` | 965 | 0 |
 | undefined | `QuantumultX/rules/QuantumultX/rules/filter/AdsBlockMAX.list` | 288195 | 0 |
 | undefined | `QuantumultX/rules/QuantumultX/rules/rewrite/AnymoreADEnhance.snippet` | 83 | 0 |
 | undefined | `QuantumultX/rules/QuantumultX/rules/rewrite/HTTPDNSBlock.conf` | 42 | 0 |

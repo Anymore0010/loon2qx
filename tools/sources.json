@@ -110,7 +110,7 @@
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
       },
       {
-        "name": "OpenAI & Anthropic",
+        "name": "AI",
         "members": [
           "proxy",
           "香港节点",
@@ -444,7 +444,7 @@
     },
     {
       "id": "filter-ads-max",
-      "tag": "广告拦截合集MAX",
+      "tag": "广告拦截合集MAX(分流)",
       "policy": null,
       "local_file": "QuantumultX/rules/filter/AdsBlockMAX.list",
       "parser": false,
@@ -475,9 +475,22 @@
       "note": "AWAvenue + fmz filter.list + bm7 Advertising 合并；kelee 的 BlockAdvertisers 排最前，它自带的 direct 白名单（短信/推送验证类域名）优先且被保留。\n**不设 force-policy**：否则会把那些 direct 白名单一起改成 reject。"
     },
     {
+      "id": "filter-awavenue",
+      "tag": "AWAvenue 秋风广告规则",
+      "policy": "reject",
+      "vendor": true,
+      "upstream_url": "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
+      "vendored_as": "filter/AWAvenue.list",
+      "local_file": "QuantumultX/rules/filter/AWAvenue.list",
+      "parser": false,
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
+      "note": "秋风广告规则。既是独立分流条目，也是「广告拦截合集MAX(分流)」的合并源之一。"
+    },
+    {
       "id": "filter-ai-fmz",
       "tag": "AI",
-      "policy": "OpenAI & Anthropic",
+      "policy": "AI",
       "enabled": true,
       "note": "AI 相关分流（fmz AI.list + bm7 OpenAI + bm7 Anthropic 合并）。",
       "vendored_as": "AI.list",
@@ -1140,12 +1153,12 @@
     ],
     "final": "兜底策略"
   },
-  "_filter_order_note": "顺序：广告拦截(3 条) → OpenAI & Anthropic → Apple AI → APNs → Apple → Google/GitHub/X/Telegram/Spotify/Meta/Netflix/Disney → LAN → CN REGION。\n\n要点：广告拦截置于最前（先匹配先赢，保证 reject 生效）；Apple AI 排在 Apple 之前（否则 Apple 列表会把 gateway.icloud.com 等抢成 direct）；LAN / CN REGION 是 QX 内置 direct 资源，置于末尾。",
+  "_filter_order_note": "顺序：广告拦截(3 条) → AI → Apple AI → APNs → Apple → Google/GitHub/X/Telegram/Spotify/Meta/Netflix/Disney → LAN → CN REGION。\n\n要点：广告拦截置于最前（先匹配先赢，保证 reject 生效）；Apple AI 排在 Apple 之前（否则 Apple 列表会把 gateway.icloud.com 等抢成 direct）；LAN / CN REGION 是 QX 内置 direct 资源，置于末尾。",
   "rule_merges": [
     {
       "id": "merge-ai",
       "out": "filter/AI.list",
-      "policy": "OpenAI & Anthropic",
+      "policy": "AI",
       "sources": [
         "https://kelee.one/Tool/Loon/Lsr/AI.lsr",
         "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list",

@@ -8,6 +8,11 @@
 #   各源贡献 Twitter/Twitter.list: 33
 # 重新生成: bun tools/vendor-rules.mjs
 
+################################################################
+# 第 1 块来源: https://rule.kelee.one/Loon/Twitter.lsr
+#   https://rule.kelee.one/Loon/Twitter.lsr
+#   本块贡献 33 条（与前面重复的已跳过，先到者优先）
+################################################################
 host-suffix, twitter.biz, X
 host-suffix, t.co, X
 host-suffix, twimg.co, X
@@ -41,6 +46,11 @@ ip-cidr, 199.59.148.0/22, X
 ip-cidr, 199.96.56.0/21, X
 ip-cidr, 202.160.128.0/22, X
 ip-cidr, 209.237.192.0/19, X
+################################################################
+# 第 2 块来源: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list
+#   本块贡献 33 条（与前面重复的已跳过，先到者优先）
+################################################################
 host-suffix, ads-twitter.com, Twitter
 host-suffix, cms-twdigitalassets.com, Twitter
 host-suffix, grok.com, Twitter

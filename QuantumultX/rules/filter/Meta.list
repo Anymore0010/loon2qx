@@ -8,6 +8,11 @@
 #   各源贡献 Instagram/Instagram.list: 4
 # 重新生成: bun tools/vendor-rules.mjs
 
+################################################################
+# 第 1 块来源: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list
+#   本块贡献 570 条（与前面重复的已跳过，先到者优先）
+################################################################
 host-suffix, aboutfacebook.com, Facebook
 host-suffix, accessfacebookfromschool.com, Facebook
 host-suffix, accountkit.com, Facebook
@@ -578,6 +583,11 @@ ip-cidr, 54.173.34.141/32, Facebook
 ip-cidr, 54.235.23.242/32, Facebook
 ip-cidr, 54.93.124.31/32, Facebook
 ip-asn, 32934, Facebook
+################################################################
+# 第 2 块来源: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list
+#   本块贡献 4 条（与前面重复的已跳过，先到者优先）
+################################################################
 host-suffix, cdninstagram.com, Instagram
 host-suffix, instagr.am, Instagram
 host-suffix, instagram.com, Instagram

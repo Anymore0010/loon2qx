@@ -4,6 +4,11 @@
 # 规则数: 965
 # 重新生成: bun tools/vendor-rules.mjs
 
+################################################################
+# 第 1 块来源: AWAvenue 秋风广告规则
+#   https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list
+#   本块贡献 965 条（与前面重复的已跳过，先到者优先）
+################################################################
 host, 1500020991.vodplayer.wxamedia.com, reject
 host, 1500022744.vodplayer.wxamedia.com, reject
 host, 1500026601.vodplayer.wxamedia.com, reject

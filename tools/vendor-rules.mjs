@@ -105,7 +105,13 @@ for (const f of toVendorOnly) {
     "",
   ];
 
-  const body = header.concat(rules).join("\n") + "\n";
+  // 单源 vendor 也插一段块标记：所有生成文件的头部格式保持一致，
+  // 便于「这份规则来自哪」在同一种位置查看。
+  const body =
+    header
+      .concat(sectionMarker(1, { tag: f.tag ?? f.id, url: f.upstream_url }, rules.length))
+      .concat(rules)
+      .join("\n") + "\n";
   const file = join(ROOT, "QuantumultX", "rules", f.vendored_as);
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, body);
@@ -419,7 +425,13 @@ for (const g of mergeGroups) {
     ];
     const file = join(ROOT, "QuantumultX", "rules", g.out);
     mkdirSync(dirname(file), { recursive: true });
-    writeFileSync(file, header.concat(g.raw_rewrite).join("\n") + "\n");
+    writeFileSync(
+      file,
+      header
+        .concat(sectionMarker(1, { tag: "内联规则（sources.json 的 raw_rewrite）" }, g.raw_rewrite.filter((l) => !l.startsWith("hostname")).length))
+        .concat(g.raw_rewrite)
+        .join("\n") + "\n",
+    );
     console.log(`${g.raw_rewrite.length} 行 -> ${g.out}`);
     report.push({ id: g.id, url: (g.sources ?? []).join(" + "), ok: true,
       count: g.raw_rewrite.filter((l) => !l.startsWith("hostname")).length,
@@ -428,6 +440,9 @@ for (const g of mergeGroups) {
   }
   process.stdout.write(`合并 ${g.id} … `);
   const all = [];
+  const rmBody = []; // 逐块累积（含分段标记）
+  let rmIdx = 0;
+  let rmCount = 0;
   const seenKeys = new Set();
   let perSource = [];
   let groupFailed = false; // 本组任一源失败 -> 不覆盖已提交的产物
@@ -441,14 +456,21 @@ for (const g of mergeGroups) {
       // 否则会因顺序把它们抢到本策略下（实测 Apple relay 域名被抢到「人工智能」）。
       const excluded = new Set((g.exclude_domains ?? []).map((x) => x.toLowerCase()));
       let added = 0;
+      const blockLines = [];
       for (const r of rules) {
         const dom = r.split(",")[1]?.trim().toLowerCase();
         if (dom && excluded.has(dom)) continue;
         if (seenKeys.has(r)) continue; // 跨来源去重（同一域名+同一策略）
         seenKeys.add(r);
-        all.push(r);
+        blockLines.push(r);
         added++;
       }
+      if (added) {
+        rmBody.push(...sectionMarker(rmIdx + 1, { tag: u, url: u }, added));
+        rmBody.push(...blockLines);
+        rmCount += added;
+      }
+      rmIdx++;
       perSource.push(`${u.split("/").slice(-2).join("/")}: ${added}`);
     } catch (e) {
       failures++;
@@ -462,7 +484,7 @@ for (const g of mergeGroups) {
   // 否则 merge-google 里 YouTube 源一挂，已提交的 Google.list 会被重写成只剩
   // Google 的 711 条（YouTube 196 条消失），而 CI 是先 commit 再变红 ——
   // 设备下周就会拉到残缺规则，直到下次成功才自愈。
-  if (groupFailed || all.length === 0) {
+  if (groupFailed || rmCount === 0) {
     const keep = existsSync(join(ROOT, "QuantumultX", "rules", g.out))
       ? "已保留上一次的完整版本"
       : "无旧版本可保留（本次不写入）";
@@ -476,16 +498,16 @@ for (const g of mergeGroups) {
     `# 合并来源（${g.sources.length} 个）:`,
     ...g.sources.map((u) => `#   ${u}`),
     `# 统一策略: ${g.policy}`,
-    `# 规则数: ${all.length}（已跨来源去重）`,
+    `# 规则数: ${rmCount}（已跨来源去重）`,
     ...perSource.map((x) => `#   各源贡献 ${x}`),
     "# 重新生成: bun tools/vendor-rules.mjs",
     "",
   ];
   const file = join(ROOT, "QuantumultX", "rules", g.out);
   mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, header.concat(all).join("\n") + "\n");
-  console.log(`${all.length} 条 -> ${g.out}`);
-  report.push({ id: g.id, url: g.sources.join(" + "), ok: true, count: all.length, dropped: [], notes: [], file: g.out });
+  writeFileSync(file, header.concat(rmBody).join("\n") + "\n");
+  console.log(`${rmCount} 条 -> ${g.out}`);
+  report.push({ id: g.id, url: g.sources.join(" + "), ok: true, count: rmCount, dropped: [], notes: [], file: g.out });
 }
 
 // ---- conversion report -----------------------------------------------------

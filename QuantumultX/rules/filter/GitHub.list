@@ -8,6 +8,11 @@
 #   各源贡献 GitHub/GitHub.list: 0
 # 重新生成: bun tools/vendor-rules.mjs
 
+################################################################
+# 第 1 块来源: https://rule.kelee.one/Loon/GitHub.lsr
+#   https://rule.kelee.one/Loon/GitHub.lsr
+#   本块贡献 31 条（与前面重复的已跳过，先到者优先）
+################################################################
 host-suffix, github.blog, GitHub
 host-suffix, github-avatars.oss-cn-hongkong.aliyuncs.com, GitHub
 host-suffix, github-cloud.s3.amazonaws.com, GitHub

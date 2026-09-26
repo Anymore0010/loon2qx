@@ -6,6 +6,11 @@
 #   各源贡献 Lsr/ApplePushNotificationService.lsr: 11
 # 重新生成: bun tools/vendor-rules.mjs
 
+################################################################
+# 第 1 块来源: https://kelee.one/Tool/Loon/Lsr/ApplePushNotificationService.lsr
+#   https://kelee.one/Tool/Loon/Lsr/ApplePushNotificationService.lsr
+#   本块贡献 11 条（与前面重复的已跳过，先到者优先）
+################################################################
 host-suffix, push.apple.com, APNs
 host, identity.apple.com, APNs
 ip-cidr, 17.249.0.0/16, APNs

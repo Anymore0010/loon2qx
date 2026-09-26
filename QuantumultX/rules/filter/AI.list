@@ -12,6 +12,11 @@
 #   各源贡献 Anthropic/Anthropic.list: 3
 # 重新生成: bun tools/vendor-rules.mjs
 
+################################################################
+# 第 1 块来源: https://kelee.one/Tool/Loon/Lsr/AI.lsr
+#   https://kelee.one/Tool/Loon/Lsr/AI.lsr
+#   本块贡献 238 条（与前面重复的已跳过，先到者优先）
+################################################################
 host, chatgpt.livekit.cloud, OpenAI & Anthropic
 host, host.livekit.cloud, OpenAI & Anthropic
 host, openai.com.cdn.cloudflare.net, OpenAI & Anthropic
@@ -250,10 +255,20 @@ host-suffix, z.ai, OpenAI & Anthropic
 host, api.zeldoc.ai, OpenAI & Anthropic
 host, ai.zenifra.com, OpenAI & Anthropic
 host, zenmux.ai, OpenAI & Anthropic
+################################################################
+# 第 2 块来源: https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list
+#   https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list
+#   本块贡献 4 条（与前面重复的已跳过，先到者优先）
+################################################################
 host-suffix, turn.livekit.cloud, OpenAI & Anthropic
 host-suffix, githubcopilot.com, OpenAI & Anthropic
 host-suffix, claude.com, OpenAI & Anthropic
 host-suffix, clau.de, OpenAI & Anthropic
+################################################################
+# 第 3 块来源: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
+#   本块贡献 35 条（与前面重复的已跳过，先到者优先）
+################################################################
 host, browser-intake-datadoghq.com, OpenAI
 host, chat.openai.com.cdn.cloudflare.net, OpenAI
 host, openai-api.arkoselabs.com, OpenAI
@@ -289,6 +304,11 @@ host-keyword, openai, OpenAI
 ip-cidr, 24.199.123.28/32, OpenAI
 ip-cidr, 64.23.132.171/32, OpenAI
 ip-asn, 20473, OpenAI
+################################################################
+# 第 4 块来源: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list
+#   本块贡献 3 条（与前面重复的已跳过，先到者优先）
+################################################################
 host, servd-anthropic-website.b-cdn.net, Anthropic
 host-suffix, anthropic.com, Anthropic
 host-suffix, claude.ai, Anthropic

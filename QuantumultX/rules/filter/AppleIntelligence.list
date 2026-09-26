@@ -4,6 +4,11 @@
 # 规则数: 11
 # 重新生成: bun tools/vendor-rules.mjs
 
+################################################################
+# 第 1 块来源: Apple AI
+#   https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list
+#   本块贡献 11 条（与前面重复的已跳过，先到者优先）
+################################################################
 host-suffix, gateway.icloud.com, Apple AI
 host-suffix, apple-relay.apple.com, Apple AI
 host-suffix, apple-relay.fastly-edge.com, Apple AI
