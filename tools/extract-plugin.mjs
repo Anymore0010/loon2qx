@@ -16,7 +16,7 @@
  *   - 单个 Loon 插件文件，或
  *   - 合并了多个插件的 .plugin（如 wxs0625/loon-plugins 的整合版）
  *
- *   bun tools/extract-plugin.mjs <plugin-file> [--out=QuantumultX/rules/plugin-rewrites.snippet]
+ *   bun tools/extract-plugin.mjs <plugin-file> [--out=QuantumultX/rules/AnymoreEnhance.snippet]
  *                                 [--keep-unconverted]
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
@@ -213,7 +213,7 @@ if (!input) {
   process.exit(2);
 }
 const outArg = args.find((a) => a.startsWith("--out="));
-const outPath = outArg ? outArg.split("=")[1] : "QuantumultX/rules/plugin-rewrites.snippet";
+const outPath = outArg ? outArg.split("=")[1] : "QuantumultX/rules/AnymoreEnhance.snippet";
 
 const text = readFileSync(input, "utf8").replace(/^\uFEFF/, "");
 
@@ -279,6 +279,42 @@ const mitmDedup = [...new Set(mitmHosts)];
  *
  * 去重键按 Quantumult X 的真实语义：同 URL 正则 + 同动作 + 同脚本，才算同一条规则。
  */
+/**
+ * 把一个 URL 正则归一化成「语义键」，用于跨源去重。
+ *
+ * 为什么需要：现有去重是按**正则文本全等**比对，但不同源会用不同写法命中同一个 URL。
+ * 实测（正是本项目一直防的坑）：
+ *   fmz 聚合  ^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/user-customization-service\/v1\/customize$
+ *   插件提取  ^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/(?:bootstrap|user-customization-service)
+ *   两者都命中 /user-customization-service 的 protobuf 响应体 -> 同一 body 被两个
+ *   script-response-body 依次改写，结果不可预期。文本比对全部漏判。
+ *
+ * 归一化：去转义/锚定/量词/非捕获组，只留下「域名与路径词元」的有序集合。
+ * 两条规则若一方的重要词元全部出现在另一方里，即视为命中同一 URL。
+ */
+function urlSig(pattern) {
+  // 注意：只去掉分组的**括号**，绝不能连内容一起去 —— 正则的关键信息常常就在
+  // 分组里（如 `(?:bootstrap|user-customization-service)`），整组删掉会把
+  // 「命中哪个接口」这个最关键的信息抹掉，导致语义比对失效。
+  const p = pattern
+    .replace(/\\/g, "")            // 去转义反斜杠（\. -> .）
+    .replace(/\(\?:/g, " ")          // 非捕获组：只去掉 "(?:"，保留候选项
+    .replace(/\(/g, " ")             // 普通组左括号
+    .replace(/\)/g, " ")             // 右括号
+    .toLowerCase();
+  return new Set(p.split(/[^a-z0-9]+/).filter((t) => t.length >= 7));
+}
+
+/** 两条规则的 URL 正则是否命中同一路径（语义重合）。 */
+function sameTarget(a, b) {
+  const A = a.length >= b.length ? a : b; // 以词元多的一方为准
+  const B = A === a ? b : a;
+  if (B.size === 0) return false;
+  let hit = 0;
+  for (const t of B) if (A.has(t)) hit++;
+  return hit >= 2 && hit / B.size >= 0.6;
+}
+
 function ruleKey(line) {
   const [pat, tail] = line.split(/\s+url\s+/);
   const [action, ...rest] = tail.split(/\s+/);
@@ -302,13 +338,18 @@ const existing = new Set();
 // 同时收集「已存在源的 URL 正则」：即便动作不同，同一 URL 被两条规则命中
 // 也可能造成重复处理（实测 2 例：myusmile 与 12306）。
 const existingPatterns = new Set();
+// 语义键（见 urlSig）：文本不同的正则也可能命中同一 URL。
+const existingSigs = [];
 for (const f of baselineFiles) {
   try {
     for (const l of readFileSync(f, "utf8").replace(/^\uFEFF/, "").split(/\r?\n/)) {
       const t = l.trim();
       if (!t || t.startsWith("#") || !/\surl\s/.test(t)) continue;
       existing.add(ruleKey(t));
-      existingPatterns.add(t.split(/\s+url\s+/)[0]);
+      const pat = t.split(/\s+url\s+/)[0];
+      existingPatterns.add(pat);
+      // 只对「会改写响应体」的动作做语义比对：脚本/jsonjq 重复才会互相破坏。
+      if (/\surl\s+(script-|jsonjq-)/.test(t)) existingSigs.push({ pat, sig: urlSig(pat) });
     }
   } catch (e) {
     console.warn(`  跳过 ${f}: ${e.message}`);
@@ -320,8 +361,25 @@ if (existing.size) {
   // 同一 URL 已由其它源处理 -> 剔除，避免重复处理（动作不同也算）
   const before2 = unique.length;
   unique = unique.filter((l) => !existingPatterns.has(l.split(/\s+url\s+/)[0]));
+  // 语义去重：文本不同但命中同一 URL 的 body 改写，同样必须剔除。
+  const before3 = unique.length;
+  const semDropped = [];
+  unique = unique.filter((l) => {
+    const m = l.match(/\surl\s+(script-|jsonjq-)/);
+    if (!m) return true;
+    const pat = l.split(/\s+url\s+/)[0];
+    const sig = urlSig(pat);
+    if (sig.size === 0) return true;
+    const clash = existingSigs.find((e) => sameTarget(sig, e.sig));
+    if (clash) { semDropped.push(pat); return false; }
+    return true;
+  });
   const removedByPattern = before2 - unique.length;
   if (removedByPattern) console.log(`同 URL 已被其它源处理、已剔除 ${removedByPattern} 条`);
+  if (semDropped.length) {
+    console.log(`语义重复（正则写法不同但命中同一 URL）、已剔除 ${semDropped.length} 条：`);
+    for (const x of semDropped.slice(0, 5)) console.log(`    ${x.slice(0, 95)}`);
+  }
 }
 const removedAsDuplicate = beforeDedupe - unique.length;
 
@@ -331,8 +389,7 @@ const header = [
   `# 说明: 从 Loon 插件提取的 URL 级 rewrite（域名黑名单无法覆盖的部分）`,
   `# 提取: ${raw.length} 条 -> 转换 ${converted.length} 条 -> 自身去重 ${beforeDedupe} 条`,
   `# 与现有重写源重复已剔除: ${removedAsDuplicate} 条`,
-  `# 最终: ${unique.length} 条`,
-  `# 并入的 MITM 主机名: ${mitmDedup.length} 个（已剔除上游破损条目并去重）`,
+  "# 最终规则数与 MITM 主机数见文件末尾（header 先于 finalRules 计算，故此处不重复打印）",
   `# 未能转换: ${skipped.length} 条（QX 无对应动作，如 mock-response-body / map-local）`,
   "# 重新生成: bun tools/extract-plugin.mjs --all   # 必须带 --all，它才会与已启用重写源去重",
   "",
@@ -373,8 +430,51 @@ if (keleeRules.length) console.log(`剔除依赖 kelee.one 脚本的规则 ${kel
 // 实测**不可行**：正则里的域名是转义的（\. ）且常带非捕获组，朴素抽取只命中 16/1038；
 // 而 QX 的 rewrite 要看到 HTTPS 的 URL 路径**必须 MITM**，hostname 少一个就静默失效一条规则。
 // 宁多勿少 —— 多解密一个域名的代价远小于规则静默失效。
-const body = mitmDedup.length ? finalRules.concat(["", `hostname = ${mitmDedup.join(", ")}`]) : finalRules;
-writeFileSync(dest, header.concat(body).join("\n") + "\n");
+const mitmFinal = mitmDedup;
+const body = mitmFinal.length ? finalRules.concat(["", `hostname = ${mitmFinal.join(", ")}`]) : finalRules;
+
+/**
+ * 自用规则区段：手工维护、重新生成时必须原样保留。
+ *
+ * 为什么需要：这个文件由本脚本整份重写，若不做保留，使用者往里加的自定义规则
+ * 会在下次 `bun tools/extract-plugin.mjs --all` 时被静默抹掉。
+ * 用法：把自用规则写在文件末尾这两个标记之间即可。
+ */
+const CUSTOM_BEGIN = "# >>>>> Anymore 自用规则（重新生成时保留，勿删标记）>>>>>";
+const CUSTOM_END = "# <<<<< Anymore 自用规则 <<<<<";
+function readCustomBlock(file) {
+  if (!existsSync(file)) return [];
+  const lines = readFileSync(file, "utf8").split(/\r?\n/);
+  const i = lines.findIndex((l) => l.trim() === CUSTOM_BEGIN);
+  const j = lines.findIndex((l) => l.trim() === CUSTOM_END);
+  return i >= 0 && j > i ? lines.slice(i, j + 1) : [];
+}
+
+// 取回上次的自用规则区段（若没有则新建空区段，方便使用者直接往里加）
+const custom = readCustomBlock(dest);
+const customBlock = custom.length
+  ? custom
+  : [
+      CUSTOM_BEGIN,
+      "# 在此处添加你自己的规则（重写/分流），重新生成时会原样保留。",
+      "# 形如: ^https:\\/\\/example\\.com\\/ad url reject",
+      "# 若用到新的域名，记得同时加入下面的 hostname 行（或写自己的 hostname）。",
+      CUSTOM_END,
+    ];
+if (custom.length) console.log(`  保留自用规则区段: ${custom.length - 2} 行`);
+
+// hostname 放在自用区段之前，避免自用规则被挤到 hostname 之后（QX 只认最后一条 hostname）
+// 规则 + 自用区段 + hostname 的顺序是固定的：hostname 必须最后。
+const rulesOnly = finalRules;
+const outFinal = header.concat(
+  rulesOnly,
+  [""],
+  customBlock,
+  mitmFinal.length ? ["", `hostname = ${mitmFinal.join(", ")}`] : [],
+);
+writeFileSync(dest, outFinal.join("\n") + "\n");
+// 打印真实写出的数量（曾出现 header 与实际不符，故这里显式对齐）
+console.log(`  实际写出: 规则 ${finalRules.length} 条 / hostname ${mitmFinal.length} 个`);
 
 console.log(`提取 ${raw.length} 条 -> 转换 ${converted.length} -> 自身去重 ${beforeDedupe}`);
 if (removedAsDuplicate) console.log(`与现有重写源重复、已剔除 ${removedAsDuplicate} 条（否则会重复处理响应体）`);

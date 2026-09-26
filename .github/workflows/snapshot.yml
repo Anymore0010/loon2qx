@@ -45,10 +45,6 @@ jobs:
       - name: Vendor Loon/Surge rule lists
         run: bun tools/vendor-rules.mjs
 
-      # 从插件包提取 URL 级重写（去重基线取自仓库内已有快照，故无需先跑 fetch-snapshot）。
-      - name: Re-extract plugin rewrites
-        run: bun tools/extract-plugin.mjs --all
-
       - name: Mirror upstream resources
         run: bun tools/fetch-snapshot.mjs
 

@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 167,
-  "mirrored": 167,
+  "total": 163,
+  "mirrored": 163,
   "failed": 0,
   "resources": [
     {
@@ -164,15 +164,6 @@
       "url": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Pinduoduo.snippet",
       "snapshot": "snapshot/github.com/ZenmoFeiShi/Qx/main/Pinduoduo.snippet",
       "upstream_raw": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Pinduoduo.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-spotify",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/module/spotify.conf",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/module/spotify.conf",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/module/spotify.conf",
       "status": 200,
       "error": null
     },
@@ -1478,33 +1469,6 @@
       "url": "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
       "snapshot": "snapshot/host/github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
       "upstream_raw": null,
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:MmmCK.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
-      "snapshot": "snapshot/github.com/githubdulong/Script/master/MmmCK.js",
-      "upstream_raw": "https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:jd_price.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
-      "snapshot": "snapshot/github.com/githubdulong/Script/master/jd_price.js",
-      "upstream_raw": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:spotify-lyric.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-lyric.js",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/js/spotify-lyric.js",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-lyric.js",
       "status": 200,
       "error": null
     }

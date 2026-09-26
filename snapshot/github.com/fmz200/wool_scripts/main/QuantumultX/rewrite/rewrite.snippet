@@ -4347,9 +4347,6 @@ IP-CIDR, 121.196.197.147/32, reject
 
 # > Spotify
 # hostname = spclient.wg.spotify.com, *spclient.spotify.com
-^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/user-customization-service\/v1\/customize$ url script-request-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-qx-header.js
-^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$ url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-proto.js
-^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/(artistview\/v1\/artist|album-entity-view\/v2\/album)\/ url script-request-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-json.js
 ^https:\/\/gae2-spclient\.spotify\.com:443\/ad url reject
 
 # > Stay

@@ -1,0 +1,32 @@
+# Spotify 解锁 + 歌词翻译（合并条目）
+#
+# 来源：
+#   解锁  —— app2smile/rules 的 module/spotify.conf（QX 原生，4127★）
+#   歌词  —— app2smile/rules 的 js/spotify-lyric.js（同仓库）
+#
+# 功能：
+#   1. 去除播放广告
+#   2. 歌手/专辑列表正常展示
+#   3. 去除随机播放
+#   4. 非中文歌词翻译为中文（**需自填百度翻译密钥**，见文末）
+#
+# 注意：
+#   - 解锁需要系统 >= iOS15，且 Spotify 音质**不能**设为「超高」。
+#   - 两条规则的 URL 互不相交：解锁走 /bootstrap、/user-customization-service，
+#     歌词走 /color-lyrics。因此合在一个文件不会互相覆盖。
+#   - 本文件由 tools/build.mjs 引用；脚本 URL 由 fetch-snapshot 镜像到本仓库。
+#
+# ---- 1. 解锁（去广告 / 去随机播放）------------------------------------------
+^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/user-customization-service\/v1\/customize$ url script-request-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-qx-header.js
+^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$ url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-proto.js
+^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/(artistview\/v1\/artist|album-entity-view\/v2\/album)\/ url script-request-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-json.js
+
+# ---- 2. 歌词翻译 -------------------------------------------------------------
+# 需先去百度翻译申请「通用翻译」API，把 appid/securityKey 填进
+#   snapshot/github.com/app2smile/rules/master/js/spotify-lyric.js 顶部的 options
+# （QX 没有 Surge/Loon 的 argument= 字段，密钥只能写进脚本本体）。
+# 申请：https://fanyi-api.baidu.com/choose （标准版免费 5 万字符/月）
+# 不填也能用：解锁照常生效，只是歌词不翻译。
+^https:\/\/spclient\.wg\.spotify\.com\/color-lyrics\/v2\/track\/ url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-lyric.js
+
+hostname = spclient.wg.spotify.com, *spclient.spotify.com

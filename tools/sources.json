@@ -334,8 +334,11 @@
       "tag": "广告拦截合集",
       "parser": false,
       "enabled": true,
-      "note": "fmz 聚合资源，覆盖约 730 款 App。实测包含原先按 App 拆分的 19/20 个片段，因此不再单独引用，避免同一响应体被重复处理。",
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png"
+      "note": "fmz 聚合资源，覆盖约 730 款 App。实测包含原先按 App 拆分的 19/20 个片段，因此不再单独引用，避免同一响应体被重复处理。 【已排除 Spotify 规则】：该聚合的 Spotify 规则与独立条目「Spotify 解锁+歌词」命中同一批 URL（/bootstrap、/user-customization-service），同一条 protobuf 响应体会被两套脚本依次处理。改由独立条目负责。",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
+      "exclude_rule_patterns": [
+        "spotify.*url script-"
+      ]
     },
     {
       "id": "rewrite-irongo-weatherkit",
@@ -354,8 +357,8 @@
       "parser": false,
       "enabled": true,
       "generated_by": "tools/vendor-rules.mjs",
-      "note": "由 rule_merges 的 merge-jd-price 生成。需先装「慢慢买」App 抓 Cookie。",
-      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/JD.png"
+      "note": "由 rule_merges 的 merge-jd-price 生成。需先装「慢慢买」App 抓 Cookie。 [图标: 本地托管 PNG（原 fmz jpg 无法在 QX 渲染/长期 404 缓存，已自托管）]",
+      "icon": "https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/QuantumultX/icons/JD.png"
     },
     {
       "id": "rewrite-pinduoduo",
@@ -367,26 +370,27 @@
       "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png"
     },
     {
-      "id": "rewrite-spotify-lyric",
+      "id": "rewrite-spotify",
       "url": null,
-      "local_file": "QuantumultX/rules/spotify-lyric.snippet",
-      "tag": "Spotify 歌词翻译",
+      "local_file": "QuantumultX/rules/spotify.snippet",
+      "tag": "Spotify 解锁+歌词",
       "parser": false,
-      "enabled": false,
+      "enabled": true,
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png",
-      "note": "对应你 Loon 的 Spotify_lyrics_translation.lpx —— 实测这是唯一**真正缺失**的 Spotify 功能：去广告/解锁已在「广告拦截合集」(fmz 聚合)里生效（4 条规则 + app2smile 同源脚本）。**默认关闭**：需先去百度翻译申请 appid + securityKey（免费版 5 万字符/月），把密钥填进 QuantumultX/rules/spotify-lyric.snippet 再启用。注意 QX 不像 Surge/Loon 有 argument= 字段，密钥只能写进脚本本体。"
+      "note": "对应你 Loon 的 Spotify_remove_ads.lpx + Spotify_lyrics_translation.lpx，合成一个条目。解锁部分取自 app2smile 官方 spotify.conf（4127★，QX 原生）：1.去播放广告 2.歌手/专辑列表正常展示 3.去随机播放。歌词翻译取自同仓库 js/spotify-lyric.js。**歌词需自填百度翻译密钥**（见文件内注释）：QX 无 Surge/Loon 的 argument= 字段，密钥只能写进脚本本体；不填也能用 —— 只是歌词不翻译（会在请求 /color-lyrics 时记一条日志）。注意两条规则的 URL 互不相交（解锁走 /bootstrap、/user-customization-service；歌词走 /color-lyrics），因此合在一个文件不会互相覆盖。为免与「广告拦截合集」重复处理，已把该聚合里的 Spotify 规则排除。"
     },
     {
       "id": "rewrite-plugin-extracted",
       "url": null,
-      "local_file": "QuantumultX/rules/plugin-rewrites.snippet",
-      "tag": "App 增强规则",
+      "local_file": "QuantumultX/rules/AnymoreEnhance.snippet",
+      "tag": "Anymore 自用增强",
       "parser": false,
       "enabled": true,
-      "generated_by": "tools/extract-plugin.mjs",
-      "note": "从插件包提取的 URL 路径级规则（395 条：232 reject + 95 jsonjq + 脚本）。域名黑名单原理上抓不到这类规则。已剔除银行/支付/微信类（证书固定、MITM 无效）及其 hostname。放在「各 App 去广告」之前。",
+      "generated_by": null,
+      "note": "**自维护文件**（已脱离上游管线）：内容源自一次性的插件提取（fmz200 官方 blockAds.plugin）+ 去重，之后不再自动拉取更新。你自己写的规则也维护在这里。该文件不再由 CI 重新生成 —— 直接编辑 QuantumultX/rules/AnymoreEnhance.snippet 即可。",
       "count": 451,
-      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png"
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
+      "self_maintained": true
     },
     {
       "id": "rewrite-weibo",
@@ -403,8 +407,8 @@
       "tag": "高德地图去广告",
       "parser": false,
       "enabled": true,
-      "note": "fmz 聚合资源未覆盖（18 条规则 0 命中）。",
-      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/GaodeMap.jpg"
+      "note": "fmz 聚合资源未覆盖（18 条规则 0 命中）。 [图标: 原 fmz GaodeMap.jpg 是 JPEG（QX 只认 PNG），已转为 PNG 并改本地托管]",
+      "icon": "https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/QuantumultX/icons/GaodeMap.png"
     },
     {
       "id": "rewrite-bilibili",
@@ -541,14 +545,6 @@
     ],
     "final": "direct"
   },
-  "vendor_plugins": [
-    {
-      "id": "fmz-blockads",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/plugin/blockAds.plugin",
-      "out": "QuantumultX/rules/plugin-rewrites.snippet",
-      "note": "fmz200 官方「广告拦截&净化合集」(Loon 插件，官方聚合 1615 条，覆盖约 730 款 App)。**替换自 0 星的 wxs0625/loon-plugins 合并包** —— 后者虽然内容主体也是 fmz 的，但来源不可信、合并过程不可验证（实测含 2 处破损行），且混入了 zirawell/Keywos/VenenoSix24 等低星仓库的脚本。现改为直接取 fmz200 官方（5704★）。"
-    }
-  ],
   "_filter_order_note": "顺序依据你的两份原配置：先取 QX [filter_remote] 的顺序（广告拦截 → 分流修正 → App 规则），再按 Loon [Remote Rule] 的顺序补上 Loon 独有的条目；CN REGION 固定最后（Loon 原配置明确要求勿改排序）。顺序有实际影响：实测 42 个域名同时出现在广告黑名单与 App 分流里（Google 35、Apple 5、YouTube 2），先匹配者决定去向。",
   "rule_merges": [
     {

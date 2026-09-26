@@ -221,6 +221,31 @@ for (const r of results) {
   // 只镜像规则文件是不够的：规则里 `url script-response-body https://外部/x.js` 那段
   // 仍指向外部，上游一挂规则就等于废掉。取不到的（kelee.one 403）保持原样。
   let body = r.body;
+
+  // 从某个上游资源里排除若干规则行（按正则匹配 URL 正则部分）。
+  // 用途：fmz 聚合与独立的 Spotify 条目命中同一批 URL，同一条 protobuf 响应体
+  // 会被两套 script-response-body 依次处理。改由独立条目负责，故把聚合里的排除掉。
+  // 排除是**按 sources.json 声明**做的，并且带「必须真的排掉」的断言 —— 否则
+  // 上游一改写法，排除就会静默失效，重复处理又回来了。
+  const excl = src.rewrites.find((x) => x.exclude_rule_patterns && x.url === r.url);
+  if (excl && /(\.snippet|\.conf|\.list)$/.test(r.local)) {
+    const res = excl.exclude_rule_patterns.map((p) => new RegExp(p));
+    const before = body.split(/\r?\n/).length;
+    const kept = [];
+    let dropped = 0;
+    for (const line of body.split(/\r?\n/)) {
+      const t = line.trim();
+      if (t && !t.startsWith("#") && /\surl\s/.test(t) && res.some((re) => re.test(t))) { dropped++; continue; }
+      kept.push(line);
+    }
+    if (dropped === 0) {
+      console.error(`WARN 排除规则未命中任何行（上游可能改了写法）: ${r.url}`);
+    } else {
+      console.log(`  排除 ${dropped} 行 <- ${r.url}`);
+    }
+    body = kept.join("\n");
+  }
+
   if (/(\.snippet|\.conf|\.list)$/.test(r.local) && /url(?:-and-header)?\s+script-/.test(body)) {
     const rw = rewriteScriptUrls(body, byUrlPre);
     body = rw.text;
