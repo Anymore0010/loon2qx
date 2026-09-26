@@ -19,7 +19,6 @@ import { resolveRepoBase } from "./repo-url.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ONLINE = join(ROOT, "QuantumultX", "default.conf");
-const OFFLINE = join(ROOT, "snapshot", "offline.conf");
 
 /** Sections Quantumult X understands. Anything else is a fatal import error. */
 const KNOWN_SECTIONS = new Set([
@@ -378,7 +377,7 @@ const repoSlug = resolveRepoBase(ROOT).slug;
   const hn = checkRewriteHostnames();
   console.log(`MITM 主机名检查  含脚本规则且自带 hostname 的文件: ${hn}`);
 }
-const profiles = [ONLINE, OFFLINE].filter((p) => {
+const profiles = [ONLINE].filter((p) => {
   if (!existsSync(p)) {
     err(p, 0, "profile does not exist");
     return false;

@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 /**
  * Mirrors every external resource referenced by tools/sources.json into
- * snapshot/, and generates snapshot/offline.conf which points at the
+ * snapshot/, which the single generated profile points at.
  * local copies instead of the upstream URLs.
  *
  * Why: the profile depends on ~50 third-party resources. If an upstream repo is
@@ -69,7 +69,7 @@ function collectResources() {
 
   // The parser is a hard dependency for opt-parser=true resources.
   add("resource-parser", src.general.resource_parser_url, "parser");
-  // Icons: cosmetic, but mirroring them keeps the offline profile fully self-contained.
+  // Icons: cosmetic, but mirroring them keeps the profile fully self-contained.
   if (src.general.profile_img_url) add("icon-profile", src.general.profile_img_url, "icon");
   for (const r of src.policies.regions) if (r.icon) add(`icon-${r.name}`, r.icon, "icon");
   for (const g of src.policies.groups ?? []) if (g.icon) add(`icon-${g.name}`, g.icon, "icon");
@@ -209,150 +209,10 @@ function rawUrlFor(local) {
   return `https://raw.githubusercontent.com/${owner}/${repo}/${ref}/${rest.join("/")}`;
 }
 
-// ---- offline profile -------------------------------------------------------
-// Same profile shape as tools/build.mjs, but every resource points at the copy
-// committed in this repository. The base URL is resolved from CI env vars or the
-// git remote so it can never be baked in as a stale/wrong value.
-
-/**
- * 把规则文本里引用的外部脚本 URL 改写成仓库内的镜像地址。
- *
- * 这一步才是「上游挂了也不影响」的关键：光镜像规则文件不够，
- * 规则里 `url script-response-body https://raw.githubusercontent.com/other/repo/x.js`
- * 这段仍然指向外部；必须改写成本仓库路径，脚本才真的落地。
- * 取不到的脚本（kelee.one 403）保持原样，并记入报告。
- */
-function rewriteScriptUrls(text, byUrl) {
-  let out = text;
-  let local = 0;
-  let kept = 0;
-  const missing = new Set();
-  out = out.replace(/(url(?:-and-header)?\s+script-\S+\s+)(https?:\/\/\S+)/g, (full, prefix, url) => {
-    const clean = url.replace(/["'],$/, "");
-    const r = byUrl.get(clean);
-    if (r) {
-      local++;
-      return prefix + `${rawBase}/snapshot/${r.local.split(/[\\/]/).join("/")}`;
-    }
-    kept++;
-    missing.add(clean);
-    return full; // 取不到 -> 保持原地址
-  });
-  return { text: out, local, kept, missing };
-}
-
-function snapUrl(url) {
-  const r = byUrlPre.get(url);
-  return r ? `${rawBase}/snapshot/${r.local.split(/[\\/]/).join("/")}` : url;
-}
-
-const comment = (t) => `# ${t}`;
-const rule = "#".repeat(72);
-/** Quantumult X requires literal `[section]` headers, not just comment banners. */
-const section = (key, t) => [rule, `# ${t}`, rule, `[${key}]`].join("\n");
-
-const lines = [];
-lines.push(comment("Quantumult X 离线配置 —— 所有远程资源均指向本仓库 snapshot/ 快照"));
-lines.push(comment("用途：上游仓库失效时仍可使用。导入后仍需自行添加订阅链接并信任证书。"));
-lines.push(comment("重新生成：GitHub Actions → Snapshot（每周自动）或本地 `bun tools/fetch-snapshot.mjs`"));
-lines.push("");
-
-lines.push(section("general", "常规设置"));
-lines.push(`resource_parser_url=${snapUrl(src.general.resource_parser_url)}`);
-lines.push(`profile_img_url=${snapUrl(src.general.profile_img_url)}`);
-lines.push(`server_check_url=${src.general.server_check_url}`);
-lines.push(`server_check_timeout=${src.general.server_check_timeout}`);
-lines.push(`network_check_url=${src.general.network_check_url}`);
-lines.push(
-  `geo_location_checker=http://ip-api.com/json/?lang=zh-CN, ${snapUrl(
-    src.general.geo_location_checker.split(",")[1].trim()
-  )}`
-);
-lines.push(`dns_exclusion_list=${src.general.dns_exclusion_list}`);
-lines.push(`excluded_routes=${src.general.excluded_routes}`);
-lines.push(`fallback_udp_policy=${src.general.fallback_udp_policy}`);
-if (src.general.udp_drop_list) lines.push(`udp_drop_list=${src.general.udp_drop_list}`);
-lines.push("");
-
-lines.push(section("dns", "DNS"));
-if (src.dns.prefer_doh3) lines.push("prefer-doh3");
-if (src.dns.no_ipv6) lines.push("no-ipv6");
-lines.push(`doh-server=${src.dns.doh_server.join(", ")}`);
-for (const s of src.dns.domain_servers ?? []) lines.push(s);
-lines.push("");
-
-lines.push(section("policy", "策略组"));
-for (const r of src.policies.regions) {
-  lines.push(
-    `static=${r.name}, resource-tag-regex=., server-tag-regex=${r.regex}, img-url=${snapUrl(r.icon)}`
-  );
-}
-const regionByName = new Map(src.policies.regions.map((r) => [r.name, r]));
-for (const s of src.policies.selects) {
-  lines.push(`static=${s.name}, ${s.region}, img-url=${snapUrl(regionByName.get(s.region).icon)}`);
-}
-for (const g of src.policies.groups ?? []) {
-  lines.push(`static=${g.name}, ${g.region}, img-url=${snapUrl(g.icon)}`);
-}
-lines.push("");
-
-lines.push(section("server_local", "本地节点"));
-lines.push(comment("必须保留：Quantumult X 缺少 [server_local] 会报「缺少模块 server_local」而无法导入。"));
-lines.push("");
-
-lines.push(section("server_remote", "节点订阅"));
-lines.push(comment("订阅链接属于个人敏感信息，需手动添加（风车 → 节点 → 添加订阅）。"));
-lines.push("");
-
-lines.push(section("filter_local", "本地分流"));
-for (const r of src.local_rules.rules) lines.push(r);
-lines.push("");
-lines.push(`final, ${src.local_rules.final}`);
-lines.push("");
-
-lines.push(section("filter_remote", "远程分流"));
-for (const f of src.filters) {
-  // Vendored filters are already in this repo; point at them directly.
-  const u = f.local_file ? `${rawBase}/${f.local_file}` : snapUrl(f.url);
-  const parts = [u, `tag=${f.tag}`];
-  if (f.policy) parts.push(`force-policy=${f.policy}`);
-  parts.push("update-interval=-1", `opt-parser=${f.parser}`, `enabled=${f.enabled}`);
-  lines.push(parts.join(", "));
-}
-lines.push("");
-
-lines.push(section("rewrite_local", "本地重写"));
-lines.push(comment("离线快照模式下，重写内容全部来自下方 rewrite_remote 引用的快照文件。"));
-lines.push("");
-
-lines.push(section("rewrite_remote", "远程重写"));
-lines.push(comment("规则文件里引用的外部脚本已改写成仓库内镜像；取不到的（如 kelee.one 403）保持原样。"));
-for (const r of src.rewrites) {
-  const u = r.local_file ? `${rawBase}/${r.local_file}` : snapUrl(r.url);
-  lines.push(
-    [u, `tag=${r.tag}`, "update-interval=-1", `opt-parser=${r.parser}`, `enabled=${r.enabled}`].join(", ")
-  );
-}
-lines.push("");
-
-lines.push(section("task_local", "任务"));
-for (const t of src.tasks) {
-  const icon = /^https?:/.test(t.icon) ? snapUrl(t.icon) : t.icon; // SF Symbols keep their name
-  lines.push(
-    [`${t.schedule} ${snapUrl(t.url)}`, `tag=${t.tag}`, `img-url=${icon}`, `enabled=${t.enabled}`].join(", ")
-  );
-}
-lines.push("");
-
-lines.push(section("http_backend", "HTTP 后端"));
-lines.push("");
-
-lines.push(section("mitm", "MITM"));
-lines.push(comment("证书需在本机生成并信任。"));
-lines.push("passphrase = ");
-lines.push("p12 = ");
-
-writeFileSync(join(SNAP, "offline.conf"), lines.join("\n") + "\n");
+// 说明：不再生成 snapshot/offline.conf。
+// 之前有「在线版(default.conf, 走上游) + 离线版(offline.conf, 走快照)」两份，
+// 现在已统一为单一配置（prefer_local=true，全部走本仓库快照）。
+// 残留的 offline.conf 还带 update-interval=-1（永不更新），属于有害遗留，已移除。
 
 // ---- machine-readable index -------------------------------------------------
 // No timestamp here on purpose: a volatile field would make every weekly run
@@ -402,7 +262,7 @@ if (failed === 0) {
   for (const f of walk(SNAP)) {
     // 保留本脚本自己产出的文件
     const base = f.split(/[\\/]/).pop();
-    if (base === "offline.conf" || base === "index.json") continue; // 本脚本自己产出的文件
+    if (base === "index.json") continue; // 本脚本自己产出的文件
     if (!expected.has(f)) {
       rmSync(f, { force: true });
       pruned++;
@@ -418,7 +278,7 @@ if (rewriteStats.local || rewriteStats.kept) {
     console.log(`  取不到的脚本（保持原地址，规则未删）: ${rewriteStats.missing.size} 个`);
   }
 }
-console.log(`Wrote ${relative(ROOT, join(SNAP, "offline.conf"))}`);
+
 console.log(`Wrote ${relative(ROOT, join(SNAP, "index.json"))}`);
 // Default: exit 0 even when some upstreams fail, because snapshot/index.json
 // records the failures and the partial mirror is still worth committing.
