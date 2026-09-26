@@ -74,6 +74,10 @@ function collectResources() {
   for (const r of src.policies.regions) if (r.icon) add(`icon-${r.name}`, r.icon, "icon");
   for (const g of src.policies.groups ?? []) if (g.icon) add(`icon-${g.name}`, g.icon, "icon");
   for (const t of src.tasks) if (t.icon && /^https?:/.test(t.icon)) add(`icon-${t.id}`, t.icon, "icon");
+  // filters / rewrites 的条目图标也要镜像，否则 iconUrl() 会把它们改写成本仓库地址
+  // 而快照里并不存在 -> 404 死链（图标空白，QX 不报错）。
+  for (const f of src.filters) if (f.icon) add(`icon-${f.id}`, f.icon, "icon");
+  for (const r of src.rewrites) if (r.icon) add(`icon-${r.id}`, r.icon, "icon");
   // geo_location_checker's script half.
   const geo = src.general.geo_location_checker.split(",").map((s) => s.trim())[1];
   if (geo && /^https?:/.test(geo)) add("geo-location-script", geo, "script");

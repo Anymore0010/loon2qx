@@ -381,6 +381,18 @@
       "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png"
     },
     {
+      "id": "rewrite-plugin-extracted",
+      "url": null,
+      "local_file": "QuantumultX/rules/plugin-rewrites.snippet",
+      "tag": "App 增强规则",
+      "parser": false,
+      "enabled": true,
+      "generated_by": "tools/extract-plugin.mjs",
+      "note": "从插件包提取的 URL 路径级规则（395 条：232 reject + 95 jsonjq + 脚本）。域名黑名单原理上抓不到这类规则。已剔除银行/支付/微信类（证书固定、MITM 无效）及其 hostname。放在「各 App 去广告」之前。",
+      "count": 451,
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png"
+    },
+    {
       "id": "rewrite-weibo",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
       "tag": "微博去广告",
@@ -433,18 +445,6 @@
       "enabled": false,
       "note": "对应 Loon 的 Sub-Store.lpx；fmz 配置亦引用。",
       "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/SubStore.png"
-    },
-    {
-      "id": "rewrite-plugin-extracted",
-      "url": null,
-      "local_file": "QuantumultX/rules/plugin-rewrites.snippet",
-      "tag": "插件提取重写",
-      "parser": false,
-      "enabled": true,
-      "generated_by": "tools/extract-plugin.mjs",
-      "note": "从 Loon 插件包提取的 URL 级 rewrite（451 条，已与现有重写源去重）。这类规则按域名拦截的规则库在原理上抓不到，是「原插件功能」真正能救回来的部分。来源：wxs0625/loon-plugins 的 kelee 合并包（kelee.one 本身对 curl/无头浏览器均 403）。重要：提取时会与所有已启用重写源比对（同正则+同动作+同脚本即视为重复），否则同一响应体会被重复处理。",
-      "count": 451,
-      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png"
     }
   ],
   "tasks": [

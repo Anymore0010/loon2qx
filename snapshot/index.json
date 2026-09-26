@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 163,
-  "mirrored": 143,
+  "total": 189,
+  "mirrored": 169,
   "failed": 0,
   "resources": [
     {
@@ -398,6 +398,258 @@
       "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Stack.png",
       "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Stack.png",
       "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Stack.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-ads-fmz",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-advertising",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/AdBlack.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-fix",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Final.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-ai-fmz",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-telegram",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Telegram.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-twitter",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Twitter.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-google",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Google.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-spotify",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Spotify.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-github",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/GitHub.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-geoip-cn",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/CN.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-apple-ai",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Apple.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-appstore",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/appstore.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/appstore.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/appstore.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-netflix",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Netflix.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-youtube",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/YouTube.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-disney",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Disney.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-facebook",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-instagram",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Instagram.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Instagram.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Instagram.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-onedrive",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/OneDrive.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/OneDrive.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/OneDrive.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-lan",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Available.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Available.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Available.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-irongo-weatherkit",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-jd-price",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/JD.png",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/JD.png",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/JD.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-pinduoduo",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/China.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-plugin-extracted",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-weibo",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Weibo.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Weibo.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Weibo.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-amap",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/GaodeMap.jpg",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/GaodeMap.jpg",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/GaodeMap.jpg",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-bilibili",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/bilibili.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/bilibili.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/bilibili.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-boxjs",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/BoxJS.png",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/BoxJS.png",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/BoxJS.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-sub-store",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/SubStore.png",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/SubStore.png",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/SubStore.png",
       "status": 200,
       "error": null
     },
@@ -1271,24 +1523,6 @@
       "url": "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
       "snapshot": "snapshot/host/github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
       "upstream_raw": null,
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:MmmCK.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
-      "snapshot": "snapshot/github.com/githubdulong/Script/master/MmmCK.js",
-      "upstream_raw": "https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:jd_price.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
-      "snapshot": "snapshot/github.com/githubdulong/Script/master/jd_price.js",
-      "upstream_raw": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
       "status": 200,
       "error": null
     },

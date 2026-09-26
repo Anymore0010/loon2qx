@@ -279,7 +279,8 @@ function checkSelfHostedFiles(p, repoSlug) {
 function checkVendoredRules() {
   const dir = join(ROOT, "QuantumultX", "rules");
   if (!existsSync(dir)) return 0;
-  const files = readdirSync(dir).filter((f) => f.endsWith(".list"));
+  // 同时覆盖 .list 与 .snippet（插件提取重写是 .snippet，此前被漏检）
+  const files = readdirSync(dir).filter((f) => /\.(list|snippet|conf)$/.test(f));
   let total = 0;
   for (const f of files) {
     const rel = `QuantumultX/rules/${f}`;
@@ -303,6 +304,15 @@ function checkVendoredRules() {
         const act = line.match(/\surl(?:-and-header)?\s+(\S+)/)[1].toLowerCase();
         if (!QX_REWRITE_ACTIONS.has(act)) {
           err(rel, 0, `未知的重写动作 "${act}": "${line.slice(0, 60)}"`);
+        }
+        // URL 正则必须只含 ASCII 且无空格/逗号（上游破损行会把中文或逗号嵌进来）
+        const pat = line.replace(/\s+url(?:-and-header)?\s+[\s\S]*$/, "");
+        if (!/^[\x20-\x7e]+$/.test(pat) || /[\s,]/.test(pat)) {
+          err(rel, 0, `URL 正则含非 ASCII 或分隔符（上游破损行）: ${pat.slice(0, 60)}`);
+        }
+        // jq-path="..." 是 Loon 的外部 jq 写法，QX 求值会失败
+        if (/jq-path\s*=|jq_file\s*=/i.test(line)) {
+          err(rel, 0, `含 jq-path=/jq_file= 的非法 jq 表达式（QX 会失效）: ${line.slice(0, 60)}`);
         }
         count++;
         continue;

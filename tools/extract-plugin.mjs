@@ -111,6 +111,9 @@ function convertRewriteLine(line) {
   if (a === "response-body-json-jq" || a === "request-body-json-jq" || a === "http-response-jq" || a === "http-request-jq") {
     const jq = stripQuotes(rest);
     if (!jq) return null;
+    // jq-path="..." 是 Loon 的「外部 jq 文件」写法，不是合法 jq 表达式：
+    // QX 会对它求值失败 -> 规则静默失效。丢弃（其引用的 .jq 也无法镜像）。
+    if (/^jq-path\s*=|^jq_file\s*=/i.test(jq)) return null;
     return `${pattern} url ${phaseOf(a)} ${quoteJQ(jq)}`;
   }
 
@@ -219,10 +222,19 @@ const raw = [...section(text, "Rewrite"), ...section(text, "Script")]
 const converted = [];
 const skipped = [];
 
+/** URL 正则部分必须只含 ASCII 且无空格/逗号；否则是上游破损行（如 URL 里嵌中文）。 */
+const isValidPattern = (p) => /^[\x20-\x7e]+$/.test(p) && !/[\s,]/.test(p);
+
 for (const line of raw) {
   // 合并包里 script-path 可能出现在行中任意位置，统一先尝试脚本转换
   const isScript = /script-path\s*=/.test(line) || /^http-(request|response)/.test(line);
   const out = isScript ? (convertScriptLine(line) ?? convertRewriteLine(line)) : convertRewriteLine(line);
+  // 污染/破损的上游行：URL 正则含非 ASCII 或分隔符 -> 直接丢弃
+  const pat = out ? out.replace(/\s+url(?:-and-header)?\s+[\s\S]*$/, "") : "";
+  if (out && !isValidPattern(pat)) {
+    skipped.push(line + "   [丢弃：URL 正则含非 ASCII/分隔符，上游破损行]");
+    continue;
+  }
   if (out) converted.push(out);
   else skipped.push(line);
 }
@@ -251,7 +263,10 @@ const mitmHosts = section(text, "MITM")
   // 上游合并包里有破损行：被注释掉的 `hostname =` 丢了前导 #，与上一行粘连成
   // "xxx.comhostname = yyy.com"。这类条目含 "=" 或 "hostname" 字样，是非法主机名，
   // QX 解析该行会报错 —— 必须剔除（并去重）。
-  .filter((x) => x && !x.includes("=") && !/hostname/i.test(x) && /^[A-Za-z0-9*?._-]+$/.test(x));
+  .filter((x) => x && !x.includes("=") && !/hostname/i.test(x) && /^[A-Za-z0-9*?._-]+$/.test(x))
+  // 剔除银行/支付/微信类：这类 App 普遍证书固定（cert pinning），MITM 不会生效，
+  // 只会增加解密开销、甚至干扰这些 App（实测 36 个，含 icbc/cmbchina/bankcomm/psbc/tenpay 等）。
+  .filter((x) => !/(icbc|cmbchina|bankcomm|psbc|abchina|bankofbeijing|jlbank|cgbank|95598pay|tenpay|ysepay|unionpay|weixin|wechat|wechatpay|alipay|mybank|jdpay)/i.test(x));
 const mitmDedup = [...new Set(mitmHosts)];
 
 /**
@@ -344,7 +359,11 @@ const rewriteScripts = (line) =>
     return existsSync(join(ROOT, local)) ? prefix + `${repoBase}/${local}` : full;
   });
 const outRules = unique.map(rewriteScripts);
-const body = mitmDedup.length ? outRules.concat(["", `hostname = ${mitmDedup.join(", ")}`]) : outRules;
+// 规则若引用已剔除的敏感域，一并去掉（否则规则留着但 MITM 不覆盖 -> 静默无效）
+const SENS_RULE = /(icbc|cmbchina|bankcomm|psbc|abchina|bankofbeijing|jlbank|cgbank|95598pay|tenpay|ysepay|unionpay|weixin|wechat|alipay|mybank|jdpay)/i;
+const finalRules = outRules.filter((l) => !SENS_RULE.test(l.split(/\s+url(?:-and-header)?\s+/)[0]));
+if (finalRules.length !== outRules.length) console.log(`剔除引用敏感域的规则 ${outRules.length - finalRules.length} 条`);
+const body = mitmDedup.length ? finalRules.concat(["", `hostname = ${mitmDedup.join(", ")}`]) : finalRules;
 writeFileSync(dest, header.concat(body).join("\n") + "\n");
 
 console.log(`提取 ${raw.length} 条 -> 转换 ${converted.length} -> 自身去重 ${beforeDedupe}`);
