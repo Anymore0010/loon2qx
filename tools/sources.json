@@ -221,6 +221,20 @@
           "全球节点"
         ],
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png"
+      },
+      {
+        "name": "兜底策略",
+        "members": [
+          "direct",
+          "proxy",
+          "全球节点",
+          "香港节点",
+          "新国节点",
+          "日本节点",
+          "韩国节点",
+          "美国节点"
+        ],
+        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png"
       }
     ]
   },
@@ -604,7 +618,7 @@
     }
   ],
   "local_rules": {
-    "_comment": "逐条移植自 Loon 的 [Rule] 段。Loon 的 DOMAIN/DOMAIN-SUFFIX/DOMAIN-KEYWORD 对应 Quantumult X 的 host/host-suffix/host-keyword，DIRECT 对应 direct。",
+    "_comment": "逐条移植自 Loon 的 [Rule] 段。Loon 的 DOMAIN/DOMAIN-SUFFIX/DOMAIN-KEYWORD 对应 Quantumult X 的 host/host-suffix/host-keyword，DIRECT 对应 direct。 final 指向「兜底策略」组（默认 direct，对应 Loon 的 FINAL,DIRECT；可在 QX 界面改成 proxy 或指定地区）。",
     "rules": [
       "host, yimuapp.com, direct",
       "host-suffix, lty01.com, 全球节点",
@@ -648,7 +662,7 @@
       "host, e.crashlynatics.com, direct",
       "host-suffix, local, direct"
     ],
-    "final": "direct"
+    "final": "兜底策略"
   },
   "_filter_order_note": "顺序依据你的两份原配置：先取 QX [filter_remote] 的顺序（广告拦截 → 分流修正 → App 规则），再按 Loon [Remote Rule] 的顺序补上 Loon 独有的条目；CN REGION 固定最后（Loon 原配置明确要求勿改排序）。顺序有实际影响：实测 42 个域名同时出现在广告黑名单与 App 分流里（Google 35、Apple 5、YouTube 2），先匹配者决定去向。\n\n【已知冲突·按用户指定顺序保留】「分流修正」(filterFix.list) 含 `host-keyword, icloud.com, direct` 与 `host-keyword, ls.apple.com, direct`，而「Apple AI」要 gateway.icloud.com / gspe1-ssl.ls.apple.com 走代理。filter_remote 先匹配先赢，故分流修正在前时 Apple AI 的这两条会被抢成 direct。用户明确指定「分流修正」在最前，故保持不动。若要让 Apple AI 生效，把它移到「分流修正」之前即可（仅 11 条窄匹配，不影响其它条目）。",
   "rule_merges": [
