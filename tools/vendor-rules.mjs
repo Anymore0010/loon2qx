@@ -233,7 +233,6 @@ for (const f of toVendorOnly) {
 // 重复命中的话同一个 body 会被处理两次。所以按 (正则, 动作) 去重，
 // 且**kelee 的条目排在前面**（与 [rewrite_remote] 里 kelee 优先的方向一致）。
 {
-  let skippedNonRewrite = 0;
   const mergeRewrites = src.rewrites.filter((r) => r.merges?.length && r.local_file);
   // 合并前先收集「独立条目」的语义签名：那些**不属于任何合并组**、但仍作为
   // rewrite_remote 条目启用的资源（主要是逐个 App 的 kelee .conf，如 Zhihu/RedPaper）。
@@ -334,6 +333,7 @@ for (const f of toVendorOnly) {
         continue;
       }
       let added = 0;
+      let skippedNonRewrite = 0; // 必须**每个来源独立计数**：累加会让日志把 fmz 的 2791 行记到每个来源头上
       const blockLines = [];
       for (const line of text.split(/\r?\n/)) {
         const t = line.trim();

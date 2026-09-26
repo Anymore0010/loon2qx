@@ -179,6 +179,19 @@ for (let i = 0; i < resources.length; i += CONCURRENCY) {
 // 脚本 URL -> 镜像记录（写入阶段改写规则文件时使用）
 
 /** 递归列出 QuantumultX/rules 下的规则文件（含 kelee 子目录）。 */
+/** 递归列出目录（用于清理空目录）。 */
+function walkDirs(dir, out = []) {
+  let entries = [];
+  try { entries = readdirSync(dir); } catch { return out; }
+  for (const n of entries) {
+    const p = join(dir, n);
+    try {
+      if (statSync(p).isDirectory()) { out.push(p); walkDirs(p, out); }
+    } catch { /* ignore */ }
+  }
+  return out;
+}
+
 function walkRules(dir, out = []) {
   for (const n of readdirSync(dir)) {
     const p = join(dir, n);
@@ -499,6 +512,24 @@ if (criticalFailures === 0) {
     }
   }
   if (pruned) console.log(`清理孤儿快照文件: ${pruned} 个（已从 sources.json 移除的源）`);
+
+  // 再自底向上删空目录。
+  // 写入阶段是 `mkdirSync(dirname(dest), {recursive:true})` **先建整条路径**，
+  // 而 prune 只删文件不删目录，于是任何被抓取失败/后来移除的资源都会留下一个空目录
+  // （实测 snapshot 下攒过 60 个：.../QuantumultX/AppleID/、.../TikTok/ 等）。
+  // git 本不跟踪空目录，删除是安全的。
+  {
+    let removedDirs = 0;
+    for (let pass = 0; pass < 8; pass++) {
+      const empty = [];
+      for (const d of walkDirs(SNAP)) {
+        try { if (readdirSync(d).length === 0) empty.push(d); } catch { /* ignore */ }
+      }
+      if (!empty.length) break;
+      for (const d of empty) { try { rmSync(d, { recursive: false, force: true }); removedDirs++; } catch { /* ignore */ } }
+    }
+    if (removedDirs) console.log(`清理空目录: ${removedDirs} 个`);
+  }
 }
 
 console.log(`Snapshot: ${ok}/${results.length} mirrored, ${criticalFailures} failed${iconFailures ? ` (+${iconFailures} 个图标失败，非致命)` : ""}`);

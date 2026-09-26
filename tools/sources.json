@@ -1021,16 +1021,16 @@
           "tag": "广告拦截(通用)（blackmatrix7）"
         },
         {
-          "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/AdvertisingLite/AdvertisingLite.conf",
-          "tag": "AdvertisingLite（blackmatrix7，重写精简版）"
-        },
-        {
           "local_file": "QuantumultX/rules/rewrite/kelee/Remove_ads_by_keli.snippet",
           "tag": "可莉广告过滤器（kelee 插件）"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/AdvertisingLite/AdvertisingLite.conf",
+          "tag": "AdvertisingLite（blackmatrix7，重写规则·新版）"
         }
       ],
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
-      "note": "kelee BlockAdvertisers + 可莉广告过滤器(Remove_ads_by_keli) + fmz rewrite.snippet + bm7 Advertising.conf + bm7 AdvertisingLite.conf + 手写自用增强规则，合并为一份。\n来源顺序即优先级（先到者胜）：kelee 在前。",
+      "note": "kelee BlockAdvertisers + 可莉 Remove_ads_by_keli + fmz rewrite.snippet + bm7 Advertising.conf + bm7 AdvertisingLite.conf + 内联手写规则，合并为一份。\n两份 bm7 都收：重写侧 AdvertisingLite **不是** Advertising 的子集（1236 vs 751 条），内容互补。\n来源顺序即优先级（先到者胜），kelee 在前。",
       "exclude_rule_patterns": [
         "api.bevol.com"
       ],

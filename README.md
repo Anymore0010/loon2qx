@@ -179,7 +179,7 @@ bun tools/fetch-snapshot.mjs # 刷新快照
 
 ## 快照机制
 
-配置文件依赖 59 个第三方资源（含图标）。任何一个上游仓库被删或强推，配置就会**静默地少掉规则**。
+配置文件依赖 **176 个**第三方资源（含图标与脚本）。任何一个上游仓库被删或强推，配置就会**静默地少掉规则**。
 
 因此 `snapshot/` 保存了一份冻结副本，配置里的所有资源都指向它：
 
@@ -199,6 +199,12 @@ bun tools/fetch-snapshot.mjs # 刷新快照
 | 单源 vendor | `rules/filter/*.list` | 一个上游一份（如 `AWAvenue.list`、`AppleIntelligence.list`） |
 | 合并组 | `rules/filter/*.list` | 多个上游合成一份（AI / Meta / Google / GitHub / X / Telegram / Spotify / Netflix / Disney / ApplePush / Apple / AdsBlock） |
 | kelee 插件转换 | `rules/filter/kelee/*.list`（分流）、`rules/rewrite/kelee/*.snippet`（重写） | 由 `tools/convert-plugins.mjs` 生成 |
+| 重写合并组 | `rules/rewrite/AdsBlock.snippet`、`HTTPDNSBlock.snippet` | 见下方「合并组」 |
+
+> **`blackmatrix7` 同目录下的 `.list` 与 `.conf` 是两种语法，不能混用**：
+> `AdvertisingLite.conf`（1236 行 `^regex url reject-dict`）是 QX **重写**资源；
+> `AdvertisingLite.list` 只有 `HOST/HOST-KEYWORD/IP-CIDR, x, AdvertisingLite`，
+> 是 **Surge/Loon 格式的分流**列表。`.conf` 才是重写。
 
 每个生成文件都有**分块注释**标明每个来源与贡献条数（重复的已在后面块里跳过）。
 
