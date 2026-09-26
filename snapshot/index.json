@@ -2,8 +2,8 @@
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
   "total": 163,
-  "mirrored": 141,
-  "failed": 1,
+  "mirrored": 142,
+  "failed": 0,
   "resources": [
     {
       "id": "filter-ads-fmz",
@@ -63,10 +63,10 @@
       "id": "filter-spotify",
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": null,
-      "error": "The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
+      "status": 200,
+      "error": null
     },
     {
       "id": "filter-github",
