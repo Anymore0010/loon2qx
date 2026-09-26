@@ -162,10 +162,17 @@ function checkLocalRuleScriptsAreSelfHosted(repoSlug) {
   const dir = join(ROOT, "QuantumultX", "rules");
   if (!existsSync(dir)) return 0;
   let checked = 0;
-  for (const f of readdirSync(dir)) {
-    if (!/\.(snippet|conf|list)$/.test(f)) continue;
+  // 必须**递归**：kelee 转换产物在 QuantumultX/rules/kelee/ 子目录。
+  // 非递归时这批文件的脚本引用完全不参与校验（曾经就是因为这个，
+  // 一个被孤儿清理删掉的镜像脚本没人发现 —— 规则指向 404 而 validate 全绿）。
+  const files = readdirSync(dir, { recursive: true })
+    .map((f) => String(f).replace(/\\/g, "/"))
+    .filter((f) => /\.(snippet|conf|list)$/.test(f));
+  for (const f of files) {
     const rel = `QuantumultX/rules/${f}`;
-    for (const raw of readFileSync(join(dir, f), "utf8").split(/\r?\n/)) {
+    let text;
+    try { text = readFileSync(join(dir, f), "utf8"); } catch { continue; }
+    for (const raw of text.split(/\r?\n/)) {
       const line = raw.trim();
       if (!line || line.startsWith("#")) continue;
       const m = line.match(/url(?:-and-header)?\s+script-\S+\s+(https?:\/\/\S+)/);
@@ -179,6 +186,17 @@ function checkLocalRuleScriptsAreSelfHosted(repoSlug) {
           warn(rel, 0, `脚本保留 kelee.one 原始地址（CI 取不到，设备端可用）: ${u.split("/").pop()}`);
         } else {
           err(rel, 0, `脚本 URL 未指向本仓库（上游失效即静默失败）: ${u.slice(0, 80)}`);
+        }
+        continue;
+      }
+      // 指向本仓库的脚本必须**真的存在**：镜像被清掉/改名后规则会指向 404。
+      // （脚本 URL 可能带 `#片段`，片段不属于路径。）
+      const idx = u.indexOf(`/${repoSlug}/`);
+      const afterSlug = u.slice(idx + repoSlug.length + 2);
+      const relPath = afterSlug.slice(afterSlug.indexOf("/") + 1).split("#")[0];
+      if (relPath.startsWith("snapshot/") || relPath.startsWith("QuantumultX/")) {
+        if (!existsSync(join(ROOT, relPath))) {
+          err(rel, 0, `规则引用的仓库内脚本不存在（镜像被清理或改名）: ${relPath}`);
         }
       }
     }

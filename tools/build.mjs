@@ -305,10 +305,14 @@ function buildMitm() {
   lines.push("passphrase = ");
   lines.push("p12 = ");
   lines.push("");
-  // 显式列出所有重写资源声明的主机名（本仓库自己的重写资源 + 转换产物）。
-  // 理由：QX 是否自动把 rewrite_remote 资源里的 hostname 并入 [mitm] 没有权威文档，
-  // 两条已知可用的社区配置（fmz 的 QuanX.conf、用户原配置）都只写了 `hostname = -www.google.com`。
-  // 若 QX 本就合并，这份清单是幂等的；若不合并，它就是唯一让重写生效的东西。
+  // 显式列出所有重写资源声明的 hostname（本仓库自己的重写资源 + 转换产物）。
+  //
+  // 事实：Quantumult X **会**把 rewrite_remote 资源自带的 hostname 自动并入 [mitm]
+  // （用户在 QX 界面的 MITM 页面上直接看到了这些主机名；其原配置的 [mitm] 也只有
+  // `hostname = -www.google.com` 一行，而重写照常生效）。
+  //
+  // 所以这一行是**冗余保险**，不是必需品：它让 MITM 覆盖范围在配置里可审计、
+  // 也便于「某个域名没生效」时直接对照。删掉它配置仍能工作。
   const hosts = collectMitmHostnames();
   lines.push(comment(`以下 ${hosts.count} 个主机名来自本仓库重写资源（含 kelee 转换产物）的 hostname 声明。`));
   for (const h of hosts.lines) lines.push(h);

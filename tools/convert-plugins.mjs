@@ -176,23 +176,6 @@ function parseArgumentDefaults(text) {
  * 注入一段 **安全的** 桥接：只有在 `$argument` 未定义且 `$environment.params` 存在时才生效。
  * 若 QX 不提供 params，这段是 no-op —— 脚本行为与不加时完全一致，不会弄坏现状。
  */
-const ARG_SHIM = `/*
- * [kelee 转换器注入] Loon/Surge 的插件参数在 Quantumult X 里没有对应机制，
- * 脚本却读 \`$argument\`（QX 下为 undefined，于是走默认分支）。
- * 这里把 QX 提供的 \`$environment.params\`（来自脚本 URL 的 #片段）桥接成 \`$argument\`。
- * 安全保证：仅在 \`$argument\` 未定义且 \`$environment.params\` 存在时生效；
- * QX 若不传 params 则完全不改变脚本原有行为。
- */
-(function () {
-  try {
-    if (typeof $argument === "undefined" && typeof $environment !== "undefined" &&
-        $environment && $environment.params) {
-      // @ts-ignore 由脚本宿主注入
-      $argument = JSON.stringify($environment.params);
-    }
-  } catch (e) {}
-})();
-`;
 
 /** 从 `argument=[{a},{b}]` 取参数名。 */
 function argKeysOf(optsRaw) {
@@ -219,20 +202,20 @@ function convertScript(line, plugin, argDefaults) {
   // `argument=` / `enable=` 是 Loon 的插件参数体系，QX 没有等价物。
   // 处理方式：把 Loon [Argument] 段的**默认值**内联成 URL `#` 片段，并在镜像脚本
   // 头部注入桥接（见 ARG_SHIM），使脚本读到与源插件相同的默认参数。
+  // QX **没有**插件参数机制：`$argument` 在 QX 下不存在，
+  // 而 `$environment.params` 是**节点信息**（见 LocationDetection.js 的注释：
+  // `$environment.params.node` / `nodeInfo`），不是脚本 URL 的 # 片段。
+  // 所以「把参数塞进 # 片段 + 桥接成 $argument」是错的 —— 注入节点信息可能让
+  // 脚本走进非预期分支（脚本常把 `$argument !== undefined` 当"用户配置过"的开关）。
+  // 如实记账为「未复刻」，不做看起来做了实则没生效的补丁。
   const argKeys = argKeysOf(optsRaw);
-  let fragment = "";
   if (argKeys) {
-    if (argDefaults) {
-      const kv = argKeys.filter((k) => argDefaults.has(k)).map((k) => `${k}=${argDefaults.get(k)}`);
-      if (kv.length) {
-        fragment = "#" + kv.map((x) => x.replace(/[#&]/g, "")).join("&");
-        inlinedArgs.push({ plugin, keys: kv });
-      } else {
-        notes.push({ plugin, kind: "参数无默认值可内联", detail: `argument=[${argKeys.join(",")}] —— [Argument] 段里没有对应默认值，脚本将走自身默认分支` });
-      }
-    } else {
-      notes.push({ plugin, kind: "参数被丢弃（无 [Argument] 段）", detail: `argument=[${argKeys.join(",")}]` });
-    }
+    const kv = argDefaults ? argKeys.filter((k) => argDefaults.has(k)).map((k) => `${k}=${argDefaults.get(k)}`) : [];
+    notes.push({
+      plugin,
+      kind: "插件参数未复刻",
+      detail: `argument=[${argKeys.join(",")}]${kv.length ? "（[Argument] 默认值: " + kv.join(", ") + "）" : ""} —— QX 无插件参数机制，脚本将走自身默认分支`,
+    });
   } else if (/(?:^|,)\s*argument=\[/.test(optsRaw) === false && /(?:^|,)\s*argument=/.test(optsRaw)) {
     // 形如 argument="search->replace"（CommonScript/replace-body.js 的替换参数），
     // 不是插件参数键值对，QX 无法表达
@@ -249,7 +232,7 @@ function convertScript(line, plugin, argDefaults) {
   }
 
   const action = trigger === "http-request" ? "script-request-body" : "script-response-body";
-  return { line: `${pattern} url ${action} ${scriptUrl}${fragment}`, scriptUrl };
+  return { line: `${pattern} url ${action} ${scriptUrl}` };
 }
 
 // ---------------------------------------------------------------- 分流
@@ -370,14 +353,6 @@ function mirrorPathFor(url) {
   if (m) return `snapshot/github.com/${m[1]}`;
   const u = new URL(url);
   return `snapshot/host/${u.hostname}${u.pathname}`;
-}
-
-/** 把参数桥接注入镜像脚本头部（幂等：已注入过就跳过）。 */
-function injectArgShim(absPath) {
-  if (!existsSync(absPath)) return;
-  const body = readFileSync(absPath, "utf8");
-  if (body.includes("[kelee 转换器注入]")) return;
-  writeFileSync(absPath, ARG_SHIM + body, "utf8");
 }
 
 /** 取资产内容：优先用 vendor 里的离线副本，其次带 Loon UA 抓取。失败返回 null。 */
@@ -518,7 +493,6 @@ for (const p of index.plugins) {
   const argDefaults = parseArgumentDefaults(text);
   const filters = [];
   const rewrites = [];
-  const scriptUrls = new Set(); // 本插件引用的脚本（用于注入参数桥接）
 
   for (const raw of sectionLines(text, "Rule") ?? []) {
     const line = cleanRule(raw);
@@ -539,10 +513,7 @@ for (const p of index.plugins) {
     const line = cleanRule(raw);
     if (!line) continue;
     const r = convertScript(line, p.name, argDefaults);
-    if (r) {
-      rewrites.push(r.line);
-      scriptUrls.add(r.scriptUrl.split("#")[0]);
-    }
+    if (r) rewrites.push(r.line);
   }
 
   // 去重方向 = **kelee 胜出**（用户要求复刻插件效果）。
@@ -595,26 +566,19 @@ for (const p of index.plugins) {
   // 脚本必须镜像进仓库：kelee.one 对 QX 的 UA 返回 403，直链会静默失效。
   // 镜像失败 -> **整条丢弃并记账**（绝不能回退成上游 URL：那等于埋一条必然失效的规则）。
   const localized = [];
-  const shimmedScripts = new Set();
   for (const r of kept) {
     const m = r.match(/^(.*\surl(?:-and-header)?\s+script-\S+\s+)(https?:\/\/[^\s#]+)(#.*)?$/);
     if (!m) {
       localized.push(r);
       continue;
     }
-    const [, prefix, url, fragment] = m;
+    const [, prefix, url] = m;
     const rel = await mirrorAsset(url);
     if (!rel) {
       skip(p.name, "Rewrite", r, `脚本镜像失败、已丢弃（避免留下必然失效的直链）: ${url}`);
       continue;
     }
-    // 带参数片段的脚本要注入桥接，否则脚本读不到 $argument（QX 下为 undefined）。
-    if (fragment && !shimmedScripts.has(rel)) {
-      injectArgShim(join(ROOT, rel));
-      shimmedScripts.add(rel);
-    }
-    // 片段必须保留：它承载插件参数的默认值。
-    localized.push(`${prefix}${repoBase}/${rel}${fragment ?? ""}`);
+    localized.push(`${prefix}${repoBase}/${rel}`);
   }
 
   const hosts = [];

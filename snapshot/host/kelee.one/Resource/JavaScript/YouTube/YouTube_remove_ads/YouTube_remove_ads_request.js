@@ -1,20 +1,4 @@
 /*
- * [kelee 转换器注入] Loon/Surge 的插件参数在 Quantumult X 里没有对应机制，
- * 脚本却读 `$argument`（QX 下为 undefined，于是走默认分支）。
- * 这里把 QX 提供的 `$environment.params`（来自脚本 URL 的 #片段）桥接成 `$argument`。
- * 安全保证：仅在 `$argument` 未定义且 `$environment.params` 存在时生效；
- * QX 若不传 params 则完全不改变脚本原有行为。
- */
-(function () {
-  try {
-    if (typeof $argument === "undefined" && typeof $environment !== "undefined" &&
-        $environment && $environment.params) {
-      // @ts-ignore 由脚本宿主注入
-      $argument = JSON.stringify($environment.params);
-    }
-  } catch (e) {}
-})();
-/*
 脚本作者：Maasea
 引用地址：https://raw.githubusercontent.com/Maasea/sgmodule/master/Script/Youtube/youtube.request.js
 */

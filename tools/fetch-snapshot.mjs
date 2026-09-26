@@ -102,7 +102,7 @@ function collectResources() {
 const resources = collectResources();
 
 /** Downloads one resource, following redirects, and returns {ok, ...}. */
-async function fetchOne(res) {
+async function fetchOne(res, attempt = 0) {
   try {
     const res0 = await fetch(res.url, {
       redirect: "follow",
@@ -120,6 +120,13 @@ async function fetchOne(res) {
     if (!body.trim()) return { ...res, ok: false, status: res0.status, reason: "empty body" };
     return { ...res, ok: true, status: res0.status, body };
   } catch (e) {
+    // 瞬时网络错误必须重试：一次 "socket connection was closed unexpectedly" 就会
+    // failed++ → 计入 criticalFailures → 当周 CI 报错并**跳过整周刷新**
+    // （实测连续多轮都撞到，且每次落在不同 URL 上）。指数退避重试代价极低。
+    if (attempt < 3) {
+      await new Promise((r) => setTimeout(r, 300 * (attempt + 1) * (attempt + 1)));
+      return fetchOne(res, attempt + 1);
+    }
     return { ...res, ok: false, error: e.message };
   }
 }
