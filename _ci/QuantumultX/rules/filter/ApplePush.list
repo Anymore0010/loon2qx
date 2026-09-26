@@ -1,0 +1,24 @@
+# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
+# 合并来源（1 个）:
+#   https://kelee.one/Tool/Loon/Lsr/ApplePushNotificationService.lsr
+# 统一策略: APNs
+# 规则数: 11（已跨来源去重）
+#   各源贡献 Lsr/ApplePushNotificationService.lsr: 11
+# 重新生成: bun tools/vendor-rules.mjs
+
+################################################################
+# 第 1 块来源: kelee ApplePushNotificationService.lsr
+#   https://kelee.one/Tool/Loon/Lsr/ApplePushNotificationService.lsr
+#   本块贡献 11 条（与前面重复的已跳过，先到者优先）
+################################################################
+host-suffix, push.apple.com, APNs
+host, identity.apple.com, APNs
+ip-cidr, 17.249.0.0/16, APNs
+ip-cidr, 17.252.0.0/16, APNs
+ip-cidr, 17.57.144.0/22, APNs
+ip-cidr, 17.188.128.0/18, APNs
+ip-cidr, 17.188.20.0/23, APNs
+ip6-cidr, 2620:149:a44::/48, APNs
+ip6-cidr, 2403:300:a42::/48, APNs
+ip6-cidr, 2403:300:a51::/48, APNs
+ip6-cidr, 2a01:b740:a42::/48, APNs

@@ -1,0 +1,305 @@
+# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
+# 合并来源（4 个）:
+#   https://kelee.one/Tool/Loon/Lsr/AI.lsr
+#   https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list
+# 统一策略: AI
+# 规则数: 271（已跨来源去重）
+#   各源贡献 Lsr/AI.lsr: 238
+#   各源贡献 rule/AI.list: 4
+#   各源贡献 OpenAI/OpenAI.list: 28
+#   各源贡献 Anthropic/Anthropic.list: 1
+# 重新生成: bun tools/vendor-rules.mjs
+
+################################################################
+# 第 1 块来源: kelee AI.lsr
+#   https://kelee.one/Tool/Loon/Lsr/AI.lsr
+#   本块贡献 238 条（与前面重复的已跳过，先到者优先）
+################################################################
+host, chatgpt.livekit.cloud, AI
+host, host.livekit.cloud, AI
+host, openai.com.cdn.cloudflare.net, AI
+host, openaiapi-site.azureedge.net, AI
+host, openaicomproductionae4b.blob.core.windows.net, AI
+host, production-openaicom-storage.azureedge.net, AI
+host, turn.livekit.cloud, AI
+host, openaicom.imgix.net, AI
+host-suffix, chat.com, AI
+host-suffix, chatgpt.com, AI
+host-suffix, crixet.com, AI
+host-suffix, oaistatic.com, AI
+host-suffix, oaiusercontent.com, AI
+host-suffix, openai.com, AI
+host-suffix, sora.com, AI
+host-suffix, chatgpt.site, AI
+host, api.githubcopilot.com, AI
+host, copilot-proxy.githubusercontent.com, AI
+host, copilot.microsoft.com, AI
+host, sydney.bing.com, AI
+host, models.inference.ai.azure.com, AI
+host, ai.google.dev, AI
+host, aida.googleapis.com, AI
+host, aicode.googleapis.com, AI
+host, aistudio.google.com, AI
+host, alkalicore-pa.clients6.google.com, AI
+host, alkalimakersuite-pa.clients6.google.com, AI
+host, bard.google.com, AI
+host, deepmind.com, AI
+host, deepmind.google, AI
+host, geller-pa.googleapis.com, AI
+host, gemini.google, AI
+host, gemini.google.com, AI
+host, generativeai.google, AI
+host, generativelanguage.googleapis.com, AI
+host, makersuite.google.com, AI
+host, proactivebackend-pa.googleapis.com, AI
+host, robinfrontend-pa.googleapis.com, AI
+host, webchannel-alkalimakersuite-pa.clients6.google.com, AI
+host, notebooklm.google, AI
+host, notebooklm.google.com, AI
+host, jules.google, AI
+host, jules.google.com, AI
+host, labs.google, AI
+host, aisandbox-pa.googleapis.com, AI
+host-suffix, antigravity.google, AI
+host-suffix, antigravity-unleash.goog, AI
+host, daily-cloudcode-pa.sandbox.googleapis.com, AI
+host, daily-cloudcode-pa.googleapis.com, AI
+host-suffix, anthropic.com, AI
+host-suffix, claude.ai, AI
+host-suffix, claudeusercontent.com, AI
+ip-cidr, 160.79.104.0/23, AI
+ip6-cidr, 2607:6bc0::/48, AI
+host-suffix, grazie.ai, AI
+host-suffix, grazie.aws.intellij.net, AI
+host-suffix, jetbrains.ai, AI
+host, chat.mistral.ai, AI
+host, console.mistral.ai, AI
+host-suffix, mistral.ai, AI
+host, api.x.ai, AI
+host-suffix, x.ai, AI
+host-suffix, grok.com, AI
+host, trae-api-sg.mchost.guru, AI
+host-suffix, trae.ai, AI
+host-suffix, tokenflux.ai, AI
+host-suffix, groq.com, AI
+host-suffix, together.ai, AI
+host, api.hyperbolic.xyz, AI
+host-suffix, hyperbolic.ai, AI
+host-suffix, jina.ai, AI
+host-suffix, gpustack.ai, AI
+host-suffix, voyageai.com, AI
+host, aiplatform.googleapis.com, AI
+host-suffix, cerebras.ai, AI
+host, ai-gateway.vercel.sh, AI
+host-suffix, kiro.dev, AI
+host-suffix, commandcode.ai, AI
+host-suffix, typesafe.ai, AI
+host-suffix, devin.ai, AI
+host, cdn.delta.dev, AI
+host, delta.zed.dev, AI
+host, api.zed.dev, AI
+host, zed-us-east-1-zed-production.c15t.dev, AI
+host, cloud.zed.dev, AI
+host, api.302.ai, AI
+host, routellm.abacus.ai, AI
+host, api.abliteration.ai, AI
+host, api.above.dev, AI
+host, agentrouter.org, AI
+host-suffix, agnes-ai.com, AI
+host, api.aiand.com, AI
+host, api.ai-router.dev, AI
+host, api.ai21.com, AI
+host, microquickjs.com, AI
+host, api.aixy-gateway.com, AI
+host, aki.io, AI
+host, dashscope-intl.aliyuncs.com, AI
+host, coding-intl.dashscope.aliyuncs.com, AI
+host, token-plan.ap-southeast-1.maas.aliyuncs.com, AI
+host, api.ambient.xyz, AI
+host, developer.amd.com.cn, AI
+host, api.anyapi.ai, AI
+host, api.arcee.ai, AI
+host, api.auriko.ai, AI
+host, inference.baseten.co, AI
+host, api.berget.ai, AI
+host, openai.blueclaw.network, AI
+host, openai.bothub.ru, AI
+host, hyper.charm.land, AI
+host, llm.chutes.ai, AI
+host, api.clarifai.com, AI
+host, api.claudin.io, AI
+host-suffix, cline.bot, AI
+host, api-sherlock.cloudferro.com, AI
+host, inference.coralbricks.ai, AI
+host, api.inference.wandb.ai, AI
+host, api.cortecs.ai, AI
+host, crof.ai, AI
+host, api.crossmodel.ai, AI
+host, api.inference.crusoecloud.com, AI
+host, daoxe.com, AI
+host, api.llmgateway.io, AI
+host, inference.do-ai.run, AI
+host, api.dinference.com, AI
+host, echo.tracerml.ai, AI
+host, api.edenai.run, AI
+host, api.empiriolabs.ai, AI
+host, models.think.evroc.com, AI
+host, go.fastrouter.ai, AI
+host-suffix, fireworks.ai, AI
+host, cc.freemodel.dev, AI
+host, api.friendli.ai, AI
+host, app.frogbot.ai, AI
+host, api.gmi-serving.com, AI
+host, api.greenpt.ai, AI
+host, ai-gateway.helicone.ai, AI
+host, inference.hetzner.com, AI
+host, api.hpc-ai.com, AI
+host, router.huggingface.co, AI
+host, api.impossibl.com, AI
+host, api.inceptionlabs.ai, AI
+host, api.inceptron.io, AI
+host, api.inco.ai, AI
+host, infer.flow7.org, AI
+host, inference.net, AI
+host, model.inferx.net, AI
+host, api.intelligence.io.solutions, AI
+host, api.iteracompute.com, AI
+host, api.jalapeno-cloud.ai, AI
+host, kenari.id, AI
+host, api.kilo.ai, AI
+host, api-gw.klok.ipaas.se, AI
+host, api.koscompute.com, AI
+host, api.getlilac.com, AI
+host, api.llama.com, AI
+host, api.llmtech.eu, AI
+host, llmtr.com, AI
+host, api.longcat.chat, AI
+host, api.lucidquery.com, AI
+host, api.meganova.ai, AI
+host, api.melious.ai, AI
+host, api-gateway.merge.dev, AI
+host, imagine.meta.com, AI
+host-suffix, meta.ai, AI
+host-suffix, minimax.io, AI
+host, models.mixlayer.ai, AI
+host, inference.us-west.modal.direct, AI
+host, api.modeloracle.com, AI
+host, modelishub.com, AI
+host, api.moonshot.ai, AI
+host, api.kimi.ai, AI
+host, api.morphllm.com, AI
+host, api.nan.builders, AI
+host, nano-gpt.com, AI
+host, cloud-api.near.ai, AI
+host, api.tokenfactory.nebius.com, AI
+host, router.neosmith.ai, AI
+host, api.neuralwatt.com, AI
+host, api.nova.amazon.com, AI
+host, api.novita.ai, AI
+host, integrate.api.nvidia.com, AI
+host, inference.generativeai.us-chicago-1.oci.oraclecloud.com, AI
+host, api.ofox.ai, AI
+host-suffix, ollama.com, AI
+host-suffix, opencode.ai, AI
+host, api.openreason.app, AI
+host-suffix, openrouter.ai, AI
+host, api.opper.ai, AI
+host, api.orcarouter.ai, AI
+host, oai.endpoints.kepler.ai.cloud.ovh.net, AI
+host, api.pendra.ai, AI
+host, pplx-res.cloudinary.com, AI
+host-suffix, pplx.ai, AI
+host-suffix, perplexity.ai, AI
+host-suffix, perplexity.com, AI
+host, api.pioneer.ai, AI
+host-suffix, poe.com, AI
+host, inference.poolside.ai, AI
+host, api.regolo.ai, AI
+host, router.requesty.ai, AI
+host, api.routing.run, AI
+host, api.runinfra.ai, AI
+host, api.sakana.ai, AI
+host, api.sarvam.ai, AI
+host, api.scaleway.ai, AI
+host, api.scx.ai, AI
+host, api.siliconflow.com, AI
+host, api.openai-compat.model-serving.eu01.onstackit.cloud, AI
+host, api.stdcmpt.com, AI
+host, api.stepfun.ai, AI
+host, api.subconscious.dev, AI
+host, llm.submodel.ai, AI
+host, api.synthetic.new, AI
+host, api.temprhq.io, AI
+host, api.tensorx.ai, AI
+host, api.thegrid.ai, AI
+host, tinker.thinkingmachines.dev, AI
+host, inference.tinfoil.sh, AI
+host, api.tokengo.com, AI
+host, api.tokenrouter.com, AI
+host, api.trustedrouter.com, AI
+host, api.code.umans.ai, AI
+host, api.unorouter.com, AI
+host, api.upstage.ai, AI
+host, vancine.com, AI
+host, api.lab.vispark.in, AI
+host, api.vivgrid.com, AI
+host, api.vultrinference.com, AI
+host, pass.wafer.ai, AI
+host, api.wallabytoken.com, AI
+host, token-plan-sgp.xiaomimimo.com, AI
+host, token-plan-ams.xiaomimimo.com, AI
+host, xpersona.co, AI
+host-suffix, z.ai, AI
+host, api.zeldoc.ai, AI
+host, ai.zenifra.com, AI
+host, zenmux.ai, AI
+################################################################
+# 第 2 块来源: raw.githubusercontent.com AI.list
+#   https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list
+#   本块贡献 4 条（与前面重复的已跳过，先到者优先）
+################################################################
+host-suffix, turn.livekit.cloud, AI
+host-suffix, githubcopilot.com, AI
+host-suffix, claude.com, AI
+host-suffix, clau.de, AI
+################################################################
+# 第 3 块来源: raw.githubusercontent.com OpenAI.list
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
+#   本块贡献 28 条（与前面重复的已跳过，先到者优先）
+################################################################
+host, browser-intake-datadoghq.com, AI
+host, chat.openai.com.cdn.cloudflare.net, AI
+host, openai-api.arkoselabs.com, AI
+host, openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net, AI
+host, static.cloudflareinsights.com, AI
+host-suffix, ai.com, AI
+host-suffix, algolia.net, AI
+host-suffix, api.statsig.com, AI
+host-suffix, auth0.com, AI
+host-suffix, chatgpt.livekit.cloud, AI
+host-suffix, client-api.arkoselabs.com, AI
+host-suffix, events.statsigapi.net, AI
+host-suffix, featuregates.org, AI
+host-suffix, host.livekit.cloud, AI
+host-suffix, identrust.com, AI
+host-suffix, intercom.io, AI
+host-suffix, intercomcdn.com, AI
+host-suffix, launchdarkly.com, AI
+host-suffix, observeit.net, AI
+host-suffix, openaiapi-site.azureedge.net, AI
+host-suffix, openaicom.imgix.net, AI
+host-suffix, segment.io, AI
+host-suffix, sentry.io, AI
+host-suffix, stripe.com, AI
+host-keyword, openai, AI
+ip-cidr, 24.199.123.28/32, AI
+ip-cidr, 64.23.132.171/32, AI
+ip-asn, 20473, AI
+################################################################
+# 第 4 块来源: raw.githubusercontent.com Anthropic.list
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list
+#   本块贡献 1 条（与前面重复的已跳过，先到者优先）
+################################################################
+host, servd-anthropic-website.b-cdn.net, AI

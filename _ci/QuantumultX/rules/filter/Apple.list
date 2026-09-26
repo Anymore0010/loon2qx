@@ -1,0 +1,25 @@
+# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
+# 规则数: 16
+# 重新生成: bun tools/vendor-rules.mjs
+
+################################################################
+# 第 1 块来源: 内联规则（sources.json 的 raw_rewrite）
+#   
+#   本块贡献 16 条（与前面重复的已跳过，先到者优先）
+################################################################
+# Apple —— 仅 Apple Account + App Store（内容严格对应 Loon 端的两个列表）。
+# 说明：原先并入的是 bm7 的大 Apple 列表（1878 条），用户核对后认为大量条目无必要，
+#       故改为只保留这两个列表。Apple AI 与 APNs 保持独立条目。
+#
+# Apple Account（4 条）
+host, account.apple.com, Apple
+host, appleid.cdn-apple.com, Apple
+host, idmsa.apple.com, Apple
+host, gsa.apple.com, Apple
+#
+# App Store（5 条）
+host-suffix, itunes.apple.com, Apple
+host-suffix, apps.apple.com, Apple
+host-suffix, mzstatic.com, Apple
+host, itunes.apple.com, Apple
+host, ppq.apple.com, Apple

@@ -8,7 +8,7 @@
 |---|---|
 | `QuantumultX/default.conf` | **日常导入用的配置** |
 | `QuantumultX/rules/` | 预转换的 QX 原生规则（不依赖运行时解析器） |
-| `snapshot/` | 全部上游资源的冻结副本 + 离线配置 |
+| `snapshot/` | 全部上游资源的冻结副本（配置里的每个 URL 都指向这里） |
 | `legacy/loon/` | 原始 Loon 配置（转换来源，保留备查） |
 | `legacy/quantumultx/` | 本机在用的 QX 配置（对比基准） |
 | `MAPPING.md` | Loon 插件 → Quantumult X 资源逐条映射 |
@@ -32,10 +32,10 @@ Loon 和 Quantumult X 的差异不在语法，而在**功能承载方式**：
 原配置里有 **40 个 kelee.one 的 `.lpx` 插件**。这些插件是 Loon 专用的，无法在 Quantumult X 里直接运行，所以这部分**不是简单翻译，而是逐插件转换**：
 
 - `vendor/loon-plugins/` 保存了这 40 个插件的**原样副本**（唯一事实来源）。
-- `tools/convert-plugins.mjs` 把每个插件的 `[Rule]` / `[Rewrite]` / `[Script]` / `[MitM]` 转换成 Quantumult X 的 `[filter_remote]` / `[rewrite_remote]` 资源，产物在 `QuantumultX/rules/kelee/`。
+- `tools/convert-plugins.mjs` 把每个插件的 `[Rule]` / `[Rewrite]` / `[Script]` / `[MitM]` 转换成 Quantumult X 的 `[filter_remote]` / `[rewrite_remote]` 资源，产物按用途分目录：重写 `QuantumultX/rules/rewrite/kelee/*.snippet`、分流 `QuantumultX/rules/filter/kelee/*.list`。
 - **脚本一律镜像进本仓库**（`snapshot/host/kelee.one/...`）。原因：kelee.one 只对 Loon 的 User-Agent 放行，Quantumult X 抓脚本时用的是它自己的 UA，会拿到 **403**，脚本静默不执行、功能表现为「没生效」——必须换成仓库内地址。
 
-转换的实测结果（`QuantumultX/rules/kelee/_conversion-report.json` 有逐条明细）：
+转换的实测结果（`QuantumultX/rules/rewrite/kelee/_conversion-report.json` 有逐条明细）：
 
 | 项 | 数量 |
 | --- | --- |
@@ -67,27 +67,20 @@ QX 确实没有对应语法、**必须显式跳过**的（转换器逐条记账�
 
 ### kelee 插件是**权威上游**（其它重写资源只补空缺）
 
-按用户要求「复刻插件效果」，优先级是**反转**的：kelee 条目排在 `[rewrite_remote]` / `[filter_remote]` 最前，
-其余资源（fmz 聚合、AnymoreEnhance 等）只负责 kelee 没覆盖的部分。
+按用户要求「复刻插件效果」，优先级是：kelee 条目排在合并组的**第一个来源**，
+其余上游（fmz 聚合、blackmatrix7 等）只补 kelee 没覆盖的部分。
 
-两边命中同一响应体时，**kelee 胜出**：被顶掉的那条写成排除清单
-（`QuantumultX/rules/kelee/_exclusions.json`），由 `fetch-snapshot.mjs` 从对应资源里真的排掉。
-例：爱奇艺 `views_plt/3.0/player_tabs_v2` —— fmz 用通用脚本 `cnftp.js`，
-kelee 用针对性的 `del(.kv_pair.activity_tab)`；反转后跑的是插件那套。
+**跨源去重由 `tools/vendor-rules.mjs` 的合并步骤负责**，在合并时按
+`(正则, 动作)` 精确比对 + 语义判据（`tools/lib/rule-target.mjs` 的 `sameTarget`）
+跳过重复 —— 因为 kelee 排第一，「先到者胜」就等于 kelee 胜出。
+每个来源前都有**分块注释**标明出处与贡献条数，重复的在后面块里已被跳过。
 
-两点实现细节（都踩过）：
+只在**真有风险**时才会因去重丢掉规则：两边都改写响应体（`script-*` / `jsonjq-*`）
+才会让同一个 body 被两套脚本处理；`reject` 族重复是幂等的，保留即可。
 
-- **只在真的有风险时排除**：两边都会改写响应体（`script-*` / `jsonjq-*`）才排，
-  因为同一个 body 被两套逻辑依次处理结果不可预期。`reject` 族重复是**幂等**的
-  （同策略同结果），保留即可、不做排除。
-- **[mitm] 不写 hostname**：QX 会**自动**把 `rewrite_remote` 资源自带的 hostname 并入
-  MITM（在 QX 界面的 MITM 页面可直接看到）。再写一份 1300+ 主机名的清单纯属冗余，
-  只会撑大配置、塞满 MITM 页面。代价是「每个重写资源必须自带 hostname」变成硬要求 ——
-  由 validate 的 `checkRewriteHostnames` 强制（递归覆盖 `kelee/*.conf` 与 `.snippet`）。
-- **`_raw` 原始副本**：排除是就地改写快照的，而转换器需要读「其他源的完整规则」来判重叠。
-  若它读被改写的快照，下轮就找不到重叠 → 清单自我清空 → 不再排除 → 上游原文回灌 → 每周振荡，
-  且每个断言都会通过。所以 `fetch-snapshot` 另存一份未排除的 `snapshot/_raw/` 给转换器读，
-  排除只作用于对外那一份。实测连跑两轮 `superseded` 稳定在 64、被排除的行不回流。
+> 早期版本用过 `_exclusions.json` + 就地改写快照的方案，已移除：
+> 合并后那些资源不再是 `rewrite_remote` 条目，清单永远落不了地，
+> 且会因「读被改写的快照 -> 找不到重叠 -> 清单自我清空」而形成每周振荡。
 
 ### 保真度提示：这三类行为与源插件不同（已在 `_conversion-report.json` 的 `notes` 里逐条列出）
 
@@ -153,23 +146,24 @@ bun tools/vendor-rules.mjs     # 重转 Loon 规则为 QX 原生格式
 bun tools/build.mjs            # 生成 QuantumultX/default.conf
 bun tools/fetch-plugins.mjs    # 抓取 40 个 kelee 插件的原样副本
 bun tools/convert-plugins.mjs  # 把插件转换成 QX 资源（含脚本镜像）
-bun tools/fetch-snapshot.mjs   # 拉取快照 + 生成离线配置
+bun tools/fetch-snapshot.mjs   # 拉取/刷新快照（配置指向的就是它）
 bun tools/validate.mjs         # 校验
 ```
 
 ## 目录结构
 
 ```
-QuantumultX/default.conf          在线配置（从 sources.json 生成，勿手改）
+QuantumultX/default.conf          唯一配置（从 sources.json 生成，勿手改）
 snapshot/index.json               快照清单：每个资源的来源、状态
 tools/sources.json                唯一事实来源：所有外部资源与本地规则
-tools/build.mjs                   生成在线配置
-tools/fetch-snapshot.mjs          拉取快照 + 生成离线配置
+tools/build.mjs                   生成 default.conf
+tools/fetch-snapshot.mjs          拉取/刷新快照
 tools/validate.mjs                校验生成的配置
 tools/fetch-plugins.mjs           抓取 kelee 插件（需 Loon 的 User-Agent）
 tools/convert-plugins.mjs         插件 -> QX 重写/分流资源 + 脚本镜像
 vendor/loon-plugins/              40 个 .lpx 的原样副本 + index.json（sha256）
-QuantumultX/rules/kelee/          转换产物（.conf 重写 / .list 分流）
+QuantumultX/rules/rewrite/**      重写资源（.snippet）
+QuantumultX/rules/filter/**       分流资源（.list）
 legacy/loon/                       原始 Loon 配置（转换来源）
 legacy/quantumultx/                你本机在用的 QX 配置（对比基准）
 MAPPING.md                        插件 → Quantumult X 资源逐条映射
@@ -180,7 +174,7 @@ MAPPING.md                        插件 → Quantumult X 资源逐条映射
 ```bash
 bun tools/build.mjs          # 重新生成 QuantumultX/default.conf
 bun tools/validate.mjs       # 校验
-bun tools/fetch-snapshot.mjs # 刷新快照 + 离线配置
+bun tools/fetch-snapshot.mjs # 刷新快照
 ```
 
 ## 快照机制
@@ -190,21 +184,23 @@ bun tools/fetch-snapshot.mjs # 刷新快照 + 离线配置
 因此 `snapshot/` 保存了一份冻结副本，配置里的所有资源都指向它：
 
 - GitHub Actions **每周一 03:17 UTC 自动刷新**（已启用，实测可运行）；
-- 上游挂掉时，改用离线配置即可继续工作；
+- 上游挂掉时，配置里的资源仍指向快照副本，**照常工作**（这就是冻结副本的意义）；
 - 手动刷新：`bun tools/fetch-snapshot.mjs`。
 
-在线配置用上游最新资源（更新快），离线配置用仓库内快照（不怕上游失效）。两者都由同一个 `sources.json` 生成，不会互相漂移。
+**只有一份配置**（`default.conf`），它指向的全部是本仓库快照 —— 上游失效不影响使用，代价是最长 7 天的更新延迟（每周任务刷新）。
 
 ## 规则已预转换为 Quantumult X 原生格式
 
 原本有 3 份规则依赖 QX 的**运行时资源解析器**（`opt-parser=true`，即 Loon 格式文件在手机上现转）。
 现已改为**在本仓库内预先转换**，存于 `QuantumultX/rules/`：
 
-| 上游（Loon 格式） | 本仓库（QX 原生） | 规则数 |
+| 产物 | 位置 | 说明 |
 |---|---|---|
-| ddgksf2013 `AppleIntelligence.list` | `rules/AppleIntelligence.list` | 11 |
-| fmz200 `Loon/rule/AI.list` | `rules/AI.list` | 64 |
-| fmz200 `Loon/rule/GeoIP_CN.list` | `rules/GeoIP_CN.list` | 1 |
+| 单源 vendor | `rules/filter/*.list` | 一个上游一份（如 `AWAvenue.list`、`AppleIntelligence.list`） |
+| 合并组 | `rules/filter/*.list` | 多个上游合成一份（AI / Meta / Google / GitHub / X / Telegram / Spotify / Netflix / Disney / ApplePush / Apple / AdsBlockMAX） |
+| kelee 插件转换 | `rules/filter/kelee/*.list`（分流）、`rules/rewrite/kelee/*.snippet`（重写） | 由 `tools/convert-plugins.mjs` 生成 |
+
+每个生成文件都有**分块注释**标明每个来源与贡献条数（重复的已在后面块里跳过）。
 
 **为什么预转换，而不是让手机现转：**
 
@@ -233,33 +229,36 @@ bun tools/fetch-snapshot.mjs # 刷新快照 + 离线配置
 
 ### 关于去重
 
-fmz 的 `rewrite.snippet` 是聚合资源（覆盖约 730 款 App）。实测它**包含原先按 App 拆分的 20 个片段中的 19 个**（同一 URL、同一动作）。
-同时保留两者会让**同一个响应体被两个脚本重复处理**，因此改为只引用聚合资源，仅保留聚合未覆盖的 4 项：
+两个层次，都在**生成期**完成，不依赖设备：
 
-- 微博去广告
-- 高德地图去广告
-- 哔哩哔哩去广告
-- 京东/淘宝比价
+1. **合并组内部**（`tools/vendor-rules.mjs`）：按 `(类型, 值)`（分流）或
+   `(URL正则, 动作)`（重写）去重；会改写响应体的动作再加一层**语义**判据
+   （`sameTarget`），因为上游常把同一接口写成不同正则（`^https:\/\/x` vs `^https?:\/\/x`）。
+   来源顺序即优先级，**kelee 排第一 = kelee 胜出**。
+2. **与独立条目之间**：合并时会先收集所有非合并条目的语义签名（主要是逐个 App 的
+   kelee 产物），重叠的让给独立条目（实测让给 50 条）。
 
-`blackmatrix7` 的两份重写（Advertising / BlockHTTPDNS）是纯 `reject` 规则、不含脚本，重复不会造成二次处理，故保留。
+`reject` 族重复是**幂等**的（同策略同结果），不视为问题；只有「两边都改写响应体」才会
+让同一个 body 被两套脚本处理，属于必须消除的形态。
 
 ## 分流规则体积说明
 
-`[filter_remote]` 同时引用了两份广告黑名单，实测体量：
+`[filter_remote]` 里最大的条目是 **`AdsBlockMAX(分流)`**（合并产物，实测体量）：
 
-| 资源 | 域名数 | 体积 |
-|---|---|---|
-| blackmatrix7 `Advertising/Advertising.list` | 285,592 | **12.2 MB** |
-| fmz200 `filter/filter.list` | 2,624 | 123 KB |
+| 组成 | 条数 |
+|---|---|
+| kelee `BlockAdvertisers`（排第一，含 direct 白名单） | 325 |
+| fmz200 `filter/filter.list` | 2 594 |
+| blackmatrix7 `Advertising.list` | 284 489 |
+| AWAvenue | 787 |
+| **合计（已去重）** | **288 195** |
 
-两份重合 1,811 条（fmz 的 69% 被 bm7 覆盖），fmz 另有 **813 条独有**域名。
-QX 启动时要把它们全部载入内存匹配，12 MB 那份在手机上是可感知的开销。
+体积约 11.5 MB。QX 启动时要全部载入内存匹配，12 MB 那份在手机上是可感知的开销。
+若想缩小：把 `blackmatrix7 Advertising.list` 从 `filter-ads-max` 的 `merges` 里去掉，
+或换成它的 `AdvertisingLite` 版本，再跑 `bun tools/vendor-rules.mjs`。
 
-**默认两者都保留**（覆盖优先）。若觉得卡顿，二选一：
-
-- 想要轻量：把 `tools/sources.json` 里 `filter-advertising` 的 url 换成
-  `.../AdvertisingLite/AdvertisingLite.list`（1.4 MB），再跑 `bun tools/build.mjs`；
-- 或直接删除 `filter-advertising` 条目（省 12 MB，但会丢掉那 813 条以外的大量拦截）。
+> 合并前 bm7 那份只在 `snapshot/` 里；合并后 `rules/filter/AdsBlockMAX.list` 是独立副本，
+> 仓库里会有两份近似内容（各约 12 MB）。
 
 ## 相对原配置的取舍
 
@@ -274,14 +273,15 @@ QX 启动时要把它们全部载入内存匹配，12 MB 那份在手机上是�
 **未迁移**
 
 - **订阅链接与证书**：敏感信息，需手动添加（这也是仓库可以公开的原因）
-- **部分小众 App 插件**：小黑盒、风鸟、LoonGallery、快捷搜索等找不到等价的 Quantumult X 资源。详见 `MAPPING.md`
+- **用户主动去掉的插件**：LoonGallery（插件仓库）、QuickSearch（快捷搜索）；kelee 版 WeatherKit 也去掉了（保留社区版 `iRingo WeatherKit`）。转换器里有 `SKIP_PLUGINS` 跳过清单，避免它们被每轮重新生成。
 - **`[Host]` 段**：原配置为空
 
 **行为差异（需知悉）**
 
 - Loon 用 `AND`/`OR` 逻辑组合的分流规则，Quantumult X 远程规则不支持等价写法，极少数依赖组合条件的分流会失效。
 - 各家去广告库实现不同，效果不会与 Loon 逐 App 完全一致，建议按 App 实测。
-- 离线快照与在线配置由同一份 `sources.json` 生成，两者内容一致，仅资源指向不同。
+- **只有一份配置**：`default.conf` 的全部资源都指向本仓库快照（`prefer_local=true`），没有第二份「离线配置」。上游失效不影响使用，代价是最长 7 天更新延迟。
+- **插件参数未复刻**：Loon 的 `argument=` / `[Argument]` 在 QX 没有对应机制，脚本走自身默认分支（逐条记账在 `_conversion-report.json`）。
 
 ## 许可证
 

@@ -1,0 +1,17 @@
+# Quantumult X and the mirrored snapshot files are consumed verbatim by the app
+# and by JavaScript engines. Never let Git rewrite their line endings.
+* text=auto eol=lf
+
+*.lcf   text eol=lf
+*.conf  text eol=lf
+*.list  text eol=lf
+*.snippet text eol=lf
+*.js    text eol=lf
+*.mjs   text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+*.yml   text eol=lf
+
+# Binary-ish artefacts
+*.png binary
+*.p12 binary

@@ -1,0 +1,8 @@
+# 12306去广告  —— 由 vendor/loon-plugins/12306_remove_ads.lpx 自动转换（tools/convert-plugins.mjs）
+# 源插件: https://kelee.one/Tool/Loon/Lpx/12306_remove_ads.lpx
+# 请勿手工编辑：改源插件后重新运行 bun tools/fetch-plugins.mjs && bun tools/convert-plugins.mjs
+
+^https:\/\/ad\.12306\.cn\/ad\/ser\/getAdList$ url jsonjq-response-body 'del(.materialsList, .advertParam)'
+^https:\/\/mobile\.12306\.cn\/otsmobile\/app\/mgs\/mgw\.htm$ url script-request-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/host/kelee.one/Resource/JavaScript/12306/12306_remove_ads.js
+
+hostname = ad.12306.cn, mobile.12306.cn

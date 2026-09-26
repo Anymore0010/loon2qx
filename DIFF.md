@@ -133,7 +133,7 @@ DoH（公网），**你在外网 DNS 下就打不开路由器后台**。已从�
 |---|---|---|
 | 广告拦截合集 | fmz `filter.list` | ✅ 同 |
 | 分流修正 | fmz `filterFix.list` | ✅ 同 |
-| AI 分流合集 | fmz `Loon/rule/AI.list`（`opt-parser=true`） | ✅ 同源，但**已预转换**为 QX 原生（见第五节） |
+| AI 分流合集 | fmz `Loon/rule/AI.list`（`opt-parser=true`） | ✅ 同源 + **kelee AI.lsr**（排第一），已预转换为 `filter/AI.list` |
 | TikTok | bm7 TikTok | ❌ **未迁移**（用户确认不需要） |
 | Telegram | bm7 Telegram | ✅ 同 |
 | Google | bm7 Google | ✅ 同 |
@@ -144,61 +144,19 @@ DoH（公网），**你在外网 DNS 下就打不开路由器后台**。已从�
 
 ### 本配置新增
 
-| 新增 | 为什么加 |
-|---|---|
-| `LAN` | Quantumult X 内置，等同 Loon 的 `LAN_SPLITTER.lsr` |
-| `CN REGION` | Quantumult X 内置，等同 Loon 的 `REGION_SPLITTER.lsr`；Loon 原配置明确要求「勿改排序」，故固定在最后 |
-| `Apple AI` | Loon 侧 `AppleIntelligence.list` |
-| `AI OpenAI` / `AI Anthropic` | Loon 侧 `AI.lsr` 的拆分；bm7 原生 QX 规则 |
-| `Apple Push Notification Service` / `Apple Account` / `App Store` | Loon 侧对应 `.lsr` |
-| `GitHub` / `Netflix` / `YouTube` / `Disney` / `Twitter` / `Facebook` / `Instagram` / `OneDrive` | Loon 侧对应 `.lsr`（你的 QX 没有这些） |
-| `Advertising` | Loon 侧 `BlockAdvertisers.lpx` 的分流部分 |
+**kelee 插件是逐条转换过来的**（不再用"找替代品"的方式），所以 Loon 插件里的能力
+基本都被保留：
 
-### 你的 QX 有、本配置**移除**
-
-| 移除 | 原因 |
-|---|---|
-| `抖音IP` / `小红书IP` / `快手IP` | **你明确说用不到**，要求删掉 |
-| `苹果服务@奶思`（`AppleAll.list`） | 由 `Apple` + `AppleID` + `AppStore` 三条更细的规则覆盖 |
-| `Twitter@奶思` | 本配置用 bm7 的 Twitter 规则（同一分流目的） |
-
-**分流目标（force-policy）差异**需注意：你的 QX 里 `Github@bm7` 走 `proxy`、
-`Spotify@bm7` **没有**设 force-policy（即跟随 final）；本配置里它们走具体的地区组
-（现改为直接指向地区节点组 / 服务组）。
-
-> ⚠️ 注意 `final` 本身不同（见第零节）：你的 `final` 是 `兜底策略`（走代理），
-> 本配置是 `direct`。所以「跟随 final」这两者**并不等价**——同样的 Spotify 规则，
-> 在你的配置里走代理，在本配置里直连。本配置显式指定了地区组，正是为了消除这种不确定性。
-
----
-
-## 四、重写规则（rewrite_remote）
-
-| | 你的 QX | 本配置 |
+| 来源 | 产物 | 说明 |
 |---|---|---|
-| 条目数 | 7 | 11 |
+| kelee `[Plugin]`（38 个启用） | `rules/rewrite/kelee/*.snippet`（30）+ `rules/filter/kelee/*.list`（30） | `tools/convert-plugins.mjs` 逐条转换 |
+| kelee `BlockAdvertisers` | 合并进 `AdsBlockMAX`（重写 + 分流）作**第一个来源** | 含 direct 白名单（短信/推送验证类域名） |
+| kelee `Block_HTTPDNS` | 合并进 `HTTPDNS拦截器` | 与 bm7 版合并 |
+| kelee `Remove_ads_by_keli` | 合并进 `Anymore自用广告过滤` | 与手写规则合并 |
+| kelee `[Remote Rule]` 的 8 个 `.lsr` | 各分组的**第一个来源** | AI / Google / GitHub / X / Telegram / Spotify / Netflix / Disney |
 
-### 共有
-
-| 用途 | 你的 QX | 本配置 |
-|---|---|---|
-| 微博去广告 | fmz `weibo.snippet` | ✅ 同源 |
-| 广告拦截合集（730 款 App） | fmz `rewrite.snippet` | ✅ 同源 |
-| Spotify | app2smile `spotify.conf` | ✅ 同源，且**实测逐条脚本 URL 完全一致** |
-| BoxJs | chavyleung | ✅ 同源 |
-| Sub-Store | sub-store-org | ✅ 同源 |
-| Script-Hub | Script-Hub-Org | ✅ 同源 |
-
-### 本配置新增
-
-| 新增 | 替代 Loon 的什么 |
-|---|---|
-| bm7 `Advertising.conf` | `BlockAdvertisers.lpx`（纯 reject，无脚本） |
-| bm7 `BlockHTTPDNS.conf` | `Block_HTTPDNS.lpx` |
-| ddgksf `AmapAds.conf` | `Amap_remove_ads.lpx` |
-| ddgksf `Bilibili_CC.conf` | `bilibili.lpx` |
-| Orz-3 `JD_TB_price.conf` | `JD_Price.lpx` |
-| fmz `cleanup.snippet` | 小程序广告清理 |
+用户主动去掉的：`LoonGallery`（插件仓库）、`QuickSearch`（快捷搜索）、kelee 版 WeatherKit、
+`TikTok` / `OneDrive`（`[Remote Rule]` 里原有）。
 
 ### 你的 QX 有、本配置移除
 
@@ -219,7 +177,7 @@ DoH（公网），**你在外网 DNS 下就打不开路由器后台**。已从�
 
 | 机制 | 作用 |
 |---|---|
-| **规则预转换** | 2 份 Loon 格式规则（AI/AppleIntelligence）已转成 QX 原生存入 `QuantumultX/rules/`，不再依赖运行时解析器。**你 QX 里那 3 条 `opt-parser=true` 正是这个风险**：解析器转换不了的规则会在手机上被静默丢弃，实测 `AI.list` 会丢 2 条 `AND` 规则 |
+| **规则预转换** | 所有 Loon 格式规则都已转成 QX 原生存入 `QuantumultX/rules/`（含 40 个 kelee 插件的转换产物与各合并组），不再依赖运行时解析器。**你 QX 里那 3 条 `opt-parser=true` 正是这个风险**：解析器转换不了的规则会在手机上被静默丢弃，实测 `AI.list` 会丢 2 条 `AND` 规则 |
 | **全量快照** | 51 个上游资源已冻结在 `snapshot/`，离线配置**零外部依赖**，上游仓库被删也能用 |
 | **每周自动刷新** | GitHub Actions 每周一 03:17 UTC 重转+重拉+校验，有变化才提交 |
 | **配置校验** | 段头、策略引用、重复策略名、自托管 URL 是否存在、预转换规则合法性，均有断言（都做过负向测试） |

@@ -1,0 +1,10 @@
+# 淘宝去广告  —— 由 vendor/loon-plugins/Taobao_remove_ads.lpx 自动转换（tools/convert-plugins.mjs）
+# 源插件: https://kelee.one/Tool/Loon/Lpx/Taobao_remove_ads.lpx
+# 请勿手工编辑：改源插件后重新运行 bun tools/fetch-plugins.mjs && bun tools/convert-plugins.mjs
+
+host, adashx.m.taobao.com, reject
+host, ossgw.alicdn.com, reject
+host, ems.youku.com, reject
+host, hudong.alicdn.com, reject
+host, h-adashx.ut.taobao.com, reject
+host, ut.taobao.com, reject

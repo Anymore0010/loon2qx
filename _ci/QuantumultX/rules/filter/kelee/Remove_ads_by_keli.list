@@ -1,0 +1,25 @@
+# 可莉广告过滤器  —— 由 vendor/loon-plugins/Remove_ads_by_keli.lpx 自动转换（tools/convert-plugins.mjs）
+# 源插件: https://kelee.one/Tool/Loon/Lpx/Remove_ads_by_keli.lpx
+# 请勿手工编辑：改源插件后重新运行 bun tools/fetch-plugins.mjs && bun tools/convert-plugins.mjs
+
+host, acdn.adnxs.com, reject
+host, mediation.adnxs.com, reject
+host, sin3-ib.adnxs.com, reject
+host, sdkconfig.ad.xiaomi.com, reject
+host, data.mistat.xiaomi.com, reject
+host, tracking.intl.miui.com, reject
+host, sdkconfig.ad.xiaomi.com, reject
+host-suffix, doubleclick-cn.net, reject
+host-suffix, doubleclick.net, reject
+host, business.msstatic.com, reject
+host-suffix, v1d.szbdyd.com, reject
+host-suffix, m1.ad.10010.com, reject
+host, ad.21cn.com, reject
+host, ad.k.21cn.com, reject
+host, admarket.21cn.com, reject
+host, adshows.21cn.com, reject
+ip-cidr, 122.229.8.47/32, reject
+ip-cidr, 122.229.29.89/32, reject
+host, mall-dsp2.qinlinkeji.com, reject
+host, mallapi2.qinlinkeji.com, reject
+host, open-pixon.ads-pixiv.net, reject

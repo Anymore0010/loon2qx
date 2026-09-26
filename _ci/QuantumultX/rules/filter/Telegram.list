@@ -1,0 +1,55 @@
+# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
+# 合并来源（2 个）:
+#   https://rule.kelee.one/Loon/Telegram.lsr
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list
+# 统一策略: Telegram
+# 规则数: 40（已跨来源去重）
+#   各源贡献 Loon/Telegram.lsr: 40
+#   各源贡献 Telegram/Telegram.list: 0
+# 重新生成: bun tools/vendor-rules.mjs
+
+################################################################
+# 第 1 块来源: kelee Telegram.lsr
+#   https://rule.kelee.one/Loon/Telegram.lsr
+#   本块贡献 40 条（与前面重复的已跳过，先到者优先）
+################################################################
+host, api.imem.app, Telegram
+host, api.swiftgram.app, Telegram
+host-suffix, comments.app, Telegram
+host-suffix, mbrx.app, Telegram
+host-suffix, contest.com, Telegram
+host-suffix, stel.com, Telegram
+host-suffix, tdesktop.com, Telegram
+host-suffix, telegramdownload.com, Telegram
+host-suffix, tg.dev, Telegram
+host-suffix, usercontent.dev, Telegram
+host-suffix, quiz.directory, Telegram
+host-suffix, telegram.dog, Telegram
+host-suffix, t.me, Telegram
+host-suffix, telegram.me, Telegram
+host-suffix, tx.me, Telegram
+host-suffix, telega.one, Telegram
+host-suffix, cdn-telegram.org, Telegram
+host-suffix, graph.org, Telegram
+host-suffix, telegram.org, Telegram
+host-suffix, telegram-cdn.org, Telegram
+host-suffix, telesco.pe, Telegram
+host-suffix, legra.ph, Telegram
+host-suffix, telegra.ph, Telegram
+host-suffix, telegram.space, Telegram
+host-keyword, nicegram, Telegram
+ip-cidr, 5.28.192.0/18, Telegram
+ip-cidr, 91.108.0.0/16, Telegram
+ip-cidr, 109.239.140.0/24, Telegram
+ip-cidr, 139.59.210.98/32, Telegram
+ip-cidr, 149.154.160.0/20, Telegram
+ip-cidr, 196.55.216.167/32, Telegram
+ip6-cidr, 2001:67c:4e8::/48, Telegram
+ip6-cidr, 2001:b28:f23c::/47, Telegram
+ip6-cidr, 2001:b28:f23f::/48, Telegram
+ip6-cidr, 2a0a:f280::/29, Telegram
+ip-asn, 44907, Telegram
+ip-asn, 59930, Telegram
+ip-asn, 62014, Telegram
+ip-asn, 62041, Telegram
+ip-asn, 211157, Telegram
