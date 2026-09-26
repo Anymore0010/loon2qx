@@ -33,7 +33,6 @@ _*.png
 # 所以这些 `!` 必须紧跟在 `_*` 模式之后。
 !QuantumultX/rules/kelee/_exclusions.json
 !QuantumultX/rules/kelee/_conversion-report.json
-!QuantumultX/rules/kelee/_hostnames.conf
 
 # 本地临时/脚本产物（不属于仓库内容）
 __pycache__/

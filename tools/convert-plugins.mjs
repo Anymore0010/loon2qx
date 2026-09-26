@@ -681,16 +681,6 @@ const exclusionDoc = {
 };
 writeIfChanged(join(OUT, "_exclusions.json"), JSON.stringify(exclusionDoc, null, 2) + "\n");
 
-writeIfChanged(
-  join(OUT, "_hostnames.conf"),
-  [
-    "# 由 tools/convert-plugins.mjs 从 vendor/loon-plugins 的 [MitM] 段汇总（仅启用的插件）。",
-    `# 共 ${allHostnames.size} 个主机名。`,
-    "",
-    `hostname = ${[...allHostnames].sort().join(", ")}`,
-    "",
-  ].join("\n"),
-);
 
 // ---- 清理本轮不再产出的文件（禁用/改名/删除插件都不会留下孤儿） ----
 const pruned = [];

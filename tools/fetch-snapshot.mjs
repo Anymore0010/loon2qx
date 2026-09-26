@@ -139,7 +139,10 @@ async function fetchOne(res, attempt = 0) {
 mkdirSync(SNAP, { recursive: true });
 
 const results = [];
-const CONCURRENCY = 8;
+// 并发降到 4：8 路时反复出现随机的 "socket connection was closed unexpectedly"
+// （每次落在不同 URL、不是某条上游坏了），是连接池 churn 特征。
+// 旧副本在失败时会保留，所以内容一直完整，红的只是 index.json 的 failed 计数。
+const CONCURRENCY = 4;
 for (let i = 0; i < resources.length; i += CONCURRENCY) {
   const batch = resources.slice(i, i + CONCURRENCY);
   results.push(...(await Promise.all(batch.map(fetchOne))));
@@ -321,7 +324,10 @@ for (const r of results) {
   // 只对**规则文件**落盘：tools/convert-plugins.mjs 只读 src.rewrites 的规则
   // 来做重叠判定。对脚本/图标也存一份会让仓库文件数翻倍、每周 diff 跟着翻倍，
   // 而那些副本没有任何读取方。
-  if (/\.(snippet|conf|list)$/.test(r.local)) {
+  // 只留 **rewrite 类**（.snippet / .conf）。分流 .list 没有读取方 ——
+  // convert-plugins 的 seedFromOtherSources 只遍历 src.rewrites，
+  // 把 .list 也存一份只是白占体积（实测 13M 里 9 个是 bm7/fmz 的分流列表）。
+  if (/\.(snippet|conf)$/.test(r.local) && r.kind === "rewrite") {
     const rawDest = join(SNAP, "_raw", r.local);
     try {
       mkdirSync(dirname(rawDest), { recursive: true });

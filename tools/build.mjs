@@ -304,7 +304,10 @@ function buildMitm() {
   // 自动并入 MITM（用户在 QX 的 MITM 页面上直接看到过这些主机名），
   // 且用户原配置的 [mitm] 也只有 `hostname = -www.google.com` 一行，重写照常生效。
   // 再写一份 1300+ 主机名的清单纯属冗余：只会把配置撑大、把 MITM 页面塞满。
-  // 每个重写资源自带 hostname 这一点由 validate 的 checkRewriteHostnames 强制保证。
+  // 每个重写资源自带 hostname 这一点由 validate 的 checkRewriteHostnames 强制保证：
+  // 它递归覆盖 QuantumultX/rules/**（含 kelee/*.conf），**并且**覆盖 snapshot 里
+  // 那些直链型重写资源（bm7 BlockHTTPDNS/Advertising、fmz rewrite.snippet、
+  // chavyleung boxjs、NSRingo WeatherKit）—— 实测 31 个文件。
   lines.push(comment("本段不写 hostname：各 rewrite_remote 资源自带 hostname，QX 会自动并入 MITM。"));
   lines.push(comment("若确需额外主机名（资源没声明的），请在 QX 界面的 MITM 页面添加，或在此写 hostname = a.com, *.b.com。"));
   lines.push("");

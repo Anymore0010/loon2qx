@@ -481,19 +481,40 @@ function checkRewriteDuplicates() {
  */
 function checkRewriteHostnames() {
   const dir = join(ROOT, "QuantumultX", "rules");
-  if (!existsSync(dir)) return 0;
   let checked = 0;
   // 必须**递归**且同时接受 .conf：kelee 转换产物是 QuantumultX/rules/kelee/*.conf，
   // 只扫顶层 .snippet 的话它们一个都不被检查（实测打印「…的文件: 1」就是这个盲区）。
   // 这一条在 [mitm] 不再写全局 hostname 之后变得**关键**：资源自带的 hostname
   // 是 MITM 覆盖的唯一来源，漏写就等于静默失效。
-  const files = readdirSync(dir, { recursive: true })
-    .map((f) => String(f).replace(/\\/g, "/"))
-    .filter((f) => /\.(snippet|conf|list)$/.test(f) && !f.split("/").pop().startsWith("_"));
-  for (const f of files) {
-    const rel = `QuantumultX/rules/${f}`;
+  const files = existsSync(dir)
+    ? readdirSync(dir, { recursive: true })
+        .map((f) => String(f).replace(/\\/g, "/"))
+        .filter((f) => /\.(snippet|conf|list)$/.test(f) && !f.split("/").pop().startsWith("_"))
+    : [];
+  const rels = files.map((f) => `QuantumultX/rules/${f}`);
+
+  // 还要覆盖 **snapshot 直链**的重写资源（sources.rewrites 里没有 local_file 的那些，
+  // 如 bm7 的 BlockHTTPDNS.conf / Advertising.conf、fmz 的 rewrite.snippet、
+  // chavyleung 的 boxjs、NSRingo 的 WeatherKit）。它们不在 QuantumultX/rules/ 下，
+  // 若只扫前者，某个上游哪天删掉 hostname 行就会**静默失明**。
+  try {
+    const src = JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8"));
+    for (const r of src.rewrites ?? []) {
+      if (!r.enabled || r.local_file) continue;
+      const m = (r.url ?? "").match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
+      const cand = m
+        ? join(ROOT, "snapshot", "github.com", m[1])
+        : (() => {
+            const m2 = (r.url ?? "").match(/^https:\/\/([^/]+)\/(.+)$/);
+            return m2 ? join(ROOT, "snapshot", "host", m2[1], m2[2]) : null;
+          })();
+      if (cand && existsSync(cand)) rels.push(relative(ROOT, cand).replace(/\\/g, "/"));
+    }
+  } catch { /* sources.json 读不到时上面的本地文件检查仍然有效 */ }
+
+  for (const rel of rels) {
     let text;
-    try { text = readFileSync(join(dir, f), "utf8"); } catch { continue; }
+    try { text = readFileSync(join(ROOT, rel), "utf8"); } catch { continue; }
     const lines = text.split(/\r?\n/);
     const hasHostname = lines.some((l) => /^hostname\s*=/i.test(l.trim()));
     // 只统计「需要 MITM 才能工作」的规则
