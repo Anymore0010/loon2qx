@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 155,
-  "mirrored": 155,
+  "total": 156,
+  "mirrored": 156,
   "failed": 0,
   "exclusionMisses": [],
   "resources": [
@@ -387,9 +387,9 @@
     {
       "id": "icon-filter-github",
       "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png",
-      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/GitHub.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/github.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Alpha/github.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/github.png",
       "status": 200,
       "error": null
     },
@@ -423,9 +423,9 @@
     {
       "id": "icon-filter-meta",
       "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
-      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/meta.png",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/meta.png",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/meta.png",
       "status": 200,
       "error": null
     },
@@ -471,6 +471,15 @@
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-jd-price",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/jd.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Alpha/jd.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/jd.png",
       "status": 200,
       "error": null
     },

@@ -352,7 +352,7 @@
       "policy": "GitHub",
       "parser": false,
       "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png"
+      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/github.png"
     },
     {
       "id": "filter-twitter",
@@ -389,7 +389,7 @@
       "enabled": true,
       "_local": true,
       "local_file": "QuantumultX/rules/Meta.list",
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/meta.png",
       "note": "由 rule_merges 的 merge-meta 生成（bm7 Facebook + bm7 Instagram）。**必须设 force-policy**：两个上游列表的规则里内联的策略名是各自的组名（Facebook/Instagram），这些组在本配置里不存在 —— 没有 force-policy 覆盖，规则会指向空策略。取「全球节点」（原 Facebook 的策略；Facebook 规则量占绝大多数）。若要 Instagram 单独走美国，把 Meta 的策略组改指「美国节点」即可。"
     },
     {
@@ -478,7 +478,7 @@
       "enabled": true,
       "generated_by": "tools/vendor-rules.mjs",
       "note": "由 rule_merges 的 merge-jd-price 生成。需先装「慢慢买」App 抓 Cookie。 [图标: 本地托管 PNG（原 fmz jpg 无法在 QX 渲染/长期 404 缓存，已自托管）]",
-      "icon": "https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/QuantumultX/icons/JD.png"
+      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/jd.png"
     },
     {
       "id": "rewrite-pinduoduo",
@@ -664,7 +664,7 @@
     ],
     "final": "兜底策略"
   },
-  "_filter_order_note": "顺序依据你的两份原配置：先取 QX [filter_remote] 的顺序（广告拦截 → 分流修正 → App 规则），再按 Loon [Remote Rule] 的顺序补上 Loon 独有的条目；CN REGION 固定最后（Loon 原配置明确要求勿改排序）。顺序有实际影响：实测 42 个域名同时出现在广告黑名单与 App 分流里（Google 35、Apple 5、YouTube 2），先匹配者决定去向。\n\n【已知冲突·按用户指定顺序保留】「分流修正」(filterFix.list) 含 `host-keyword, icloud.com, direct` 与 `host-keyword, ls.apple.com, direct`，而「Apple AI」要 gateway.icloud.com / gspe1-ssl.ls.apple.com 走代理。filter_remote 先匹配先赢，故分流修正在前时 Apple AI 的这两条会被抢成 direct。用户明确指定「分流修正」在最前，故保持不动。若要让 Apple AI 生效，把它移到「分流修正」之前即可（仅 11 条窄匹配，不影响其它条目）。",
+  "_filter_order_note": "顺序：广告拦截(3 条) → 分流修正 → OpenAI & Anthropic → Apple AI → APNs → Apple → Google/GitHub/X/Telegram/Spotify/Meta/Netflix/Disney → CN REGION → LAN。分流修正放在广告**之后**（还原原 QX 顺序：广告的 reject 先于修正的 direct 生效，否则白名单会抢走广告拦截）。\n\n【仍存在的冲突·用户指定顺序保留】「分流修正」(filterFix) 仍排在「Apple AI」之前，其 `host-keyword, icloud.com, direct` 与 `host-keyword, ls.apple.com, direct` 会把 Apple AI 的 `gateway.icloud.com` / `gspe1-ssl.ls.apple.com` 抢成 direct。若要让 Apple AI 生效，把它移到「分流修正」之前即可。",
   "rule_merges": [
     {
       "id": "merge-ai",
