@@ -505,7 +505,7 @@ for (const p of index.plugins) {
     continue; // 不产出文件，避免"已生成但无人引用"的孤儿
   }
   const base = p.name.replace(/\.lpx$/, "");
-  const selfRel = `QuantumultX/rules/rewrite/kelee/${base}.conf`;
+  const selfRel = `QuantumultX/rules/rewrite/kelee/${base}.snippet`;
 
   const argDefaults = parseArgumentDefaults(text);
   const filters = [];
@@ -620,10 +620,10 @@ for (const p of index.plugins) {
   }
   if (localized.length) {
     writeIfChanged(
-      join(OUT_REWRITE, `${base}.conf`),
+      join(OUT_REWRITE, `${base}.snippet`),
       [...header, "", ...localized, "", `hostname = ${hosts.join(", ")}`, ""].join("\n"),
     );
-    written.add(`${base}.conf`);
+    written.add(`${base}.snippet`);
   }
   pluginReport.push({ plugin: p.name, name: nm, enabled: true, rules: filters.length, rewrites: localized.length, hostnames: hosts.length });
 }
@@ -642,7 +642,7 @@ if (!CHECK) {
   for (const dir of [OUT_REWRITE, OUT_FILTER]) {
     if (!existsSync(dir)) continue;
     for (const f of readdirSync(dir)) {
-      if (!/\.(conf|list)$/.test(f) || f.startsWith("_")) continue;
+      if (!/\.(snippet|list)$/.test(f) || f.startsWith("_")) continue;
       if (!written.has(f)) {
         rmSync(join(dir, f));
         pruned.push(f);

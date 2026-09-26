@@ -3,13 +3,13 @@
 #   https://rule.kelee.one/Loon/Twitter.lsr
 #   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list
 # 统一策略: X
-# 规则数: 66（已跨来源去重）
+# 规则数: 33（已跨来源去重）
 #   各源贡献 Loon/Twitter.lsr: 33
-#   各源贡献 Twitter/Twitter.list: 33
+#   各源贡献 Twitter/Twitter.list: 0
 # 重新生成: bun tools/vendor-rules.mjs
 
 ################################################################
-# 第 1 块来源: https://rule.kelee.one/Loon/Twitter.lsr
+# 第 1 块来源: kelee Twitter.lsr
 #   https://rule.kelee.one/Loon/Twitter.lsr
 #   本块贡献 33 条（与前面重复的已跳过，先到者优先）
 ################################################################
@@ -46,41 +46,3 @@ ip-cidr, 199.59.148.0/22, X
 ip-cidr, 199.96.56.0/21, X
 ip-cidr, 202.160.128.0/22, X
 ip-cidr, 209.237.192.0/19, X
-################################################################
-# 第 2 块来源: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list
-#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list
-#   本块贡献 33 条（与前面重复的已跳过，先到者优先）
-################################################################
-host-suffix, ads-twitter.com, Twitter
-host-suffix, cms-twdigitalassets.com, Twitter
-host-suffix, grok.com, Twitter
-host-suffix, periscope.tv, Twitter
-host-suffix, pscp.tv, Twitter
-host-suffix, t.co, Twitter
-host-suffix, tellapart.com, Twitter
-host-suffix, tweetdeck.com, Twitter
-host-suffix, twimg.co, Twitter
-host-suffix, twimg.com, Twitter
-host-suffix, twimg.org, Twitter
-host-suffix, twitpic.com, Twitter
-host-suffix, twitter.biz, Twitter
-host-suffix, twitter.com, Twitter
-host-suffix, twitter.jp, Twitter
-host-suffix, twittercommunity.com, Twitter
-host-suffix, twitterflightschool.com, Twitter
-host-suffix, twitterinc.com, Twitter
-host-suffix, twitteroauth.com, Twitter
-host-suffix, twitterstat.us, Twitter
-host-suffix, twtrdns.net, Twitter
-host-suffix, twttr.com, Twitter
-host-suffix, twttr.net, Twitter
-host-suffix, twvid.com, Twitter
-host-suffix, vine.co, Twitter
-host-suffix, x.com, Twitter
-host-keyword, twitter, Twitter
-ip-cidr, 192.133.76.0/22, Twitter
-ip-cidr, 199.59.148.0/22, Twitter
-ip-cidr, 199.96.56.0/21, Twitter
-ip-cidr, 202.160.128.0/22, Twitter
-ip-cidr, 209.237.192.0/19, Twitter
-ip-cidr, 69.195.160.0/19, Twitter

@@ -167,7 +167,7 @@ function checkLocalRuleScriptsAreSelfHosted(repoSlug) {
   // 一个被孤儿清理删掉的镜像脚本没人发现 —— 规则指向 404 而 validate 全绿）。
   const files = readdirSync(dir, { recursive: true })
     .map((f) => String(f).replace(/\\/g, "/"))
-    .filter((f) => /\.(snippet|conf|list)$/.test(f));
+    .filter((f) => /\.(snippet|list)$/.test(f));
   for (const f of files) {
     const rel = `QuantumultX/rules/${f}`;
     let text;
@@ -491,7 +491,7 @@ function checkRewriteHostnames() {
   const files = existsSync(dir)
     ? readdirSync(dir, { recursive: true })
         .map((f) => String(f).replace(/\\/g, "/"))
-        .filter((f) => /\.(snippet|conf|list)$/.test(f) && !f.split("/").pop().startsWith("_"))
+        .filter((f) => /\.(snippet|list)$/.test(f) && !f.split("/").pop().startsWith("_"))
     : [];
   const rels = files.map((f) => `QuantumultX/rules/${f}`);
 

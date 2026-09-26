@@ -122,6 +122,11 @@ export function convertRuleList(text, opts = {}) {
     }
     if (policy) {
       policy = POLICY_MAP[policy.toLowerCase()] ?? policy;
+      // 合并组要求**统一策略**时覆写上游自带的值。
+      // 否则文件里会留着上游的字面量（bm7 的 AI.list 写 `OpenAI & Anthropic`、
+      // Meta 的写 `Facebook`），与条目名/force-policy 不一致 ——
+      // 运行时靠 force-policy 兜住，但文件自身不自洽，与「分段注释标明出处」的初衷相悖。
+      if (opts.forcePolicy && opts.policy) policy = opts.policy;
     } else {
       policy = opts.policy ?? null;
     }

@@ -636,7 +636,7 @@
     {
       "id": "rewrite-kelee-12306_remove_ads",
       "tag": "12306去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/12306_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/12306_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "12306_remove_ads.lpx",
@@ -647,7 +647,7 @@
     {
       "id": "rewrite-kelee-AliYunDrive_remove_ads",
       "tag": "阿里云盘去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/AliYunDrive_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/AliYunDrive_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "AliYunDrive_remove_ads.lpx",
@@ -658,7 +658,7 @@
     {
       "id": "rewrite-kelee-Cainiao_remove_ads",
       "tag": "菜鸟去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Cainiao_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Cainiao_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Cainiao_remove_ads.lpx",
@@ -669,7 +669,7 @@
     {
       "id": "rewrite-kelee-CoolApk_remove_ads",
       "tag": "酷安去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/CoolApk_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/CoolApk_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "CoolApk_remove_ads.lpx",
@@ -680,7 +680,7 @@
     {
       "id": "rewrite-kelee-FleaMarket_remove_ads",
       "tag": "闲鱼去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/FleaMarket_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/FleaMarket_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "FleaMarket_remove_ads.lpx",
@@ -691,7 +691,7 @@
     {
       "id": "rewrite-kelee-JD_remove_ads",
       "tag": "京东去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/JD_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/JD_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "JD_remove_ads.lpx",
@@ -702,7 +702,7 @@
     {
       "id": "rewrite-kelee-PinDuoDuo_remove_ads",
       "tag": "拼多多去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/PinDuoDuo_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/PinDuoDuo_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "PinDuoDuo_remove_ads.lpx",
@@ -713,7 +713,7 @@
     {
       "id": "rewrite-kelee-QuarkBrowser_remove_ads",
       "tag": "夸克去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/QuarkBrowser_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/QuarkBrowser_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "QuarkBrowser_remove_ads.lpx",
@@ -724,7 +724,7 @@
     {
       "id": "rewrite-kelee-RedPaper_remove_ads",
       "tag": "小红书去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/RedPaper_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/RedPaper_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "RedPaper_remove_ads.lpx",
@@ -735,7 +735,7 @@
     {
       "id": "rewrite-kelee-RiskBird_remove_ads",
       "tag": "风鸟去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/RiskBird_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/RiskBird_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "RiskBird_remove_ads.lpx",
@@ -746,7 +746,7 @@
     {
       "id": "rewrite-kelee-Script-Hub",
       "tag": "Script-Hub",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Script-Hub.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Script-Hub.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Script-Hub.lpx",
@@ -757,7 +757,7 @@
     {
       "id": "rewrite-kelee-Snowball_remove_ads",
       "tag": "雪球去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Snowball_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Snowball_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Snowball_remove_ads.lpx",
@@ -768,7 +768,7 @@
     {
       "id": "rewrite-kelee-Spotify_lyrics_translation",
       "tag": "Spotify歌词增强",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Spotify_lyrics_translation.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Spotify_lyrics_translation.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Spotify_lyrics_translation.lpx",
@@ -779,7 +779,7 @@
     {
       "id": "rewrite-kelee-Spotify_remove_ads",
       "tag": "Spotify去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Spotify_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Spotify_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Spotify_remove_ads.lpx",
@@ -790,7 +790,7 @@
     {
       "id": "rewrite-kelee-Taobao_remove_ads",
       "tag": "淘宝去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Taobao_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Taobao_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Taobao_remove_ads.lpx",
@@ -801,7 +801,7 @@
     {
       "id": "rewrite-kelee-Tencent_Video_remove_ads",
       "tag": "腾讯视频去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Tencent_Video_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Tencent_Video_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Tencent_Video_remove_ads.lpx",
@@ -812,7 +812,7 @@
     {
       "id": "rewrite-kelee-Weixin_Official_Accounts_remove_ads",
       "tag": "微信公众号去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Weixin_Official_Accounts_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Weixin_Official_Accounts_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Weixin_Official_Accounts_remove_ads.lpx",
@@ -823,7 +823,7 @@
     {
       "id": "rewrite-kelee-Weixin_external_links_unlock",
       "tag": "微信外部链接解锁",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Weixin_external_links_unlock.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Weixin_external_links_unlock.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Weixin_external_links_unlock.lpx",
@@ -834,7 +834,7 @@
     {
       "id": "rewrite-kelee-XiaoHeiHe_remove_ads",
       "tag": "小黑盒去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/XiaoHeiHe_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/XiaoHeiHe_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "XiaoHeiHe_remove_ads.lpx",
@@ -845,7 +845,7 @@
     {
       "id": "rewrite-kelee-YouTube_remove_ads",
       "tag": "YouTube去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/YouTube_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/YouTube_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "YouTube_remove_ads.lpx",
@@ -856,7 +856,7 @@
     {
       "id": "rewrite-kelee-Zhihu_remove_ads",
       "tag": "知乎去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Zhihu_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Zhihu_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Zhihu_remove_ads.lpx",
@@ -867,7 +867,7 @@
     {
       "id": "rewrite-kelee-iQiYi_Video_remove_ads",
       "tag": "爱奇艺去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/iQiYi_Video_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/iQiYi_Video_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "iQiYi_Video_remove_ads.lpx",
@@ -878,7 +878,7 @@
     {
       "id": "rewrite-kelee-smzdm_remove_ads",
       "tag": "什么值得买去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/smzdm_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/smzdm_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "smzdm_remove_ads.lpx",
@@ -889,7 +889,7 @@
     {
       "id": "rewrite-kelee-Amap_remove_ads",
       "tag": "高德地图去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Amap_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Amap_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Amap_remove_ads.lpx",
@@ -900,7 +900,7 @@
     {
       "id": "rewrite-kelee-Bilibili_remove_ads",
       "tag": "哔哩哔哩去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Bilibili_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Bilibili_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Bilibili_remove_ads.lpx",
@@ -911,7 +911,7 @@
     {
       "id": "rewrite-kelee-JD_Price",
       "tag": "京东比价",
-      "local_file": "QuantumultX/rules/rewrite/kelee/JD_Price.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/JD_Price.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "JD_Price.lpx",
@@ -922,7 +922,7 @@
     {
       "id": "rewrite-kelee-Weibo_remove_ads",
       "tag": "微博去广告",
-      "local_file": "QuantumultX/rules/rewrite/kelee/Weibo_remove_ads.conf",
+      "local_file": "QuantumultX/rules/rewrite/kelee/Weibo_remove_ads.snippet",
       "parser": false,
       "enabled": true,
       "kelee_plugin": "Weibo_remove_ads.lpx",
@@ -952,7 +952,7 @@
       "note": "自用增强 = kelee 的 Remove_ads_by_keli 插件产物 + sources.json 里内联的手写规则，由 vendor-rules.mjs 合并生成 AnymoreADEnhance.snippet。\n手写规则直接改 sources.json 的 raw_rewrite（不再需要单独的输入文件）。",
       "merges": [
         {
-          "local_file": "QuantumultX/rules/rewrite/kelee/Remove_ads_by_keli.conf",
+          "local_file": "QuantumultX/rules/rewrite/kelee/Remove_ads_by_keli.snippet",
           "tag": "可莉广告过滤器（kelee 插件）"
         }
       ],
@@ -1013,13 +1013,13 @@
     {
       "id": "rewrite-httpdns-merged",
       "url": null,
-      "local_file": "QuantumultX/rules/rewrite/HTTPDNSBlock.conf",
+      "local_file": "QuantumultX/rules/rewrite/HTTPDNSBlock.snippet",
       "tag": "HTTPDNS拦截器",
       "parser": false,
       "enabled": true,
       "merges": [
         {
-          "local_file": "QuantumultX/rules/rewrite/kelee/Block_HTTPDNS.conf",
+          "local_file": "QuantumultX/rules/rewrite/kelee/Block_HTTPDNS.snippet",
           "tag": "HTTPDNS拦截器(kelee)"
         },
         {
@@ -1033,13 +1033,13 @@
     {
       "id": "rewrite-ads-max",
       "url": null,
-      "local_file": "QuantumultX/rules/rewrite/AdsBlockMAX.conf",
+      "local_file": "QuantumultX/rules/rewrite/AdsBlockMAX.snippet",
       "tag": "广告拦截合集MAX",
       "parser": false,
       "enabled": true,
       "merges": [
         {
-          "local_file": "QuantumultX/rules/rewrite/kelee/BlockAdvertisers.conf",
+          "local_file": "QuantumultX/rules/rewrite/kelee/BlockAdvertisers.snippet",
           "tag": "广告平台拦截器（kelee 插件，优先）"
         },
         {
@@ -1181,7 +1181,7 @@
     {
       "id": "merge-meta",
       "out": "filter/Meta.list",
-      "policy": null,
+      "policy": "Meta",
       "sources": [
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list"

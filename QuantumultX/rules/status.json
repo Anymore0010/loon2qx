@@ -2,17 +2,8 @@
   "total": 17,
   "ok": 17,
   "failed": 0,
-  "rules": 294745,
+  "rules": 294697,
   "resources": [
-    {
-      "id": "filter-apple-ai",
-      "upstream": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
-      "file": "QuantumultX/rules/filter/AppleIntelligence.list",
-      "rules": 11,
-      "dropped": 0,
-      "adjusted": 0,
-      "error": null
-    },
     {
       "id": "filter-awavenue",
       "upstream": "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
@@ -23,8 +14,18 @@
       "error": null
     },
     {
+      "id": "filter-apple-ai",
+      "upstream": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
+      "file": "QuantumultX/rules/filter/AppleIntelligence.list",
+      "rules": 11,
+      "dropped": 0,
+      "adjusted": 0,
+      "error": null
+    },
+    {
       "id": "filter-ads-max",
-      "file": "QuantumultX/rules/QuantumultX/rules/filter/AdsBlockMAX.list",
+      "upstream": "QuantumultX/rules/filter/kelee/BlockAdvertisers.list + https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list + QuantumultX/rules/filter/AWAvenue.list",
+      "file": "QuantumultX/rules/filter/AdsBlockMAX.list",
       "rules": 288195,
       "dropped": 0,
       "adjusted": 0,
@@ -32,7 +33,8 @@
     },
     {
       "id": "rewrite-anymore-enhance",
-      "file": "QuantumultX/rules/QuantumultX/rules/rewrite/AnymoreADEnhance.snippet",
+      "upstream": "QuantumultX/rules/rewrite/kelee/Remove_ads_by_keli.snippet",
+      "file": "QuantumultX/rules/rewrite/AnymoreADEnhance.snippet",
       "rules": 83,
       "dropped": 0,
       "adjusted": 0,
@@ -40,7 +42,8 @@
     },
     {
       "id": "rewrite-httpdns-merged",
-      "file": "QuantumultX/rules/QuantumultX/rules/rewrite/HTTPDNSBlock.conf",
+      "upstream": "QuantumultX/rules/rewrite/kelee/Block_HTTPDNS.snippet + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
+      "file": "QuantumultX/rules/rewrite/HTTPDNSBlock.snippet",
       "rules": 42,
       "dropped": 0,
       "adjusted": 0,
@@ -48,7 +51,8 @@
     },
     {
       "id": "rewrite-ads-max",
-      "file": "QuantumultX/rules/QuantumultX/rules/rewrite/AdsBlockMAX.conf",
+      "upstream": "QuantumultX/rules/rewrite/kelee/BlockAdvertisers.snippet + https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "file": "QuantumultX/rules/rewrite/AdsBlockMAX.snippet",
       "rules": 2162,
       "dropped": 0,
       "adjusted": 0,
@@ -58,7 +62,7 @@
       "id": "merge-ai",
       "upstream": "https://kelee.one/Tool/Loon/Lsr/AI.lsr + https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
       "file": "QuantumultX/rules/filter/AI.list",
-      "rules": 280,
+      "rules": 271,
       "dropped": 0,
       "adjusted": 0,
       "error": null
@@ -67,7 +71,7 @@
       "id": "merge-meta",
       "upstream": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list",
       "file": "QuantumultX/rules/filter/Meta.list",
-      "rules": 574,
+      "rules": 571,
       "dropped": 0,
       "adjusted": 0,
       "error": null
@@ -76,7 +80,7 @@
       "id": "merge-google",
       "upstream": "https://rule.kelee.one/Loon/Google.lsr + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list",
       "file": "QuantumultX/rules/filter/Google.list",
-      "rules": 907,
+      "rules": 904,
       "dropped": 0,
       "adjusted": 0,
       "error": null
@@ -112,7 +116,7 @@
       "id": "merge-x",
       "upstream": "https://rule.kelee.one/Loon/Twitter.lsr + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
       "file": "QuantumultX/rules/filter/X.list",
-      "rules": 66,
+      "rules": 33,
       "dropped": 0,
       "adjusted": 0,
       "error": null

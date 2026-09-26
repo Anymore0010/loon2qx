@@ -219,7 +219,8 @@ for (const f of toVendorOnly) {
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, header.join("\n"));
     console.log(`${total} 条（${perSource.join(" | ")}）-> ${f.local_file}`);
-    report.push({ id: f.id, ok: true, count: total, dropped: [], notes: [], file: f.local_file });
+    report.push({ id: f.id, ok: true, count: total, dropped: [], notes: [],
+      url: f.merges.map((m) => m.url ?? m.local_file).join(" + "), file: f.local_file });
   }
 }
 
@@ -402,7 +403,8 @@ for (const f of toVendorOnly) {
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, header.join("\n"));
     console.log(`${rwCount} 条（${perSource.join(" | ")}）${semanticallyDeduped ? `，组内去重 ${semanticallyDeduped} 条` : ""}${excludedByStandalone ? `，让给独立条目 ${excludedByStandalone} 条` : ""} -> ${r.local_file}`);
-    report.push({ id: r.id, ok: true, count: rwCount, dropped: [], notes: [], file: r.local_file });
+    report.push({ id: r.id, ok: true, count: rwCount, dropped: [], notes: [],
+      url: (r.merges ?? []).map((m) => m.url ?? m.local_file).join(" + "), file: r.local_file });
   }
 }
 
@@ -451,7 +453,7 @@ for (const g of mergeGroups) {
       const res = await fetch(u, { headers: { // kelee.one / rule.kelee.one 只对 Loon 的 UA 放行（其余返回 Cloudflare 403）
       "User-Agent": "Loon/998 CFNetwork/3896.200.41 Darwin/27.2.0" } });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const { rules } = convertRuleList(await res.text(), { policy: g.policy });
+      const { rules } = convertRuleList(await res.text(), { policy: g.policy, forcePolicy: true });
       // exclude_domains：这些域名由别的条目负责，合并时必须剔除，
       // 否则会因顺序把它们抢到本策略下（实测 Apple relay 域名被抢到「人工智能」）。
       const excluded = new Set((g.exclude_domains ?? []).map((x) => x.toLowerCase()));
@@ -466,7 +468,15 @@ for (const g of mergeGroups) {
         added++;
       }
       if (added) {
-        rmBody.push(...sectionMarker(rmIdx + 1, { tag: u, url: u }, added));
+        // 可读标签：从 URL 末段推出来源名；否则「来源」处会是裸 URL、
+        // 且与下一行的 URL 重复打两遍（实测 Google.list 就是那样）。
+        const label = (() => {
+          const seg = u.split("/");
+          const file = seg[seg.length - 1];
+          const host = u.includes("kelee.one") ? "kelee" : (seg[2] ?? "");
+          return `${host} ${file}`;
+        })();
+        rmBody.push(...sectionMarker(rmIdx + 1, { tag: label, url: u }, added));
         rmBody.push(...blockLines);
         rmCount += added;
       }
@@ -526,7 +536,13 @@ for (const r of report) {
   if (!r.ok) {
     lines.push(`| ${r.url} | — | **抓取失败**：${r.error} | — |`);
   } else {
-    lines.push(`| ${r.url} | \`QuantumultX/rules/${r.file}\` | ${r.count} | ${r.dropped.length} |`);
+    // file 可能是全仓库路径（合并路径推的是 local_file）或相对路径（单源 vendor）。
+    // 两种形态都要兼容：否则会拼出 QuantumultX/rules/QuantumultX/rules/… 这种坏路径。
+    // upstream 在合并路径里没有单一 url，用来源列表（已 join）兜底。
+    const filePath = r.file
+      ? (r.file.startsWith("QuantumultX/") ? r.file : `QuantumultX/rules/${r.file}`)
+      : "(未写入)";
+    lines.push(`| ${r.url ?? "(见文件内分段注释)"} | \`${filePath}\` | ${r.count} | ${r.dropped?.length ?? 0} |`);
   }
 }
 lines.push("", "## 选项调整（规则保留）", "");
@@ -564,7 +580,9 @@ const status = {
   resources: report.map((r) => ({
     id: r.id,
     upstream: r.url,
-    file: r.ok ? `QuantumultX/rules/${r.file}` : null,
+    file: r.ok
+      ? (r.file?.startsWith("QuantumultX/") ? r.file : `QuantumultX/rules/${r.file}`)
+      : null,
     rules: r.ok ? r.count : null,
     dropped: r.ok ? r.dropped.length : null,
     adjusted: r.ok ? (r.notes ?? []).length : null,
