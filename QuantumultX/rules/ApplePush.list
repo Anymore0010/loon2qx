@@ -3,16 +3,16 @@
 # 规则数: 13
 # 重新生成: bun tools/vendor-rules.mjs
 
-# Apple Push Notification Service —— APNs 推送中继。
-# 上游无独立 APNs 列表（fmz/bm7 均 404），故从 bm7 Apple 列表中提取 push/courier 域名固化于此。
-# 保留独立条目（不并入 Apple）的原因：APNs 走直连更稳，且便于单独调整策略。
+# Apple Push Notification Service（APNs）—— 推送中继，默认直连。
+# 上游无独立 APNs 列表（fmz/bm7 实测 404），故从 bm7 Apple 列表提取 + 补 APNs 正式端点。
+# 关键补充：真正的 APNs 端点形如 N-courier.push.apple.com（1..50），
+#   bm7 的列表里**没有**这条，缺了它这些主机会落到兜底策略（走代理）——与「直连更稳」相反。
 # 来源参考: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list
-host, courier-push-apple.com.akadns.net
-host, init-p01md-lb.push-apple.com.akadns.net
-host, init-p01st-lb.push-apple.com.akadns.net
-host, init-p01st.push.apple.com
-host, init-s01st-lb.push-apple.com.akadns.net
-host, init-s01st.push.apple.com
-host, push-apple.com.akadns.net
-host-wildcard, init*.push-apple.com.akadns.net
-host-wildcard, init*.push.apple.com
+host-suffix, push.apple.com, APNs
+host, courier-push-apple.com.akadns.net, APNs
+host, init-p01md-lb.push-apple.com.akadns.net, APNs
+host, init-p01st-lb.push-apple.com.akadns.net, APNs
+host, init-s01st-lb.push-apple.com.akadns.net, APNs
+host, push-apple.com.akadns.net, APNs
+host-wildcard, init*.push-apple.com.akadns.net, APNs
+host-wildcard, init*.push.apple.com, APNs

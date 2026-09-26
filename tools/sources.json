@@ -60,36 +60,11 @@
         "regex": "^(?=.*(.))(?!.*((?i)群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|(\\b(USE|USED|TOTAL|EXPIRE|EMAIL|Panel)\\b|(\\d{4}-\\d{2}-\\d{2}|\\dG)))).*$"
       }
     ],
-    "selects": [
-      {
-        "name": "全球手动策略",
-        "region": "全球节点"
-      },
-      {
-        "name": "香港手动策略",
-        "region": "香港节点"
-      },
-      {
-        "name": "新国手动策略",
-        "region": "新国节点"
-      },
-      {
-        "name": "日本手动策略",
-        "region": "日本节点"
-      },
-      {
-        "name": "韩国手动策略",
-        "region": "韩国节点"
-      },
-      {
-        "name": "美国手动策略",
-        "region": "美国节点"
-      }
-    ],
+    "selects": [],
     "groups": [],
     "services": [
       {
-        "name": "谷歌服务",
+        "name": "Google",
         "members": [
           "proxy",
           "香港节点",
@@ -102,7 +77,7 @@
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png"
       },
       {
-        "name": "电报消息",
+        "name": "Telegram",
         "members": [
           "proxy",
           "香港节点",
@@ -115,7 +90,7 @@
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png"
       },
       {
-        "name": "推特服务",
+        "name": "X",
         "members": [
           "proxy",
           "香港节点",
@@ -128,7 +103,7 @@
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png"
       },
       {
-        "name": "Meta 服务",
+        "name": "Meta",
         "members": [
           "proxy",
           "香港节点",
@@ -194,7 +169,7 @@
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png"
       },
       {
-        "name": "苹果服务",
+        "name": "Apple",
         "members": [
           "direct",
           "proxy",
@@ -208,7 +183,7 @@
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
       },
       {
-        "name": "苹果推送",
+        "name": "APNs",
         "members": [
           "direct",
           "proxy",
@@ -222,7 +197,7 @@
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
       },
       {
-        "name": "人工智能",
+        "name": "OpenAI & Anthropic",
         "members": [
           "proxy",
           "香港节点",
@@ -235,7 +210,7 @@
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png"
       },
       {
-        "name": "苹果AI",
+        "name": "Apple AI",
         "members": [
           "美国节点",
           "proxy",
@@ -296,7 +271,7 @@
     {
       "id": "filter-ai-fmz",
       "tag": "OpenAI & Anthropic",
-      "policy": "人工智能",
+      "policy": "OpenAI & Anthropic",
       "enabled": true,
       "note": "由 rule_merges 的 merge-ai 生成（fmz AI.list + bm7 OpenAI + bm7 Anthropic 合并）。（原名「AI 分流合集」；内容为 fmz AI.list + bm7 OpenAI + bm7 Anthropic 合并，不含 Apple Intelligence —— 后者是独立条目「Apple AI」）",
       "vendored_as": "AI.list",
@@ -308,7 +283,7 @@
     {
       "id": "filter-apple-ai",
       "tag": "Apple AI",
-      "policy": "苹果AI",
+      "policy": "Apple AI",
       "parser": false,
       "enabled": true,
       "note": "来自 Loon [Remote Rule] 的 AppleIntelligence.list。 已预转换为 Quantumult X 原生规则存于仓库（不再依赖运行时解析器）。",
@@ -322,7 +297,7 @@
     {
       "id": "filter-apple",
       "tag": "Apple",
-      "policy": "苹果服务",
+      "policy": "Apple",
       "parser": false,
       "enabled": true,
       "_local": true,
@@ -332,8 +307,8 @@
     },
     {
       "id": "filter-apns",
-      "tag": "Apple Push Notification Service",
-      "policy": "苹果推送",
+      "tag": "APNs",
+      "policy": "APNs",
       "parser": false,
       "enabled": true,
       "_local": true,
@@ -344,11 +319,11 @@
     {
       "id": "filter-google",
       "tag": "Google",
-      "policy": "谷歌服务",
+      "policy": "Google",
       "parser": false,
       "enabled": true,
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png",
-      "note": "由 rule_merges 的 merge-google 生成（bm7 Google + bm7 YouTube 合并）。两者本来是同一策略「新国手动策略」，且 Google.list 不含 youtube.com/googlevideo.com/ytimg.com，只有并进来才不会让 YouTube 掉到兜底策略。",
+      "note": "由 rule_merges 的 merge-google 生成（bm7 Google + bm7 YouTube 合并）。两者本来是同一策略「新国节点」，且 Google.list 不含 youtube.com/googlevideo.com/ytimg.com，只有并进来才不会让 YouTube 掉到兜底策略。",
       "_local": true,
       "local_file": "QuantumultX/rules/Google.list"
     },
@@ -364,8 +339,8 @@
     {
       "id": "filter-twitter",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
-      "tag": "Twitter",
-      "policy": "推特服务",
+      "tag": "X",
+      "policy": "X",
       "parser": false,
       "enabled": true,
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png"
@@ -374,7 +349,7 @@
       "id": "filter-telegram",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
       "tag": "Telegram",
-      "policy": "电报消息",
+      "policy": "Telegram",
       "parser": false,
       "enabled": true,
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png"
@@ -391,13 +366,13 @@
     {
       "id": "filter-meta",
       "tag": "Meta",
-      "policy": "Meta 服务",
+      "policy": "Meta",
       "parser": false,
       "enabled": true,
       "_local": true,
       "local_file": "QuantumultX/rules/Meta.list",
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Facebook.png",
-      "note": "由 rule_merges 的 merge-meta 生成（bm7 Facebook + bm7 Instagram）。**必须设 force-policy**：两个上游列表的规则里内联的策略名是各自的组名（Facebook/Instagram），这些组在本配置里不存在 —— 没有 force-policy 覆盖，规则会指向空策略。取「全球手动策略」（原 Facebook 的策略；Facebook 规则量占绝大多数）。若要 Instagram 单独走美国，把 Meta 的策略组改指「美国手动策略」即可。"
+      "note": "由 rule_merges 的 merge-meta 生成（bm7 Facebook + bm7 Instagram）。**必须设 force-policy**：两个上游列表的规则里内联的策略名是各自的组名（Facebook/Instagram），这些组在本配置里不存在 —— 没有 force-policy 覆盖，规则会指向空策略。取「全球节点」（原 Facebook 的策略；Facebook 规则量占绝大多数）。若要 Instagram 单独走美国，把 Meta 的策略组改指「美国节点」即可。"
     },
     {
       "id": "filter-netflix",
@@ -416,20 +391,6 @@
       "parser": false,
       "enabled": true,
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png"
-    },
-    {
-      "id": "filter-geoip-cn",
-      "tag": "GeoIP_CN",
-      "policy": "direct",
-      "parser": false,
-      "enabled": true,
-      "note": "fmz 配置原有（Loon 格式，需解析器）。 已预转换为 Quantumult X 原生规则存于仓库（不再依赖运行时解析器）。",
-      "vendor": true,
-      "vendored_as": "GeoIP_CN.list",
-      "_local": true,
-      "local_file": "QuantumultX/rules/GeoIP_CN.list",
-      "upstream_url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
-      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png"
     },
     {
       "id": "filter-cn-region",
@@ -642,43 +603,43 @@
     "_comment": "逐条移植自 Loon 的 [Rule] 段。Loon 的 DOMAIN/DOMAIN-SUFFIX/DOMAIN-KEYWORD 对应 Quantumult X 的 host/host-suffix/host-keyword，DIRECT 对应 direct。",
     "rules": [
       "host, yimuapp.com, direct",
-      "host-suffix, lty01.com, 全球手动策略",
+      "host-suffix, lty01.com, 全球节点",
       "host, resolver.msg.xiaomi.net, direct",
-      "host-suffix, aptvpn.org, 全球手动策略",
-      "host-suffix, tokenharbor.ai, 新国手动策略",
-      "host-suffix, discord.com, 全球手动策略",
-      "host-suffix, b.ai, 全球手动策略",
-      "host-suffix, youmind.com, 全球手动策略",
-      "host-suffix, perchai.app, 全球手动策略",
-      "host-keyword, missav, 全球手动策略",
-      "host, lody.ai, 全球手动策略",
+      "host-suffix, aptvpn.org, 全球节点",
+      "host-suffix, tokenharbor.ai, 新国节点",
+      "host-suffix, discord.com, 全球节点",
+      "host-suffix, b.ai, 全球节点",
+      "host-suffix, youmind.com, 全球节点",
+      "host-suffix, perchai.app, 全球节点",
+      "host-keyword, missav, 全球节点",
+      "host, lody.ai, 全球节点",
       "host, stat.y.qq.com, direct",
-      "host-suffix, singlelogin.rs, 全球手动策略",
-      "host-suffix, idcflare.com, 全球手动策略",
-      "host-suffix, vercel.app, 全球手动策略",
-      "host, missav.live, 全球手动策略",
+      "host-suffix, singlelogin.rs, 全球节点",
+      "host-suffix, idcflare.com, 全球节点",
+      "host-suffix, vercel.app, 全球节点",
+      "host, missav.live, 全球节点",
       "host, oth.str.mdt.qq.com, direct",
       "host, httpdns.kg.qq.com, direct",
       "host, stat6.y.qq.com, direct",
-      "host-suffix, linux.do, 全球手动策略",
+      "host-suffix, linux.do, 全球节点",
       "host, at.alicdn.com, direct",
       "host, dns.weixin.qq.com.cn, direct",
-      "host-suffix, okx.com, 全球手动策略",
-      "host-suffix, googlevideo.com, 新国手动策略",
-      "host-suffix, youtube.com, 新国手动策略",
-      "host-suffix, ytimg.com, 新国手动策略",
-      "host-suffix, googleapis.com, 新国手动策略",
-      "host-suffix, follow.is, 全球手动策略",
-      "host-keyword, huobi.com, 美国手动策略",
-      "host-suffix, htx.com, 美国手动策略",
-      "host-keyword, ikuuu, 全球手动策略",
-      "host-suffix, wikipedia.org, 全球手动策略",
-      "host-suffix, 88maru.com, 全球手动策略",
-      "host-suffix, woodpeckerlog.com, 全球手动策略",
-      "host-suffix, trustwallet.com, 美国手动策略",
-      "host-suffix, unsplash.com, 全球手动策略",
-      "host-suffix, v2ex.com, 全球手动策略",
-      "host-suffix, api.iturrit.com, 全球手动策略",
+      "host-suffix, okx.com, 全球节点",
+      "host-suffix, googlevideo.com, 新国节点",
+      "host-suffix, youtube.com, 新国节点",
+      "host-suffix, ytimg.com, 新国节点",
+      "host-suffix, googleapis.com, 新国节点",
+      "host-suffix, follow.is, 全球节点",
+      "host-keyword, huobi.com, 美国节点",
+      "host-suffix, htx.com, 美国节点",
+      "host-keyword, ikuuu, 全球节点",
+      "host-suffix, wikipedia.org, 全球节点",
+      "host-suffix, 88maru.com, 全球节点",
+      "host-suffix, woodpeckerlog.com, 全球节点",
+      "host-suffix, trustwallet.com, 美国节点",
+      "host-suffix, unsplash.com, 全球节点",
+      "host-suffix, v2ex.com, 全球节点",
+      "host-suffix, api.iturrit.com, 全球节点",
       "host, localhost, direct",
       "host, e.crashlynatics.com, direct",
       "host-suffix, local, direct"
@@ -696,7 +657,7 @@
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list"
       ],
-      "note": "三条 AI 分流本是同一类（fmz AI 合集 + bm7 OpenAI + bm7 Anthropic），合并为一个文件、统一走「人工智能」策略组，避免同一域名被多条规则以不同策略重复命中。 排除 Apple Intelligence 相关域名（apple-relay.*/gateway.icloud.com/guzzoni.apple.com 等 9 个）：它们由独立的「Apple AI」条目负责（策略 全球手动策略），若同时出现在 AI 列表里、且 AI 在前，会把它们抢到「人工智能」策略，与原 Loon 行为不符。",
+      "note": "三条 AI 分流本是同一类（fmz AI 合集 + bm7 OpenAI + bm7 Anthropic），合并为一个文件、统一走「人工智能」策略组，避免同一域名被多条规则以不同策略重复命中。 排除 Apple Intelligence 相关域名（apple-relay.*/gateway.icloud.com/guzzoni.apple.com 等 9 个）：它们由独立的「Apple AI」条目负责（策略 全球节点），若同时出现在 AI 列表里、且 AI 在前，会把它们抢到「人工智能」策略，与原 Loon 行为不符。",
       "exclude_domains": [
         "apple-relay.apple.com",
         "apple-relay.fastly-edge.com",
@@ -731,17 +692,17 @@
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list"
       ],
-      "note": "Facebook 与 Instagram 同属 Meta，合并为一个列表、单一策略（全球手动策略），避免同一域被两条规则以不同策略重复命中。"
+      "note": "Facebook 与 Instagram 同属 Meta，合并为一个列表、单一策略（全球节点），避免同一域被两条规则以不同策略重复命中。"
     },
     {
       "id": "merge-google",
       "out": "Google.list",
-      "policy": "新国手动策略",
+      "policy": "新国节点",
       "sources": [
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list"
       ],
-      "note": "Google 与 YouTube 同属 Google 系、同走「新国手动策略」，合并为一个列表（原 Loon 里 googlevideo.com/youtube.com 就是 新国手动策略）。"
+      "note": "Google 与 YouTube 同属 Google 系、同走「新国节点」，合并为一个列表（原 Loon 里 googlevideo.com/youtube.com 就是 新国节点）。"
     },
     {
       "id": "merge-apple",
@@ -762,32 +723,35 @@
         "init-s01st.push.apple.com",
         "push-apple.com.akadns.net",
         "init*.push-apple.com.akadns.net",
-        "init*.push.apple.com"
+        "init*.push.apple.com",
+        "push.apple.com",
+        "courier-push-apple.com.akadns.net",
+        "push-apple.com.akadns.net"
       ]
     },
     {
       "id": "merge-apns",
       "out": "ApplePush.list",
-      "policy": null,
+      "policy": "APNs",
       "raw_rewrite": [
-        "# Apple Push Notification Service —— APNs 推送中继。",
-        "# 上游无独立 APNs 列表（fmz/bm7 均 404），故从 bm7 Apple 列表中提取 push/courier 域名固化于此。",
-        "# 保留独立条目（不并入 Apple）的原因：APNs 走直连更稳，且便于单独调整策略。",
+        "# Apple Push Notification Service（APNs）—— 推送中继，默认直连。",
+        "# 上游无独立 APNs 列表（fmz/bm7 实测 404），故从 bm7 Apple 列表提取 + 补 APNs 正式端点。",
+        "# 关键补充：真正的 APNs 端点形如 N-courier.push.apple.com（1..50），",
+        "#   bm7 的列表里**没有**这条，缺了它这些主机会落到兜底策略（走代理）——与「直连更稳」相反。",
         "# 来源参考: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
-        "host, courier-push-apple.com.akadns.net",
-        "host, init-p01md-lb.push-apple.com.akadns.net",
-        "host, init-p01st-lb.push-apple.com.akadns.net",
-        "host, init-p01st.push.apple.com",
-        "host, init-s01st-lb.push-apple.com.akadns.net",
-        "host, init-s01st.push.apple.com",
-        "host, push-apple.com.akadns.net",
-        "host-wildcard, init*.push-apple.com.akadns.net",
-        "host-wildcard, init*.push.apple.com"
+        "host-suffix, push.apple.com, APNs",
+        "host, courier-push-apple.com.akadns.net, APNs",
+        "host, init-p01md-lb.push-apple.com.akadns.net, APNs",
+        "host, init-p01st-lb.push-apple.com.akadns.net, APNs",
+        "host, init-s01st-lb.push-apple.com.akadns.net, APNs",
+        "host, push-apple.com.akadns.net, APNs",
+        "host-wildcard, init*.push-apple.com.akadns.net, APNs",
+        "host-wildcard, init*.push.apple.com, APNs"
       ],
       "sources": [
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list"
       ],
-      "note": "APNs 推送域名（从 bm7 Apple 列表提取）。用户要求保持独立条目。"
+      "note": "APNs 推送域名。含 `host-suffix, push.apple.com`（覆盖 N-courier.push.apple.com 等真实端点，bm7 列表没有）。每条都带策略字段 APNs。"
     }
   ],
   "output": {
