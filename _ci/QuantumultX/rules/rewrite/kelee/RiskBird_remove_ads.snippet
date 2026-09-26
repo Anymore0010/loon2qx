@@ -1,9 +1,0 @@
-# 风鸟去广告  —— 由 vendor/loon-plugins/RiskBird_remove_ads.lpx 自动转换（tools/convert-plugins.mjs）
-# 源插件: https://kelee.one/Tool/Loon/Lpx/RiskBird_remove_ads.lpx
-# 请勿手工编辑：改源插件后重新运行 bun tools/fetch-plugins.mjs && bun tools/convert-plugins.mjs
-
-^https:\/\/m\.riskbird\.com\/prod-qbb-api\/user\/getBannerList url reject-dict
-^https:\/\/m\.riskbird\.com\/prod-qbb-api\/searchHotEnt url reject-dict
-^https:\/\/m\.riskbird\.com\/prod-qbb-api\/query\/person\/personRecommend url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/host/kelee.one/Resource/JavaScript/RiskBird/RiskBird_remove_ads.js
-
-hostname = m.riskbird.com

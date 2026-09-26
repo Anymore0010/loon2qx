@@ -1,8 +1,0 @@
-# Spotify歌词增强  —— 由 vendor/loon-plugins/Spotify_lyrics_translation.lpx 自动转换（tools/convert-plugins.mjs）
-# 源插件: https://kelee.one/Tool/Loon/Lpx/Spotify_lyrics_translation.lpx
-# 请勿手工编辑：改源插件后重新运行 bun tools/fetch-plugins.mjs && bun tools/convert-plugins.mjs
-
-^https?:\/\/api\.spotify\.com\/v1\/tracks\? url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/host/kelee.one/Resource/JavaScript/Spotify/Spotify_response.js
-^https?:\/\/spclient\.wg\.spotify\.com\/color-lyrics\/v2\/track\/(.+)\?(.*)format=json url script-request-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/host/kelee.one/Resource/JavaScript/Spotify/Spotify_request.js
-
-hostname = api.spotify.com, spclient.wg.spotify.com
