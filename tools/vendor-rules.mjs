@@ -22,6 +22,7 @@ import { mkdirSync, writeFileSync, readFileSync, existsSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { convertRuleList } from "./convert-rules.mjs";
+import { ruleSig, sameTarget } from "./lib/rule-target.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const src = JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8"));
@@ -45,6 +46,14 @@ if (toVendor.length === 0 && mergeGroups.length === 0) {
   process.exit(0);
 }
 
+/** 上游 URL -> 仓库内快照相对路径（与 fetch-snapshot 的 localPathFor 一致）。 */
+function snapshotPathFor(url) {
+  const m = (url ?? "").match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
+  if (m) return `snapshot/github.com/${m[1]}`;
+  const m2 = (url ?? "").match(/^https:\/\/([^/]+)\/(.+)$/);
+  return m2 ? `snapshot/host/${m2[1]}/${m2[2]}` : null;
+}
+
 const report = [];
 let failures = 0;
 
@@ -52,7 +61,8 @@ for (const f of toVendor) {
   process.stdout.write(`vendoring ${f.id} … `);
   let text;
   try {
-    const res = await fetch(f.upstream_url, { headers: { "User-Agent": "proxy-profile-vendor/1.0" } });
+    const res = await fetch(f.upstream_url, { headers: { // kelee.one / rule.kelee.one 只对 Loon 的 UA 放行（其余返回 Cloudflare 403）
+      "User-Agent": "Loon/998 CFNetwork/3896.200.41 Darwin/27.2.0" } });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     text = await res.text();
   } catch (e) {
@@ -80,6 +90,173 @@ for (const f of toVendor) {
   writeFileSync(file, body);
   console.log(`${rules.length} rules${dropped.length ? `, ${dropped.length} dropped` : ""}${notes.length ? `, ${notes.length} adjusted` : ""} -> ${f.vendored_as}`);
   report.push({ id: f.id, url: f.upstream_url, ok: true, count: rules.length, dropped, notes, stats, file: f.vendored_as });
+}
+
+// ---- rewrite 合并组 --------------------------------------------------------
+// 把多个 rewrite 资源合成**一份本仓库文件**：按 (正则, 动作) 去重，kelee 侧优先。
+// 目的：条目更少、同一响应体不会被两套脚本重复处理，且产物可 review。
+//
+// 为什么不是简单拼接：bm7 的 Advertising.conf 是纯 reject（幂等），
+// fmz 的 rewrite.snippet 与 kelee 的 BlockAdvertisers.conf 含 script-/jsonjq- 规则 ——
+// 重复命中的话同一个 body 会被处理两次。所以按 (正则, 动作) 去重，
+// 且**kelee 的条目排在前面**（与 [rewrite_remote] 里 kelee 优先的方向一致）。
+{
+  let skippedNonRewrite = 0;
+  const mergeRewrites = src.rewrites.filter((r) => r.merges?.length && r.local_file);
+  // 合并前先收集「独立条目」的语义签名：那些**不属于任何合并组**、但仍作为
+  // rewrite_remote 条目启用的资源（主要是逐个 App 的 kelee .conf，如 Zhihu/RedPaper）。
+  // 它们更具体、且方向也是 kelee 优先，所以合并时要把重叠项排除掉 ——
+  // 否则同一个响应体会被两套脚本处理（validate 的跨源重复检查会直接报错，
+  // 实测合并后出现 35 条：kelee/Zhihu.conf <-> 广告拦截合集MAX.list）。
+  const mergedInputs = new Set();
+  for (const r0 of src.rewrites) for (const m0 of r0.merges ?? []) {
+    if (m0.local_file) mergedInputs.add(m0.local_file);
+  }
+  const standaloneSigs = [];
+  for (const r0 of src.rewrites) {
+    if (!r0.enabled || !r0.local_file) continue;
+    if (r0.merges?.length) continue;              // 合并组的产物，跳过
+    if (mergedInputs.has(r0.local_file)) continue; // 合并组的输入，跳过
+    const abs0 = join(ROOT, r0.local_file);
+    if (!existsSync(abs0)) continue;
+    for (const line of readFileSync(abs0, "utf8").split(/\r?\n/)) {
+      const tt = line.trim();
+      const mm0 = tt.match(/^(\S+)\s+url(?:-and-header)?\s+(\S+)/);
+      if (!mm0) continue;
+      if (!/^(script-|jsonjq-)/.test(mm0[2].toLowerCase())) continue;
+      standaloneSigs.push({ sig: ruleSig(mm0[1]), from: r0.tag });
+    }
+  }
+
+  for (const r of mergeRewrites) {
+    process.stdout.write(`合并 ${r.id} … `);
+    const bodySigs = []; // 本组内已收的 body-rewrite 语义签名（kelee 排第一 -> kelee 胜出）
+    let semanticallyDeduped = 0;
+    let excludedByStandalone = 0;
+    const all = [];
+    const seen = new Set();
+    let failed = false;
+    const perSource = [];
+    const hostnames = new Set();
+    // raw_rewrite：内联在 sources.json 里的手写规则（如 Anymore 自用增强的 41 条）。
+    // 放在 merges **之前** —— 它们是用户手写的、优先级最高。
+    const sources = [];
+    if (r.raw_rewrite?.length) sources.push({ tag: "内联手写规则（raw_rewrite）", raw: r.raw_rewrite });
+    sources.push(...r.merges);
+    for (const m of sources) {
+      if (m.raw) {
+        let added0 = 0;
+        for (const line of m.raw) {
+          const tt = line.trim();
+          if (!tt) continue;
+          if (/^hostname\s*=/i.test(tt)) {
+            for (const h of tt.split("=", 2)[1].split(",")) {
+              const v = h.trim();
+              if (v && /^[A-Za-z0-9*?._-]+$/.test(v) && !v.startsWith("-")) hostnames.add(v);
+            }
+            continue;
+          }
+          if (tt.startsWith("#")) continue;
+          const mm = tt.match(/^(\S+)\s+url(?:-and-header)?\s+(\S+)/);
+          if (!mm) continue;
+          const key = `${mm[1]}\t${mm[2].toLowerCase()}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          all.push(tt);
+          added0++;
+        }
+        perSource.push(`${m.tag}: ${added0} 条`);
+        continue;
+      }
+      let text = null;
+      // local_file：直接读本仓库文件（kelee 产物）
+      if (m.local_file) {
+        const abs = join(ROOT, m.local_file);
+        if (existsSync(abs)) text = readFileSync(abs, "utf8");
+      } else if (m.url) {
+        // 上游 URL：读 fetch-snapshot 镜像好的快照（保证离线可重建、结果确定）。
+        // 不用 _raw：合并**自己**负责去重（见下面的语义判据），
+        // 读未排除的原始副本会让被 kelee 顶掉的规则回灌。
+        const snapAbs = (() => { const r0 = snapshotPathFor(m.url); return r0 ? join(ROOT, r0) : null; })();
+        if (snapAbs && existsSync(snapAbs)) text = readFileSync(snapAbs, "utf8");
+        else {
+          try {
+            const res = await fetch(m.url, { headers: { "User-Agent": "Loon/998 CFNetwork/3896.200.41 Darwin/27.2.0" } });
+            if (res.ok) text = await res.text();
+          } catch { /* 下面统一按失败处理 */ }
+        }
+      }
+      if (!text) {
+        failed = true;
+        console.log(`FAILED 取不到 ${m.tag ?? m.url ?? m.local_file}`);
+        report.push({ id: r.id, url: m.tag ?? m.url ?? m.local_file, ok: false, error: "取不到内容" });
+        continue;
+      }
+      let added = 0;
+      for (const line of text.split(/\r?\n/)) {
+        const t = line.trim();
+        if (!t) continue;
+        if (/^hostname\s*=/i.test(t)) {
+          for (const h of t.split("=", 2)[1].split(",")) {
+            const v = h.trim();
+            if (v && /^[A-Za-z0-9*?._-]+$/.test(v) && !v.startsWith("-")) hostnames.add(v);
+          }
+          continue;
+        }
+        if (t.startsWith("#")) continue;
+        // 只收**重写行**。上游聚合资源里混着分流规则（`host, x, reject` 之类），
+        // 放进 rewrite 资源是无效的 —— QX 的 rewrite 段只解析 `… url <动作> …`，
+        // 其余行会被静默忽略（实测 fmz 的 rewrite.snippet 里就有约 2700 行是分流）。
+        const mm = t.match(/^(\S+)\s+url(?:-and-header)?\s+(\S+)/);
+        if (!mm) { skippedNonRewrite++; continue; }
+        // 去重键 = (URL正则, 动作)，**忽略脚本 URL**（跨源同一动作会钉不同脚本版本）
+        const key = `${mm[1]}\t${mm[2].toLowerCase()}`;
+        if (seen.has(key)) continue;
+        const isBody = /^(script-|jsonjq-)/.test(mm[2].toLowerCase());
+        if (isBody) {
+          // 会改写响应体的规则要做**语义**判重：上游常把同一接口写成不同正则
+          // （`^https:\/\/x` vs `^https?:\/\/x`），只比字符串会漏，
+          // 导致同一个 body 被两套脚本依次处理（本项目反复踩的坑）。
+          // 因为 kelee 排在第一个来源，先到者即 kelee —— 方向就是「kelee 胜出」。
+          const sig = ruleSig(mm[1]);
+          const dup = bodySigs.find((e) => sameTarget(sig, e.sig));
+          if (dup) { semanticallyDeduped++; continue; }
+          // 与独立条目（逐个 App 的 kelee .conf）重叠 -> 让独立条目负责
+          if (standaloneSigs.some((e) => sameTarget(sig, e.sig))) { excludedByStandalone++; continue; }
+          bodySigs.push({ sig, from: m.tag ?? m.url ?? m.local_file });
+        }
+        seen.add(key);
+        all.push(t);
+        added++;
+      }
+      perSource.push(`${m.tag ?? (m.url ?? m.local_file).split("/").pop()}: ${added} 条${skippedNonRewrite ? `，丢弃 ${skippedNonRewrite} 条非重写行` : ""}`);
+    }
+    // 与 fetch-snapshot 一致：任一源失败就不覆盖已提交的完整版本
+    if (failed || all.length === 0) {
+      const keep = existsSync(join(ROOT, r.local_file)) ? "已保留上一次的完整版本" : "无旧版本可保留";
+      console.log(`跳过写入 ${r.local_file} —— ${keep}`);
+      report.push({ id: r.id, ok: false, error: failed ? "部分来源失败，保留旧版" : "结果为空", file: r.local_file, kept: true });
+      continue;
+    }
+    const header = [
+      "# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑",
+      `# 合并来源（${r.merges.length} 个，按顺序优先）:`,
+      ...r.merges.map((m) => `#   ${m.tag ?? ""}  ${m.url ?? m.local_file}`),
+      `# 去重键: (URL正则, 动作)，忽略脚本 URL`,
+      `# 重写规则数: ${all.length}`,
+      `# 重新生成: bun tools/vendor-rules.mjs`,
+      "",
+      ...all,
+      "",
+      `hostname = ${[...hostnames].sort().join(", ")}`,
+      "",
+    ];
+    const file = join(ROOT, r.local_file);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, header.join("\n"));
+    console.log(`${all.length} 条（${perSource.join(" | ")}）${semanticallyDeduped ? `，组内去重 ${semanticallyDeduped} 条` : ""}${excludedByStandalone ? `，让给独立条目 ${excludedByStandalone} 条` : ""} -> ${r.local_file}`);
+    report.push({ id: r.id, ok: true, count: all.length, dropped: [], notes: [], file: r.local_file });
+  }
 }
 
 // ---- 合并组 ----------------------------------------------------------------
@@ -115,7 +292,8 @@ for (const g of mergeGroups) {
   let groupFailed = false; // 本组任一源失败 -> 不覆盖已提交的产物
   for (const u of g.sources) {
     try {
-      const res = await fetch(u, { headers: { "User-Agent": "proxy-profile-vendor/1.0" } });
+      const res = await fetch(u, { headers: { // kelee.one / rule.kelee.one 只对 Loon 的 UA 放行（其余返回 Cloudflare 403）
+      "User-Agent": "Loon/998 CFNetwork/3896.200.41 Darwin/27.2.0" } });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const { rules } = convertRuleList(await res.text(), { policy: g.policy });
       // exclude_domains：这些域名由别的条目负责，合并时必须剔除，

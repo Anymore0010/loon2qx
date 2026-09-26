@@ -22,12 +22,25 @@ import { resolveRepoBase } from "./repo-url.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const VENDOR = join(ROOT, "vendor", "loon-plugins");
-const OUT = join(ROOT, "QuantumultX", "rules", "kelee");
+// 产物按用途分目录：重写放 rules/rewrite/kelee/，分流放 rules/filter/kelee/。
+const OUT_REWRITE = join(ROOT, "QuantumultX", "rules", "rewrite", "kelee");
+const OUT_FILTER = join(ROOT, "QuantumultX", "rules", "filter", "kelee");
 const CHECK = process.argv.includes("--check");
 const repoBase = resolveRepoBase(ROOT).rawBase;
 
 /** kelee.one 与 GitHub 的脚本一律镜像进本仓库后引用（kelee.one 对 QX 的 UA 不可靠）。 */
 const UA = { "User-Agent": "Loon/998 CFNetwork/3896.200.41 Darwin/27.2.0", accept: "*/*", "accept-language": "zh-CN,zh-Hans;q=0.9" };
+
+/**
+ * 这些插件**不产出**文件（用户明确从配置里去掉 / 已由合并条目覆盖）。
+ * 不加跳过清单的话，转换器每轮都会重新生成它们 -> validate 的孤儿检查报错 ->
+ * CI 红绿循环（实测出现过）。
+ */
+const SKIP_PLUGINS = new Set([
+  "LoonGallery.lpx",     // 用户去掉（插件仓库）
+  "QuickSearch.lpx",     // 用户去掉（快捷搜索）
+  "iRingo.WeatherKit.lpx", // 用户去掉，保留社区版 iRingo WeatherKit
+]);
 
 const skipReport = [];
 const pluginReport = [];
@@ -410,7 +423,8 @@ async function tryInlineJq(pattern, line, plugin) {
 // ---------------------------------------------------------------- 主流程
 
 const index = JSON.parse(readFileSync(join(VENDOR, "index.json"), "utf8"));
-mkdirSync(OUT, { recursive: true });
+mkdirSync(OUT_REWRITE, { recursive: true });
+mkdirSync(OUT_FILTER, { recursive: true });
 
 const claimedSigs = [];      // kelee 侧已产出的语义签名
 const claimedExact = new Map(); // kelee 侧已产出的整行
@@ -483,12 +497,15 @@ for (const p of index.plugins) {
   if (!p.file) continue;
   const text = readFileSync(join(ROOT, p.file), "utf8");
   const nm = text.match(/^#!name\s*=\s*(.+)$/m)?.[1]?.trim() || p.name.replace(/\.lpx$/, "");
-  if (!p.enabled) {
-    pluginReport.push({ plugin: p.name, name: nm, enabled: false, rules: 0, rewrites: 0, hostnames: 0 });
-    continue; // 禁用插件不产出文件，避免"已生成但无人引用"的孤儿
+  if (!p.enabled || SKIP_PLUGINS.has(p.name)) {
+    pluginReport.push({
+      plugin: p.name, name: nm, enabled: false, rules: 0, rewrites: 0, hostnames: 0,
+      skipped_reason: SKIP_PLUGINS.has(p.name) ? "用户从配置中去掉" : "源配置里 enabled=false",
+    });
+    continue; // 不产出文件，避免"已生成但无人引用"的孤儿
   }
   const base = p.name.replace(/\.lpx$/, "");
-  const selfRel = `QuantumultX/rules/kelee/${base}.conf`;
+  const selfRel = `QuantumultX/rules/rewrite/kelee/${base}.conf`;
 
   const argDefaults = parseArgumentDefaults(text);
   const filters = [];
@@ -598,12 +615,12 @@ for (const p of index.plugins) {
     "# 请勿手工编辑：改源插件后重新运行 bun tools/fetch-plugins.mjs && bun tools/convert-plugins.mjs",
   ];
   if (filters.length) {
-    writeIfChanged(join(OUT, `${base}.list`), [...header, "", ...filters, ""].join("\n"));
+    writeIfChanged(join(OUT_FILTER, `${base}.list`), [...header, "", ...filters, ""].join("\n"));
     written.add(`${base}.list`);
   }
   if (localized.length) {
     writeIfChanged(
-      join(OUT, `${base}.conf`),
+      join(OUT_REWRITE, `${base}.conf`),
       [...header, "", ...localized, "", `hostname = ${hosts.join(", ")}`, ""].join("\n"),
     );
     written.add(`${base}.conf`);
@@ -611,85 +628,25 @@ for (const p of index.plugins) {
   pluginReport.push({ plugin: p.name, name: nm, enabled: true, rules: filters.length, rewrites: localized.length, hostnames: hosts.length });
 }
 
-// ---- kelee 胜出后的排除清单（fetch-snapshot.mjs 会读取并真的排掉） ----
-//
-// 空清单必须当**错误**：若转换器一个重叠都没找到，要么是它读错了数据源
-// （历史上就读过被就地改写的快照，导致清单自我清空、每周振荡），
-// 要么是非 kelee 源全被删了 —— 两种都需要人看一眼，而不是静默通过。
-if (superseded === 0 && otherRules.length > 0) {
-  console.error(
-    `ERROR 转换器在 ${otherRules.length} 条既有重写规则里没找到任何与 kelee 重叠的条目 —— ` +
-      "排除清单为空，说明比对数据源可疑（应读 snapshot/_raw/ 的原始副本）",
-  );
-  process.exitCode = 1;
-}
-if (otherRules.length === 0) {
-  console.error("ERROR 读不到任何既有的重写规则（snapshot 与 _raw 都不存在？）—— 去重无法判定");
-  process.exitCode = 1;
-}
+// ---- 去重职责已移交 tools/vendor-rules.mjs 的合并步骤 ----
+// 合并按 (正则,动作) + 语义判据在**源之间**去重，且 kelee 排第一个来源 = kelee 胜出。
+// 所以这里不再生成 _exclusions.json（原机制要求目标资源仍是 rewrite_remote 条目，
+// 而合并后它们已不是，清单永远落不了地）。
+const localTargets = new Map();
 
-const localTargets = new Map(); // 绝对路径 -> Map<pattern, reason>
-for (const [target, m] of exclusions) {
-  if (!/^https?:/.test(target)) {
-    const abs = join(ROOT, target);
-    if (existsSync(abs)) localTargets.set(abs, m);
-  }
-}
-let prunedLines = 0;
-if (!CHECK) {
-  for (const [abs, m] of localTargets) {
-    const pats = [...m.keys()];
-    const entries = pats.map((pattern) => {
-      let re = null;
-      try { re = new RegExp(pattern, "i"); } catch { /* 非法正则只走语义判据 */ }
-      return { pattern, re, sig: ruleSig(pattern) };
-    });
-    const src = readFileSync(abs, "utf8").split(/\r?\n/);
-    const out = [];
-    for (const line of src) {
-      if (line.includes(" url ") && !line.trim().startsWith("#")) {
-        const linePat = line.trim().split(/\s+url(?:-and-header)?\s+/)[0];
-        const lineSig = ruleSig(linePat);
-        // 与 fetch-snapshot 用同一套判据（sameTarget），否则两边结论会不一致：
-        // 上游常把同一接口写成不同正则（`^https:\/\/x` vs `^https?:\/\/x`）。
-        const hit = entries.find((e) => (e.re && e.re.test(line)) || sameTarget(lineSig, e.sig));
-        if (hit) {
-          prunedLines++;
-          out.push(`# [kelee 胜出] 已移除（与 kelee ${m.get(hit.pattern) ?? ""} 命中同一响应体）: ${line.trim().slice(0, 100)}`);
-          continue;
-        }
-      }
-      out.push(line);
-    }
-    if (out.length !== src.length || out.some((l, i) => l !== src[i])) {
-      writeIfChanged(abs, out.join("\n"));
-    }
-  }
-}
-
-const upstreamExclusions = [...exclusions].filter(([t]) => /^https?:/.test(t));
-const exclusionDoc = {
-  generated_note:
-    "由 tools/convert-plugins.mjs 生成：kelee 插件胜出后，需要从其他 rewrite 资源里排掉的重叠规则。" +
-    "fetch-snapshot.mjs 会按这份清单做排除，并断言排除真的命中（否则报错，避免静默失效）。",
-  superseded,
-  targets: upstreamExclusions.map(([target, m]) => ({
-    target,
-    patterns: [...m.keys()],
-    reason: Object.fromEntries(m),
-  })),
-};
-writeIfChanged(join(OUT, "_exclusions.json"), JSON.stringify(exclusionDoc, null, 2) + "\n");
 
 
 // ---- 清理本轮不再产出的文件（禁用/改名/删除插件都不会留下孤儿） ----
 const pruned = [];
 if (!CHECK) {
-  for (const f of readdirSync(OUT)) {
-    if (!/\.(conf|list)$/.test(f) || f.startsWith("_")) continue;
-    if (!written.has(f)) {
-      rmSync(join(OUT, f));
-      pruned.push(f);
+  for (const dir of [OUT_REWRITE, OUT_FILTER]) {
+    if (!existsSync(dir)) continue;
+    for (const f of readdirSync(dir)) {
+      if (!/\.(conf|list)$/.test(f) || f.startsWith("_")) continue;
+      if (!written.has(f)) {
+        rmSync(join(dir, f));
+        pruned.push(f);
+      }
     }
   }
 }

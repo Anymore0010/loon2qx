@@ -1,13 +1,13 @@
 {
-  "total": 8,
-  "ok": 8,
+  "total": 10,
+  "ok": 10,
   "failed": 0,
-  "rules": 2583,
+  "rules": 4905,
   "resources": [
     {
       "id": "filter-awavenue",
       "upstream": "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
-      "file": "QuantumultX/rules/AWAvenue.list",
+      "file": "QuantumultX/rules/filter/AWAvenue.list",
       "rules": 965,
       "dropped": 0,
       "adjusted": 0,
@@ -16,8 +16,32 @@
     {
       "id": "filter-apple-ai",
       "upstream": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
-      "file": "QuantumultX/rules/AppleIntelligence.list",
+      "file": "QuantumultX/rules/filter/AppleIntelligence.list",
       "rules": 11,
+      "dropped": 0,
+      "adjusted": 0,
+      "error": null
+    },
+    {
+      "id": "rewrite-anymore-enhance",
+      "file": "QuantumultX/rules/QuantumultX/rules/rewrite/AnymoreADEnhance.snippet",
+      "rules": 124,
+      "dropped": 0,
+      "adjusted": 0,
+      "error": null
+    },
+    {
+      "id": "rewrite-httpdns-merged",
+      "file": "QuantumultX/rules/QuantumultX/rules/rewrite/HTTPDNSBlock.conf",
+      "rules": 42,
+      "dropped": 0,
+      "adjusted": 0,
+      "error": null
+    },
+    {
+      "id": "rewrite-ads-max",
+      "file": "QuantumultX/rules/QuantumultX/rules/rewrite/AdsBlockMAX.conf",
+      "rules": 2162,
       "dropped": 0,
       "adjusted": 0,
       "error": null
@@ -25,17 +49,8 @@
     {
       "id": "merge-ai",
       "upstream": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list",
-      "file": "QuantumultX/rules/AI.list",
+      "file": "QuantumultX/rules/filter/AI.list",
       "rules": 93,
-      "dropped": 0,
-      "adjusted": 0,
-      "error": null
-    },
-    {
-      "id": "merge-jd-price",
-      "upstream": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
-      "file": "QuantumultX/rules/JD_price.list",
-      "rules": 2,
       "dropped": 0,
       "adjusted": 0,
       "error": null
@@ -43,7 +58,7 @@
     {
       "id": "merge-meta",
       "upstream": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list",
-      "file": "QuantumultX/rules/Meta.list",
+      "file": "QuantumultX/rules/filter/Meta.list",
       "rules": 574,
       "dropped": 0,
       "adjusted": 0,
@@ -52,7 +67,7 @@
     {
       "id": "merge-google",
       "upstream": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list",
-      "file": "QuantumultX/rules/Google.list",
+      "file": "QuantumultX/rules/filter/Google.list",
       "rules": 907,
       "dropped": 0,
       "adjusted": 0,
@@ -60,9 +75,9 @@
     },
     {
       "id": "merge-apns",
-      "upstream": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
-      "file": "QuantumultX/rules/ApplePush.list",
-      "rules": 15,
+      "upstream": "https://kelee.one/Tool/Loon/Lsr/ApplePushNotificationService.lsr",
+      "file": "QuantumultX/rules/filter/ApplePush.list",
+      "rules": 11,
       "dropped": 0,
       "adjusted": 0,
       "error": null
@@ -70,7 +85,7 @@
     {
       "id": "merge-apple",
       "upstream": "",
-      "file": "QuantumultX/rules/Apple.list",
+      "file": "QuantumultX/rules/filter/Apple.list",
       "rules": 16,
       "dropped": 0,
       "adjusted": 0,

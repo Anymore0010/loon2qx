@@ -75,10 +75,14 @@ export function convertRuleList(text, opts = {}) {
   const seen = new Set();
 
   for (const raw of text.split(/\r?\n/)) {
-    const line = raw.trim();
+    // 行内 `//` 注释必须先剥掉：Loon 的 .lsr 大量使用 `DOMAIN-SUFFIX, push.apple.com //推送通知`，
+    // 不剥的话注释会落进值字段（实测生成 `host-suffix, push.apple.com //推送通知, APNs` ——
+    // 域名里带上中文注释，规则直接失效）。注意 `//` 出现在 URL 里时不算注释，
+    // 但分流规则的值不会是 URL，所以按第一个 `//` 截断是安全的。
+    const line = raw.split("//")[0].trim();
 
     // Comments: QX accepts # ; // at line start. Metadata uses #!.
-    if (!line || /^[#;/]/.test(line)) continue;
+    if (!line || /^[#;]/.test(line)) continue;
     if (/^\[.*\]$/.test(line)) continue;
 
     // Logical combination rules cannot be expressed in QX.

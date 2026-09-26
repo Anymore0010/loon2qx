@@ -176,37 +176,20 @@ function hasHostnameLine(text) {
  *     若不去重则同一响应体会被两套脚本各处理一次）。
  * 排除都带「必须真的排掉」的断言：上游一改写法排除就会静默失效，必须报错而不是放过。
  */
+
 /**
- * 某个上游资源需要排掉的规则。
- *
- * 两个来源，合并返回（元素形如 `{pattern, re, sig}`）：
- *  1) sources.json 里该条目自己的 exclude_rule_patterns（历史用法）
- *  2) QuantumultX/rules/kelee/_exclusions.json —— 转换器生成：kelee 插件胜出后，
- *     把被 kelee 顶掉的重叠规则从聚合资源里排掉（用户要求"复刻插件效果"，
- *     若不去重则同一响应体会被两套脚本各处理一次）。
- * 排除都带「必须真的命中」的断言：上游一改写法排除就会静默失效，必须报错而不是放过。
+ * sources.json 里该条目自己声明的排除正则（历史用法）。
+ * 注意：kelee 胜出的去重**已移交** tools/vendor-rules.mjs 的合并步骤 ——
+ * 合并后的资源不再是 rewrite_remote 条目，_exclusions.json 那套落不了地，已移除。
  */
-function findExclusions(r) {
-  const raw = [];
-  const declared = [...src.rewrites, ...src.filters].find(
+function declaredExclusions(r) {
+  const d = [...src.rewrites, ...src.filters].find(
     (x) => x.exclude_rule_patterns && x.url === r.url,
   );
-  if (declared) raw.push(...declared.exclude_rule_patterns);
-
-  const manifest = join(ROOT, "QuantumultX", "rules", "kelee", "_exclusions.json");
-  if (existsSync(manifest)) {
-    try {
-      const doc = JSON.parse(readFileSync(manifest, "utf8"));
-      for (const t of doc.targets ?? []) {
-        if (t.target === r.url) raw.push(...t.patterns);
-      }
-    } catch {
-      console.error("WARN 读 _exclusions.json 失败（kelee 排除清单未生效）");
-    }
-  }
-  return raw.map((pattern) => {
+  if (!d) return [];
+  return d.exclude_rule_patterns.map((pattern) => {
     let re = null;
-    try { re = new RegExp(pattern, "i"); } catch { /* 非法正则则只走语义判据 */ }
+    try { re = new RegExp(pattern, "i"); } catch { /* 非法正则只走语义判据 */ }
     return { pattern, re, sig: ruleSig(pattern) };
   });
 }
@@ -340,7 +323,7 @@ for (const r of results) {
   // 会被两套 script-response-body 依次处理。改由独立条目负责，故把聚合里的排除掉。
   // 排除是**按 sources.json 声明**做的，并且带「必须真的排掉」的断言 —— 否则
   // 上游一改写法，排除就会静默失效，重复处理又回来了。
-  const excl = findExclusions(r);
+  const excl = declaredExclusions(r);
   if (excl && excl.length && /(\.snippet|\.conf|\.list)$/.test(r.local)) {
     const lines = body.split(/\r?\n/);
     const removeAt = new Set();

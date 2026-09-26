@@ -7,14 +7,16 @@
 
 | 上游来源 | 转换后文件 | 规则数 | 丢弃 |
 |---|---|---|---|
-| https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list | `QuantumultX/rules/AWAvenue.list` | 965 | 0 |
-| https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list | `QuantumultX/rules/AppleIntelligence.list` | 11 | 0 |
-| https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list | `QuantumultX/rules/AI.list` | 93 | 0 |
-| https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js | `QuantumultX/rules/JD_price.list` | 2 | 0 |
-| https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list | `QuantumultX/rules/Meta.list` | 574 | 0 |
-| https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list | `QuantumultX/rules/Google.list` | 907 | 0 |
-| https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list | `QuantumultX/rules/ApplePush.list` | 15 | 0 |
-|  | `QuantumultX/rules/Apple.list` | 16 | 0 |
+| https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list | `QuantumultX/rules/filter/AWAvenue.list` | 965 | 0 |
+| https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list | `QuantumultX/rules/filter/AppleIntelligence.list` | 11 | 0 |
+| undefined | `QuantumultX/rules/QuantumultX/rules/rewrite/AnymoreADEnhance.snippet` | 124 | 0 |
+| undefined | `QuantumultX/rules/QuantumultX/rules/rewrite/HTTPDNSBlock.conf` | 42 | 0 |
+| undefined | `QuantumultX/rules/QuantumultX/rules/rewrite/AdsBlockMAX.conf` | 2162 | 0 |
+| https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list | `QuantumultX/rules/filter/AI.list` | 93 | 0 |
+| https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list | `QuantumultX/rules/filter/Meta.list` | 574 | 0 |
+| https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list | `QuantumultX/rules/filter/Google.list` | 907 | 0 |
+| https://kelee.one/Tool/Loon/Lsr/ApplePushNotificationService.lsr | `QuantumultX/rules/filter/ApplePush.list` | 11 | 0 |
+|  | `QuantumultX/rules/filter/Apple.list` | 16 | 0 |
 
 ## 选项调整（规则保留）
 

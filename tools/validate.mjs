@@ -365,12 +365,14 @@ function checkVendoredRules() {
             err(rel, 0, `url-and-header 缺少 header 条件（形如 \\r\\nUser-Agent: ...）: ${line.slice(0, 70)}`);
           }
         } else {
-          // URL 正则必须只含 ASCII 且无空格/逗号（上游破损行会把中文或逗号嵌进来）。
-          // 但 `{n,m}` 量词里的逗号是合法的（如 `\d{3,4}`），先剥掉再判。
+          // URL 正则必须只含 ASCII 且**不含空白**（空白才是字段分隔符）。
+          // 早先还检查了逗号，但那是错的：URL 查询串里合法地含逗号
+          // （如 `x-oss-process=image/resize,m_fill,w_1\\d{3},h_2\\d{3}`），
+          // 会把一批正常规则误报成"上游破损行"（实测 5 条）。
+          // 真正的结构性不变量是「正则是单个无空白 token」。
           const pat = line.replace(/\s+url\s+[\s\S]*$/, "");
-          const bare = pat.replace(/\{\d+,\d*\}/g, "");
-          if (!/^[\x20-\x7e]+$/.test(pat) || /[\s,]/.test(bare)) {
-            err(rel, 0, `URL 正则含非 ASCII 或分隔符（上游破损行）: ${pat.slice(0, 60)}`);
+          if (!/^[\x20-\x7e]+$/.test(pat) || /\s/.test(pat)) {
+            err(rel, 0, `URL 正则含非 ASCII 或空白（上游破损行）: ${pat.slice(0, 60)}`);
           }
         }
         count++;
@@ -553,6 +555,18 @@ function checkOrphanedRuleFiles(p) {
   for (const name of ["filter_remote", "rewrite_remote"]) {
     for (const e of p.sections.get(name) ?? []) lines.push(e.line);
   }
+  // 合并的**输入**也算被引用：它们不再作为 rewrite_remote 条目出现，
+  // 而是被 sources.json 的 merges[].local_file 引用（如 kelee/BlockAdvertisers.conf
+  // 是「广告拦截合集MAX」的来源之一）。不认的话会被误报成"无人引用"。
+  try {
+    const src = JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8"));
+    for (const arr of [src.rewrites, src.filters]) {
+      for (const e of arr ?? []) {
+        for (const m of e.merges ?? []) if (m.local_file) lines.push(m.local_file);
+        if (e.local_file) lines.push(e.local_file);
+      }
+    }
+  } catch { /* 读不到 sources.json 时仍按已解析的段判定 */ }
   const blob = lines.join("\n");
   let orphans = 0;
   for (const f of readdirSync(dir, { recursive: true })) {

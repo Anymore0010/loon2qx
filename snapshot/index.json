@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 163,
-  "mirrored": 163,
+  "total": 149,
+  "mirrored": 149,
   "failed": 0,
   "exclusionMisses": [],
   "resources": [
@@ -75,33 +75,6 @@
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
       "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
       "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-block-httpdns",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-advertising",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-fmz-ads",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
       "status": 200,
       "error": null
     },
@@ -331,15 +304,6 @@
       "error": null
     },
     {
-      "id": "icon-filter-kelee-LoonGallery",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Loon.png",
-      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Loon.png",
-      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Loon.png",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "icon-filter-kelee-PinDuoDuo_remove_ads",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/PinDuoDuo.png",
@@ -426,15 +390,6 @@
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/iQiYi_Video.png",
       "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/iQiYi_Video.png",
       "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/iQiYi_Video.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-filter-kelee-iRingo.WeatherKit",
-      "kind": "icon",
-      "url": "https://developer.apple.com/assets/elements/icons/weatherkit/weatherkit-128x128.png",
-      "snapshot": "snapshot/host/developer.apple.com/assets/elements/icons/weatherkit/weatherkit-128x128.png",
-      "upstream_raw": null,
       "status": 200,
       "error": null
     },
@@ -619,15 +574,6 @@
       "error": null
     },
     {
-      "id": "icon-rewrite-kelee-QuickSearch",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Safari.png",
-      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Safari.png",
-      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Safari.png",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "icon-rewrite-kelee-RedPaper_remove_ads",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RedPaper.png",
@@ -718,6 +664,33 @@
       "error": null
     },
     {
+      "id": "script:response.bundle.js",
+      "kind": "js",
+      "url": "https://github.com/NSRingo/WeatherKit/releases/download/v3.3.2/response.bundle.js",
+      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/download/v3.3.2/response.bundle.js",
+      "upstream_raw": null,
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:request.bundle.js",
+      "kind": "js",
+      "url": "https://github.com/NSRingo/WeatherKit/releases/download/v3.3.2/request.bundle.js",
+      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/download/v3.3.2/request.bundle.js",
+      "upstream_raw": null,
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:chavy.boxjs.js",
+      "kind": "js",
+      "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js",
+      "snapshot": "snapshot/github.com/chavyleung/scripts/master/box/chavy.boxjs.js",
+      "upstream_raw": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js",
+      "status": 200,
+      "error": null
+    },
+    {
       "id": "script:12306.js",
       "kind": "js",
       "url": "https://raw.githubusercontent.com/kokoryh/Script/master/js/12306.js",
@@ -745,29 +718,11 @@
       "error": null
     },
     {
-      "id": "script:cainiao.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/cainiao/cainiao.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/cainiao/cainiao.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/cainiao/cainiao.js",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "script:myBlockAds.js",
       "kind": "js",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:adrive.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/adrive/adrive.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/adrive/adrive.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/adrive/adrive.js",
       "status": 200,
       "error": null
     },
@@ -795,15 +750,6 @@
       "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/tieba-json.js",
       "snapshot": "snapshot/github.com/app2smile/rules/master/js/tieba-json.js",
       "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/tieba-json.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:tieba-proto.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/tieba-proto.js",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/js/tieba-proto.js",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/tieba-proto.js",
       "status": 200,
       "error": null
     },
@@ -840,6 +786,15 @@
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/caixin/caixinAd.js",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/caixin/caixinAd.js",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/caixin/caixinAd.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:cainiao.js",
+      "kind": "js",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/cainiao/cainiao.js",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/cainiao/cainiao.js",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/cainiao/cainiao.js",
       "status": 200,
       "error": null
     },
@@ -984,15 +939,6 @@
       "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/alicdn.js",
       "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/alicdn.js",
       "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/alicdn.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:jingdong.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/jingdong/jingdong.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/jingdong/jingdong.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/jingdong/jingdong.js",
       "status": 200,
       "error": null
     },
@@ -1231,24 +1177,6 @@
       "error": null
     },
     {
-      "id": "script:spotify-qx-header.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-qx-header.js",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/js/spotify-qx-header.js",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-qx-header.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:spotify-proto.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-proto.js",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/js/spotify-proto.js",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-proto.js",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "script:spotify-json.js",
       "kind": "js",
       "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-json.js",
@@ -1321,29 +1249,11 @@
       "error": null
     },
     {
-      "id": "script:goofish.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/ishowshu/qx/refs/heads/main/script/goofish.js",
-      "snapshot": "snapshot/github.com/ishowshu/qx/refs/heads/main/script/goofish.js",
-      "upstream_raw": "https://raw.githubusercontent.com/ishowshu/qx/refs/heads/main/script/goofish.js",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "script:xjsp.js",
       "kind": "js",
       "url": "https://raw.githubusercontent.com/NobyDa/Script/master/QuantumultX/File/xjsp.js",
       "snapshot": "snapshot/github.com/NobyDa/Script/master/QuantumultX/File/xjsp.js",
       "upstream_raw": "https://raw.githubusercontent.com/NobyDa/Script/master/QuantumultX/File/xjsp.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:xiaohongshu.js",
-      "kind": "js",
-      "url": "https://github.com/fmz200/wool_scripts/raw/main/Scripts/xiaohongshu/xiaohongshu.js",
-      "snapshot": "snapshot/host/github.com/fmz200/wool_scripts/raw/main/Scripts/xiaohongshu/xiaohongshu.js",
-      "upstream_raw": null,
       "status": 200,
       "error": null
     },
@@ -1380,15 +1290,6 @@
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/yx.js",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/yx.js",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/yx.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:youtube.response.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/Script/Youtube/youtube.response.js",
-      "snapshot": "snapshot/github.com/Maasea/sgmodule/refs/heads/master/Script/Youtube/youtube.response.js",
-      "upstream_raw": "https://raw.githubusercontent.com/Maasea/sgmodule/refs/heads/master/Script/Youtube/youtube.response.js",
       "status": 200,
       "error": null
     },
@@ -1443,33 +1344,6 @@
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhuanzhuan/zhuanzhuan.js",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/zhuanzhuan/zhuanzhuan.js",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhuanzhuan/zhuanzhuan.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:response.bundle.js",
-      "kind": "js",
-      "url": "https://github.com/NSRingo/WeatherKit/releases/download/v3.3.2/response.bundle.js",
-      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/download/v3.3.2/response.bundle.js",
-      "upstream_raw": null,
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:request.bundle.js",
-      "kind": "js",
-      "url": "https://github.com/NSRingo/WeatherKit/releases/download/v3.3.2/request.bundle.js",
-      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/download/v3.3.2/request.bundle.js",
-      "upstream_raw": null,
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:chavy.boxjs.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js",
-      "snapshot": "snapshot/github.com/chavyleung/scripts/master/box/chavy.boxjs.js",
-      "upstream_raw": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js",
       "status": 200,
       "error": null
     }
