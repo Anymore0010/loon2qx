@@ -107,7 +107,7 @@ Loon 的 `.lsr` 与 Quantumult X 的 `.list` 是同一套 `host-suffix, x, POLIC
 ## 规则预转换（不再依赖运行时解析器）
 
 见 README「规则已预转换为 Quantumult X 原生格式」。简言之：`opt-parser=true` 的 3 份文件
-（AI 分流合集、GeoIP_CN、AppleIntelligence）已由 `tools/vendor-rules.mjs` 预转换为
+（OpenAI & Anthropic、AppleIntelligence）已由 `tools/vendor-rules.mjs` 预转换为
 `QuantumultX/rules/*.list`，理由是没有 fallback 且运行时丢弃规则不可见。
 
 ## 取值原则：与 Loon 冲突时以 Loon 为准

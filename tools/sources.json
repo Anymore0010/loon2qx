@@ -212,13 +212,13 @@
       {
         "name": "Apple AI",
         "members": [
+          "全球节点",
           "美国节点",
           "proxy",
           "香港节点",
           "新国节点",
           "日本节点",
-          "韩国节点",
-          "全球节点"
+          "韩国节点"
         ],
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
       }
@@ -705,31 +705,6 @@
       "note": "Google 与 YouTube 同属 Google 系、同走「新国节点」，合并为一个列表（原 Loon 里 googlevideo.com/youtube.com 就是 新国节点）。"
     },
     {
-      "id": "merge-apple",
-      "out": "Apple.list",
-      "policy": "direct",
-      "sources": [
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list"
-      ],
-      "note": "Apple 系合并：bm7 Apple/Apple.list(1881) + AppleID(4) + AppStore(2)。APNs 与 Apple AI 保持独立条目（用户要求）。 APNs 域名已排除（由独立条目「Apple Push Notification Service」负责）。",
-      "exclude_domains": [
-        "courier-push-apple.com.akadns.net",
-        "init-p01md-lb.push-apple.com.akadns.net",
-        "init-p01st-lb.push-apple.com.akadns.net",
-        "init-p01st.push.apple.com",
-        "init-s01st-lb.push-apple.com.akadns.net",
-        "init-s01st.push.apple.com",
-        "push-apple.com.akadns.net",
-        "init*.push-apple.com.akadns.net",
-        "init*.push.apple.com",
-        "push.apple.com",
-        "courier-push-apple.com.akadns.net",
-        "push-apple.com.akadns.net"
-      ]
-    },
-    {
       "id": "merge-apns",
       "out": "ApplePush.list",
       "policy": "APNs",
@@ -754,6 +729,31 @@
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list"
       ],
       "note": "APNs 推送域名。含 `host-suffix, push.apple.com`（覆盖 N-courier.push.apple.com 等真实端点，bm7 列表没有）。每条都带策略字段 APNs。"
+    },
+    {
+      "id": "merge-apple",
+      "out": "Apple.list",
+      "policy": "Apple",
+      "raw_rewrite": [
+        "# Apple —— 仅 Apple Account + App Store（内容严格对应 Loon 端的两个列表）。",
+        "# 说明：原先并入的是 bm7 的大 Apple 列表（1878 条），用户核对后认为大量条目无必要，",
+        "#       故改为只保留这两个列表。Apple AI 与 APNs 保持独立条目。",
+        "#",
+        "# Apple Account（4 条）",
+        "host, account.apple.com, Apple",
+        "host, appleid.cdn-apple.com, Apple",
+        "host, idmsa.apple.com, Apple",
+        "host, gsa.apple.com, Apple",
+        "#",
+        "# App Store（5 条）",
+        "host-suffix, itunes.apple.com, Apple",
+        "host-suffix, apps.apple.com, Apple",
+        "host-suffix, mzstatic.com, Apple",
+        "host, itunes.apple.com, Apple",
+        "host, ppq.apple.com, Apple"
+      ],
+      "sources": [],
+      "note": "Apple Account(4) + App Store(5)，内容对应 Loon 端的 AppleAccount/AppStore 列表。不再并入 bm7 的 1878 条大列表（用户核对后认为无必要）。Apple AI 与 APNs 独立。"
     }
   ],
   "output": {
