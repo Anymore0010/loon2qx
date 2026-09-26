@@ -128,8 +128,9 @@ Loon 的 `.lsr` 与 Quantumult X 的 `.list` 是同一套 `host-suffix, x, POLIC
 |---|---|---|
 | `server_check_url` | `proxy-test-url`（gstatic/generate_204） | ✅ 一致 |
 | `network_check_url` | `internet-test-url`（hicloud/generate_204） | ✅ 一致 |
-| DoH | `doh-server` 三个 | ✅ 一致（同一行逗号分隔） |
+| DoH | `doh-server` 三个（阿里/腾讯/Google） | ⚠️ **有意偏离**：改为二源（阿里/腾讯）+ `prefer-doh3`。Google DoH 内地常不可达，保留会拖慢并发查询。 |
 | IPv6 | `ip-mode = dual`（双栈） | ✅ 保留（不写 `no-ipv6`） |
+| 域名级 DNS | 无此概念 | ⚠️ **有意偏离**：已按用户要求清空（含路由器管理页那批） |
 | `final` | `FINAL,DIRECT` | ✅ `final, direct` |
 | 策略组类型 | 8 组均为 `select`（手动） | ✅ 8 个「…手动策略」static 组 |
 

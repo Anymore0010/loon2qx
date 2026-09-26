@@ -189,7 +189,7 @@ QX 启动时要把它们全部载入内存匹配，12 MB 那份在手机上是�
 
 - 全部本地分流规则（逐条转换，见 `[filter_local]`）
 - 8 个地区策略组及其正则筛选
-- DNS（DoH 三源，对应 Loon `doh-server`）
+- DNS（DoH 二源：阿里 + 腾讯，加 `prefer-doh3`；Google 已按需移除）
 - 远程分流规则的语义
 - 去广告、脚本能力（改用 Quantumult X 原生资源）
 
