@@ -3,10 +3,10 @@
  * Loon 插件（.lpx）-> Quantumult X 重写/分流资源 转换器。
  *
  * 输入： vendor/loon-plugins/*.lpx（tools/fetch-plugins.mjs 抓的源配置原样副本）
- * 输出： QuantumultX/rules/kelee/<plugin>.conf   —— 纯重写资源（rewrite_remote）
- *        QuantumultX/rules/kelee/<plugin>.list   —— 纯分流资源（filter_remote）
+ * 输出： QuantumultX/rules/rewrite/kelee/<plugin>.snippet —— 重写资源（rewrite_remote）
+ *        QuantumultX/rules/filter/kelee/<plugin>.list    —— 分流资源（filter_remote）
  *        QuantumultX/rules/kelee/_hostnames.conf —— 汇总的 hostname 行
- *        QuantumultX/rules/kelee/_conversion-report.json —— 统计与跳过明细
+ *        QuantumultX/rules/rewrite/kelee/_conversion-report.json —— 统计与跳过明细
  *
  * 目标：尽可能**完整复刻**源 Loon 插件的行为（用户明确要求），而不是"功能差不多"。
  * 因此能映射的一律映射；映射不了的一律**逐条记账**到报告，绝不静默丢弃。

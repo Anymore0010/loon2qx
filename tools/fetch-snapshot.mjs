@@ -210,18 +210,29 @@ function hasHostnameLine(text) {
  * 合并后的资源不再是 rewrite_remote 条目，_exclusions.json 那套落不了地，已移除。
  */
 function declaredExclusions(r) {
-  const d = [...src.rewrites, ...src.filters].find(
-    (x) => x.exclude_rule_patterns && x.url === r.url,
-  );
+  const all = [...src.rewrites, ...src.filters];
+  // 两种声明方式都认：
+  //  · 条目自己的 url === r.url（历史用法）
+  //  · 该 url 是某个**合并条目**的 merges[].url（合并后来源不再有独立条目，
+  //    否则没法从聚合资源里排掉不想要的规则，例如 fmz 的「美丽修行」去广告）
+  const d = all.find((x) => x.exclude_rule_patterns && x.url === r.url)
+    ?? all.find((x) => x.exclude_rule_patterns && (x.merges ?? []).some((m) => m.url === r.url));
   if (!d) return [];
   return d.exclude_rule_patterns.map((pattern) => {
     let re = null;
     try { re = new RegExp(pattern, "i"); } catch { /* 非法正则只走语义判据 */ }
-    return { pattern, re, sig: ruleSig(pattern) };
+    // 归一化子串：把反斜杠去掉再比对。
+    // 上游规则里的 URL 正则是**带转义**的（`api\.bevol\.com`），
+    // 手写排除时很容易转义错（实测 `^https:\\/\\/api\\.bevol` 一条都匹配不上）。
+    // 去掉反斜杠后做子串匹配，既好写又不会因转义层数不同而失效。
+    const plain = String(pattern).replace(/\\/g, "");
+    return { pattern, re, sig: ruleSig(pattern), plain };
   });
 }
 
 const rewriteStats = { local: 0, kept: 0, missing: new Set() };
+/** 排除模式 -> 全局命中行数（用于末尾断言「排除真的生效了」）。 */
+const globalPatternHits = new Map();
 /**
  * 声明了 exclude_rule_patterns、但一行都没排掉的上游。
  * 这类失败必须计入门禁：上游一改写法，排除就会静默失效，
@@ -353,7 +364,8 @@ for (const r of results) {
       // sameTarget 恒为 false，靠 e.re 兜底即可。
       let matched = false;
       for (const e of excl) {
-        if ((e.re && e.re.test(lines[i])) || sameTarget(lineSig, e.sig)) {
+        const plainLine = lines[i].replace(/\\/g, "");
+        if ((e.plain && plainLine.includes(e.plain)) || (e.re && e.re.test(lines[i])) || sameTarget(lineSig, e.sig)) {
           // 命中计数按**原始行集**累加：一条上游行可能同时满足多个 kelee pattern，
           // 若只对"存活行"计数，后面的 pattern 会因该行已被移除而误报"未命中"。
           perPatternHits.set(e.pattern, perPatternHits.get(e.pattern) + 1);
@@ -362,12 +374,11 @@ for (const r of results) {
       }
       if (matched) removeAt.add(i);
     }
-    // 逐个 pattern 断言：任一 pattern 一条都没命中 = 上游改了写法、排除已失效 -> 必须报错。
+    // 累计到全局计数，**断言留到最后**统一判：
+    // 排除声明挂在合并条目上，会作用于该组所有来源，而模式通常只存在于其中一个
+    // （实测 api.bevol.com 只在 fmz 聚合里）。按来源逐个断言会误报。
     for (const [pat, hits] of perPatternHits) {
-      if (hits === 0) {
-        console.error(`ERROR 排除规则未命中任何行（上游可能改了写法，排除已失效）: ${pat.slice(0, 100)}  <- ${r.url}`);
-        exclusionMisses.push(pat);
-      }
+      globalPatternHits.set(pat, (globalPatternHits.get(pat) ?? 0) + hits);
     }
     const kept = lines.filter((_, i) => !removeAt.has(i));
     if (removeAt.size) console.log(`  排除 ${removeAt.size} 行 <- ${r.url}`);
@@ -419,6 +430,14 @@ for (const r of results) {
 // - icon（纯装饰）：失败时旧副本保留，不影响任何功能
 // 若把 icon 也算致命，一个图标 URL 的 socket 抖动就会让当周 CI 报错并**跳过整周刷新**
 // —— 实测连续多轮都被 IconResource 的 png 超时卡住，等于把「每周跟 kelee 更新」白废掉。
+// 排除模式断言（全局）：任何模式在整个运行里一条都没排掉 = 上游改了写法、排除已失效。
+// 这条断言必须存在 —— 否则上游一改，排除会静默失效而规则重复处理又回来了。
+for (const [pat, hits] of globalPatternHits) {
+  if (hits === 0) {
+    console.error(`ERROR 排除规则全程未命中任何行（上游可能改了写法，排除已失效）: ${pat}`);
+    exclusionMisses.push(pat);
+  }
+}
 const criticalFailures =
   results.filter((r) => !r.ok && r.kind !== "js" && r.kind !== "icon").length + exclusionMisses.length;
 const iconFailures = results.filter((r) => !r.ok && r.kind === "icon").length;

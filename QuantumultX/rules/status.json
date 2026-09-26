@@ -2,7 +2,7 @@
   "total": 17,
   "ok": 17,
   "failed": 0,
-  "rules": 294697,
+  "rules": 334851,
   "resources": [
     {
       "id": "filter-awavenue",
@@ -25,17 +25,17 @@
     {
       "id": "filter-ads-max",
       "upstream": "QuantumultX/rules/filter/kelee/BlockAdvertisers.list + https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list + QuantumultX/rules/filter/AWAvenue.list",
-      "file": "QuantumultX/rules/filter/AdsBlockMAX.list",
+      "file": "QuantumultX/rules/filter/AdsBlockFull.list",
       "rules": 288195,
       "dropped": 0,
       "adjusted": 0,
       "error": null
     },
     {
-      "id": "rewrite-anymore-enhance",
-      "upstream": "QuantumultX/rules/rewrite/kelee/Remove_ads_by_keli.snippet",
-      "file": "QuantumultX/rules/rewrite/AnymoreADEnhance.snippet",
-      "rules": 83,
+      "id": "filter-ads-max-lite",
+      "upstream": "QuantumultX/rules/filter/kelee/BlockAdvertisers.list + https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AdvertisingLite/AdvertisingLite.list + QuantumultX/rules/filter/AWAvenue.list",
+      "file": "QuantumultX/rules/filter/AdsBlock.list",
+      "rules": 40022,
       "dropped": 0,
       "adjusted": 0,
       "error": null
@@ -51,9 +51,9 @@
     },
     {
       "id": "rewrite-ads-max",
-      "upstream": "QuantumultX/rules/rewrite/kelee/BlockAdvertisers.snippet + https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
-      "file": "QuantumultX/rules/rewrite/AdsBlockMAX.snippet",
-      "rules": 2162,
+      "upstream": "QuantumultX/rules/rewrite/kelee/BlockAdvertisers.snippet + https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/AdvertisingLite/AdvertisingLite.conf + QuantumultX/rules/rewrite/kelee/Remove_ads_by_keli.snippet",
+      "file": "QuantumultX/rules/rewrite/AdsBlock.snippet",
+      "rules": 2377,
       "dropped": 0,
       "adjusted": 0,
       "error": null

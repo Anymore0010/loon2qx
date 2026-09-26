@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 174,
-  "mirrored": 174,
+  "total": 175,
+  "mirrored": 175,
   "failed": 0,
   "exclusionMisses": [],
   "resources": [
@@ -223,6 +223,14 @@
       "error": null
     },
     {
+      "id": "merge-rewrite-ads-max",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/AdvertisingLite/AdvertisingLite.conf",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/AdvertisingLite/AdvertisingLite.conf",
+      "status": 200,
+      "error": null
+    },
+    {
       "id": "merge-filter-ads-max",
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
@@ -235,6 +243,14 @@
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
       "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "merge-filter-ads-max-lite",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AdvertisingLite/AdvertisingLite.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AdvertisingLite/AdvertisingLite.list",
       "status": 200,
       "error": null
     },
@@ -707,14 +723,6 @@
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-rewrite-anymore-enhance",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
       "status": 200,
       "error": null
     },

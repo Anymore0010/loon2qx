@@ -69,10 +69,13 @@ Loon 的 `.lsr` 与 Quantumult X 的 `.list` 是同一套 `host-suffix, x, POLIC
 
 | 合并条目 | 位置 | 来源顺序（先到者胜） |
 |---|---|---|
-| `AdsBlockMAX`（重写） | `rules/rewrite/AdsBlockMAX.snippet` | kelee `BlockAdvertisers` → fmz `rewrite.snippet` → bm7 `Advertising.conf` |
-| `AdsBlockMAX(分流)` | `rules/filter/AdsBlockMAX.list` | kelee `BlockAdvertisers` → fmz `filter.list` → bm7 `Advertising.list` → AWAvenue |
+| **`广告拦截合集(重写)`** | `rules/rewrite/AdsBlock.snippet` | 内联手写规则 → kelee `BlockAdvertisers` → fmz `rewrite.snippet` → bm7 `Advertising.conf` → bm7 `AdvertisingLite.conf` → kelee `Remove_ads_by_keli` |
+| **`广告拦截合集`（主版本）** | `rules/filter/AdsBlock.list` | kelee `BlockAdvertisers` → fmz `filter.list` → bm7 `AdvertisingLite.list` → AWAvenue |
+| `广告拦截合集-全量`（可选，默认关） | `rules/filter/AdsBlockFull.list` | 同上，但 bm7 用完整 `Advertising.list` |
 | `HTTPDNS拦截器` | `rules/rewrite/HTTPDNSBlock.snippet` | kelee `Block_HTTPDNS` + bm7 `BlockHTTPDNS` |
-| `Anymore自用广告过滤` | `rules/rewrite/AnymoreADEnhance.snippet` | sources.json 内联手写规则 + kelee `Remove_ads_by_keli` |
+
+> 两个 AdsBlock 变体**只启一个**：同时启用会让同一域名被两份列表重复匹配。
+> 主版本 40022 条 / 1.3 MB；全量 288195 条 / 11.5 MB（QX 启动要全部载入内存）。
 
 ### 未能转换的构造（逐条记账在 `_conversion-report.json`）
 
