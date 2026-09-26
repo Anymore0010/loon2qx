@@ -39,6 +39,17 @@ const KNOWN_SECTIONS = new Set([
 /** Sections that may only appear once. */
 const REQUIRED_SECTIONS = [...KNOWN_SECTIONS];
 
+/** Quantumult X 接受的 rewrite 动作名（官方 sample.conf 的 [rewrite_local] 全集）。 */
+const QX_REWRITE_ACTIONS = new Set([
+  "reject", "reject-200", "reject-img", "reject-dict", "reject-array", "reject-drop",
+  "302", "307",
+  "script-request-header", "script-request-body", "script-response-header", "script-response-body",
+  "script-echo-response", "script-analyze-echo-response",
+  "request-header", "response-header", "request-body", "response-body",
+  "jsonjq-request-body", "jsonjq-response-body",
+  "echo-response",
+]);
+
 /** Rule types Quantumult X accepts in filter sections. */
 const QX_RULE_TYPES = new Set([
   "host",
@@ -240,10 +251,28 @@ function checkVendoredRules() {
     const rel = `QuantumultX/rules/${f}`;
     const lines = readFileSync(join(dir, f), "utf8").split(/\r?\n/);
     let count = 0;
+    let hasHostnameInFile = false;
     for (const raw of lines) {
       const line = raw.trim();
       if (!line || line.startsWith("#")) continue;
       // Must be "<type>, <value>[, policy]" with a QX type.
+      // hostname 行是重写资源的 MITM 声明，不是分流规则 —— 单独校验，不计入规则数。
+      if (/^hostname\s*=/i.test(line)) {
+        const hostList = line.split("=", 2)[1].split(",").map((x) => x.trim()).filter(Boolean);
+        const badH = hostList.filter((x) => !/^[A-Za-z0-9*?._-]+$/.test(x));
+        if (badH.length) err(rel, 0, `hostname 含非法条目: ${badH.slice(0, 3).join(", ")}`);
+        hasHostnameInFile = true;
+        continue;
+      }
+      // 重写规则写作 "<regex> url <action> [arg]" —— 与分流规则是两套语法。
+      if (/\surl(?:-and-header)?\s+\S/.test(line)) {
+        const act = line.match(/\surl(?:-and-header)?\s+(\S+)/)[1].toLowerCase();
+        if (!QX_REWRITE_ACTIONS.has(act)) {
+          err(rel, 0, `未知的重写动作 "${act}": "${line.slice(0, 60)}"`);
+        }
+        count++;
+        continue;
+      }
       const type = line.split(",")[0].trim().toLowerCase();
       if (!QX_RULE_TYPES.has(type)) {
         err(rel, 0, `not a valid Quantumult X rule type: "${line.slice(0, 60)}"`);
@@ -263,7 +292,9 @@ function checkVendoredRules() {
       }
       count++;
     }
-    if (count === 0) err(rel, 0, "vendored rule file contains zero rules");
+    // 纯重写文件（如京东比价）只有 url 规则 + hostname，没有分流规则，属正常。
+    const hasRewrite = lines.some((l) => /\surl(?:-and-header)?\s+\S/.test(l));
+    if (count === 0 && !hasRewrite) err(rel, 0, "vendored 文件既无分流规则也无重写规则");
     total += count;
   }
   return { files: files.length, rules: total };

@@ -114,6 +114,18 @@
       "note": "替代 Loon 的 BlockAdvertisers.lpx 的分流部分。"
     },
     {
+      "id": "filter-awavenue",
+      "tag": "AWAvenue 秋风广告规则",
+      "policy": "reject",
+      "parser": false,
+      "enabled": true,
+      "note": "965 条广告拦截规则。**注意：上游虽是 .list 且名为 QuantumultX，实为 Surge 语法**（DOMAIN,/DOMAIN-SUFFIX,/DOMAIN-KEYWORD,），QX 只认 host,/host-suffix,/host-keyword,，直链会被静默丢弃。故已预转换为 QX 原生格式存于本仓库。",
+      "upstream_url": "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
+      "vendor": true,
+      "vendored_as": "AWAvenue.list",
+      "local_file": "QuantumultX/rules/AWAvenue.list"
+    },
+    {
       "id": "filter-fix",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
       "tag": "分流修正",
@@ -172,15 +184,6 @@
       "policy": "全球手动策略",
       "parser": false,
       "enabled": true
-    },
-    {
-      "id": "filter-talkatone",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
-      "tag": "Talkatone",
-      "policy": "美国手动策略",
-      "parser": false,
-      "enabled": true,
-      "note": "fmz 配置原有。"
     },
     {
       "id": "filter-geoip-cn",
@@ -301,16 +304,16 @@
   ],
   "rewrites": [
     {
-      "id": "rewrite-advertising",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
-      "tag": "广告拦截(通用)",
+      "id": "rewrite-block-httpdns",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
+      "tag": "HTTPDNS拦截器",
       "parser": false,
       "enabled": true
     },
     {
-      "id": "rewrite-block-httpdns",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
-      "tag": "HTTPDNS拦截器",
+      "id": "rewrite-advertising",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "tag": "广告拦截(通用)",
       "parser": false,
       "enabled": true
     },
@@ -321,6 +324,24 @@
       "parser": false,
       "enabled": true,
       "note": "fmz 聚合资源，覆盖约 730 款 App。实测包含原先按 App 拆分的 19/20 个片段，因此不再单独引用，避免同一响应体被重复处理。"
+    },
+    {
+      "id": "rewrite-irongo-weatherkit",
+      "url": "https://github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
+      "tag": "iRingo WeatherKit",
+      "parser": false,
+      "enabled": true,
+      "note": "替代 Loon 的 iRingo.WeatherKit.lpx。该项目自带 Quantumult X 版 snippet（官方文档有 QX 安装页），因此不再属于「未迁移」。注意它自带 hostname，QX 会自动并入 MITM。"
+    },
+    {
+      "id": "rewrite-jd-price",
+      "url": null,
+      "local_file": "QuantumultX/rules/JD_price.list",
+      "tag": "京东比价",
+      "parser": false,
+      "enabled": true,
+      "generated_by": "tools/vendor-rules.mjs",
+      "note": "由 rule_merges 的 merge-jd-price 生成。需先装「慢慢买」App 抓 Cookie。"
     },
     {
       "id": "rewrite-weibo",
@@ -351,32 +372,24 @@
       "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
       "tag": "BoxJs",
       "parser": false,
-      "enabled": true,
+      "enabled": false,
       "note": "对应 Loon 的 BoxJs.lpx；fmz 配置亦引用。"
-    },
-    {
-      "id": "rewrite-sub-store",
-      "url": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
-      "tag": "Sub-Store",
-      "parser": false,
-      "enabled": true,
-      "note": "对应 Loon 的 Sub-Store.lpx；fmz 配置亦引用。"
     },
     {
       "id": "rewrite-script-hub",
       "url": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
       "tag": "Script-Hub",
       "parser": false,
-      "enabled": true,
+      "enabled": false,
       "note": "对应 Loon 的 Script-Hub.lpx；fmz 配置亦引用。"
     },
     {
-      "id": "rewrite-irongo-weatherkit",
-      "url": "https://github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
-      "tag": "iRingo WeatherKit",
+      "id": "rewrite-sub-store",
+      "url": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
+      "tag": "Sub-Store",
       "parser": false,
-      "enabled": true,
-      "note": "替代 Loon 的 iRingo.WeatherKit.lpx。该项目自带 Quantumult X 版 snippet（官方文档有 QX 安装页），因此不再属于「未迁移」。注意它自带 hostname，QX 会自动并入 MITM。"
+      "enabled": false,
+      "note": "对应 Loon 的 Sub-Store.lpx；fmz 配置亦引用。"
     },
     {
       "id": "rewrite-plugin-extracted",
@@ -519,10 +532,25 @@
         "gspe1-ssl.ls.apple.com",
         "apps.mzstatic.com"
       ]
+    },
+    {
+      "id": "merge-jd-price",
+      "out": "JD_price.list",
+      "policy": null,
+      "sources": [
+        "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js"
+      ],
+      "raw_rewrite": [
+        "^https?://apapia-sqk-weblogic\\.manmanbuy\\.com/baoliao/center/menu url script-request-body https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
+        "^https://in\\.m\\.jd\\.com/product/graphext/\\d+\\.html url script-response-body https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
+        "hostname = in.m.jd.com, apapia-sqk-weblogic.manmanbuy.com"
+      ],
+      "note": "京东比价（替代 Loon 的 JD_Price.lpx）。来源 githubdulong/Script，脚本宿主存活。用法：需先安装「慢慢买」App，在[我的]页面捕获 Cookie 后，商品详情页才会显示比价。CK 捕获脚本 MmmCK.js 读 $request.body，因此必须是 script-request-body（写成 header 版会静默失败）。"
     }
   ],
   "output": {
     "prefer_local": true,
     "_comment": "统一为一份配置：所有资源都指向本仓库快照（prefer_local=true）。代价是上游修正最长延迟 7 天（每周快照任务同步一次）；好处是上游任何仓库失效都不影响使用，且脚本引用也已在快照阶段改写为本仓库地址。若想改回「上游直链（更新更快但依赖上游可用）」，把 prefer_local 设为 false 即可。"
-  }
+  },
+  "_rewrite_order_note": "顺序由用户指定：HTTPDNS拦截器在最前（所有去广告的依赖）→ 广告拦截(通用/合集) → 天气解锁 → 各 App → BoxJs/Script-Hub/Sub-Store（默认禁用）→ 插件提取重写（最后）。"
 }

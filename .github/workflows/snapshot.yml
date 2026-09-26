@@ -37,18 +37,20 @@ jobs:
 
       # Converts upstream Loon/Surge rule lists into native QX rules committed
       # in QuantumultX/rules/, so the profile no longer needs the runtime parser.
+      # Exits 0 even if some upstreams fail (recorded in snapshot/index.json);
+      # the final step turns those into a failing run after the commit.
+      # 顺序很重要：所有「生成 QuantumultX/rules/*」的步骤必须排在 fetch-snapshot 之前——
+      # fetch-snapshot 的脚本发现阶段要扫描这些文件，才能把其中引用的脚本一并镜像。
+      # 顺序反了会导致新生成的规则脚本永远直链上游、不受快照保护（会静默失效）。
       - name: Vendor Loon/Surge rule lists
         run: bun tools/vendor-rules.mjs
 
-      # Exits 0 even if some upstreams fail (recorded in snapshot/index.json);
-      # the final step turns those into a failing run after the commit.
-      - name: Mirror upstream resources
-        run: bun tools/fetch-snapshot.mjs
-
-      # 从插件包重新提取 URL 级重写（会与上面同步过的快照去重，
-      # 所以必须在 fetch-snapshot 之后跑）。缺这一步，这 400+ 条规则永不刷新。
+      # 从插件包提取 URL 级重写（去重基线取自仓库内已有快照，故无需先跑 fetch-snapshot）。
       - name: Re-extract plugin rewrites
         run: bun tools/extract-plugin.mjs --all
+
+      - name: Mirror upstream resources
+        run: bun tools/fetch-snapshot.mjs
 
       - name: Validate generated profiles
         run: bun tools/validate.mjs

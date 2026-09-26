@@ -170,6 +170,33 @@ if (scriptTargets.size) {
   console.log(`第二轮：发现并抓取被引用的脚本 ${extra.length} 个`);
 }
 
+/**
+ * 把规则文本里引用的外部脚本 URL 改写成本仓库的镜像地址。
+ *
+ * 这一步才是「上游挂了也不影响」的关键：光镜像规则文件不够，
+ * 规则里 `url script-response-body https://外部/x.js` 这段仍指向外部；
+ * 必须改写成本仓库路径，脚本才真的落地。
+ * 取不到的脚本（kelee.one 403）保持原样。
+ */
+function rewriteScriptUrls(text, byUrl) {
+  let out = text;
+  let local = 0;
+  let kept = 0;
+  const missing = new Set();
+  out = out.replace(/(url(?:-and-header)?\s+script-\S+\s+)(https?:\/\/\S+)/g, (full, prefix, url) => {
+    const clean = url.replace(/["'],$/, "");
+    const r = byUrl.get(clean);
+    if (r) {
+      local++;
+      return prefix + `${rawBase}/snapshot/${r.local.split(/[\\/]/).join("/")}`;
+    }
+    kept++;
+    missing.add(clean);
+    return full; // 取不到 -> 保持原地址
+  });
+  return { text: out, local, kept, missing };
+}
+
 // 脚本 URL -> 镜像记录（写入阶段改写规则时使用；必须含第二轮结果）
 const byUrlPre = new Map(results.filter((r) => r.ok).map((r) => [r.url, r]));
 
@@ -199,6 +226,27 @@ for (const r of results) {
   }
   writeFileSync(dest, body);
   ok++;
+}
+
+// 本仓库自带的规则文件（QuantumultX/rules/*）也要就地改写。
+// 它们不在 results 里（不是下载来的），但同样含脚本引用；不改写就会一直直链上游。
+{
+  const localRulesDir = join(ROOT, "QuantumultX", "rules");
+  if (existsSync(localRulesDir)) {
+    for (const f of readdirSync(localRulesDir)) {
+      if (!/\.(snippet|conf|list)$/.test(f)) continue;
+      const p0 = join(localRulesDir, f);
+      const before = readFileSync(p0, "utf8");
+      if (!/url(?:-and-header)?\s+script-/.test(before)) continue;
+      const rw = rewriteScriptUrls(before, byUrlPre);
+      if (rw.local > 0) {
+        writeFileSync(p0, rw.text);
+        rewriteStats.local += rw.local;
+        rewriteStats.kept += rw.kept;
+        for (const u of rw.missing) rewriteStats.missing.add(u);
+      }
+    }
+  }
 }
 
 /** Absolute raw.githubusercontent.com URL for a snapshot path. */
@@ -248,7 +296,11 @@ if (failed === 0) {
   // 会在「清理孤儿」这一步被误删 —— 而规则仍指向它们，等于一周后自动失效。
   // 这里直接扫描已提交的规则文件，把其中指向本仓库 snapshot 的路径还原成磁盘路径。
   const referenced = new Set();
-  for (const f of walkFiles(SNAP)) {
+  // 扫描范围必须同时包含本仓库自带的规则目录：
+  // vendor-rules/extract-plugin 生成的 QuantumultX/rules/* 里引用的脚本，
+  // 若只扫 snapshot/ 就会被当成孤儿删掉 —— 而规则仍指向它们（静默失效）。
+  const refScanRoots = [SNAP, join(ROOT, "QuantumultX", "rules")].filter(existsSync);
+  for (const root of refScanRoots) for (const f of walkFiles(root)) {
     if (!/(\.snippet|\.conf|\.list)$/.test(f)) continue;
     let text;
     try { text = readFileSync(f, "utf8"); } catch { continue; }

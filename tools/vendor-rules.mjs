@@ -18,7 +18,7 @@
  *
  *   bun tools/vendor-rules.mjs
  */
-import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync, existsSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { convertRuleList } from "./convert-rules.mjs";
@@ -84,6 +84,30 @@ for (const f of toVendor) {
 
 // ---- 合并组 ----------------------------------------------------------------
 for (const g of mergeGroups) {
+  // raw_rewrite：直接给出最终 QX 规则（无需从上游转换），用于「上游是 JS 脚本、
+  // 规则要自己写」的情况，例如京东比价。
+  if (g.raw_rewrite?.length) {
+    process.stdout.write(`合并 ${g.id} … `);
+    // 注意：这里**不**改写脚本 URL —— 交给 fetch-snapshot 统一处理。
+    // 原因：改写需要快照副本已存在，而副本由 fetch-snapshot 创建，
+    // 若在此改写会形成死结（首次永远不改 -> 永远不进快照）。
+    // fetch-snapshot 会扫描 QuantumultX/rules/* 并把脚本镜像 + 改写。
+    const header = [
+      "# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑",
+      ...(g.sources ?? []).map((u) => `# 参考来源: ${u}`),
+      `# 规则数: ${g.raw_rewrite.filter((l) => !l.startsWith("hostname")).length}`,
+      "# 重新生成: bun tools/vendor-rules.mjs",
+      "",
+    ];
+    const file = join(ROOT, "QuantumultX", "rules", g.out);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, header.concat(g.raw_rewrite).join("\n") + "\n");
+    console.log(`${g.raw_rewrite.length} 行 -> ${g.out}`);
+    report.push({ id: g.id, url: (g.sources ?? []).join(" + "), ok: true,
+      count: g.raw_rewrite.filter((l) => !l.startsWith("hostname")).length,
+      dropped: [], notes: [], file: g.out });
+    continue;
+  }
   process.stdout.write(`合并 ${g.id} … `);
   const all = [];
   const seenKeys = new Set();

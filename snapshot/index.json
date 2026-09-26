@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 163,
-  "mirrored": 142,
+  "total": 160,
+  "mirrored": 140,
   "failed": 0,
   "resources": [
     {
@@ -74,15 +74,6 @@
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
       "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
       "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-talkatone",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/talkatone.list",
       "status": 200,
       "error": null
     },
@@ -168,15 +159,6 @@
       "error": null
     },
     {
-      "id": "rewrite-advertising",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "rewrite-block-httpdns",
       "kind": "rewrite",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
@@ -186,11 +168,29 @@
       "error": null
     },
     {
+      "id": "rewrite-advertising",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "status": 200,
+      "error": null
+    },
+    {
       "id": "rewrite-fmz-ads",
       "kind": "rewrite",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "rewrite-irongo-weatherkit",
+      "kind": "rewrite",
+      "url": "https://github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
+      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
+      "upstream_raw": null,
       "status": 200,
       "error": null
     },
@@ -222,29 +222,11 @@
       "error": null
     },
     {
-      "id": "rewrite-jd-tb-price",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
-      "snapshot": "snapshot/github.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
-      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "rewrite-boxjs",
       "kind": "rewrite",
       "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
       "snapshot": "snapshot/github.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
       "upstream_raw": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-sub-store",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
-      "snapshot": "snapshot/github.com/sub-store-org/Sub-Store/master/config/QX.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
       "status": 200,
       "error": null
     },
@@ -258,11 +240,11 @@
       "error": null
     },
     {
-      "id": "rewrite-irongo-weatherkit",
+      "id": "rewrite-sub-store",
       "kind": "rewrite",
-      "url": "https://github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
-      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
-      "upstream_raw": null,
+      "url": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
+      "snapshot": "snapshot/github.com/sub-store-org/Sub-Store/master/config/QX.snippet",
+      "upstream_raw": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
       "status": 200,
       "error": null
     },
@@ -1140,6 +1122,24 @@
       "error": null
     },
     {
+      "id": "script:response.bundle.js",
+      "kind": "js",
+      "url": "https://github.com/NSRingo/WeatherKit/releases/download/v3.3.2/response.bundle.js",
+      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/download/v3.3.2/response.bundle.js",
+      "upstream_raw": null,
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:request.bundle.js",
+      "kind": "js",
+      "url": "https://github.com/NSRingo/WeatherKit/releases/download/v3.3.2/request.bundle.js",
+      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/download/v3.3.2/request.bundle.js",
+      "upstream_raw": null,
+      "status": 200,
+      "error": null
+    },
+    {
       "id": "script:index.js",
       "kind": "js",
       "url": "https://raw.githubusercontent.com/Keywos/rule/master/script/weibo_us/js/index.js",
@@ -1221,38 +1221,11 @@
       "error": null
     },
     {
-      "id": "script:main.js",
-      "kind": "js",
-      "url": "https://service.2ti.st/QuanX/Script/jd_tb_price/main.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": null,
-      "error": "The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"
-    },
-    {
       "id": "script:chavy.boxjs.js",
       "kind": "js",
       "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js",
       "snapshot": "snapshot/github.com/chavyleung/scripts/master/box/chavy.boxjs.js",
       "upstream_raw": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:sub-store-1.min.js",
-      "kind": "js",
-      "url": "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-1.min.js",
-      "snapshot": "snapshot/host/github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-1.min.js",
-      "upstream_raw": null,
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:sub-store-0.min.js",
-      "kind": "js",
-      "url": "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
-      "snapshot": "snapshot/host/github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
-      "upstream_raw": null,
       "status": 200,
       "error": null
     },
@@ -1275,19 +1248,19 @@
       "error": null
     },
     {
-      "id": "script:response.bundle.js",
+      "id": "script:sub-store-1.min.js",
       "kind": "js",
-      "url": "https://github.com/NSRingo/WeatherKit/releases/download/v3.3.2/response.bundle.js",
-      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/download/v3.3.2/response.bundle.js",
+      "url": "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-1.min.js",
+      "snapshot": "snapshot/host/github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-1.min.js",
       "upstream_raw": null,
       "status": 200,
       "error": null
     },
     {
-      "id": "script:request.bundle.js",
+      "id": "script:sub-store-0.min.js",
       "kind": "js",
-      "url": "https://github.com/NSRingo/WeatherKit/releases/download/v3.3.2/request.bundle.js",
-      "snapshot": "snapshot/host/github.com/NSRingo/WeatherKit/releases/download/v3.3.2/request.bundle.js",
+      "url": "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
+      "snapshot": "snapshot/host/github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
       "upstream_raw": null,
       "status": 200,
       "error": null
