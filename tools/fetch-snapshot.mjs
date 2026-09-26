@@ -81,6 +81,15 @@ function collectResources() {
   // 不镜像的话，fetch-snapshot 的 prune 会把它们的快照删掉，下一轮 CI 的
   // vendor-rules 就取不到内容 -> 跳过写入（保留旧版）-> 合并永久停更。
   // 实测就是这样把 fmz 的 rewrite.snippet 与 bm7 的 Advertising.conf 裁掉了。
+  // 分流合并组（rule_merges）的 sources/upstream_url 也必须镜像。
+  // 它们不是任何条目的 url，只在 rule_merges 里被引用；不收集的话
+  // 快照里一个都没有（实测 snapshot/host/rule.kelee.one/ 曾是空目录），
+  // 合并只能联网现抓 —— 没有离线兜底，且每周都依赖网络。
+  for (const g of src.rule_merges ?? []) {
+    for (const u of g.sources ?? []) if (u && !u.startsWith("FILTER_")) add(`merge-${g.id}`, u, "filter");
+    if (g.upstream_url) add(`merge-${g.id}`, g.upstream_url, "filter");
+  }
+
   // 合并来源必须镜像，rewrites 与 filters **都要**收集：
   // 不镜像 -> prune 会删掉它们的快照 -> 下一轮合并取不到内容 -> 永久冻结在引入那一刻。
   for (const arr of [src.rewrites, src.filters]) {

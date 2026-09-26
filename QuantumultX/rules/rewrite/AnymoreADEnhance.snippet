@@ -2,9 +2,14 @@
 # 合并来源（1 个，按顺序优先）:
 #   可莉广告过滤器（kelee 插件）  QuantumultX/rules/rewrite/kelee/Remove_ads_by_keli.conf
 # 去重键: (URL正则, 动作)，忽略脚本 URL
-# 重写规则数: 124
+# 重写规则数: 83
 # 重新生成: bun tools/vendor-rules.mjs
 
+################################################################
+# 第 1 块来源: 内联手写规则（raw_rewrite）
+#   
+#   本块贡献 41 条（与前面重复的已跳过，先到者优先）
+################################################################
 ^https:\/\/line3-h5-mobile-api\.biligame\.com\/game\/live\/large_card_material\? url reject-dict
 ^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.cainiao\.guoguo\.nbnetflow\.ads url reject
 ^https?:\/\/ap\.dongdianqiu\.com\/plat\/v4 url reject
@@ -46,6 +51,11 @@
 ^https?:\/\/amdc\.m\.taobao\.com\/amdc\/mobileDispatch$ url script-response-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/fmz200/wool_scripts/main/Scripts/header.js
 ^https:\/\/www\.coolapk\.com\/link.* url script-request-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/VenenoSix24/Ivy-Script/refs/heads/main/Loon/script/Coolapk_Redirect.js
 ^https?:\/\/api\.gotokeep\.com\/config\/v\d\/basic url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/fmz200/wool_scripts/main/Scripts/keep.js
+################################################################
+# 第 2 块来源: 可莉广告过滤器（kelee 插件）
+#   QuantumultX/rules/rewrite/kelee/Remove_ads_by_keli.conf
+#   本块贡献 83 条（与前面重复的已跳过，先到者优先）
+################################################################
 ^http:\/\/cdn\.wup\.huya\.com\/launch\/queryHttpDns$ url reject
 ^http:\/\/p\.kuaidi100\.com\/mobile\/mobileapi\.do url reject-dict
 ^http:\/\/p\.kuaidi100\.com\/advertisement\/ url reject-dict

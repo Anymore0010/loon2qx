@@ -50,6 +50,24 @@ if (toVendor.length === 0 && mergeGroups.length === 0 && filterMergeGroups.lengt
 }
 
 /** 上游 URL -> 仓库内快照相对路径（与 fetch-snapshot 的 localPathFor 一致）。 */
+/**
+ * 合并产物的**分段标记**：每个来源的规则前插一段注释，标明这一块的出处。
+ * 便于 review「哪一条来自哪里」——合并后单看文件是分不清的。
+ * 去重方向是「先到者胜」：同一 (键) 在后面的来源里会被跳过，所以
+ * 靠前的来源优先级更高（kelee 通常排第一）。
+ */
+function sectionMarker(idx, src, count) {
+  const bar = "#".repeat(64);
+  const where = src.url ?? src.local_file ?? "";
+  return [
+    bar,
+    `# 第 ${idx} 块来源: ${src.tag ?? ""}`,
+    `#   ${where}`,
+    `#   本块贡献 ${count} 条（与前面重复的已跳过，先到者优先）`,
+    bar,
+  ];
+}
+
 function snapshotPathFor(url) {
   const m = (url ?? "").match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
   if (m) return `snapshot/github.com/${m[1]}`;
@@ -102,7 +120,9 @@ for (const f of toVendorOnly) {
 {
   for (const f of filterMergeGroups) {
     process.stdout.write(`合并 ${f.id} … `);
-    const all = [];
+    const body = []; // 逐块累积（含分段标记）
+    let idx0 = 0;
+    let total = 0;
     const seen = new Map(); // key -> policy，用于检测策略冲突
     let failed = false;
     let conflicts = 0;
@@ -136,6 +156,7 @@ for (const f of toVendorOnly) {
         ? text.split(/\r?\n/).map((x) => x.split("//")[0].trim()).filter((x) => x && !x.startsWith("#"))
         : convertRuleList(text, { policy: f.policy }).rules;
       let added = 0;
+      const blockLines = [];
       for (const r of rules) {
         const parts = r.split(",").map((x) => x.trim());
         if (parts.length < 2) continue;
@@ -157,15 +178,22 @@ for (const f of toVendorOnly) {
           continue;
         }
         seen.set(key, pol);
-        all.push(line);
+        blockLines.push(line);
         added++;
       }
+      // 分段标记放在本块规则**之前**，标明这一块的出处
+      if (added) {
+        body.push(...sectionMarker(idx0 + 1, m, added));
+        body.push(...blockLines);
+        total += added;
+      }
+      idx0++;
       perSource.push(`${m.tag ?? (m.url ?? m.local_file).split("/").pop()}: ${added}`);
     }
     if (conflicts) {
       console.error(`WARN ${f.id}: ${conflicts} 条同名规则策略不一致，已保留先出现的那个`);
     }
-    if (failed || all.length === 0) {
+    if (failed || total === 0) {
       console.log(`跳过写入 ${f.local_file} —— ${existsSync(join(ROOT, f.local_file)) ? "已保留上一次的完整版本" : "无旧版本可保留"}`);
       report.push({ id: f.id, ok: false, error: "部分来源失败或结果为空", file: f.local_file, kept: true });
       continue;
@@ -175,17 +203,17 @@ for (const f of toVendorOnly) {
       `# 合并来源（${f.merges.length} 个，按顺序优先）:`,
       ...f.merges.map((m) => `#   ${m.tag ?? ""}  ${m.url ?? m.local_file}`),
       "# 去重键: (类型, 值)；策略取先出现的来源",
-      `# 规则数: ${all.length}`,
+      `# 规则数: ${total}`,
       "# 重新生成: bun tools/vendor-rules.mjs",
       "",
-      ...all,
+      ...body,
       "",
     ];
     const file = join(ROOT, f.local_file);
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, header.join("\n"));
-    console.log(`${all.length} 条（${perSource.join(" | ")}）-> ${f.local_file}`);
-    report.push({ id: f.id, ok: true, count: all.length, dropped: [], notes: [], file: f.local_file });
+    console.log(`${total} 条（${perSource.join(" | ")}）-> ${f.local_file}`);
+    report.push({ id: f.id, ok: true, count: total, dropped: [], notes: [], file: f.local_file });
   }
 }
 
@@ -235,6 +263,9 @@ for (const f of toVendorOnly) {
     let failed = false;
     const perSource = [];
     const hostnames = new Set();
+    const rwBody = []; // 逐块累积（含分段标记）
+    let rwIdx = 0;
+    let rwCount = 0;   // 实际产出的规则行数（守卫与计数都用它；all 已不再被 push）
     // raw_rewrite：内联在 sources.json 里的手写规则（如 Anymore 自用增强的 41 条）。
     // 放在 merges **之前** —— 它们是用户手写的、优先级最高。
     const sources = [];
@@ -243,6 +274,7 @@ for (const f of toVendorOnly) {
     for (const m of sources) {
       if (m.raw) {
         let added0 = 0;
+        const blockLines0 = [];
         for (const line of m.raw) {
           const tt = line.trim();
           if (!tt) continue;
@@ -259,9 +291,14 @@ for (const f of toVendorOnly) {
           const key = `${mm[1]}\t${mm[2].toLowerCase()}`;
           if (seen.has(key)) continue;
           seen.add(key);
-          all.push(tt);
+          blockLines0.push(tt);
           added0++;
         }
+        if (added0) {
+          rwBody.push(...sectionMarker(rwIdx + 1, m, added0));
+          rwBody.push(...blockLines0);
+        }
+        rwIdx++;
         perSource.push(`${m.tag}: ${added0} 条`);
         continue;
       }
@@ -290,6 +327,7 @@ for (const f of toVendorOnly) {
         continue;
       }
       let added = 0;
+      const blockLines = [];
       for (const line of text.split(/\r?\n/)) {
         const t = line.trim();
         if (!t) continue;
@@ -323,13 +361,19 @@ for (const f of toVendorOnly) {
           bodySigs.push({ sig, from: m.tag ?? m.url ?? m.local_file });
         }
         seen.add(key);
-        all.push(t);
+        blockLines.push(t);
         added++;
       }
+      if (added) {
+        rwBody.push(...sectionMarker(rwIdx + 1, m, added));
+        rwBody.push(...blockLines);
+        rwCount += added;
+      }
+      rwIdx++;
       perSource.push(`${m.tag ?? (m.url ?? m.local_file).split("/").pop()}: ${added} 条${skippedNonRewrite ? `，丢弃 ${skippedNonRewrite} 条非重写行` : ""}`);
     }
     // 与 fetch-snapshot 一致：任一源失败就不覆盖已提交的完整版本
-    if (failed || all.length === 0) {
+    if (failed || rwCount === 0) {
       const keep = existsSync(join(ROOT, r.local_file)) ? "已保留上一次的完整版本" : "无旧版本可保留";
       console.log(`跳过写入 ${r.local_file} —— ${keep}`);
       report.push({ id: r.id, ok: false, error: failed ? "部分来源失败，保留旧版" : "结果为空", file: r.local_file, kept: true });
@@ -340,10 +384,10 @@ for (const f of toVendorOnly) {
       `# 合并来源（${r.merges.length} 个，按顺序优先）:`,
       ...r.merges.map((m) => `#   ${m.tag ?? ""}  ${m.url ?? m.local_file}`),
       `# 去重键: (URL正则, 动作)，忽略脚本 URL`,
-      `# 重写规则数: ${all.length}`,
+      `# 重写规则数: ${rwCount}`,
       `# 重新生成: bun tools/vendor-rules.mjs`,
       "",
-      ...all,
+      ...rwBody,
       "",
       `hostname = ${[...hostnames].sort().join(", ")}`,
       "",
@@ -351,8 +395,8 @@ for (const f of toVendorOnly) {
     const file = join(ROOT, r.local_file);
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, header.join("\n"));
-    console.log(`${all.length} 条（${perSource.join(" | ")}）${semanticallyDeduped ? `，组内去重 ${semanticallyDeduped} 条` : ""}${excludedByStandalone ? `，让给独立条目 ${excludedByStandalone} 条` : ""} -> ${r.local_file}`);
-    report.push({ id: r.id, ok: true, count: all.length, dropped: [], notes: [], file: r.local_file });
+    console.log(`${rwCount} 条（${perSource.join(" | ")}）${semanticallyDeduped ? `，组内去重 ${semanticallyDeduped} 条` : ""}${excludedByStandalone ? `，让给独立条目 ${excludedByStandalone} 条` : ""} -> ${r.local_file}`);
+    report.push({ id: r.id, ok: true, count: rwCount, dropped: [], notes: [], file: r.local_file });
   }
 }
 

@@ -9,7 +9,7 @@
 |---|---|---|---|
 | https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list | `QuantumultX/rules/filter/AppleIntelligence.list` | 11 | 0 |
 | undefined | `QuantumultX/rules/QuantumultX/rules/filter/AdsBlockMAX.list` | 288195 | 0 |
-| undefined | `QuantumultX/rules/QuantumultX/rules/rewrite/AnymoreADEnhance.snippet` | 124 | 0 |
+| undefined | `QuantumultX/rules/QuantumultX/rules/rewrite/AnymoreADEnhance.snippet` | 83 | 0 |
 | undefined | `QuantumultX/rules/QuantumultX/rules/rewrite/HTTPDNSBlock.conf` | 42 | 0 |
 | undefined | `QuantumultX/rules/QuantumultX/rules/rewrite/AdsBlockMAX.conf` | 2162 | 0 |
 | https://kelee.one/Tool/Loon/Lsr/AI.lsr + https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list | `QuantumultX/rules/filter/AI.list` | 280 | 0 |

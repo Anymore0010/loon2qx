@@ -289,17 +289,6 @@
       "note": "移植自 Loon 插件 Bilibili_remove_ads.lpx 的 [Rule] 段。"
     },
     {
-      "id": "filter-kelee-BlockAdvertisers",
-      "tag": "广告平台拦截器(分流)",
-      "local_file": "QuantumultX/rules/filter/kelee/BlockAdvertisers.list",
-      "policy": null,
-      "parser": false,
-      "enabled": true,
-      "kelee_plugin": "BlockAdvertisers.lpx",
-      "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/Website_icon/120px/TencentAd.png",
-      "note": "移植自 Loon 插件 BlockAdvertisers.lpx 的 [Rule] 段。"
-    },
-    {
       "id": "filter-kelee-Block_HTTPDNS",
       "tag": "HTTPDNS拦截器(分流)",
       "local_file": "QuantumultX/rules/filter/kelee/Block_HTTPDNS.list",
@@ -467,11 +456,6 @@
           "preserve_policy": true
         },
         {
-          "tag": "AWAvenue 秋风广告规则（本仓库 vendor 产物）",
-          "force_policy": "reject",
-          "local_file": "QuantumultX/rules/filter/AWAvenue.list"
-        },
-        {
           "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
           "tag": "广告拦截合集（fmz）",
           "force_policy": "reject"
@@ -480,6 +464,11 @@
           "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
           "tag": "Advertising（blackmatrix7，策略列是字面量 advertising）",
           "force_policy": "reject"
+        },
+        {
+          "tag": "AWAvenue 秋风广告规则（本仓库 vendor 产物）",
+          "force_policy": "reject",
+          "local_file": "QuantumultX/rules/filter/AWAvenue.list"
         }
       ],
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
