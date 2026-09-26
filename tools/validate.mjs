@@ -273,7 +273,11 @@ function checkSelfHostedFiles(p, repoSlug) {
         const idx = url.indexOf(`/${repoSlug}/`);
         const afterSlug = url.slice(idx + repoSlug.length + 2);
         const slash = afterSlug.indexOf("/");
-        const rel = afterSlug.slice(slash + 1);
+        // 脚本 URL 可以带 `#key=value` 参数片段（kelee 转换器用它内联插件参数）。
+        // 片段不是路径的一部分；若不去掉，这里会拼出一个不存在的文件名而误报，
+        // 更糟的是 fetch-snapshot 的孤儿扫描会因此漏认引用、把该脚本删掉（实测踩过）。
+        const hash = afterSlug.indexOf("#");
+        const rel = (hash === -1 ? afterSlug : afterSlug.slice(0, hash)).slice(slash + 1);
         if (seen.has(rel)) continue;
         seen.add(rel);
         if (!existsSync(join(ROOT, rel))) {

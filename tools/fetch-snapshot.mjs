@@ -457,7 +457,9 @@ if (criticalFailures === 0) {
     if (!/(\.snippet|\.conf|\.list)$/.test(f)) continue;
     let text;
     try { text = readFileSync(f, "utf8"); } catch { continue; }
-    for (const m of text.matchAll(new RegExp(`${rawBase}/snapshot/([^\\s"',]+)`, "g"))) {
+    // 排除 #：脚本 URL 可以带 `#key=value` 参数片段（kelee 转换器用它内联插件参数），
+    // 若把 # 也算进路径，引用就会解析成不存在的文件名 -> 该脚本被当孤儿删掉 -> 规则指向 404。
+    for (const m of text.matchAll(new RegExp(`${rawBase}/snapshot/([^\\s"',#]+)`, "g"))) {
       referenced.add(join(SNAP, decodeURIComponent(m[1])));
     }
   }
