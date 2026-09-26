@@ -214,7 +214,16 @@ if (!input) {
   process.exit(2);
 }
 const outArg = args.find((a) => a.startsWith("--out="));
-const outPath = outArg ? outArg.split("=")[1] : "QuantumultX/rules/AnymoreEnhance.snippet";
+const outPath = outArg ? outArg.split("=")[1] : "QuantumultX/rules/plugin-extracted.snippet";
+
+// 防呆：AnymoreEnhance.snippet 已改为**手工维护**（不再自动生成）。
+// 若不加这层保护，误跑一次本脚本就会把手写规则整份覆盖掉。
+if (/AnymoreEnhance\.snippet$/.test(outPath) && !args.includes("--force")) {
+  console.error("拒绝写入 QuantumultX/rules/AnymoreEnhance.snippet —— 该文件已改为手工维护。");
+  console.error("  它会整份覆盖你的手写规则。确实要覆盖请显式加 --force。");
+  console.error(`  想提取到别处: bun tools/extract-plugin.mjs <plugin> --out=QuantumultX/rules/xxx.snippet`);
+  process.exit(2);
+}
 
 const text = readFileSync(input, "utf8").replace(/^\uFEFF/, "");
 
@@ -398,43 +407,8 @@ if (keleeRules.length) console.log(`剔除依赖 kelee.one 脚本的规则 ${kel
 const mitmFinal = mitmDedup;
 const body = mitmFinal.length ? finalRules.concat(["", `hostname = ${mitmFinal.join(", ")}`]) : finalRules;
 
-/**
- * 自用规则区段：手工维护、重新生成时必须原样保留。
- *
- * 为什么需要：这个文件由本脚本整份重写，若不做保留，使用者往里加的自定义规则
- * 会在下次 `bun tools/extract-plugin.mjs --all` 时被静默抹掉。
- * 用法：把自用规则写在文件末尾这两个标记之间即可。
- */
-const CUSTOM_BEGIN = "# >>>>> Anymore 自用规则（重新生成时保留，勿删标记）>>>>>";
-const CUSTOM_END = "# <<<<< Anymore 自用规则 <<<<<";
-function readCustomBlock(file) {
-  if (!existsSync(file)) return [];
-  const lines = readFileSync(file, "utf8").split(/\r?\n/);
-  const i = lines.findIndex((l) => l.trim() === CUSTOM_BEGIN);
-  const j = lines.findIndex((l) => l.trim() === CUSTOM_END);
-  return i >= 0 && j > i ? lines.slice(i, j + 1) : [];
-}
-
-// 取回上次的自用规则区段（若没有则新建空区段，方便使用者直接往里加）
-const custom = readCustomBlock(dest);
-const customBlock = custom.length
-  ? custom
-  : [
-      CUSTOM_BEGIN,
-      "# 在此处添加你自己的规则（重写/分流），重新生成时会原样保留。",
-      "# 形如: ^https:\\/\\/example\\.com\\/ad url reject",
-      "# 若用到新的域名，记得同时加入下面的 hostname 行（或写自己的 hostname）。",
-      CUSTOM_END,
-    ];
-if (custom.length) console.log(`  保留自用规则区段: ${custom.length - 2} 行`);
-
-// hostname 放在自用区段之前，避免自用规则被挤到 hostname 之后（QX 只认最后一条 hostname）
-// 规则 + 自用区段 + hostname 的顺序是固定的：hostname 必须最后。
-const rulesOnly = finalRules;
 const outFinal = header.concat(
-  rulesOnly,
-  [""],
-  customBlock,
+  finalRules,
   mitmFinal.length ? ["", `hostname = ${mitmFinal.join(", ")}`] : [],
 );
 writeFileSync(dest, outFinal.join("\n") + "\n");
