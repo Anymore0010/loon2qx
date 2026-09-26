@@ -340,22 +340,6 @@ function checkRewriteHostnames() {
   return checked;
 }
 
-/** In the snapshot profile, every referenced snapshot file must exist. */
-function checkSnapshotFiles(p) {
-  const seen = new Set();
-  for (const name of ["filter_remote", "rewrite_remote", "server_remote", "task_local", "general"]) {
-    for (const { n, line } of p.sections.get(name) ?? []) {
-      for (const m of line.matchAll(/https:\/\/raw\.githubusercontent\.com\/[^,\s]+\/snapshot\/([^,\s]+)/g)) {
-        const rel = `snapshot/${m[1]}`;
-        if (seen.has(rel)) continue;
-        seen.add(rel);
-        if (!existsSync(join(ROOT, rel))) err(p.path, n, `snapshot file missing on disk: ${rel}`);
-      }
-    }
-  }
-  return seen.size;
-}
-
 /** Non-empty requirement: essential sections must carry real content. */
 function checkNonEmpty(p) {
   for (const name of ["general", "dns", "policy", "filter_local", "filter_remote", "rewrite_remote"]) {
@@ -405,12 +389,11 @@ for (const path of profiles) {
   const missing = REQUIRED_SECTIONS.filter((s) => !p.sections.has(s));
   for (const s of missing) err(rel, 0, `缺少段头 [${s}] —— Quantumult X 会因缺少该模块而无法导入`);
 
-  let snapCount = 0;
-  if (rel.includes("offline")) snapCount = checkSnapshotFiles({ ...p, path: rel });
+
   const selfHosted = checkSelfHostedFiles({ ...p, path: rel }, repoSlug);
 
   const counts = [...p.sections].map(([k, v]) => `${k}:${v.length}`).join(" ");
-  console.log(`${rel}  ${counts}${snapCount ? `  snapshot-files:${snapCount}` : ""}${selfHosted ? `  self-hosted:${selfHosted}` : ""}`);
+  console.log(`${rel}  ${counts}${selfHosted ? `  self-hosted:${selfHosted}` : ""}`);
 }
 
 // Rule-count sanity: the snapshot must not be an empty mirror.

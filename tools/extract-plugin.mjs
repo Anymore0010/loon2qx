@@ -247,7 +247,12 @@ const mitmHosts = section(text, "MITM")
   .filter((l) => /^hostname\s*=/i.test(l))
   .flatMap((l) => l.replace(/^hostname\s*=/i, "").split(","))
   .map((x) => x.trim())
-  .filter(Boolean);
+  .filter(Boolean)
+  // 上游合并包里有破损行：被注释掉的 `hostname =` 丢了前导 #，与上一行粘连成
+  // "xxx.comhostname = yyy.com"。这类条目含 "=" 或 "hostname" 字样，是非法主机名，
+  // QX 解析该行会报错 —— 必须剔除（并去重）。
+  .filter((x) => x && !x.includes("=") && !/hostname/i.test(x) && /^[A-Za-z0-9*?._-]+$/.test(x));
+const mitmDedup = [...new Set(mitmHosts)];
 
 /**
  * 与「已在配置里生效」的重写源去重。
@@ -302,7 +307,7 @@ const header = [
   `# 提取: ${raw.length} 条 -> 转换 ${converted.length} 条 -> 自身去重 ${beforeDedupe} 条`,
   `# 与现有重写源重复已剔除: ${removedAsDuplicate} 条`,
   `# 最终: ${unique.length} 条`,
-  `# 并入的 MITM 主机名: ${mitmHosts.length} 个（缺了这些脚本规则不会生效）`,
+  `# 并入的 MITM 主机名: ${mitmDedup.length} 个（已剔除上游破损条目并去重）`,
   `# 未能转换: ${skipped.length} 条（QX 无对应动作，如 mock-response-body / map-local）`,
   "# 重新生成: bun tools/extract-plugin.mjs --all   # 必须带 --all，它才会与已启用重写源去重",
   "",
@@ -330,7 +335,7 @@ const rewriteScripts = (line) =>
     return existsSync(join(ROOT, local)) ? prefix + `${repoBase}/${local}` : full;
   });
 const outRules = unique.map(rewriteScripts);
-const body = mitmHosts.length ? outRules.concat(["", `hostname = ${mitmHosts.join(", ")}`]) : outRules;
+const body = mitmDedup.length ? outRules.concat(["", `hostname = ${mitmDedup.join(", ")}`]) : outRules;
 writeFileSync(dest, header.concat(body).join("\n") + "\n");
 
 console.log(`提取 ${raw.length} 条 -> 转换 ${converted.length} -> 自身去重 ${beforeDedupe}`);

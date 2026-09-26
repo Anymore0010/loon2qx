@@ -2,7 +2,7 @@
 
 自用的代理配置仓库：**以 Quantumult X 为主**，从 Loon 配置转换并融合现有 QX 配置而来。
 
-生成的配置：**`QuantumultX/default.conf`**（在线版）与 `snapshot/offline.conf`（离线版）。
+生成的配置：**`QuantumultX/default.conf`**（唯一一份，所有资源指向本仓库快照）。
 
 | 文件 | 作用 |
 |---|---|
@@ -86,7 +86,6 @@ bun tools/validate.mjs         # 校验
 
 ```
 QuantumultX/default.conf          在线配置（从 sources.json 生成，勿手改）
-snapshot/offline.conf              离线配置（所有资源指向仓库内快照）
 snapshot/index.json               快照清单：每个资源的来源、状态
 tools/sources.json                唯一事实来源：所有外部资源与本地规则
 tools/build.mjs                   生成在线配置
@@ -109,7 +108,7 @@ bun tools/fetch-snapshot.mjs # 刷新快照 + 离线配置
 
 配置文件依赖 59 个第三方资源（含图标）。任何一个上游仓库被删或强推，配置就会**静默地少掉规则**。
 
-因此 `snapshot/` 保存了一份冻结副本，`snapshot/offline.conf` 指向仓库内的副本而不是上游：
+因此 `snapshot/` 保存了一份冻结副本，配置里的所有资源都指向它：
 
 - GitHub Actions **每周一 03:17 UTC 自动刷新**（已启用，实测可运行）；
 - 上游挂掉时，改用离线配置即可继续工作；

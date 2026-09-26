@@ -3,7 +3,7 @@
  * Generates QuantumultX/default.conf from tools/sources.json.
  *
  * The profile is generated, never hand-edited: sources.json is the single
- * source of truth so the online profile and the offline snapshot cannot drift.
+ * source of truth so the profile and the snapshot it points at cannot drift.
  *
  *   bun tools/build.mjs           # write QuantumultX/default.conf
  *   bun tools/build.mjs --check   # fail if the committed file is stale

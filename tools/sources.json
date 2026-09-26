@@ -347,14 +347,6 @@
       "note": "fmz 聚合资源未覆盖。"
     },
     {
-      "id": "rewrite-jd-tb-price",
-      "url": "https://raw.githubusercontent.com/Orz-3/QuantumultX/master/JD_TB_price.conf",
-      "tag": "京东/淘宝比价",
-      "parser": false,
-      "enabled": true,
-      "note": "对应 Loon 的 JD_Price.lpx；fmz 聚合资源未覆盖。"
-    },
-    {
       "id": "rewrite-boxjs",
       "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
       "tag": "BoxJs",

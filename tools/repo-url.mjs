@@ -1,7 +1,7 @@
 /**
  * Works out this repository's raw.githubusercontent.com base URL.
  *
- * The offline profile embeds absolute URLs pointing back at the snapshot files
+ * The profile embeds absolute URLs pointing back at the snapshot files
  * committed in this repository. Hard-coding (or leaking a local test value)
  * silently produces a profile whose every resource 404s, so the base is
  * resolved from the git remote, with CI env vars taking precedence.

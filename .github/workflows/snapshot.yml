@@ -3,7 +3,7 @@ name: Snapshot
 # The profile depends on ~59 third-party resources across several upstream repos.
 # If one is deleted or force-pushed, the profile silently loses rules. This job
 # refreshes the frozen mirror in snapshot/ weekly so there is always a working
-# copy, and regenerates the offline profile that points at the mirror.
+# copy, which the single generated profile points at.
 #
 # A single broken upstream must NOT block the refresh: the other resources are
 # still worth mirroring. So the job commits whatever succeeded and only then
