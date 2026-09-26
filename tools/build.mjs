@@ -102,7 +102,11 @@ function buildDns(d) {
   } else {
     lines.push(comment("Loon ip-mode = dual / ipv6-vif = auto，因此这里不写 no-ipv6，保留 IPv6。"));
   }
-  lines.push(comment("官方要求多个 doh-server 写在同一行、以逗号分隔（并发查询）。"));
+  if (d.prefer_doh3) {
+    lines.push(comment("优先使用 DNS over HTTP/3；失败时自动回落 HTTP/2（QX 内置回落）。"));
+    lines.push("prefer-doh3");
+  }
+  lines.push(comment("多个 doh-server 写在同一行、逗号分隔（并发查询，多路提高可用性）。"));
   lines.push(`doh-server=${d.doh_server.join(", ")}`);
   if (d.domain_servers?.length) {
     lines.push("");

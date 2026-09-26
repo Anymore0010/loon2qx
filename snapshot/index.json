@@ -1,9 +1,9 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 165,
-  "mirrored": 144,
-  "failed": 0,
+  "total": 163,
+  "mirrored": 141,
+  "failed": 1,
   "resources": [
     {
       "id": "filter-ads-fmz",
@@ -63,10 +63,10 @@
       "id": "filter-spotify",
       "kind": "filter",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
-      "status": 200,
-      "error": null
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": null,
+      "error": "The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"
     },
     {
       "id": "filter-github",
@@ -348,15 +348,6 @@
       "error": null
     },
     {
-      "id": "icon-台湾节点",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png",
-      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/TW.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "icon-日本节点",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/JP.png",
@@ -389,15 +380,6 @@
       "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png",
       "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/US.png",
       "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-游戏节点",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/GAME.png",
-      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/GAME.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/GAME.png",
       "status": 200,
       "error": null
     },

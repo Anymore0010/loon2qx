@@ -275,6 +275,7 @@ if (src.general.udp_drop_list) lines.push(`udp_drop_list=${src.general.udp_drop_
 lines.push("");
 
 lines.push(section("dns", "DNS"));
+if (src.dns.prefer_doh3) lines.push("prefer-doh3");
 if (src.dns.no_ipv6) lines.push("no-ipv6");
 lines.push(`doh-server=${src.dns.doh_server.join(", ")}`);
 for (const s of src.dns.domain_servers ?? []) lines.push(s);

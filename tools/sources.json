@@ -17,37 +17,14 @@
     "_dns_exclusion_note": "dns_exclusion_list 来自 fmz（Loon 无对应概念），属纯新增：这些域名不使用 fake-ip。excluded_routes 以 Loon bypass-tun 为准；fmz 额外加的 239.255.255.250/32 已被 Loon 的 224.0.0.0/4 覆盖，属冗余，已移除。"
   },
   "dns": {
-    "_comment": "来自 Loon [General] doh-server。domain_servers 保留原配置中「按域名指定 DNS」的规则：官方文档说明 doh-server 只忽略「未绑定域名」的普通 server，按域名绑定的仍然生效。路由管理页那几条用 system，否则在外网 DNS 下会解析不到、打不开路由器后台。no_ipv6 开关：false=保留 IPv6（对齐 Loon ip-mode=dual，当前值）；true=生成 no-ipv6（对齐 fmz 的 QX 配置）。",
+    "_comment": "DoH 双源并发（阿里 + 腾讯），加 prefer-doh3 优先 HTTP/3。Google DoH 已按用户要求移除（内地常被墙，留着反而拖慢查询）。",
     "doh_server": [
       "https://dns.alidns.com/dns-query",
-      "https://doh.pub/dns-query",
-      "https://dns.google/dns-query"
+      "https://doh.pub/dns-query"
     ],
-    "domain_servers": [
-      "server=/*itunes.apple.com/system",
-      "server=/dl.google.com/119.29.29.29",
-      "server=/dl.l.google.com/119.29.29.29",
-      "server=/update.googleapis.com/119.29.29.29",
-      "server=/*.dl.playstation.net/119.29.29.29",
-      "server=/amplifi.lan/system",
-      "server=/router.synology.com/system",
-      "server=/sila.razer.com/system",
-      "server=/router.asus.com/system",
-      "server=/routerlogin.net/system",
-      "server=/orbilogin.com/system",
-      "server=/www.LinksysSmartWiFi.com/system",
-      "server=/LinksysSmartWiFi.com/system",
-      "server=/myrouter.local/system",
-      "server=/www.miwifi.com/system",
-      "server=/miwifi.com/system",
-      "server=/mediarouter.home/system",
-      "server=/tplogin.cn/system",
-      "server=/tplinklogin.net/system",
-      "server=/melogin.cn/system",
-      "server=/falogin.cn/system",
-      "server=/liquidlink.cn/119.29.29.29"
-    ],
-    "no_ipv6": false
+    "no_ipv6": false,
+    "domain_servers": [],
+    "prefer_doh3": true
   },
   "policies": {
     "_comment": "regions + selects 来自 Loon（[Remote Filter] 正则 + [Proxy Group]）。groups 是 fmz 配置里的策略组，供融合进来的 fmz 分流规则使用。",
@@ -56,11 +33,6 @@
         "name": "香港节点",
         "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/HK.png",
         "regex": "^(?=.*((?i)🇭🇰|香港|(\\b(HK|Hong)(\\d+)?\\b)))(?!.*((?i)回国|校园|游戏|🎮|(\\b(GAME)\\b))).*$"
-      },
-      {
-        "name": "台湾节点",
-        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/TW.png",
-        "regex": "^(?=.*((?i)🇹🇼|台湾|(\\b(TW|Tai|Taiwan)(\\d+)?\\b)))(?!.*((?i)回国|校园|游戏|🎮|(\\b(GAME)\\b))).*$"
       },
       {
         "name": "日本节点",
@@ -81,11 +53,6 @@
         "name": "美国节点",
         "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/US.png",
         "regex": "^(?=.*((?i)🇺🇸|美国|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|(\\b(US|United States)(\\d+)?\\b)))(?!.*((?i)回国|校园|游戏|🎮|(\\b(GAME)\\b))).*$"
-      },
-      {
-        "name": "游戏节点",
-        "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/GAME.png",
-        "regex": "^(?=.*((?i)游戏|🎮|(\\b(GAME)(\\d+)?\\b)))(?!.*((?i)回国|校园)).*$"
       },
       {
         "name": "全球节点",
@@ -117,14 +84,6 @@
       {
         "name": "美国手动策略",
         "region": "美国节点"
-      },
-      {
-        "name": "游戏手动策略",
-        "region": "游戏节点"
-      },
-      {
-        "name": "台湾手动策略",
-        "region": "台湾节点"
       }
     ],
     "groups": [
