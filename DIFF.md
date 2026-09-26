@@ -132,11 +132,11 @@ DoH（公网），**你在外网 DNS 下就打不开路由器后台**。已从�
 | 广告拦截合集 | fmz `filter.list` | ✅ 同 |
 | 分流修正 | fmz `filterFix.list` | ✅ 同 |
 | AI 分流合集 | fmz `Loon/rule/AI.list`（`opt-parser=true`） | ✅ 同源，但**已预转换**为 QX 原生（见第五节） |
-| TikTok | bm7 TikTok | ✅ 同 |
+| TikTok | bm7 TikTok | ❌ **未迁移**（用户确认不需要） |
 | Telegram | bm7 Telegram | ✅ 同 |
 | Google | bm7 Google | ✅ 同 |
 | Spotify | bm7 Spotify | ✅ 同 |
-| Talkatone | fmz talkatone | ✅ 同 |
+| Talkatone | fmz talkatone | ❌ **未迁移**（用户确认不需要） |
 | GeoIP_CN | fmz `GeoIP_CN.list` | ✅ 同源，已预转换 |
 | 苹果屏蔽系统更新 | fmz `blockAppleUpdate`（disabled） | ✅ 同（保持 disabled） |
 

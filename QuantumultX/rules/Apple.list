@@ -4,8 +4,8 @@
 #   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list
 #   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list
 # 统一策略: direct
-# 规则数: 1887（已跨来源去重）
-#   各源贡献 Apple/Apple.list: 1881
+# 规则数: 1878（已跨来源去重）
+#   各源贡献 Apple/Apple.list: 1872
 #   各源贡献 AppleID/AppleID.list: 4
 #   各源贡献 AppStore/AppStore.list: 2
 # 重新生成: bun tools/vendor-rules.mjs
@@ -80,7 +80,6 @@ host, cn-smp-paymentservices.apple.com, Apple
 host, communities.apple.com, Apple
 host, configuration.apple.com, Apple
 host, configuration.apple.com.akadns.net, Apple
-host, courier-push-apple.com.akadns.net, Apple
 host, crl-lb.apple.com.akadns.net, Apple
 host, crl.apple.com, Apple
 host, cstat.apple.com, Apple
@@ -127,12 +126,7 @@ host, images.apple.com, Apple
 host, images.apple.com.akadns.net, Apple
 host, images.apple.com.edgekey.net.globalredir.akadns.net, Apple
 host, init-kt.apple.com, Apple
-host, init-p01md-lb.push-apple.com.akadns.net, Apple
 host, init-p01md.apple.com, Apple
-host, init-p01st-lb.push-apple.com.akadns.net, Apple
-host, init-p01st.push.apple.com, Apple
-host, init-s01st-lb.push-apple.com.akadns.net, Apple
-host, init-s01st.push.apple.com, Apple
 host, init.ess.apple.com, Apple
 host, init.itunes.apple.com, Apple
 host, iosapps-ssl.itunes.apple.com, Apple
@@ -181,7 +175,6 @@ host, ppq.apple.com, Apple
 host, probe.siri.apple.com, Apple
 host, prod-support.apple-support.akadns.net, Apple
 host, publicassets.cdn-apple.com, Apple
-host, push-apple.com.akadns.net, Apple
 host, reserve-prime.apple.com, Apple
 host, s.mzstatic.com, Apple
 host, se-edge.itunes.apple.com, Apple
@@ -1838,8 +1831,6 @@ host-wildcard, apple.*, Apple
 host-wildcard, apple.com.*, Apple
 host-wildcard, appleworldwidedeveloper.*.net, Apple
 host-wildcard, imac.*, Apple
-host-wildcard, init*.push-apple.com.akadns.net, Apple
-host-wildcard, init*.push.apple.com, Apple
 host-wildcard, ipad.*, Apple
 host-wildcard, ipadair.*, Apple
 host-wildcard, ipadmini.*, Apple

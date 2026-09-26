@@ -21,9 +21,9 @@ Loon 的 `.lsr` 与 Quantumult X 的 `.list` 是同一套 `host-suffix, x, POLIC
 |---|---|---|
 | AppleIntelligence.list（ddgksf2013） | 同源，`opt-parser=true` | 全球手动策略 |
 | Telegram.lsr | bm7 `Telegram/Telegram.list` | 全球手动策略 |
-| TikTok.lsr | bm7 `TikTok/TikTok.list` | direct |
+| ~~TikTok.lsr~~ | ❌ 未迁移（用户确认不需要） | — |
 | AI.lsr | bm7 `OpenAI` + `Anthropic` | 美国手动策略 |
-| ApplePushNotificationService.lsr | bm7 `Apple/Apple.list` | direct |
+| ApplePushNotificationService.lsr | 从 bm7 `Apple/Apple.list` **提取** push/courier 域（上游无独立 APNs 列表） | 苹果推送（可选组） |
 | AppleAccount.lsr | bm7 `AppleID/AppleID.list` | direct |
 | AppStore.lsr | bm7 `AppStore/AppStore.list` | direct |
 | GitHub.lsr | bm7 `GitHub/GitHub.list` | 全球手动策略 |

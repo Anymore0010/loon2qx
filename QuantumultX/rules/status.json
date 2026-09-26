@@ -1,8 +1,8 @@
 {
-  "total": 8,
-  "ok": 8,
+  "total": 9,
+  "ok": 9,
   "failed": 0,
-  "rules": 4440,
+  "rules": 4444,
   "resources": [
     {
       "id": "filter-awavenue",
@@ -71,7 +71,16 @@
       "id": "merge-apple",
       "upstream": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list",
       "file": "QuantumultX/rules/Apple.list",
-      "rules": 1887,
+      "rules": 1878,
+      "dropped": 0,
+      "adjusted": 0,
+      "error": null
+    },
+    {
+      "id": "merge-apns",
+      "upstream": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
+      "file": "QuantumultX/rules/ApplePush.list",
+      "rules": 13,
       "dropped": 0,
       "adjusted": 0,
       "error": null

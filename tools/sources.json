@@ -233,6 +233,19 @@
           "全球节点"
         ],
         "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/ChatGPT.png"
+      },
+      {
+        "name": "苹果AI",
+        "members": [
+          "美国节点",
+          "proxy",
+          "香港节点",
+          "新国节点",
+          "日本节点",
+          "韩国节点",
+          "全球节点"
+        ],
+        "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
       }
     ]
   },
@@ -295,7 +308,7 @@
     {
       "id": "filter-apple-ai",
       "tag": "Apple AI",
-      "policy": "人工智能",
+      "policy": "苹果AI",
       "parser": false,
       "enabled": true,
       "note": "来自 Loon [Remote Rule] 的 AppleIntelligence.list。 已预转换为 Quantumult X 原生规则存于仓库（不再依赖运行时解析器）。",
@@ -316,6 +329,17 @@
       "local_file": "QuantumultX/rules/Apple.list",
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png",
       "note": "由 rule_merges 的 merge-apple 生成（bm7 Apple + AppleID + AppStore）。"
+    },
+    {
+      "id": "filter-apns",
+      "tag": "Apple Push Notification Service",
+      "policy": "苹果推送",
+      "parser": false,
+      "enabled": true,
+      "_local": true,
+      "local_file": "QuantumultX/rules/ApplePush.list",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png",
+      "note": "APNs 推送中继域名。上游无独立列表，从 bm7 Apple 列表提取固化。"
     },
     {
       "id": "filter-google",
@@ -661,7 +685,7 @@
     ],
     "final": "direct"
   },
-  "_filter_order_note": "顺序依据你的两份原配置：先取 QX [filter_remote] 的顺序（广告拦截 → 分流修正 → App 规则），再按 Loon [Remote Rule] 的顺序补上 Loon 独有的条目；CN REGION 固定最后（Loon 原配置明确要求勿改排序）。顺序有实际影响：实测 42 个域名同时出现在广告黑名单与 App 分流里（Google 35、Apple 5、YouTube 2），先匹配者决定去向。",
+  "_filter_order_note": "顺序依据你的两份原配置：先取 QX [filter_remote] 的顺序（广告拦截 → 分流修正 → App 规则），再按 Loon [Remote Rule] 的顺序补上 Loon 独有的条目；CN REGION 固定最后（Loon 原配置明确要求勿改排序）。顺序有实际影响：实测 42 个域名同时出现在广告黑名单与 App 分流里（Google 35、Apple 5、YouTube 2），先匹配者决定去向。\n\n【已知冲突·按用户指定顺序保留】「分流修正」(filterFix.list) 含 `host-keyword, icloud.com, direct` 与 `host-keyword, ls.apple.com, direct`，而「Apple AI」要 gateway.icloud.com / gspe1-ssl.ls.apple.com 走代理。filter_remote 先匹配先赢，故分流修正在前时 Apple AI 的这两条会被抢成 direct。用户明确指定「分流修正」在最前，故保持不动。若要让 Apple AI 生效，把它移到「分流修正」之前即可（仅 11 条窄匹配，不影响其它条目）。",
   "rule_merges": [
     {
       "id": "merge-ai",
@@ -728,7 +752,42 @@
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list"
       ],
-      "note": "Apple 系合并：bm7 Apple/Apple.list(1881) + AppleID(4) + AppStore(2)。APNs 与 Apple AI 保持独立条目（用户要求）。"
+      "note": "Apple 系合并：bm7 Apple/Apple.list(1881) + AppleID(4) + AppStore(2)。APNs 与 Apple AI 保持独立条目（用户要求）。 APNs 域名已排除（由独立条目「Apple Push Notification Service」负责）。",
+      "exclude_domains": [
+        "courier-push-apple.com.akadns.net",
+        "init-p01md-lb.push-apple.com.akadns.net",
+        "init-p01st-lb.push-apple.com.akadns.net",
+        "init-p01st.push.apple.com",
+        "init-s01st-lb.push-apple.com.akadns.net",
+        "init-s01st.push.apple.com",
+        "push-apple.com.akadns.net",
+        "init*.push-apple.com.akadns.net",
+        "init*.push.apple.com"
+      ]
+    },
+    {
+      "id": "merge-apns",
+      "out": "ApplePush.list",
+      "policy": null,
+      "raw_rewrite": [
+        "# Apple Push Notification Service —— APNs 推送中继。",
+        "# 上游无独立 APNs 列表（fmz/bm7 均 404），故从 bm7 Apple 列表中提取 push/courier 域名固化于此。",
+        "# 保留独立条目（不并入 Apple）的原因：APNs 走直连更稳，且便于单独调整策略。",
+        "# 来源参考: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
+        "host, courier-push-apple.com.akadns.net",
+        "host, init-p01md-lb.push-apple.com.akadns.net",
+        "host, init-p01st-lb.push-apple.com.akadns.net",
+        "host, init-p01st.push.apple.com",
+        "host, init-s01st-lb.push-apple.com.akadns.net",
+        "host, init-s01st.push.apple.com",
+        "host, push-apple.com.akadns.net",
+        "host-wildcard, init*.push-apple.com.akadns.net",
+        "host-wildcard, init*.push.apple.com"
+      ],
+      "sources": [
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list"
+      ],
+      "note": "APNs 推送域名（从 bm7 Apple 列表提取）。用户要求保持独立条目。"
     }
   ],
   "output": {
