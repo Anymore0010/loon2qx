@@ -15,6 +15,7 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { ruleSig, sameTarget } from "./lib/rule-target.mjs";
 import { resolveRepoBase } from "./repo-url.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -363,39 +364,6 @@ function checkVendoredRules() {
 function checkRewriteDuplicates() {
   const src = JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8"));
 
-  /**
-   * URL 正则 -> 语义键（域名+路径词元的有序集合）。
-   *
-   * 为什么不能按整行文本比对：跨源重复的真实形态是「同一 URL、不同正则写法、
-   * 不同脚本」。实测 fmz 聚合用
-   *   ^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/user-customization-service\/v1\/customize$
-   * 而插件提取用
-   *   ^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/(?:bootstrap|user-customization-service)
-   * 两者命中同一 protobuf 响应体，但整行文本完全不同 —— 旧的整行比对永远报 0，
-   * 于是「Spotify 解锁没用」这类问题一路绿灯上线。
-   * 注意：只去掉分组的括号，**保留组内候选**（关键信息常在组里）。
-   */
-  const urlSig = (pattern) =>
-    new Set(
-      pattern
-        .replace(/\\/g, "")
-        .replace(/\(\?:/g, " ")
-        .replace(/\(/g, " ")
-        .replace(/\)/g, " ")
-        .toLowerCase()
-        .split(/[^a-z0-9]+/)
-        .filter((t) => t.length >= 7),
-    );
-  /** 两条规则是否命中同一 URL（一方词元多数出现在另一方）。 */
-  const sameTarget = (a, b) => {
-    const A = a.size >= b.size ? a : b;
-    const B = A === a ? b : a;
-    if (B.size === 0) return false;
-    let hit = 0;
-    for (const t of B) if (A.has(t)) hit++;
-    return hit >= 2 && hit / B.size >= 0.6;
-  };
-
   const seen = new Map(); // 规则键 -> 来源文件
   const seenSigs = []; // {sig, line, from} 仅脚本/jsonjq 类
   let dupes = 0;
@@ -417,12 +385,14 @@ function checkRewriteDuplicates() {
     for (const raw of readFileSync(file, "utf8").split(/\r?\n/)) {
       const t = raw.trim();
       if (!t || t.startsWith("#") || !/\surl\s/.test(t)) continue;
-      // 只有脚本类动作会「处理响应体」，重复才是危险的
-      if (!/url\s+script-/.test(t)) continue;
+      // 会「处理请求/响应体」的动作重复才是危险的：脚本类 + jsonjq 类。
+      // 注意：jsonjq-response-body / jsonjq-request-body 同样改写 body，
+      // 两条命中同一 URL 时会先后各跑一次（曾漏掉这类，见本次修复说明）。
+      if (!/url\s+(script-|jsonjq-)/.test(t)) continue;
       const key = t;
       const from = (relative(ROOT, file) || file).replace(/\\/g, "/");
       const pat = t.split(/\s+url\s+/)[0];
-      const sig = urlSig(pat);
+      const sig = ruleSig(pat);
 
       // ① 整行完全相同：最明显的重复
       if (seen.has(key) && seen.get(key) !== from) {

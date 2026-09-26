@@ -25,11 +25,14 @@
 # 这一条**默认注释掉**。原因：百度翻译需要在脚本里填 appid/securityKey，
 # 而本仓库是**公开**的 —— 密钥一旦提交就无法撤回。
 #
-# 因此歌词脚本刻意**不放进本仓库**，改用 Quantumult X 的本地脚本：
-#   1) 下载脚本到你手机（两种存放位置均可）：
+# 因此歌词脚本**不指向仓库里的 URL**，改用 Quantumult X 的本地脚本
+# （裸文件名 spotify-lyric.js，QX 从设备本地 Scripts 目录解析）—— 密钥只存手机。
+#   1) 下载脚本到你手机（两种存放位置均可，文件名必须是 spotify-lyric.js）：
 #        - 我的 iPhone → Quantumult X → Scripts → spotify-lyric.js
 #        - iCloud Drive → Quantumult X → Scripts → spotify-lyric.js
-#      脚本地址: https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-lyric.js
+#      下载本仓库的版本（= app2smile 原版 + 「未填密钥则静默跳过」补丁）：
+#        https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/QuantumultX/scripts/spotify-lyric.js
+#      若直接下 app2smile 原版，未填密钥就会**每首歌弹一条通知**，故建议用上面的副本。
 #   2) 编辑该文件顶部的 const options = { appid: '你的', securityKey: '你的' }
 #      （去 https://fanyi-api.baidu.com/choose 申请，标准版免费 5 万字符/月）
 #   3) 把下面这行的行首 # 去掉，保存并重载配置。

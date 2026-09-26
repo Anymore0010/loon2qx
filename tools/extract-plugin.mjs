@@ -23,6 +23,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveRepoBase } from "./repo-url.mjs";
+import { ruleSig, sameTarget } from "./lib/rule-target.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -279,42 +280,6 @@ const mitmDedup = [...new Set(mitmHosts)];
  *
  * 去重键按 Quantumult X 的真实语义：同 URL 正则 + 同动作 + 同脚本，才算同一条规则。
  */
-/**
- * 把一个 URL 正则归一化成「语义键」，用于跨源去重。
- *
- * 为什么需要：现有去重是按**正则文本全等**比对，但不同源会用不同写法命中同一个 URL。
- * 实测（正是本项目一直防的坑）：
- *   fmz 聚合  ^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/user-customization-service\/v1\/customize$
- *   插件提取  ^https:\/\/(?:\w+-spclient|spclient\.wg)\.spotify\.com(?::443)?\/(?:bootstrap|user-customization-service)
- *   两者都命中 /user-customization-service 的 protobuf 响应体 -> 同一 body 被两个
- *   script-response-body 依次改写，结果不可预期。文本比对全部漏判。
- *
- * 归一化：去转义/锚定/量词/非捕获组，只留下「域名与路径词元」的有序集合。
- * 两条规则若一方的重要词元全部出现在另一方里，即视为命中同一 URL。
- */
-function urlSig(pattern) {
-  // 注意：只去掉分组的**括号**，绝不能连内容一起去 —— 正则的关键信息常常就在
-  // 分组里（如 `(?:bootstrap|user-customization-service)`），整组删掉会把
-  // 「命中哪个接口」这个最关键的信息抹掉，导致语义比对失效。
-  const p = pattern
-    .replace(/\\/g, "")            // 去转义反斜杠（\. -> .）
-    .replace(/\(\?:/g, " ")          // 非捕获组：只去掉 "(?:"，保留候选项
-    .replace(/\(/g, " ")             // 普通组左括号
-    .replace(/\)/g, " ")             // 右括号
-    .toLowerCase();
-  return new Set(p.split(/[^a-z0-9]+/).filter((t) => t.length >= 7));
-}
-
-/** 两条规则的 URL 正则是否命中同一路径（语义重合）。 */
-function sameTarget(a, b) {
-  const A = a.length >= b.length ? a : b; // 以词元多的一方为准
-  const B = A === a ? b : a;
-  if (B.size === 0) return false;
-  let hit = 0;
-  for (const t of B) if (A.has(t)) hit++;
-  return hit >= 2 && hit / B.size >= 0.6;
-}
-
 function ruleKey(line) {
   const [pat, tail] = line.split(/\s+url\s+/);
   const [action, ...rest] = tail.split(/\s+/);
@@ -349,7 +314,7 @@ for (const f of baselineFiles) {
       const pat = t.split(/\s+url\s+/)[0];
       existingPatterns.add(pat);
       // 只对「会改写响应体」的动作做语义比对：脚本/jsonjq 重复才会互相破坏。
-      if (/\surl\s+(script-|jsonjq-)/.test(t)) existingSigs.push({ pat, sig: urlSig(pat) });
+      if (/\surl\s+(script-|jsonjq-)/.test(t)) existingSigs.push({ pat, sig: ruleSig(pat) });
     }
   } catch (e) {
     console.warn(`  跳过 ${f}: ${e.message}`);
@@ -368,7 +333,7 @@ if (existing.size) {
     const m = l.match(/\surl\s+(script-|jsonjq-)/);
     if (!m) return true;
     const pat = l.split(/\s+url\s+/)[0];
-    const sig = urlSig(pat);
+    const sig = ruleSig(pat);
     if (sig.size === 0) return true;
     const clash = existingSigs.find((e) => sameTarget(sig, e.sig));
     if (clash) { semDropped.push(pat); return false; }
