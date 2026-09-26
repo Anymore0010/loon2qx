@@ -23,3 +23,10 @@ _wk/
 # 插件包临时文件
 _p.plugin
 *.plugin
+
+# 临时分析文件（下划线开头）
+_*.list
+_*.js
+_*.json
+_*.conf
+_*.plugin
