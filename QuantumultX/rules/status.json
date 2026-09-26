@@ -14,19 +14,19 @@
       "error": null
     },
     {
-      "id": "filter-geoip-cn",
-      "upstream": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
-      "file": "QuantumultX/rules/GeoIP_CN.list",
-      "rules": 1,
+      "id": "filter-apple-ai",
+      "upstream": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
+      "file": "QuantumultX/rules/AppleIntelligence.list",
+      "rules": 11,
       "dropped": 0,
       "adjusted": 0,
       "error": null
     },
     {
-      "id": "filter-apple-ai",
-      "upstream": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
-      "file": "QuantumultX/rules/AppleIntelligence.list",
-      "rules": 11,
+      "id": "filter-geoip-cn",
+      "upstream": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/GeoIP_CN.list",
+      "file": "QuantumultX/rules/GeoIP_CN.list",
+      "rules": 1,
       "dropped": 0,
       "adjusted": 0,
       "error": null

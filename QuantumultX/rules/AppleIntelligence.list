@@ -4,14 +4,14 @@
 # 规则数: 11
 # 重新生成: bun tools/vendor-rules.mjs
 
-host-suffix, gateway.icloud.com, 全球手动策略
-host-suffix, apple-relay.apple.com, 全球手动策略
-host-suffix, apple-relay.fastly-edge.com, 全球手动策略
-host-suffix, apple-relay.cloudflare.com, 全球手动策略
-host-suffix, guzzoni.apple.com, 全球手动策略
-host-suffix, cp4.cloudflare.com, 全球手动策略
-host-suffix, gspe1-ssl.ls.apple.com, 全球手动策略
-host-suffix, smoot.apple.com, 全球手动策略
-host-suffix, apple-relay.akamaized.net, 全球手动策略
-host-suffix, apple-relay.mask.apple-dns.net, 全球手动策略
-host-suffix, api-siri-prod.apple.com, 全球手动策略
+host-suffix, gateway.icloud.com, 人工智能
+host-suffix, apple-relay.apple.com, 人工智能
+host-suffix, apple-relay.fastly-edge.com, 人工智能
+host-suffix, apple-relay.cloudflare.com, 人工智能
+host-suffix, guzzoni.apple.com, 人工智能
+host-suffix, cp4.cloudflare.com, 人工智能
+host-suffix, gspe1-ssl.ls.apple.com, 人工智能
+host-suffix, smoot.apple.com, 人工智能
+host-suffix, apple-relay.akamaized.net, 人工智能
+host-suffix, apple-relay.mask.apple-dns.net, 人工智能
+host-suffix, api-siri-prod.apple.com, 人工智能

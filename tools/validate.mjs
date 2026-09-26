@@ -130,9 +130,13 @@ function checkFilterOrder(p) {
   if (!order.length) return;
   const tagOf = (l) => (l.match(/tag=([^,]+)/) ?? [])[1] ?? "";
   const tags = order.map((l) => tagOf(l).includes("CN REGION") ? "CN" : (l.startsWith("FILTER_REGION") ? "CN" : tagOf(l)));
+  // Loon 原注释要求「请勿修改远程 CN REGION 规则的排序甚至删除」，
+  // 即 CN REGION 必须在**所有走代理/规则的条目之后**（否则 CN 的 IP 会被后续条目抢走）。
+  // 但纯 direct 的内置资源（LAN）排在其后无影响，故允许 LAN 跟在它后面。
   const cnIdx = tags.findIndex((t) => t === "CN");
-  if (cnIdx !== -1 && cnIdx !== tags.length - 1) {
-    err(p.path, 0, `CN REGION 不在 [filter_remote] 最后（第 ${cnIdx + 1}/${tags.length} 条）—— Loon 原配置要求它必须最后`);
+  const after = tags.slice(cnIdx + 1).filter((t) => t !== "LAN");
+  if (cnIdx !== -1 && after.length) {
+    err(p.path, 0, `CN REGION 之后还有非 LAN 条目（第 ${cnIdx + 1}/${tags.length} 条，其后为 ${after.join(", ")}）—— Loon 原配置要求 CN REGION 必须在最后（LAN 除外）`);
   }
   const adsIdx = tags.findIndex((t) => t.includes("广告拦截") || t === "Advertising");
   if (adsIdx > 2) {

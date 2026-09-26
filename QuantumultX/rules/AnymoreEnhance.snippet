@@ -10,8 +10,7 @@
 #         若用到了新域名，记得同时加到文件末尾的 hostname 行（否则该条不会生效，且不报错）。
 #         改完跑 `bun tools/validate.mjs` 确认语法没写错。
 #
-# 注意：本文件曾被 tools/extract-plugin.mjs 覆盖，现已从 CI 移除该步骤；
-#       不要再运行 `bun tools/extract-plugin.mjs` 来「更新」它。
+# 本文件由手工维护：直接编辑即可，没有任何自动生成步骤会覆盖它。
 
 ^https:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v1\/ecommerce-user\/get_shopping_info\? url reject-dict
 ^https:\/\/line3-h5-mobile-api\.biligame\.com\/game\/live\/large_card_material\? url reject-dict
