@@ -114,6 +114,16 @@ function buildDns(d) {
   }
   lines.push(comment("多个 doh-server 写在同一行、逗号分隔（并发查询，多路提高可用性）。"));
   lines.push(`doh-server=${d.doh_server.join(", ")}`);
+  // 兜底 UDP DNS（明文）。QX 语义：配了 doh-server 后，未绑定域名的普通 server 会被忽略，
+  // 但显式写出来可作为备用链路 + 让「无 DoH 时」的行为可预期（否则只剩内置 system DNS）。
+  if (d.udp_dns_servers?.length) {
+    lines.push("");
+    lines.push(comment("兜底 UDP DNS（明文，53 端口）：DoH 不可用时的备用链路，"));
+    lines.push(comment("避免只剩 QX 内置 system DNS 导致解析行为不可控。与上面 DoH 同源同口径。"));
+    lines.push(comment("注意：这不是「DoH 失败自动降级」——配了 doh-server 后普通 server 仅对"));
+    lines.push(comment("「绑定了域名的场景」生效（QX 官方文档）。要自动降级需把域名绑到明文 server。"));
+    for (const s of d.udp_dns_servers) lines.push(`server = ${s}`);
+  }
   if (d.domain_servers?.length) {
     lines.push("");
     lines.push(comment("按域名指定 DNS。官方文档：doh-server 只忽略「未绑定域名」的普通 server，"));
@@ -226,7 +236,7 @@ function buildFilterRemote(filters) {
   lines.push("");
   for (const f of filters) {
     const parts = [filterUrl(f), `tag=${f.tag}`];
-    // 规则自带策略的资源（如分流修正）不设 force-policy，否则会覆盖其原有策略。
+    // 规则自带策略的资源（如各 bm7 原生列表）不设 force-policy，否则会覆盖其原有策略。
     if (f.policy) parts.push(`force-policy=${f.policy}`);
     if (f.icon) parts.push(`img-url=${iconUrl(f.icon)}`);
     parts.push("update-interval=86400", `opt-parser=${f.parser}`, `enabled=${f.enabled}`);

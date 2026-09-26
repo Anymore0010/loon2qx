@@ -17,14 +17,19 @@
     "_dns_exclusion_note": "dns_exclusion_list 来自 fmz（Loon 无对应概念），属纯新增：这些域名不使用 fake-ip。excluded_routes 以 Loon bypass-tun 为准；fmz 额外加的 239.255.255.250/32 已被 Loon 的 224.0.0.0/4 覆盖，属冗余，已移除。"
   },
   "dns": {
-    "_comment": "DoH 双源并发（阿里 + 腾讯），加 prefer-doh3 优先 HTTP/3。Google DoH 已按用户要求移除（内地常被墙，留着反而拖慢查询）。",
+    "_comment": "DoH 双源并发（阿里 + 腾讯），加 prefer-doh3 优先 HTTP/3。Google DoH 已按用户要求移除（内地常被墙，留着反而拖慢查询）。 另加「兜底 UDP DNS」：见 udp_dns_servers。",
     "doh_server": [
       "https://dns.alidns.com/dns-query",
       "https://doh.pub/dns-query"
     ],
     "no_ipv6": false,
     "domain_servers": [],
-    "prefer_doh3": true
+    "prefer_doh3": true,
+    "udp_dns_servers": [
+      "223.5.5.5",
+      "119.29.29.29"
+    ],
+    "_udp_dns_note": "兜底 UDP DNS（明文 53 端口）。为什么要它：QX 官方说明——设置了 doh-server 后，system 与所有「未绑定域名的普通非加密 server」都会被忽略；而 DoH 一旦不可用（网络限制/证书问题），就只剩 QX 内置的 system DNS 兜底，行为不可控。这里显式给出两个国内明文 UDP DNS 作为兜底：223.5.5.5（阿里）、119.29.29.29（腾讯，与 dns.pub/DoH 同源）。二者与上面 DoH 的解析口径一致，避免「加密不可用时解析结果突变」。注意（实测 QX sample.conf:58）：这**不**等于「DoH 失败时改用 UDP」——配了 doh-server 后，普通 server 仅用于「绑定了域名的场景」，故它实际是一条备用链路，而非自动降级。若要自动降级需把域名显式绑到明文 server（server = /域名/IP），但那会绕过加密，本配置不采用。"
   },
   "policies": {
     "_comment": "regions + selects 来自 Loon（[Remote Filter] 正则 + [Proxy Group]）。groups 是 fmz 配置里的策略组，供融合进来的 fmz 分流规则使用。",
@@ -650,7 +655,7 @@
     ],
     "final": "兜底策略"
   },
-  "_filter_order_note": "顺序：广告拦截(3 条) → 分流修正 → OpenAI & Anthropic → Apple AI → APNs → Apple → Google/GitHub/X/Telegram/Spotify/Meta/Netflix/Disney → CN REGION → LAN。分流修正放在广告**之后**（还原原 QX 顺序：广告的 reject 先于修正的 direct 生效，否则白名单会抢走广告拦截）。\n\n【仍存在的冲突·用户指定顺序保留】「分流修正」(filterFix) 仍排在「Apple AI」之前，其 `host-keyword, icloud.com, direct` 与 `host-keyword, ls.apple.com, direct` 会把 Apple AI 的 `gateway.icloud.com` / `gspe1-ssl.ls.apple.com` 抢成 direct。若要让 Apple AI 生效，把它移到「分流修正」之前即可。",
+  "_filter_order_note": "顺序：广告拦截(3 条) → OpenAI & Anthropic → Apple AI → APNs → Apple → Google/GitHub/X/Telegram/Spotify/Meta/Netflix/Disney → LAN → CN REGION。\n\n要点：广告拦截置于最前（先匹配先赢，保证 reject 生效）；Apple AI 排在 Apple 之前（否则 Apple 列表会把 gateway.icloud.com 等抢成 direct）；LAN / CN REGION 是 QX 内置 direct 资源，置于末尾。",
   "rule_merges": [
     {
       "id": "merge-ai",
@@ -764,5 +769,5 @@
     "prefer_local": true,
     "_comment": "统一为一份配置：所有资源都指向本仓库快照（prefer_local=true）。代价是上游修正最长延迟 7 天（每周快照任务同步一次）；好处是上游任何仓库失效都不影响使用，且脚本引用也已在快照阶段改写为本仓库地址。若想改回「上游直链（更新更快但依赖上游可用）」，把 prefer_local 设为 false 即可。"
   },
-  "_rewrite_order_note": "顺序由用户指定：HTTPDNS拦截器在最前（所有去广告的依赖）→ 广告拦截(通用/合集) → 天气解锁 → 各 App → BoxJs/Script-Hub/Sub-Store（默认禁用）→ 插件提取重写（最后）。"
+  "_rewrite_order_note": "顺序由用户指定：HTTPDNS拦截器在最前（所有去广告的依赖）→ 广告拦截(通用/合集) → 天气解锁 → 各 App → BoxJs/Script-Hub/Sub-Store（默认禁用）→ Anymore 自用增强（最后）。"
 }
