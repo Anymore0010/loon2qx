@@ -91,7 +91,11 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A snapshot QuantumultX
+          # vendor/ 必须一起提交：fetch-plugins.mjs --force 会把新抓的 kelee 插件
+          # 写进 vendor/loon-plugins/（含 index.json），而 convert-plugins.mjs 读的正是
+          # 那个 index.json。漏掉 vendor/ 则每周抓到的新插件被丢弃，
+          # 「kelee 作为上游 -> 转成 QX」这条链会永远停在首次快照的内容。
+          git add -A snapshot QuantumultX vendor
           if git diff --cached --quiet; then
             echo "No upstream changes."
           else

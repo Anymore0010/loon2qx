@@ -878,7 +878,7 @@
     {
       "plugin": "Bilibili_remove_ads.lpx",
       "section": "Rewrite",
-      "line": "^https:\\/\\/(grpc\\.biliapi\\.net|app\\.bilibili\\.com)\\/bilibili\\.(app\\.(show\\.v1\\.Popular\\/Index|dynamic\\.v2\\.Dynamic\\/DynAll|view(unite)?\\.v1\\.View\\/(View|ViewProgress|RelatesFeed|AIRelateAsync)|playurl\\.v1\\.PlayURL\\/PlayView|playerunite\\.v1\\.Player\\/PlayViewUnite)|polymer\\.app\\.search\\.v1\\.Search\\/SearchAll|community\\.service\\.dm\\.v1\\.DM\\/DmView|main\\.community\\.reply\\.v1\\.Reply\\/MainList|pgc\\.gateway\\.player\\.v2\\.PlayURL\\/PlayView)$ url script-response-body https://kelee.one/Resource/JavaScript/Bilibili/Bilibili_proto_response_kokoryh.js",
+      "line": "^https:\\/\\/(grpc\\.biliapi\\.net|app\\.bilibili\\.com)\\/bilibili\\.(app\\.(show\\.v1\\.Popular\\/Index|dynamic\\.v2\\.Dynamic\\/DynAll|view(unite)?\\.v1\\.View\\/(View|ViewProgress|RelatesFeed|AIRelateAsync)|playurl\\.v1\\.PlayURL\\/PlayView|playerunite\\.v1\\.Player\\/PlayViewUnite)|polymer\\.app\\.search\\.v1\\.Search\\/SearchAll|community\\.service\\.dm\\.v1\\.DM\\/DmView|main\\.community\\.reply\\.v1\\.Reply\\/MainList|pgc\\.gateway\\.player\\.v2\\.PlayURL\\/PlayView)$ url script-response-body https://kelee.one/Resource/JavaScript/Bilibili/Bilibili_proto_response_kokoryh.js#displayUpList=show&purifyComment=true&sponsorBlock=false&logLevel=off",
       "reason": "与另一个 kelee 插件产出重复（保留先出现的那个）"
     },
     {
@@ -927,21 +927,6 @@
   "notes": [
     {
       "plugin": "iRingo.WeatherKit.lpx",
-      "kind": "参数被丢弃",
-      "detail": "argument=[{DataSets},{Weather.Provider},{WeatherAlerts.Provider},{NextHour.Provider},{Air —— QX 无插件参数机制，脚本将走默认分支"
-    },
-    {
-      "plugin": "iRingo.WeatherKit.lpx",
-      "kind": "参数被丢弃",
-      "detail": "argument=[{DataSets},{Weather.Provider},{WeatherAlerts.Provider},{NextHour.Provider},{Air —— QX 无插件参数机制，脚本将走默认分支"
-    },
-    {
-      "plugin": "iRingo.WeatherKit.lpx",
-      "kind": "参数被丢弃",
-      "detail": "argument=[{DataSets},{Weather.Provider},{WeatherAlerts.Provider},{NextHour.Provider},{Air —— QX 无插件参数机制，脚本将走默认分支"
-    },
-    {
-      "plugin": "iRingo.WeatherKit.lpx",
       "kind": "二进制体脚本（未验证）",
       "detail": "^https?:\\/\\/weatherkit\\.apple\\.com\\/api\\/v2\\/weather\\/ —— binary-body-mode 脚本，QX 侧可否解包 protobuf 未经设备验证"
     },
@@ -962,23 +947,13 @@
     },
     {
       "plugin": "Spotify_remove_ads.lpx",
-      "kind": "参数被丢弃",
-      "detail": "argument=[{tab},{useractivity}] —— QX 无插件参数机制，脚本将走默认分支"
-    },
-    {
-      "plugin": "Spotify_remove_ads.lpx",
       "kind": "二进制体脚本（未验证）",
       "detail": "^https:\\/\\/(?:\\w+-spclient|spclient\\.wg)\\.spotify\\.com(?::44 —— binary-body-mode 脚本，QX 侧可否解包 protobuf 未经设备验证"
     },
     {
       "plugin": "Tencent_Video_remove_ads.lpx",
-      "kind": "参数被丢弃",
-      "detail": "argument=\"&sppreviewtype=\\d(.*)&spsrt=\\d->&sppreviewtype=0$1&spsrt=0\" —— QX 无插件参数机制，脚本将走默认分支"
-    },
-    {
-      "plugin": "Bilibili_remove_ads.lpx",
-      "kind": "参数被丢弃",
-      "detail": "argument=[{logLevel}] —— QX 无插件参数机制，脚本将走默认分支"
+      "kind": "非键值型 argument 无法内联",
+      "detail": "\"&sppreviewtype=\\d(.*)&spsrt=\\d->&sppreviewtype=0$1&spsrt=0\""
     },
     {
       "plugin": "Bilibili_remove_ads.lpx",
@@ -992,11 +967,6 @@
     },
     {
       "plugin": "Bilibili_remove_ads.lpx",
-      "kind": "参数被丢弃",
-      "detail": "argument=[{purifyComment}, {logLevel}] —— QX 无插件参数机制，脚本将走默认分支"
-    },
-    {
-      "plugin": "Bilibili_remove_ads.lpx",
       "kind": "条件启用无法表达",
       "detail": "enable={...} —— 该规则在源插件里可按参数关闭，QX 只能无条件生效"
     },
@@ -1004,11 +974,6 @@
       "plugin": "Bilibili_remove_ads.lpx",
       "kind": "二进制体脚本（未验证）",
       "detail": "^https:\\/\\/(?:grpc\\.biliapi\\.net|app\\.bilibili\\.com)\\/bilibi —— binary-body-mode 脚本，QX 侧可否解包 protobuf 未经设备验证"
-    },
-    {
-      "plugin": "Bilibili_remove_ads.lpx",
-      "kind": "参数被丢弃",
-      "detail": "argument=[{displayUpList}, {purifyComment}, {sponsorBlock}, {logLevel}] —— QX 无插件参数机制，脚本将走默认分支"
     },
     {
       "plugin": "Bilibili_remove_ads.lpx",
@@ -1017,28 +982,13 @@
     },
     {
       "plugin": "YouTube_remove_ads.lpx",
-      "kind": "参数被丢弃",
-      "detail": "argument=[{blockUpload},{blockShorts},{blockImmersive},{captionLang},{debug}] —— QX 无插件参数机制，脚本将走默认分支"
-    },
-    {
-      "plugin": "YouTube_remove_ads.lpx",
       "kind": "二进制体脚本（未验证）",
       "detail": "^https:\\/\\/youtubei\\.googleapis\\.com\\/(youtubei\\/v1\\/(browse —— binary-body-mode 脚本，QX 侧可否解包 protobuf 未经设备验证"
     },
     {
       "plugin": "YouTube_remove_ads.lpx",
-      "kind": "参数被丢弃",
-      "detail": "argument=[{captionLang}] —— QX 无插件参数机制，脚本将走默认分支"
-    },
-    {
-      "plugin": "YouTube_remove_ads.lpx",
       "kind": "二进制体脚本（未验证）",
       "detail": "^https?:\\/\\/[\\w-]+\\.googlevideo\\.com\\/initplayback.+&ack.* —— binary-body-mode 脚本，QX 侧可否解包 protobuf 未经设备验证"
-    },
-    {
-      "plugin": "YouTube_remove_ads.lpx",
-      "kind": "参数被丢弃",
-      "detail": "argument=[{blockUpload},{blockShorts},{blockImmersive},{captionLang},{debug}] —— QX 无插件参数机制，脚本将走默认分支"
     },
     {
       "plugin": "YouTube_remove_ads.lpx",
