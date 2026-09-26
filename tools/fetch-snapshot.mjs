@@ -42,6 +42,14 @@ function localPathFor(url) {
 const repoInfo = resolveRepoBase(ROOT);
 const rawBase = repoInfo.rawBase;
 
+/** 图标 URL 是否已指向本仓库（如 QuantumultX/icons/JD.png 这类手工图标）。
+ *  已在本仓库 -> 不再镜像，否则 fetch-snapshot 会把自家文件镜像进 snapshot/、
+ *  build/iconUrl 还会因检测到 snapshot 而回退路径，造成每周震荡/首轮 404。 */
+const isRepoLocal = (u) => {
+  if (!u || !/^https?:/.test(u)) return true; // 本地相对路径，已是本仓库
+  return u.startsWith(rawBase) || u.includes(`/${repoInfo.slug}/`);
+};
+
 /** 递归列出目录下所有文件。 */
 function walkFiles(dir) {
   const out = [];
@@ -76,8 +84,11 @@ function collectResources() {
   for (const t of src.tasks) if (t.icon && /^https?:/.test(t.icon)) add(`icon-${t.id}`, t.icon, "icon");
   // filters / rewrites 的条目图标也要镜像，否则 iconUrl() 会把它们改写成本仓库地址
   // 而快照里并不存在 -> 404 死链（图标空白，QX 不报错）。
-  for (const f of src.filters) if (f.icon) add(`icon-${f.id}`, f.icon, "icon");
-  for (const r of src.rewrites) if (r.icon) add(`icon-${r.id}`, r.icon, "icon");
+  // 注意：图标 URL 若已指向本仓库（如 QuantumultX/icons/JD.png 这类手工图标），
+  // 就**别**再镜像 —— 否则会在 snapshot/ 里多出一份「自己的快照副本」造成嵌套，
+  // 且首轮抓取时若文件未落到 master 会 404。这里跳过，让 iconUrl() 直接用原值。
+  for (const f of src.filters) if (f.icon && !isRepoLocal(f.icon)) add(`icon-${f.id}`, f.icon, "icon");
+  for (const r of src.rewrites) if (r.icon && !isRepoLocal(r.icon)) add(`icon-${r.id}`, r.icon, "icon");
   // geo_location_checker's script half.
   const geo = src.general.geo_location_checker.split(",").map((s) => s.trim())[1];
   if (geo && /^https?:/.test(geo)) add("geo-location-script", geo, "script");
@@ -128,6 +139,12 @@ for (let i = 0; i < resources.length; i += CONCURRENCY) {
 // 脚本 URL -> 镜像记录（写入阶段改写规则文件时使用）
 
 const rewriteStats = { local: 0, kept: 0, missing: new Set() };
+/**
+ * 声明了 exclude_rule_patterns、但一行都没排掉的上游。
+ * 这类失败必须计入门禁：上游一改写法，排除就会静默失效，
+ * 独立条目与聚合会再次重复处理同一响应体，而 CI 全绿（本仓库一贯在防的静默失效）。
+ */
+const exclusionMisses = [];
 
 
 // ---- 第二轮：从「刚抓到的内容」中发现脚本引用并补下载 ----------------------
@@ -239,7 +256,8 @@ for (const r of results) {
       kept.push(line);
     }
     if (dropped === 0) {
-      console.error(`WARN 排除规则未命中任何行（上游可能改了写法）: ${r.url}`);
+      console.error(`ERROR 排除规则未命中任何行（上游可能改了写法，排除已失效）: ${r.url}`);
+      exclusionMisses.push(r.url);
     } else {
       console.log(`  排除 ${dropped} 行 <- ${r.url}`);
     }
@@ -295,7 +313,8 @@ function rawUrlFor(local) {
 // No timestamp here on purpose: a volatile field would make every weekly run
 // commit a no-op diff. Use the git commit date as the authoritative "when".
 // 只有规则/脚本主体失败才算致命；引用脚本失效（上游已删）不影响可用性
-const criticalFailures = results.filter((r) => !r.ok && r.kind !== "js").length;
+const criticalFailures =
+  results.filter((r) => !r.ok && r.kind !== "js").length + exclusionMisses.length;
 
 const index = {
   repository: repoInfo.slug,
@@ -303,6 +322,7 @@ const index = {
   total: results.length,
   mirrored: ok,
   failed: criticalFailures,
+  exclusionMisses,
   resources: results.map((r) => ({
     id: r.id,
     kind: r.kind,

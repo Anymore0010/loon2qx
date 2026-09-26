@@ -8,25 +8,34 @@
 #   1. 去除播放广告
 #   2. 歌手/专辑列表正常展示
 #   3. 去除随机播放
-#   4. 非中文歌词翻译为中文（**需自填百度翻译密钥**，见文末）
+#   4. 非中文歌词翻译为中文（可选，见下方「歌词翻译」）
 #
 # 注意：
 #   - 解锁需要系统 >= iOS15，且 Spotify 音质**不能**设为「超高」。
-#   - 两条规则的 URL 互不相交：解锁走 /bootstrap、/user-customization-service，
-#     歌词走 /color-lyrics。因此合在一个文件不会互相覆盖。
-#   - 本文件由 tools/build.mjs 引用；脚本 URL 由 fetch-snapshot 镜像到本仓库。
+#   - 解锁与歌词的 URL 互不相交（解锁走 /bootstrap、/user-customization-service；
+#     歌词走 /color-lyrics），合在一个文件不会互相覆盖。
+#   - 脚本 URL 由 fetch-snapshot 镜像到本仓库（解锁部分）。
 #
 # ---- 1. 解锁（去广告 / 去随机播放）------------------------------------------
 ^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/user-customization-service\/v1\/customize$ url script-request-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-qx-header.js
 ^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$ url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-proto.js
 ^https:\/\/(spclient\.wg\.spotify\.com|.*-spclient\.spotify\.com(:443)?)\/(artistview\/v1\/artist|album-entity-view\/v2\/album)\/ url script-request-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-json.js
 
-# ---- 2. 歌词翻译 -------------------------------------------------------------
-# 需先去百度翻译申请「通用翻译」API，把 appid/securityKey 填进
-#   snapshot/github.com/app2smile/rules/master/js/spotify-lyric.js 顶部的 options
-# （QX 没有 Surge/Loon 的 argument= 字段，密钥只能写进脚本本体）。
-# 申请：https://fanyi-api.baidu.com/choose （标准版免费 5 万字符/月）
-# 不填也能用：解锁照常生效，只是歌词不翻译。
-^https:\/\/spclient\.wg\.spotify\.com\/color-lyrics\/v2\/track\/ url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/app2smile/rules/master/js/spotify-lyric.js
+# ---- 2. 歌词翻译（可选，默认关闭）-------------------------------------------
+# 这一条**默认注释掉**。原因：百度翻译需要在脚本里填 appid/securityKey，
+# 而本仓库是**公开**的 —— 密钥一旦提交就无法撤回。
+#
+# 因此歌词脚本刻意**不放进本仓库**，改用 Quantumult X 的本地脚本：
+#   1) 下载脚本到你手机（两种存放位置均可）：
+#        - 我的 iPhone → Quantumult X → Scripts → spotify-lyric.js
+#        - iCloud Drive → Quantumult X → Scripts → spotify-lyric.js
+#      脚本地址: https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-lyric.js
+#   2) 编辑该文件顶部的 const options = { appid: '你的', securityKey: '你的' }
+#      （去 https://fanyi-api.baidu.com/choose 申请，标准版免费 5 万字符/月）
+#   3) 把下面这行的行首 # 去掉，保存并重载配置。
+#
+# 这样密钥只存在你手机本地，不会进仓库。
+# 未配置就启用的话：脚本会跳过翻译（本仓库副本已加该保护），解锁不受影响。
+#^https:\/\/spclient\.wg\.spotify\.com\/color-lyrics\/v2\/track\/ url script-response-body spotify-lyric.js
 
 hostname = spclient.wg.spotify.com, *spclient.spotify.com

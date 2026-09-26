@@ -388,7 +388,7 @@
       "enabled": true,
       "generated_by": null,
       "note": "**自维护文件**（已脱离上游管线）：内容源自一次性的插件提取（fmz200 官方 blockAds.plugin）+ 去重，之后不再自动拉取更新。你自己写的规则也维护在这里。该文件不再由 CI 重新生成 —— 直接编辑 QuantumultX/rules/AnymoreEnhance.snippet 即可。",
-      "count": 451,
+      "count": 57,
       "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
       "self_maintained": true
     },

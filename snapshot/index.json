@@ -4,6 +4,7 @@
   "total": 163,
   "mirrored": 163,
   "failed": 0,
+  "exclusionMisses": [],
   "resources": [
     {
       "id": "filter-ads-fmz",
@@ -528,15 +529,6 @@
       "error": null
     },
     {
-      "id": "icon-rewrite-jd-price",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/JD.png",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/JD.png",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/JD.png",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "icon-rewrite-pinduoduo",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png",
@@ -560,15 +552,6 @@
       "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Weibo.png",
       "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Weibo.png",
       "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Weibo.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-rewrite-amap",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/GaodeMap.jpg",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/GaodeMap.jpg",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/GaodeMap.jpg",
       "status": 200,
       "error": null
     },
@@ -1469,6 +1452,24 @@
       "url": "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
       "snapshot": "snapshot/host/github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
       "upstream_raw": null,
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:MmmCK.js",
+      "kind": "js",
+      "url": "https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
+      "snapshot": "snapshot/github.com/githubdulong/Script/master/MmmCK.js",
+      "upstream_raw": "https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:jd_price.js",
+      "kind": "js",
+      "url": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
+      "snapshot": "snapshot/github.com/githubdulong/Script/master/jd_price.js",
+      "upstream_raw": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
       "status": 200,
       "error": null
     }

@@ -1,11 +1,17 @@
-# 由 tools/extract-plugin.mjs 自动生成 —— 请勿手工编辑
-# 来源: _plugin_cache\plugins.plugin
-# 说明: 从 Loon 插件提取的 URL 级 rewrite（域名黑名单无法覆盖的部分）
-# 提取: 1615 条 -> 转换 1500 条 -> 自身去重 1489 条
-# 与现有重写源重复已剔除: 1432 条
-# 最终规则数与 MITM 主机数见文件末尾（header 先于 finalRules 计算，故此处不重复打印）
-# 未能转换: 115 条（QX 无对应动作，如 mock-response-body / map-local）
-# 重新生成: bun tools/extract-plugin.mjs --all   # 必须带 --all，它才会与已启用重写源去重
+# Anymore 自用增强规则 —— 手工维护，不再自动生成
+#
+# 用途：查漏补缺的 URL 路径级重写。这类规则域名黑名单原理上抓不到
+#       （如某个 API 的广告字段、某个接口的 banner 列表）。
+#
+# 来源：源自一次性的插件提取（fmz200 官方 blockAds.plugin）+ 与其他已启用源的语义去重。
+#       **自此之后不再跟随上游更新**，由仓库所有者自己维护。
+#
+# 怎么改：直接编辑本文件即可。想加自己的规则，写到下面「自用规则」区块里。
+#         若用到了新域名，记得同时加到文件末尾的 hostname 行（否则该条不会生效，且不报错）。
+#         改完跑 `bun tools/validate.mjs` 确认语法没写错。
+#
+# 注意：本文件曾被 tools/extract-plugin.mjs 覆盖，现已从 CI 移除该步骤；
+#       不要再运行 `bun tools/extract-plugin.mjs` 来「更新」它。
 
 ^https:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v1\/ecommerce-user\/get_shopping_info\? url reject-dict
 ^https:\/\/line3-h5-mobile-api\.biligame\.com\/game\/live\/large_card_material\? url reject-dict

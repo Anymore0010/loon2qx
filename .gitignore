@@ -30,3 +30,4 @@ _*.js
 _*.json
 _*.conf
 _*.plugin
+_*.snippet
