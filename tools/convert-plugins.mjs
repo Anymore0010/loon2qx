@@ -5,37 +5,16 @@
  * 输入： vendor/loon-plugins/*.lpx（tools/fetch-plugins.mjs 抓的源配置原样副本）
  * 输出： QuantumultX/rules/kelee/<plugin>.conf   —— 纯重写资源（rewrite_remote）
  *        QuantumultX/rules/kelee/<plugin>.list   —— 纯分流资源（filter_remote）
- *        QuantumultX/rules/kelee/_hostnames.conf —— 汇总的 hostname 行（供 [mitm] 参考）
+ *        QuantumultX/rules/kelee/_hostnames.conf —— 汇总的 hostname 行
  *        QuantumultX/rules/kelee/_conversion-report.json —— 统计与跳过明细
  *
- * 为什么必须转换而不能直接引用 .lpx：
- *   QX 的 rewrite_remote 只解析 QX 重写语法（`<正则> url <动作> [参数]`），而 Loon 的
- *   [Rewrite] 段用 `<正则> <动作>`（**没有 url 关键字**），[Script]/[Rule] 是独立段落、
- *   QX 完全不认。直接引用 → 整份资源静默失效（不报错、没效果）。
- *
- * 转换映射（动作名以 QX 官方 sample.conf 为准）：
- *   [Rewrite] `<regex> reject-dict`                  -> `<regex> url reject-dict`
- *   [Rewrite] `<regex> response-body-json-del A B`   -> `<regex> url jsonjq-response-body 'del(.A, .B)'`
- *   [Rewrite] `<regex> response-body-json-jq <expr>` -> `<regex> url jsonjq-response-body <expr>`
- *   [Rewrite] `<regex> response-body-json-replace a <v>` -> `<regex> url jsonjq-response-body '.a = <v>'`
- *   [Rewrite] `<regex> <302|307> <url>`              -> `<regex> url <302|307> <url>`
- *   [Script]  `http-response <regex> script-path=U`  -> `<regex> url script-response-body U`
- *   [Script]  `http-request  <regex> script-path=U`  -> `<regex> url script-request-body U`
- *   [Rule]    `DOMAIN,x,REJECT[,no-resolve]`         -> `host, x, reject`（no-resolve 直接丢弃）
- *   [MitM]    `hostname=a, b`                        -> 汇总进 _hostnames.conf
- *
- * 无法转换、显式跳过的（QX 无对应语法；写了会被静默丢弃或让整份资源失效）：
- *   - AND/OR/NOT 组合规则（QX 分流不支持逻辑组合）
- *   - QX 分流词表里没有的类型：URL-REGEX / USER-AGENT / DEST-PORT / PROTOCOL
- *   - `request/response if ${url} ~= ...` 这类 Loon 脚本化写法
- *   - `mock-response-body` / `response-header-add` / `header` 等 QX 不存在的动作名
- *   - `jq-path="..."`（Loon 外链 jq 文件）：QX 不会去取这个文件；而这些 .jq 是多行且含
- *     `#` 注释，内联进单行 rewrite 会把行拆断，风险大于收益，故跳过。
+ * 目标：尽可能**完整复刻**源 Loon 插件的行为（用户明确要求），而不是"功能差不多"。
+ * 因此能映射的一律映射；映射不了的一律**逐条记账**到报告，绝不静默丢弃。
  *
  * 用法： bun tools/convert-plugins.mjs [--check]
  */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync, rmSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ruleSig, sameTarget } from "./lib/rule-target.mjs";
@@ -47,70 +26,54 @@ const OUT = join(ROOT, "QuantumultX", "rules", "kelee");
 const CHECK = process.argv.includes("--check");
 const repoBase = resolveRepoBase(ROOT).rawBase;
 
-/**
- * kelee.one 只对 Loon 的 User-Agent 放行（其余 UA 返回 Cloudflare 403）。
- * Quantumult X 抓脚本用的是它自己的 UA —— 所以**绝不能**把 kelee.one 的脚本地址
- * 直接写进配置：设备端会 403，脚本静默不执行，功能看起来"没生效"。
- * 因此所有脚本都必须镜像进本仓库，URL 改写成本仓库地址。
- */
-const LOON_UA = "Loon/998 CFNetwork/3896.200.41 Darwin/27.2.0";
-
-/** URL -> 仓库内镜像路径（与 fetch-snapshot.mjs 的 localPathFor 保持一致）。 */
-function mirrorPathFor(url) {
-  const m = url.match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
-  if (m) return `snapshot/github.com/${m[1]}`;
-  const u = new URL(url);
-  return `snapshot/host/${u.hostname}${u.pathname}`;
-}
-
-const scriptMisses = [];
-/** 把脚本抓进仓库；返回仓库内相对路径，失败返回 null。 */
-async function mirrorScript(url) {
-  const rel = mirrorPathFor(url);
-  const abs = join(ROOT, rel);
-  if (existsSync(abs) && statSync(abs).size > 100) return rel;
-  // 优先用 vendor/loon-plugins/_assets 里的离线副本（网络不稳时也能重建）
-  const base = url.split("/").pop().split("?")[0];
-  const offline = join(VENDOR, "_assets", base);
-  let body = null;
-  if (existsSync(offline)) {
-    const b = readFileSync(offline);
-    if (b.length > 100) body = b;
-  }
-  if (!body) {
-    try {
-      const res = await fetch(url, {
-        headers: { "User-Agent": LOON_UA, accept: "*/*", "accept-language": "zh-CN,zh-Hans;q=0.9" },
-        redirect: "follow",
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const buf = Buffer.from(await res.arrayBuffer());
-      if (buf.length < 100) throw new Error(`响应过小 (${buf.length}B)`);
-      body = buf;
-    } catch (e) {
-      scriptMisses.push({ url, error: String(e.message) });
-      return null;
-    }
-  }
-  mkdirSync(dirname(abs), { recursive: true });
-  writeFileSync(abs, body);
-  return rel;
-}
-
-/** 递归列出目录下匹配扩展名的文件（fetch-snapshot 的扫描是非递归的，这里不依赖它）。 */
-function walk(dir, re, out = []) {
-  for (const n of readdirSync(dir)) {
-    const p = join(dir, n);
-    if (statSync(p).isDirectory()) walk(p, re, out);
-    else if (re.test(n)) out.push(p);
-  }
-  return out;
-}
+/** kelee.one 与 GitHub 的脚本一律镜像进本仓库后引用（kelee.one 对 QX 的 UA 不可靠）。 */
+const UA = { "User-Agent": "Loon/998 CFNetwork/3896.200.41 Darwin/27.2.0", accept: "*/*", "accept-language": "zh-CN,zh-Hans;q=0.9" };
 
 const skipReport = [];
 const pluginReport = [];
+const notes = [];
 
-/** 取某个 [Section] 的正文行（不含段头）。 */
+/**
+ * 分流（[filter_remote]）策略名。
+ * ⚠ reject-drop / reject-200 之类是**重写动作**，不是分流策略 ——
+ * QX 分流只认 reject / direct / proxy / 策略组名。
+ * 曾把 REJECT-DROP 原样写成分流策略，生成 `host, x, reject-drop` 这种非法行。
+ */
+const FILTER_POLICY = {
+  REJECT: "reject",
+  "REJECT-DICT": "reject",
+  "REJECT-200": "reject",
+  "REJECT-ARRAY": "reject",
+  "REJECT-IMG": "reject",
+  "REJECT-DROP": "reject",
+  "REJECT-NO-DROP": "reject",
+  DIRECT: "direct",
+  PROXY: "proxy",
+};
+
+/** 重写（[rewrite_local]）动作名。 */
+const REWRITE_ACTION = {
+  REJECT: "reject",
+  "REJECT-DICT": "reject-dict",
+  "REJECT-200": "reject-200",
+  "REJECT-ARRAY": "reject-array",
+  "REJECT-IMG": "reject-img",
+  "REJECT-DROP": "reject-drop",
+  "REJECT-NO-DROP": "reject",
+};
+
+/** Loon 分流类型 -> QX 分流类型。 */
+const RULE_MAP = {
+  DOMAIN: "host",
+  "DOMAIN-SUFFIX": "host-suffix",
+  "DOMAIN-KEYWORD": "host-keyword",
+  "DOMAIN-WILDCARD": "host-wildcard",
+  "IP-CIDR": "ip-cidr",
+  "IP-CIDR6": "ip6-cidr",
+  GEOIP: "geoip",
+  "USER-AGENT": "user-agent", // QX 官方 sample.conf 的 [filter_local] 里有 user-agent
+};
+
 function sectionLines(text, name) {
   const lines = text.split(/\r?\n/);
   const start = lines.findIndex((l) => l.trim().toLowerCase() === `[${name.toLowerCase()}]`);
@@ -123,76 +86,43 @@ function sectionLines(text, name) {
   return out;
 }
 
-/** 去掉注释（QX 的 # / Loon 的 # 与 ;）与首尾空白；返回 null 表示不是有效规则。 */
 function cleanRule(line) {
   if (/^\s*[#;]/.test(line)) return null;
   const s = line.replace(/\s*#.*$/, "").trim();
   return s.length ? s : null;
 }
 
-const LOON_POLICY = {
-  REJECT: "reject",
-  "REJECT-DICT": "reject-dict",
-  "REJECT-200": "reject-200",
-  "REJECT-ARRAY": "reject-array",
-  "REJECT-IMG": "reject-img",
-  "REJECT-DROP": "reject-drop",
-  "REJECT-NO-DROP": "reject",
-  DIRECT: "direct",
-  PROXY: "proxy",
-};
+const skip = (plugin, section, line, reason) => skipReport.push({ plugin, section, line, reason });
+const stripQuotes = (s) => s.trim().replace(/^["']|["']$/g, "");
 
-/** Loon 分流类型 -> QX。QX 只认官方 sample.conf 里那几种。 */
-const RULE_MAP = {
-  DOMAIN: "host",
-  "DOMAIN-SUFFIX": "host-suffix",
-  "DOMAIN-KEYWORD": "host-keyword",
-  "DOMAIN-WILDCARD": "host-wildcard",
-  "IP-CIDR": "ip-cidr",
-  "IP-CIDR6": "ip6-cidr",
-  GEOIP: "geoip",
-};
+// ---------------------------------------------------------------- 重写
 
 /** `a.b c.d` -> `del(.a.b, .c.d)` */
-function jsonDelToJq(paths) {
-  return `'del(${paths.map((p) => `.${p}`).join(", ")})'`;
-}
+const jsonDelToJq = (paths) => `'del(${paths.map((p) => `.${p}`).join(", ")})'`;
 
-/** 转换 [Rewrite] 的一行。Loon 是 `<regex> <action> [args]`，QX 是 `<regex> url <action> [args]`。 */
+/** 转换 [Rewrite] 的一行。Loon = `<regex> <action> [args]`，QX = `<regex> url <action> [args]`。 */
 function convertRewrite(line, plugin) {
   const m = line.match(/^(\S+)\s+(\S+)\s*(.*)$/);
   if (!m) return null;
   const [, pattern, action, rest] = m;
   const a = action.toLowerCase();
 
-  if (["reject", "reject-dict", "reject-200", "reject-array", "reject-img"].includes(a)) {
-    return `${pattern} url ${a}`;
-  }
-  if (a === "reject-drop" || a === "reject-no-drop") return `${pattern} url reject-drop`;
+  const rej = REWRITE_ACTION[action.toUpperCase()];
+  if (rej) return `${pattern} url ${rej}`;
 
-  // jq-path="..."（外链 .jq 文件）：QX 不会取这个文件。这些 .jq 是多行且含 # 注释，
-  // 内联进单行 rewrite 会把行拆断 —— 跳过并记账，绝不静默失效。
-  if (/jq[-_]path\s*=|jq_file\s*=/i.test(rest)) {
-    skipReport.push({
-      plugin, section: "Rewrite", line,
-      reason: 'jq-path=/jq_file=（Loon 外链 jq 文件）QX 无法加载；内联多行 jq 会拆断单行 rewrite',
-    });
-    return null;
-  }
+  // jq-path / jq_file：Loon 外链 .jq 文件。QX 不会去取这个文件。
+  // 由调用方（tryInlineJq）负责抓回并内联；这里只做标记。
+  if (/jq[-_]path\s*=|jq_file\s*=/i.test(rest)) return { needsJqInline: true, pattern, raw: line };
 
   if (a === "response-body-json-del") {
     const paths = rest.trim().split(/\s+/).filter(Boolean);
-    if (!paths.length) {
-      skipReport.push({ plugin, section: "Rewrite", line, reason: "response-body-json-del 无路径参数" });
-      return null;
-    }
+    if (!paths.length) return skip(plugin, "Rewrite", line, "response-body-json-del 无路径参数"), null;
     return `${pattern} url jsonjq-response-body ${jsonDelToJq(paths)}`;
   }
   if (a === "response-body-json-replace") {
     const toks = rest.trim().split(/\s+/).filter(Boolean);
     if (toks.length < 2 || toks.length % 2 !== 0) {
-      skipReport.push({ plugin, section: "Rewrite", line, reason: "response-body-json-replace 参数不成对" });
-      return null;
+      return skip(plugin, "Rewrite", line, "response-body-json-replace 参数不成对"), null;
     }
     const sets = [];
     for (let i = 0; i < toks.length; i += 2) sets.push(`.${toks[i]} = ${toks[i + 1]}`);
@@ -200,156 +130,233 @@ function convertRewrite(line, plugin) {
   }
   if (a === "response-body-json-jq" || a === "request-body-json-jq") {
     const expr = rest.trim();
-    if (!expr) {
-      skipReport.push({ plugin, section: "Rewrite", line, reason: "json-jq 无表达式" });
-      return null;
-    }
-    const act = a.startsWith("response") ? "jsonjq-response-body" : "jsonjq-request-body";
-    return `${pattern} url ${act} ${expr}`;
+    if (!expr) return skip(plugin, "Rewrite", line, "json-jq 无表达式"), null;
+    return `${pattern} url ${a.startsWith("response") ? "jsonjq-response-body" : "jsonjq-request-body"} ${expr}`;
   }
   if (a === "response-body" || a === "request-body") {
     if (!/\sresponse-body\s+/.test(rest)) {
-      skipReport.push({ plugin, section: "Rewrite", line, reason: `${a} 需要成对的 search/replace` });
-      return null;
+      return skip(plugin, "Rewrite", line, `${a} 需要成对的 search/replace`), null;
     }
     return `${pattern} url ${a} ${rest}`;
   }
   if (a === "302" || a === "307") return `${pattern} url ${a} ${rest.trim()}`;
 
-  if (["mock-response-body", "header", "response-header", "request-header", "response-header-add",
-       "response-header-del", "request-header-add", "response-body-json",
-       "response-body-replace-regex", "response-body-replace"].includes(a)) {
-    skipReport.push({ plugin, section: "Rewrite", line, reason: `QX 无此动作名（${action}）` });
-    return null;
-  }
-  skipReport.push({ plugin, section: "Rewrite", line, reason: `未识别的 Loon 重写动作 "${action}"` });
+  skip(plugin, "Rewrite", line, `QX 无对应动作名（${action}）`);
   return null;
 }
 
-/** 转换 [Script] 的一行。只处理 http-request / http-response 这种直白形式。 */
+/** 转换 [Script] 的一行。 */
 function convertScript(line, plugin) {
   const m = line.match(/^(http-request|http-response)\s+(\S+)\s+(.*)$/);
   if (!m) {
-    skipReport.push({
-      plugin, section: "Script", line,
-      reason: "Loon 脚本化写法（`request/response if ${url} ~= ...`），QX 无等价语法",
-    });
+    skip(plugin, "Script", line, "Loon 脚本化写法（`request/response if ${url} ~= ...`），QX 无等价语法");
     return null;
   }
   const [, trigger, pattern, optsRaw] = m;
   const sp = optsRaw.match(/script-path=(\S+?)(?:,|$)/);
-  if (!sp) {
-    skipReport.push({ plugin, section: "Script", line, reason: "没有 script-path=" });
-    return null;
+  if (!sp) return skip(plugin, "Script", line, "没有 script-path="), null;
+  const scriptUrl = stripQuotes(sp[1]);
+
+  // `argument=` / `enable=` 是 Loon 的插件参数体系，QX 没有等价物。
+  // 丢掉参数 = 脚本走默认分支，行为与源插件不同 —— 必须记账，不能当成功转换。
+  const argM = optsRaw.match(/(?:^|,)\s*argument=(\[[^\]]*\]|"[^"]*"|[^,]*)/);
+  if (argM && argM[1].trim()) {
+    notes.push({ plugin, kind: "参数被丢弃", detail: `argument=${argM[1].trim().slice(0, 80)} —— QX 无插件参数机制，脚本将走默认分支` });
   }
-  const scriptUrl = sp[1].replace(/["',]+$/, "");
+  if (/enable\s*=\s*\{/.test(optsRaw)) {
+    notes.push({ plugin, kind: "条件启用无法表达", detail: `enable={...} —— 该规则在源插件里可按参数关闭，QX 只能无条件生效` });
+  }
+  // binary-body-mode：protobuf 响应体。QX 对二进制体的处理与 Loon 不同，
+  // 这类脚本能否正常工作未经设备验证。
+  if (/binary-body-mode\s*=\s*(1|true)/i.test(optsRaw)) {
+    notes.push({ plugin, kind: "二进制体脚本（未验证）", detail: `${pattern.slice(0, 60)} —— binary-body-mode 脚本，QX 侧可否解包 protobuf 未经设备验证` });
+  }
+
   const action = trigger === "http-request" ? "script-request-body" : "script-response-body";
   return `${pattern} url ${action} ${scriptUrl}`;
 }
 
-/** 转换 [Rule] 的一行。 */
+// ---------------------------------------------------------------- 分流
+
+/**
+ * 转换 [Rule] 的一行。
+ * 返回 {kind:"filter"|"rewrite", line} 或 null（已记账）。
+ * URL-REGEX 分流在 QX 里没有对应**分流**类型，但有精确的重写等价物：`<re> url reject`。
+ * 这些规则是 http:// 的（无需 MITM），搬到重写段即可完整复刻。
+ */
 function convertRule(line, plugin) {
-  if (/^(AND|OR|NOT)\s*[,((]/i.test(line)) {
-    skipReport.push({ plugin, section: "Rule", line, reason: "QX 分流不支持 AND/OR/NOT 组合规则" });
-    return null;
-  }
+  if (/^(AND|OR|NOT)\s*[,((]/i.test(line)) return convertAnd(line, plugin);
+
   const parts = line.split(",").map((x) => x.trim());
   const type = parts[0].toUpperCase();
+
+  // URL-REGEX -> 重写 (reject 系列)
+  if (type === "URL-REGEX") {
+    const re = stripQuotes(parts[1] ?? "");
+    const pol = (parts[parts.length - 1] ?? "").toUpperCase();
+    const act = REWRITE_ACTION[pol];
+    if (!re) return skip(plugin, "Rule", line, "URL-REGEX 无表达式"), null;
+    if (!act) {
+      return skip(plugin, "Rule", line, `URL-REGEX 的策略 ${pol} 无重写等价物（QX 重写只支持 reject 系列）`), null;
+    }
+    return { kind: "rewrite", line: `${re} url ${act}` };
+  }
+  if (type === "PROTOCOL" || type === "DEST-PORT") {
+    return skip(plugin, "Rule", line, `QX 分流无此类型（${type}）`), null;
+  }
+
   const qxType = RULE_MAP[type];
-  if (!qxType) {
-    skipReport.push({ plugin, section: "Rule", line, reason: `QX 分流词表无此类型（${type}）` });
-    return null;
-  }
-  if (parts.length < 3) {
-    skipReport.push({ plugin, section: "Rule", line, reason: "字段不足（缺策略）" });
-    return null;
-  }
-  const value = parts[1];
-  // Loon 允许「策略之后」再跟一个 no-resolve 修饰符：`IP-CIDR, x/32, REJECT, no-resolve`。
-  // 早先误把它当策略位冲突而丢掉了 75 条有效规则；正确做法是丢掉该修饰符、保留策略。
+  if (!qxType) return skip(plugin, "Rule", line, `QX 分流词表无此类型（${type}）`), null;
+  if (parts.length < 3) return skip(plugin, "Rule", line, "字段不足（缺策略）"), null;
+
+  const value = type === "USER-AGENT" ? stripQuotes(parts[1]) : parts[1];
+  // `IP-CIDR, x/32, REJECT, no-resolve` —— no-resolve 是策略之后的**修饰符**，
+  // 不是策略。QX 没有它，丢掉即可（曾误判成策略位冲突，白丢 75 条有效规则）。
   const fields = parts.slice(2).filter((x) => !/^no-resolve$/i.test(x));
   const policy = (fields[fields.length - 1] ?? "").replace(/\s*\/\/.*$/, "").trim();
-  if (!policy) {
-    skipReport.push({ plugin, section: "Rule", line, reason: "剥离 no-resolve 后没有策略了" });
-    return null;
-  }
-  return `${qxType}, ${value}, ${LOON_POLICY[policy.toUpperCase()] ?? policy}`;
+  if (!policy) return skip(plugin, "Rule", line, "剥离 no-resolve 后没有策略了"), null;
+  return { kind: "filter", line: `${qxType}, ${value}, ${FILTER_POLICY[policy.toUpperCase()] ?? policy}` };
 }
 
-/** 从 [MitM] 段提取 hostname。 */
-function extractHostnames(text) {
+/**
+ * AND/OR/NOT 组合规则。
+ * QX 分流不支持逻辑组合，但 `URL-REGEX + USER-AGENT` 这个组合在 QX **重写**里有精确对应：
+ *   `<re> \r\nUser-Agent: <ua> url-and-header <action>`
+ * （官方 sample.conf：`;^http://example.com/resource1/1/ \r\nUser-Agent: example-agent url-and-header reject`）
+ */
+
+/**
+ * 从 AND(...) 里按**括号深度**切出顶层条件项。
+ * 不能用 `\(([^()]+?)\)` —— PDD 的 URL-REGEX 本身含嵌套括号
+ * （`^http:\/\/((25[0-5]|...)...)`），正则会在第一个 `)` 处截断，导致条件项解析不出来。
+ */
+function topLevelItems(s) {
   const out = [];
-  for (const raw of sectionLines(text, "MitM") ?? []) {
-    const line = cleanRule(raw);
-    if (!line || !/^hostname\s*=/i.test(line)) continue;
-    for (const h of line.split("=", 2)[1].split(",")) {
-      const v = h.trim();
-      // 排除 Loon 的 `-host` 取反写法；QX 的 hostname 只列要解密的主机名
-      if (v && /^[A-Za-z0-9*?._-]+$/.test(v) && !v.startsWith("-")) out.push(v);
+  let depth = 0;
+  let start = -1;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c === "(") {
+      if (depth === 0) start = i + 1;
+      depth++;
+    } else if (c === ")") {
+      depth--;
+      if (depth === 0 && start >= 0) {
+        out.push(s.slice(start, i));
+        start = -1;
+      }
     }
   }
   return out;
 }
 
-function meta(text) {
-  const name = text.match(/^#!name\s*=\s*(.+)$/m);
-  return { name: name ? name[1].trim() : "" };
+/** 解析单个条件项 `TYPE, value` -> {type, value}；嵌套 OR 项返回 null。 */
+function parseAtom(item) {
+  const m = item.match(/^\s*([A-Z-]+)\s*,\s*([\s\S]*)$/);
+  if (!m) return null;
+  const type = m[1].toUpperCase();
+  if (type === "OR" || type === "AND" || type === "NOT") return null;
+  return { type, value: stripQuotes(m[2]) };
 }
 
-// ---------------------------------------------------------------- main
+function convertAnd(line, plugin) {
+  const polM = line.match(/\),\s*([A-Za-z-]+)\s*$/);
+  const pol = (polM?.[1] ?? "").toUpperCase();
+
+  const head = line.match(/^\s*(AND|OR|NOT)\s*,\s*\(([\s\S]*)\)\s*,\s*[A-Za-z-]+\s*$/);
+  const atoms = head ? topLevelItems(head[2]).map(parseAtom).filter(Boolean) : [];
+
+  // QUIC 类：QX 没有 PROTOCOL 条件，但 udp_drop_list=443 已全局覆盖
+  if (/PROTOCOL\s*,\s*QUIC/i.test(line)) {
+    skip(plugin, "Rule", line, "AND(...PROTOCOL QUIC) —— QX 无 PROTOCOL 条件；已由 [general] 的 udp_drop_list=443 覆盖");
+    return null;
+  }
+  const urlRe = atoms.filter((a) => a.type === "URL-REGEX");
+  const ua = atoms.filter((a) => a.type === "USER-AGENT");
+  const isAnd = /^\s*AND\b/i.test(line);
+  if (isAnd && urlRe.length === 1 && ua.length === 1 && atoms.length === 2) {
+    const act = REWRITE_ACTION[pol];
+    if (!act) {
+      skip(plugin, "Rule", line, `AND(URL-REGEX, USER-AGENT) 的策略 ${pol} 无重写等价物（QX 重写只支持 reject 系列）`);
+      return null;
+    }
+    // QX 的 url-and-header 写法：`<re> \r\nUser-Agent: <ua> url-and-header <action>`
+    return { kind: "rewrite", line: `${urlRe[0].value} \\r\\nUser-Agent: ${ua[0].value} url-and-header ${act}` };
+  }
+  skip(plugin, "Rule", line, "AND/OR/NOT 组合规则 —— QX 分流不支持逻辑组合，且无重写等价物");
+  return null;
+}
+
+// ---------------------------------------------------------------- 资产
+
+function mirrorPathFor(url) {
+  const m = url.match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
+  if (m) return `snapshot/github.com/${m[1]}`;
+  const u = new URL(url);
+  return `snapshot/host/${u.hostname}${u.pathname}`;
+}
+
+/** 取资产内容：优先用 vendor 里的离线副本，其次带 Loon UA 抓取。失败返回 null。 */
+async function fetchAsset(url) {
+  const base = url.split("/").pop().split("?")[0];
+  const offline = join(VENDOR, "_assets", base);
+  if (existsSync(offline)) {
+    const b = readFileSync(offline);
+    if (b.length > 100) return b;
+  }
+  try {
+    const res = await fetch(url, { headers: UA, redirect: "follow" });
+    if (!res.ok) return null;
+    const buf = Buffer.from(await res.arrayBuffer());
+    return buf.length > 100 ? buf : null;
+  } catch {
+    return null;
+  }
+}
+
+/** 把脚本/资产镜像进仓库，返回仓库内相对路径；失败返回 null。 */
+async function mirrorAsset(url) {
+  const rel = mirrorPathFor(url);
+  const abs = join(ROOT, rel);
+  if (existsSync(abs) && statSync(abs).size > 100) return rel;
+  const body = await fetchAsset(url);
+  if (!body) return null;
+  mkdirSync(dirname(abs), { recursive: true });
+  writeFileSync(abs, body);
+  return rel;
+}
+
+/**
+ * 内联 Loon 的外链 .jq 文件。
+ * 这些 .jq 常是多行且含 `#` 注释 —— 直接塞进单行 rewrite 会把行拆断（QX 会解析失败），
+ * 所以先剥注释、把多行折叠成单行，再包在单引号里。折叠不了的就记账跳过。
+ */
+async function tryInlineJq(pattern, line, plugin) {
+  const m = line.match(/jq[-_]path\s*=\s*"([^"]+)"/i) || line.match(/jq[-_]path\s*=\s*([^\s,]+)/i);
+  if (!m) return skip(plugin, "Rewrite", line, "jq-path 但取不到文件地址"), null;
+  const url = m[1];
+  const buf = await fetchAsset(url);
+  if (!buf) return skip(plugin, "Rewrite", line, `jq-path 文件取不到（${url}）`), null;
+  const inline = buf
+    .toString("utf8")
+    .split(/\r?\n/)
+    .map((l) => l.replace(/\s*#.*$/, "").trim()) // 去注释（QX 的 jq 在单行里，注释会截断表达式）
+    .filter(Boolean)
+    .join(" ")
+    .replace(/'/g, "'\\''");
+  if (!inline) return skip(plugin, "Rewrite", line, "jq-path 文件折叠后为空"), null;
+  return `${pattern} url jsonjq-response-body '${inline}'`;
+}
+
+// ---------------------------------------------------------------- 主流程
 
 const index = JSON.parse(readFileSync(join(VENDOR, "index.json"), "utf8"));
 mkdirSync(OUT, { recursive: true });
 
-/**
- * 跨源「同一响应体被重复处理」检测。
- *
- * 真实形态是**同一接口、不同正则写法**（例如 fmz 聚合用
- * `^https?:\/\/app-api\.smzdm\.com\/util\/update$`，kelee 用别的写法），
- * 所以只比字符串不够，必须用语义判据（同域 + ≥2 个有区分度的共同路径词元）。
- * 判据实现复用 tools/lib/rule-target.mjs —— 与 validate.mjs 同一套，避免两边结论不一致。
- */
-const claimedSigs = []; // {sig, line, from}
-/**
- * 整行完全相同的登记表。**必须与语义判据并用**：
- * sameTarget 要求「同域 + ≥2 个有区分度的共同路径词元」，像
- * `^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\?` 这种路径只有 feed 一个词元，
- * 语义判据判不出来，但两边**逐字相同**、同样会把同一个响应体处理两次。
- * （实测漏掉 2 条，靠 validate.mjs 的精确比对才发现。）
- */
-const claimedExact = new Map(); // line -> from
+const claimedSigs = [];      // 语义判据（复用 rule-target.mjs，与 validate 同一套）
+const claimedExact = new Map(); // 整行完全相同
+const isBodyRewrite = (l) => /\surl\s+(script-|jsonjq-)/.test(l);
 
-/** 只有会「改写请求/响应体」的动作重复才危险；reject 类重复无害。 */
-function isBodyRewriteLine(line) {
-  return /\surl\s+(script-|jsonjq-)/.test(line);
-}
-
-/**
- * 把其他 rewrite_remote 资源已声明的 (正则, 动作) 与语义签名登记进来，
- * 使 kelee 侧不再重复产出。
- */
-function seedFromOtherSources() {
-  const src = JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8"));
-  for (const r of src.rewrites ?? []) {
-    if (r.kelee_plugin) continue; // 本转换器的产物，跳过
-    const rel = r.local_file ?? snapshotPathFor(r.url);
-    if (!rel) continue;
-    const abs = join(ROOT, rel);
-    if (!existsSync(abs)) continue;
-    let n = 0;
-    for (const raw of readFileSync(abs, "utf8").split(/\r?\n/)) {
-      const t = raw.trim();
-      if (!t || /^[#;]/.test(t) || !/\surl\s/.test(t)) continue;
-      n++;
-      if (!isBodyRewriteLine(t)) continue;
-      const pat = t.split(/\s+url\s+/)[0];
-      const fromRel = rel.replace(/\\/g, "/");
-      claimedSigs.push({ sig: ruleSig(pat), line: t, from: fromRel });
-      if (!claimedExact.has(t)) claimedExact.set(t, fromRel);
-    }
-    if (n) seeded.push({ from: rel, n });
-  }
-}
 function snapshotPathFor(url) {
   const m = (url ?? "").match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
   if (m) return `snapshot/github.com/${m[1]}`;
@@ -357,44 +364,56 @@ function snapshotPathFor(url) {
   return m2 ? `snapshot/host/${m2[1]}/${m2[2]}` : null;
 }
 
+/** 其他 rewrite_remote 资源已声明的规则，先登记（先匹配先赢，kelee 侧不再重复产出）。 */
 const seeded = [];
-seedFromOtherSources();
+for (const r of JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8")).rewrites ?? []) {
+  if (r.kelee_plugin) continue;
+  const rel = r.local_file ?? snapshotPathFor(r.url);
+  if (!rel || !existsSync(join(ROOT, rel))) continue;
+  const from = rel.replace(/\\/g, "/");
+  let n = 0;
+  for (const raw of readFileSync(join(ROOT, rel), "utf8").split(/\r?\n/)) {
+    const t = raw.trim();
+    if (!t || /^[#;]/.test(t) || !/\surl\s/.test(t)) continue;
+    n++;
+    if (!isBodyRewrite(t)) continue;
+    claimedSigs.push({ sig: ruleSig(t.split(/\s+url\s+/)[0]), from });
+    if (!claimedExact.has(t)) claimedExact.set(t, from);
+  }
+  if (n) seeded.push(from);
+}
 
+const written = new Set();
 const allHostnames = new Set();
-let wrote = 0;
 let deduped = 0;
 
 for (const p of index.plugins) {
   if (!p.file) continue;
-  // 源配置里 enabled=false 的插件（BoxJs / Sub-Store）：不产出文件。
-  // 它们对应的功能在 sources.json 里由社区版条目承担、同样处于禁用状态；
-  // 若为禁用的插件也生成文件，磁盘上就会出现「已生成但无人引用」的孤儿文件
-  // （validate 的 checkOrphanedRuleFiles 会直接报错，提醒功能被静默删除）。
-  if (!p.enabled) {
-    pluginReport.push({
-      plugin: p.name, name: meta(readFileSync(join(ROOT, p.file), "utf8")).name || p.name,
-      enabled: false, rules: 0, rewrites: 0, hostnames: 0,
-    });
-    continue;
-  }
   const text = readFileSync(join(ROOT, p.file), "utf8");
-  const nm = meta(text).name || p.name.replace(/\.lpx$/, "");
-  const enabled = p.enabled;
-  const selfRel = `QuantumultX/rules/kelee/${p.name.replace(/\.lpx$/, "")}.conf`;
+  const nm = text.match(/^#!name\s*=\s*(.+)$/m)?.[1]?.trim() || p.name.replace(/\.lpx$/, "");
+  if (!p.enabled) {
+    pluginReport.push({ plugin: p.name, name: nm, enabled: false, rules: 0, rewrites: 0, hostnames: 0 });
+    continue; // 禁用插件不产出文件，避免"已生成但无人引用"的孤儿
+  }
+  const base = p.name.replace(/\.lpx$/, "");
+  const selfRel = `QuantumultX/rules/kelee/${base}.conf`;
 
-  const rules = [];
+  const filters = [];
+  const rewrites = [];
+
   for (const raw of sectionLines(text, "Rule") ?? []) {
     const line = cleanRule(raw);
     if (!line) continue;
-    const r = convertRule(line, p.name);
-    if (r) rules.push(r);
+    const res = convertRule(line, p.name);
+    if (!res) continue;
+    (res.kind === "filter" ? filters : rewrites).push(res.line);
   }
 
-  const rewrites = [];
   for (const raw of sectionLines(text, "Rewrite") ?? []) {
     const line = cleanRule(raw);
     if (!line) continue;
-    const r = convertRewrite(line, p.name);
+    let r = convertRewrite(line, p.name);
+    if (r && typeof r === "object" && r.needsJqInline) r = await tryInlineJq(r.pattern, line, p.name);
     if (r) rewrites.push(r);
   }
   for (const raw of sectionLines(text, "Script") ?? []) {
@@ -404,86 +423,72 @@ for (const p of index.plugins) {
     if (r) rewrites.push(r);
   }
 
-  // 语义去重：与「其他源」以及「已产出的兄弟插件」比对同一响应体
+  // 语义去重（会改写 body 的才危险；reject 类重复无害）
   const kept = [];
   for (const r of rewrites) {
-    if (!isBodyRewriteLine(r)) {
+    if (!isBodyRewrite(r)) {
       kept.push(r);
       continue;
     }
     const pat = r.split(/\s+url\s+/)[0];
-    const sig = ruleSig(pat);
     const exactFrom = claimedExact.get(r);
-    const clash = claimedSigs.find((e) => e.from !== selfRel && sameTarget(sig, e.sig));
-    if (exactFrom && exactFrom !== selfRel) {
+    const clash = claimedSigs.find((e) => e.from !== selfRel && sameTarget(ruleSig(pat), e.sig));
+    const from = exactFrom ?? clash?.from;
+    if (from && from !== selfRel) {
       deduped++;
-      skipReport.push({
-        plugin: p.name, section: "Rewrite", line: r,
-        reason: `与 ${exactFrom} 逐字相同的重写（同一响应体会被处理两次）`,
-      });
+      skip(p.name, "Rewrite", r, `与 ${from} 命中同一响应体、被其先处理（避免处理两次）`);
       continue;
     }
-    if (clash) {
-      deduped++;
-      skipReport.push({
-        plugin: p.name, section: "Rewrite", line: r,
-        reason: `与 ${clash.from} 命中同一接口、被其先处理（避免同一响应体处理两次）`,
-      });
-      continue;
-    }
-    claimedSigs.push({ sig, line: r, from: selfRel });
+    claimedSigs.push({ sig: ruleSig(pat), from: selfRel });
     if (!claimedExact.has(r)) claimedExact.set(r, selfRel);
     kept.push(r);
   }
 
-  // 脚本 URL 必须改写成本仓库镜像地址：kelee.one 对 QX 的 UA 返回 403，
-  // 直接写上游地址 → 设备端脚本静默不执行（本次故障的主因之一）。
+  // 脚本必须镜像进仓库：kelee.one 对 QX 的 UA 返回 403，直链会静默失效。
+  // 镜像失败 -> **整条丢弃并记账**（绝不能回退成上游 URL：那等于埋一条必然失效的规则）。
   const localized = [];
   for (const r of kept) {
-    const m = r.match(/^(.*\surl\s+script-\S+\s+)(https?:\/\/\S+)$/);
+    const m = r.match(/^(.*\surl(?:-and-header)?\s+script-\S+\s+)(https?:\/\/\S+)$/);
     if (!m) {
       localized.push(r);
       continue;
     }
-    const rel = await mirrorScript(m[2]);
-    localized.push(rel ? `${m[1]}${repoBase}/${rel}` : r);
+    const rel = await mirrorAsset(m[2]);
+    if (!rel) {
+      skip(p.name, "Rewrite", r, `脚本镜像失败、已丢弃（避免留下必然失效的直链）: ${m[2]}`);
+      continue;
+    }
+    localized.push(`${m[1]}${repoBase}/${rel}`);
   }
 
-  const hosts = extractHostnames(text);
-  if (enabled) for (const h of hosts) allHostnames.add(h);
+  const hosts = [];
+  for (const raw of sectionLines(text, "MitM") ?? []) {
+    const line = cleanRule(raw);
+    if (!line || !/^hostname\s*=/i.test(line)) continue;
+    for (const h of line.split("=", 2)[1].split(",")) {
+      const v = h.trim();
+      if (v && /^[A-Za-z0-9*?._-]+$/.test(v) && !v.startsWith("-")) hosts.push(v);
+    }
+  }
+  for (const h of hosts) allHostnames.add(h);
 
   const header = [
     `# ${nm}  —— 由 vendor/loon-plugins/${p.name} 自动转换（tools/convert-plugins.mjs）`,
     `# 源插件: ${p.url}`,
-    `# 源配置里 enabled=${enabled}`,
     "# 请勿手工编辑：改源插件后重新运行 bun tools/fetch-plugins.mjs && bun tools/convert-plugins.mjs",
   ];
-
-  if (rules.length) {
-    writeIfChanged(join(OUT, `${p.name.replace(/\.lpx$/, "")}.list`), [...header, "", ...rules, ""].join("\n"));
-    wrote++;
+  if (filters.length) {
+    writeIfChanged(join(OUT, `${base}.list`), [...header, "", ...filters, ""].join("\n"));
+    written.add(`${base}.list`);
   }
   if (localized.length) {
     writeIfChanged(
-      join(OUT, `${p.name.replace(/\.lpx$/, "")}.conf`),
-      [
-        ...header,
-        "",
-        ...localized,
-        "",
-        // hostname 随重写资源一起给出。QX 是否把资源里的 hostname 并入 [mitm] 由 QX 决定；
-        // [mitm] 那边由 _hostnames.conf 提供同名的显式清单，两条路都覆盖到。
-        `hostname = ${hosts.join(", ")}`,
-        "",
-      ].join("\n"),
+      join(OUT, `${base}.conf`),
+      [...header, "", ...localized, "", `hostname = ${hosts.join(", ")}`, ""].join("\n"),
     );
-    wrote++;
+    written.add(`${base}.conf`);
   }
-
-  pluginReport.push({
-    plugin: p.name, name: nm, enabled,
-    rules: rules.length, rewrites: localized.length, hostnames: hosts.length,
-  });
+  pluginReport.push({ plugin: p.name, name: nm, enabled: true, rules: filters.length, rewrites: localized.length, hostnames: hosts.length });
 }
 
 writeIfChanged(
@@ -496,31 +501,47 @@ writeIfChanged(
     "",
   ].join("\n"),
 );
-wrote++;
+
+// ---- 清理本轮不再产出的文件（禁用/改名/删除插件都不会留下孤儿） ----
+const pruned = [];
+if (!CHECK) {
+  for (const f of readdirSync(OUT)) {
+    if (!/\.(conf|list)$/.test(f) || f.startsWith("_")) continue;
+    if (!written.has(f)) {
+      rmSync(join(OUT, f));
+      pruned.push(f);
+    }
+  }
+}
 
 const totRules = pluginReport.reduce((a, b) => a + b.rules, 0);
 const totRew = pluginReport.reduce((a, b) => a + b.rewrites, 0);
-console.log(`转换完成: ${pluginReport.length} 个插件 -> ${wrote} 个文件`);
+console.log(`转换完成: ${pluginReport.filter((p) => p.enabled).length}/${pluginReport.length} 个启用插件 -> ${written.size} 个文件`);
 console.log(`  分流 ${totRules} 条 / 重写 ${totRew} 条 / MITM 主机名 ${allHostnames.size} 个`);
-console.log(`  跨源语义去重跳过 ${deduped} 条；比对的既有源 ${seeded.length} 个`);
+console.log(`  跨源去重跳过 ${deduped} 条；比对的既有源 ${seeded.length} 个`);
+if (pruned.length) console.log(`  清理孤儿产物 ${pruned.length} 个: ${pruned.join(", ")}`);
 
 const reasons = new Map();
 for (const s of skipReport) reasons.set(s.reason, (reasons.get(s.reason) ?? 0) + 1);
-if (reasons.size) {
-  console.log(`\n跳过/无法转换共 ${skipReport.length} 条（每条都已记账，不静默丢弃）:`);
-  for (const [r, n] of [...reasons].sort((a, b) => b[1] - a[1])) console.log(`  ${String(n).padStart(4)}  ${r}`);
+console.log(`\n未转换/已丢弃共 ${skipReport.length} 条（逐条记账）:`);
+for (const [r, n] of [...reasons].sort((a, b) => b[1] - a[1])) console.log(`  ${String(n).padStart(4)}  ${r}`);
+
+if (notes.length) {
+  const byKind = new Map();
+  for (const n of notes) byKind.set(n.kind, (byKind.get(n.kind) ?? 0) + 1);
+  console.log(`\n⚠ 保真度提示 ${notes.length} 条（已转换但行为可能与源插件不同）:`);
+  for (const [k, n] of byKind) console.log(`  ${String(n).padStart(4)}  ${k}`);
 }
 
 writeIfChanged(
   join(OUT, "_conversion-report.json"),
   JSON.stringify(
-    { generated_note: "由 tools/convert-plugins.mjs 生成，勿手工编辑。", plugins: pluginReport, skipped: skipReport },
+    { generated_note: "由 tools/convert-plugins.mjs 生成，勿手工编辑。", plugins: pluginReport, skipped: skipReport, notes },
     null,
     2,
   ) + "\n",
 );
 
-/** 只在内容变化时写盘；--check 下只报告，不写。生成物必须可重复。 */
 function writeIfChanged(dest, body) {
   const rel = dest.replace(ROOT + "/", "").replace(/\\/g, "/");
   const prev = existsSync(dest) ? readFileSync(dest, "utf8") : null;

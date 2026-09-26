@@ -285,7 +285,14 @@ function checkVendoredRules() {
   const dir = join(ROOT, "QuantumultX", "rules");
   if (!existsSync(dir)) return 0;
   // 同时覆盖 .list 与 .snippet（插件提取重写是 .snippet，此前被漏检）
-  const files = readdirSync(dir).filter((f) => /\.(list|snippet|conf)$/.test(f));
+  // 必须**递归**：转换产物在 QuantumultX/rules/kelee/ 子目录。
+  // 非递归会让这 54 个文件完全绕过语法校验 —— 实测非法的 `host, x, reject-drop`
+  // 分流策略（QX 分流只认 reject/direct/proxy）就是这样在 0 error 下通过的。
+  const files = readdirSync(dir, { recursive: true })
+    .map((f) => String(f).replace(/\\/g, "/"))
+    .filter((f) => /\.(list|snippet|conf)$/.test(f))
+    // `_hostnames.conf` / `_conversion-report.json` 是辅助产物，不是规则集
+    .filter((f) => !f.split("/").pop().startsWith("_"));
   let total = 0;
   for (const f of files) {
     const rel = `QuantumultX/rules/${f}`;
@@ -306,18 +313,35 @@ function checkVendoredRules() {
       }
       // 重写规则写作 "<regex> url <action> [arg]" —— 与分流规则是两套语法。
       if (/\surl(?:-and-header)?\s+\S/.test(line)) {
+        const isHeaderForm = /\surl-and-header\s+\S/.test(line);
         const act = line.match(/\surl(?:-and-header)?\s+(\S+)/)[1].toLowerCase();
         if (!QX_REWRITE_ACTIONS.has(act)) {
           err(rel, 0, `未知的重写动作 "${act}": "${line.slice(0, 60)}"`);
         }
-        // URL 正则必须只含 ASCII 且无空格/逗号（上游破损行会把中文或逗号嵌进来）
-        const pat = line.replace(/\s+url(?:-and-header)?\s+[\s\S]*$/, "");
-        if (!/^[\x20-\x7e]+$/.test(pat) || /[\s,]/.test(pat)) {
-          err(rel, 0, `URL 正则含非 ASCII 或分隔符（上游破损行）: ${pat.slice(0, 60)}`);
-        }
         // jq-path="..." 是 Loon 的外部 jq 写法，QX 求值会失败
         if (/jq-path\s*=|jq_file\s*=/i.test(line)) {
           err(rel, 0, `含 jq-path=/jq_file= 的非法 jq 表达式（QX 会失效）: ${line.slice(0, 60)}`);
+        }
+        if (isHeaderForm) {
+          // url-and-header 的“正则”部分**本来就含空格**：`<re> \r\nUser-Agent: <ua>`
+          // （官方 sample.conf 就是这个形状）。所以此处只校验正则段本身。
+          const pat = line.replace(/\s+\\r\\n[\s\S]*$/, "");
+          if (!/^[\x20-\x7e]+$/.test(pat) || /,/.test(pat)) {
+            err(rel, 0, `url-and-header 的 URL 正则含非 ASCII 或逗号: ${pat.slice(0, 60)}`);
+          }
+          // header 段必须带 User-Agent: 之类的真实条件，否则等于无条件
+          const hdr = line.slice(pat.length);
+          if (!/\\r\\n\s*[A-Za-z-]+:/.test(hdr)) {
+            err(rel, 0, `url-and-header 缺少 header 条件（形如 \\r\\nUser-Agent: ...）: ${line.slice(0, 70)}`);
+          }
+        } else {
+          // URL 正则必须只含 ASCII 且无空格/逗号（上游破损行会把中文或逗号嵌进来）。
+          // 但 `{n,m}` 量词里的逗号是合法的（如 `\d{3,4}`），先剥掉再判。
+          const pat = line.replace(/\s+url\s+[\s\S]*$/, "");
+          const bare = pat.replace(/\{\d+,\d*\}/g, "");
+          if (!/^[\x20-\x7e]+$/.test(pat) || /[\s,]/.test(bare)) {
+            err(rel, 0, `URL 正则含非 ASCII 或分隔符（上游破损行）: ${pat.slice(0, 60)}`);
+          }
         }
         count++;
         continue;

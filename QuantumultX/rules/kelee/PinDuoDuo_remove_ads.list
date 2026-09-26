@@ -1,6 +1,5 @@
 # 拼多多去广告  —— 由 vendor/loon-plugins/PinDuoDuo_remove_ads.lpx 自动转换（tools/convert-plugins.mjs）
 # 源插件: https://kelee.one/Tool/Loon/Lpx/PinDuoDuo_remove_ads.lpx
-# 源配置里 enabled=true
 # 请勿手工编辑：改源插件后重新运行 bun tools/fetch-plugins.mjs && bun tools/convert-plugins.mjs
 
 host, titan.pinduoduo.com, reject

@@ -993,11 +993,11 @@
       "tag": " iRingo: 🌤 WeatherKit",
       "local_file": "QuantumultX/rules/kelee/iRingo.WeatherKit.conf",
       "parser": false,
-      "enabled": true,
+      "enabled": false,
       "kelee_plugin": "iRingo.WeatherKit.lpx",
       "source_url": "https://github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.lpx",
       "icon": "https://developer.apple.com/assets/elements/icons/weatherkit/weatherkit-128x128.png",
-      "note": "移植自 Loon 插件 iRingo.WeatherKit.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
+      "note": "移植自 Loon 插件 iRingo.WeatherKit.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。 已禁用：与社区版 rewrite-irongo-weatherkit（NSRingo 官方 QX snippet）命中同一批 weatherkit.apple.com 接口，同时启用会让同一响应体被两个脚本各处理一次；社区版参数完整（kelee 版丢了 12 个 argument），故保留社区版。"
     },
     {
       "id": "rewrite-kelee-smzdm_remove_ads",

@@ -36,9 +36,11 @@ jobs:
         run: bun tools/build.mjs
 
       # 抓取源 Loon 配置里 40 个 kelee 插件的原样副本（kelee.one 只对 Loon 的 UA 放行）。
-      # 已存在则跳过，不产生无谓改动。
+      # 必须带 --force：默认「已存在则跳过」会让插件在仓库里永久冻结、上游更新永不跟进，
+      # 而本次故障的成因之一正是「用的插件片段是 11 个月前的旧版」。
+      # fetch-plugins.mjs 是「先抓后覆盖」，抓取失败时保留旧副本，不会毁掉兜底。
       - name: Fetch Loon plugins (vendored copies)
-        run: bun tools/fetch-plugins.mjs
+        run: bun tools/fetch-plugins.mjs --force
 
       # 转换为 QX 原生资源，并把插件引用的脚本镜像进本仓库
       # （kelee.one 对 Quantumult X 的 UA 返回 403，直链会静默失效）。

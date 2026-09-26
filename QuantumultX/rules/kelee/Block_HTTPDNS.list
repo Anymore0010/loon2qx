@@ -1,10 +1,13 @@
 # HTTPDNS拦截器  —— 由 vendor/loon-plugins/Block_HTTPDNS.lpx 自动转换（tools/convert-plugins.mjs）
 # 源插件: https://kelee.one/Tool/Loon/Lpx/Block_HTTPDNS.lpx
-# 源配置里 enabled=true
 # 请勿手工编辑：改源插件后重新运行 bun tools/fetch-plugins.mjs && bun tools/convert-plugins.mjs
 
 host-keyword, httpdns, reject
 host-keyword, httpsdns, reject
+user-agent, httpdns*, reject
+user-agent, httpsdns*, reject
+user-agent, Httpdns*, reject
+user-agent, Httpsdns*, reject
 host, yyapp-httpdns.gslb.yy.com, reject
 host, union-httpdns.gslb.yy.com, reject
 host, yuyin-httpdns.gslb.yy.com, reject

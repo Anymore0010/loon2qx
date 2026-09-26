@@ -1,6 +1,5 @@
 # 广告平台拦截器  —— 由 vendor/loon-plugins/BlockAdvertisers.lpx 自动转换（tools/convert-plugins.mjs）
 # 源插件: https://kelee.one/Tool/Loon/Lpx/BlockAdvertisers.lpx
-# 源配置里 enabled=true
 # 请勿手工编辑：改源插件后重新运行 bun tools/fetch-plugins.mjs && bun tools/convert-plugins.mjs
 
 host-keyword, adstrategy, reject

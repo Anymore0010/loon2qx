@@ -39,20 +39,37 @@ Loon 和 Quantumult X 的差异不在语法，而在**功能承载方式**：
 
 | 项 | 数量 |
 | --- | --- |
-| 插件 | 40（33 启用 / 7 禁用，与源配置一致） |
-| 转换出的分流规则 | 632 |
-| 转换出的重写规则 | 347 |
-| 汇总的 MITM 主机名 | 148 |
-| 跨源去重跳过 | 71（与 fmz 聚合 / 自用增强命中同一响应体） |
-| 无法转换、已记账的 | 86（QX 无对应语法，见下） |
+| 插件 | 40（38 启用 / 2 禁用，与源配置一致） |
+| 转换出的分流规则 | 634 |
+| 转换出的重写规则 | 368 |
+| [mitm] 显式列出的主机名 | 1303 |
+| 跨源去重跳过 | 72（与 fmz 聚合 / 自用增强命中同一响应体） |
+| 无法转换、已逐条记账的 | 128 |
+| 保真度提示（已转换但行为可能不同） | 24 |
 
-QX 无对应语法、**必须显式跳过**的（转换器逐条记账，绝不静默丢弃）：
+比早期版本多恢复的映射（都是 QX 里**有**精确对应、此前被误判为"不支持"的）：
 
-- `AND/OR/NOT` 组合规则 —— QX 分流不支持逻辑组合（14 条）
-- `URL-REGEX` / `USER-AGENT` / `DEST-PORT` / `PROTOCOL` —— QX 分流词表里没有（31 条）
-- `request/response if ${url} ~= ...` —— Loon 的脚本化写法（11 + 19 条）
-- `mock-response-body` / `response-header-add` 等 QX 不存在的动作名（9 条）
-- `jq-path="..."` 外链 jq 文件 —— 那些 `.jq` 是多行且含 `#` 注释，内联进单行 rewrite 会把行拆断（3 条）
+- `URL-REGEX` 分流 → 重写 `<re> url reject`（恢复 22 条 http:// 的 HTTPDNS 拦截）
+- `USER-AGENT` 分流 → QX 的 `user-agent` 类型（恢复 4 条按 UA 拦 HTTPDNS）
+- `AND((URL-REGEX), (USER-AGENT))` → `<re> \r\nUser-Agent: <ua> url-and-header reject`
+  （官方 sample.conf 就是这个形状；恢复拼多多的 2 条直连 IP 广告拦截）
+- `response-body-json-replace a v` → `jsonjq-response-body '.a = v'`
+- `jq-path=` 外链 jq → 抓回并**折叠成单行**再内联（剥掉 `#` 注释，否则会把单行 rewrite 截断）
+
+QX 确实没有对应语法、**必须显式跳过**的（转换器逐条记账，绝不静默丢弃）：
+
+- `AND(... PROTOCOL QUIC)` —— QX 无 PROTOCOL 条件；已由 `[general]` 的 `udp_drop_list=443` 覆盖（4 条）
+- `DEST-PORT` 分流 —— QX 分流词表里没有（4 条）
+- `AND/OR/NOT` 里含 `OR`、或无重写等价物的组合（6 条）
+- `mock-response-body` / `response-header-add` 等 QX 不存在的重写动作（9 条）
+- `request/response if ${url} ~= ...` —— Loon 的脚本化写法（10 + 19 条）
+- 脚本镜像失败时**整条丢弃**（绝不回退成上游直链）：`CommonScript/replace-body.js` 已 404（1 条）
+
+### 保真度提示：这三类行为与源插件不同（已在 `_conversion-report.json` 的 `notes` 里逐条列出）
+
+- **插件参数被丢弃**（11 条）：Loon 的 `argument=` / `[Argument]` 在 QX 没有等价物，脚本会走默认分支。
+- **二进制体脚本（未设备验证）**（11 条）：`binary-body-mode` 的 protobuf 脚本，QX 侧能否正确解包未经实测。
+- **条件启用无法表达**（2 条）：`enable={...}` 在 QX 只能无条件生效。
 
 **关于抓取插件需要 Loon 的 User-Agent**：kelee.one 对 `curl` / 无头浏览器一律返回 Cloudflare 403，只有 `Loon/998 CFNetwork/...` 能过。`tools/fetch-plugins.mjs` 与 `tools/fetch-snapshot.mjs` 都已带上该 UA。
 

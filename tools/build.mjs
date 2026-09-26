@@ -298,15 +298,58 @@ function buildMitm() {
   const lines = [section("mitm", "MITM"), ""];
   lines.push(comment("证书必须在本机生成，任何证书私钥都不应提交到仓库。"));
   lines.push(comment("Quantumult X：风车 → 设置 → MITM → 生成证书 → 安装描述文件 → 到「设置-通用-关于本机-证书信任设置」开启信任。"));
-  lines.push(comment("这里刻意不写 hostname：rewrite_remote 提供的重写资源自带 hostname，"));
-  lines.push(comment("Quantumult X 会自动汇总；写一个空的 hostname= 反而会覆盖它。"));
-  lines.push(comment("如需额外主机名，请在 Quantumult X 界面的 MITM 页面添加。"));
+  lines.push(comment("重导配置**不会**清除已生成的证书；若每次都要重新生成，那是证书本身没被信任。"));
   lines.push("");
   lines.push(comment("与 fmz 的 QuanX.conf、用户原 QX 配置保持一致（两边都显式设了 true）。"));
   lines.push("skip_validating_cert = true");
   lines.push("passphrase = ");
   lines.push("p12 = ");
+  lines.push("");
+  // 显式列出所有重写资源声明的主机名（本仓库自己的重写资源 + 转换产物）。
+  // 理由：QX 是否自动把 rewrite_remote 资源里的 hostname 并入 [mitm] 没有权威文档，
+  // 两条已知可用的社区配置（fmz 的 QuanX.conf、用户原配置）都只写了 `hostname = -www.google.com`。
+  // 若 QX 本就合并，这份清单是幂等的；若不合并，它就是唯一让重写生效的东西。
+  const hosts = collectMitmHostnames();
+  lines.push(comment(`以下 ${hosts.count} 个主机名来自本仓库重写资源（含 kelee 转换产物）的 hostname 声明。`));
+  for (const h of hosts.lines) lines.push(h);
   return lines.join("\n");
+}
+
+/**
+ * 汇总本仓库所有 rewrite_remote 资源（本地文件 + 快照）声明的 hostname。
+ *
+ * ⚠ 必须输出**一行**：Quantumult X 的配置是逐行 `key = value`，官方文档对同类多值项
+ * （doh-server）明确要求「多个必须写在**一行**、逗号分隔」，可见不支持续行。
+ * 折行的后果是只有第一行生效、其余主机名静默不进 MITM —— 而 MITM 决定所有重写成败。
+ * fmz 的 QuanX.conf 与官方 sample.conf 的 hostname 也都是单行（fmz 那条上万字符照样单行）。
+ */
+function collectMitmHostnames() {
+  const urls = []; // 自托管 URL / 上游 URL
+  for (const r of src.rewrites) {
+    if (!r.enabled) continue;
+    if (r.local_file) urls.push(join(ROOT, r.local_file));
+    else {
+      const p = snapshotLocalFor(r.url);
+      if (p) urls.push(join(ROOT, p));
+    }
+  }
+  const all = new Set();
+  for (const abs of urls) {
+    if (!existsSync(abs)) continue;
+    let text;
+    try { text = readFileSync(abs, "utf8"); } catch { continue; }
+    for (const line of text.split(/\r?\n/)) {
+      const m = line.match(/^\s*hostname\s*=\s*(.+)$/i);
+      if (!m) continue;
+      for (const h of m[1].split(",")) {
+        const v = h.trim();
+        if (v && /^[A-Za-z0-9*?._-]+$/.test(v) && !v.startsWith("-")) all.add(v);
+      }
+    }
+  }
+  const sorted = [...all].sort();
+  if (!sorted.length) return { lines: [comment("（没有找到任何重写资源声明 hostname）")], count: 0 };
+  return { lines: [`hostname = ${sorted.join(", ")}`], count: sorted.length };
 }
 
 const profile = [
