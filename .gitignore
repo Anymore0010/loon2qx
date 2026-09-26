@@ -29,9 +29,19 @@ _*.json
 _*.conf
 _*.snippet
 _*.png
+# 例外：kelee 转换器的辅助产物**必须入库**（见文末说明）。注意 git 是「后面的规则覆盖前面」，
+# 所以这些 `!` 必须紧跟在 `_*` 模式之后。
+!QuantumultX/rules/kelee/_exclusions.json
+!QuantumultX/rules/kelee/_conversion-report.json
+!QuantumultX/rules/kelee/_hostnames.conf
 
 # 本地临时/脚本产物（不属于仓库内容）
 __pycache__/
 *.pyc
 *.tmp
 _check.py
+
+# kelee 转换器的辅助产物必须入库（例外规则在上面 `_*` 之后）：
+# CI 流程是 convert-plugins 先跑、fetch-snapshot 后跑并**读取 _exclusions.json**
+# 来排掉与 kelee 重叠的规则。若它被 `_*.json` 忽略、没入库，
+# CI 上「kelee 胜出」就完全不生效（实测就是这个原因，重复处理照样存在）。
