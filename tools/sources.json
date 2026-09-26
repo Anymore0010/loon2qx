@@ -555,6 +555,16 @@
       "enabled": false,
       "note": "对应 Loon 的 Sub-Store.lpx；fmz 配置亦引用。",
       "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/SubStore.png"
+    },
+    {
+      "id": "rewrite-wechat-unlock",
+      "url": null,
+      "local_file": "QuantumultX/rules/wechat-unlock.snippet",
+      "tag": "微信解除链接限制",
+      "parser": false,
+      "enabled": false,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WeChat.png",
+      "note": "对应 Loon 的 Weixin_external_links_unlock.lpx。enabled=false：不写进 default.conf，作为独立的规则链接使用（用户偏好：直接加 URL，不重装配置）。放在 sources.json 里的目的是让 fetch-snapshot 镜像其脚本并改写成本仓库地址，否则脚本直链上游，上游失效即静默失败。"
     }
   ],
   "tasks": [

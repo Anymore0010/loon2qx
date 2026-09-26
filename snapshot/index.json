@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 153,
-  "mirrored": 153,
+  "total": 154,
+  "mirrored": 154,
   "failed": 0,
   "exclusionMisses": [],
   "resources": [
@@ -430,20 +430,20 @@
       "error": null
     },
     {
-      "id": "icon-filter-cn-region",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png",
-      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/CN.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "icon-filter-lan",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Available.png",
       "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Available.png",
       "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Available.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-cn-region",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png",
+      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/CN.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png",
       "status": 200,
       "error": null
     },
@@ -507,6 +507,15 @@
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/SubStore.png",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/SubStore.png",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/SubStore.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-wechat-unlock",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WeChat.png",
+      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/WeChat.png",
+      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WeChat.png",
       "status": 200,
       "error": null
     },
