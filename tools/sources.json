@@ -175,14 +175,6 @@
       "parser": false
     },
     {
-      "id": "filter-tiktok",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/TikTok/TikTok.list",
-      "tag": "TikTok",
-      "policy": "direct",
-      "parser": false,
-      "enabled": true
-    },
-    {
       "id": "filter-telegram",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
       "tag": "Telegram",

@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 166,
-  "mirrored": 145,
+  "total": 165,
+  "mirrored": 144,
   "failed": 0,
   "resources": [
     {
@@ -29,15 +29,6 @@
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filterFix.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-tiktok",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/TikTok/TikTok.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/TikTok/TikTok.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/TikTok/TikTok.list",
       "status": 200,
       "error": null
     },
