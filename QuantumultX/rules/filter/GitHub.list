@@ -1,0 +1,41 @@
+# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
+# 合并来源（2 个）:
+#   https://rule.kelee.one/Loon/GitHub.lsr
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list
+# 统一策略: GitHub
+# 规则数: 31（已跨来源去重）
+#   各源贡献 Loon/GitHub.lsr: 31
+#   各源贡献 GitHub/GitHub.list: 0
+# 重新生成: bun tools/vendor-rules.mjs
+
+host-suffix, github.blog, GitHub
+host-suffix, github-avatars.oss-cn-hongkong.aliyuncs.com, GitHub
+host-suffix, github-cloud.s3.amazonaws.com, GitHub
+host-suffix, dependabot.com, GitHub
+host-suffix, github.com, GitHub
+host-suffix, githubapp.com, GitHub
+host-suffix, githubassets.com, GitHub
+host-suffix, githubcopilot.com, GitHub
+host-suffix, githubhackathon.com, GitHub
+host-suffix, githubnext.com, GitHub
+host-suffix, githubstatus.com, GitHub
+host-suffix, githubuniverse.com, GitHub
+host-suffix, githubusercontent.com, GitHub
+host-suffix, myoctocat.com, GitHub
+host-suffix, npmjs.com, GitHub
+host-suffix, rawgit.com, GitHub
+host-suffix, rawgithub.com, GitHub
+host-suffix, thegithubshop.com, GitHub
+host-suffix, github.community, GitHub
+host-suffix, npm.community, GitHub
+host-suffix, github.dev, GitHub
+host-suffix, githubpreview.dev, GitHub
+host-suffix, opensource.guide, GitHub
+host-suffix, atom.io, GitHub
+host-suffix, ghcr.io, GitHub
+host-suffix, git.io, GitHub
+host-suffix, github.io, GitHub
+host-suffix, github-atom-io-herokuapp-com.freetls.fastly.net, GitHub
+host-suffix, repo.new, GitHub
+host-suffix, npmjs.org, GitHub
+host-keyword, github, GitHub

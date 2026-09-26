@@ -1,0 +1,76 @@
+# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑
+# 合并来源（2 个）:
+#   https://rule.kelee.one/Loon/Twitter.lsr
+#   https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list
+# 统一策略: X
+# 规则数: 66（已跨来源去重）
+#   各源贡献 Loon/Twitter.lsr: 33
+#   各源贡献 Twitter/Twitter.list: 33
+# 重新生成: bun tools/vendor-rules.mjs
+
+host-suffix, twitter.biz, X
+host-suffix, t.co, X
+host-suffix, twimg.co, X
+host-suffix, vine.co, X
+host-suffix, ads-twitter.com, X
+host-suffix, cms-twdigitalassets.com, X
+host-suffix, grok.com, X
+host-suffix, tellapart.com, X
+host-suffix, tweetdeck.com, X
+host-suffix, twimg.com, X
+host-suffix, twitpic.com, X
+host-suffix, twitter.com, X
+host-suffix, twittercommunity.com, X
+host-suffix, twitterflightschool.com, X
+host-suffix, twitterinc.com, X
+host-suffix, twitteroauth.com, X
+host-suffix, twttr.com, X
+host-suffix, twvid.com, X
+host-suffix, x.com, X
+host-suffix, twitter.jp, X
+host-suffix, twtrdns.net, X
+host-suffix, twttr.net, X
+host-suffix, twimg.org, X
+host-suffix, periscope.tv, X
+host-suffix, pscp.tv, X
+host-suffix, twitterstat.us, X
+host-keyword, twitter, X
+ip-cidr, 69.195.160.0/19, X
+ip-cidr, 192.133.76.0/22, X
+ip-cidr, 199.59.148.0/22, X
+ip-cidr, 199.96.56.0/21, X
+ip-cidr, 202.160.128.0/22, X
+ip-cidr, 209.237.192.0/19, X
+host-suffix, ads-twitter.com, Twitter
+host-suffix, cms-twdigitalassets.com, Twitter
+host-suffix, grok.com, Twitter
+host-suffix, periscope.tv, Twitter
+host-suffix, pscp.tv, Twitter
+host-suffix, t.co, Twitter
+host-suffix, tellapart.com, Twitter
+host-suffix, tweetdeck.com, Twitter
+host-suffix, twimg.co, Twitter
+host-suffix, twimg.com, Twitter
+host-suffix, twimg.org, Twitter
+host-suffix, twitpic.com, Twitter
+host-suffix, twitter.biz, Twitter
+host-suffix, twitter.com, Twitter
+host-suffix, twitter.jp, Twitter
+host-suffix, twittercommunity.com, Twitter
+host-suffix, twitterflightschool.com, Twitter
+host-suffix, twitterinc.com, Twitter
+host-suffix, twitteroauth.com, Twitter
+host-suffix, twitterstat.us, Twitter
+host-suffix, twtrdns.net, Twitter
+host-suffix, twttr.com, Twitter
+host-suffix, twttr.net, Twitter
+host-suffix, twvid.com, Twitter
+host-suffix, vine.co, Twitter
+host-suffix, x.com, Twitter
+host-keyword, twitter, Twitter
+ip-cidr, 192.133.76.0/22, Twitter
+ip-cidr, 199.59.148.0/22, Twitter
+ip-cidr, 199.96.56.0/21, Twitter
+ip-cidr, 202.160.128.0/22, Twitter
+ip-cidr, 209.237.192.0/19, Twitter
+ip-cidr, 69.195.160.0/19, Twitter

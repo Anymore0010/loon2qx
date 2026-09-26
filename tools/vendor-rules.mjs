@@ -40,8 +40,11 @@ const mergeGroups = src.rule_merges ?? [];
 
 /** Filters flagged `vendor: true` are fetched, converted and committed locally. */
 const toVendor = src.filters.filter((f) => f.vendor);
+// 带 merges 的分流条目走下面的合并路径（不按单一上游转换）。
+const filterMergeGroups = src.filters.filter((f) => f.merges?.length && f.local_file);
+const toVendorOnly = toVendor.filter((f) => !f.merges?.length);
 
-if (toVendor.length === 0 && mergeGroups.length === 0) {
+if (toVendor.length === 0 && mergeGroups.length === 0 && filterMergeGroups.length === 0) {
   console.log("No filters marked vendor:true — nothing to do.");
   process.exit(0);
 }
@@ -57,7 +60,7 @@ function snapshotPathFor(url) {
 const report = [];
 let failures = 0;
 
-for (const f of toVendor) {
+for (const f of toVendorOnly) {
   process.stdout.write(`vendoring ${f.id} … `);
   let text;
   try {
@@ -90,6 +93,100 @@ for (const f of toVendor) {
   writeFileSync(file, body);
   console.log(`${rules.length} rules${dropped.length ? `, ${dropped.length} dropped` : ""}${notes.length ? `, ${notes.length} adjusted` : ""} -> ${f.vendored_as}`);
   report.push({ id: f.id, url: f.upstream_url, ok: true, count: rules.length, dropped, notes, stats, file: f.vendored_as });
+}
+
+// ---- 分流合并组 ------------------------------------------------------------
+// 与 rewrite 合并同样的思路，但分流规则是 `type, value, policy` 三元组：
+// 去重键 = (type, value)，**策略必须一致**才合并 —— 策略不同的同名规则合并后
+// 只有一个能生效，会静默改变行为，所以那种情况报错让人来处理。
+{
+  for (const f of filterMergeGroups) {
+    process.stdout.write(`合并 ${f.id} … `);
+    const all = [];
+    const seen = new Map(); // key -> policy，用于检测策略冲突
+    let failed = false;
+    let conflicts = 0;
+    const perSource = [];
+    for (const m of f.merges) {
+      let text = null;
+      if (m.local_file) {
+        const abs = join(ROOT, m.local_file);
+        if (existsSync(abs)) text = readFileSync(abs, "utf8");
+      } else if (m.url) {
+        // 上游 URL：先看快照，其次本仓库已 vendored 的产物
+        const snapRel = snapshotPathFor(m.url);
+        const snapAbs = snapRel ? join(ROOT, snapRel) : null;
+        if (snapAbs && existsSync(snapAbs)) text = readFileSync(snapAbs, "utf8");
+        else {
+          try {
+            const res = await fetch(m.url, { headers: { "User-Agent": "Loon/998 CFNetwork/3896.200.41 Darwin/27.2.0" } });
+            if (res.ok) text = await res.text();
+          } catch { /* 下面统一按失败处理 */ }
+        }
+      }
+      if (!text) {
+        failed = true;
+        console.log(`FAILED 取不到 ${m.tag ?? m.url ?? m.local_file}`);
+        report.push({ id: f.id, ok: false, error: "取不到内容", url: m.tag ?? m.url ?? m.local_file });
+        continue;
+      }
+      // 上游多为 Surge/Loon 语法时用 convertRuleList；本仓库产物已是 QX 语法、直接收。
+      const isQx = m.local_file && m.local_file.endsWith("AWAvenue.list");
+      const rules = isQx
+        ? text.split(/\r?\n/).map((x) => x.split("//")[0].trim()).filter((x) => x && !x.startsWith("#"))
+        : convertRuleList(text, { policy: f.policy }).rules;
+      let added = 0;
+      for (const r of rules) {
+        const parts = r.split(",").map((x) => x.trim());
+        if (parts.length < 2) continue;
+        const key = `${parts[0].toLowerCase()}\t${parts[1].toLowerCase()}`;
+        // 策略来源分两类，**不能一刀切**：
+        //  · 上游 url 源（fmz/bm7/AWAvenue）原本靠 force-policy=reject 生效；
+        //    bm7 的 Advertising.list 策略列甚至是字面量 "advertising"（28 万条），
+        //    不覆写成 reject 会产出无效策略。=> force_policy（默认 reject）
+        //  · 本仓库的 kelee 产物自带逐行策略，里面**有 direct 白名单**
+        //    （如 host, init.sms.mob.com, direct —— 短信/推送验证类）。
+        //    若给整份文件设 force-policy 会把这些白名单一起改成 reject，
+        //    用户设备上会立刻出现功能故障。=> preserve_policy
+        const pol = m.preserve_policy ? parts[parts.length - 1] : (m.force_policy ?? f.policy ?? "reject");
+        const val = parts.slice(1, -1).join(", ") || parts[1];
+        const line = `${parts[0]}, ${val}, ${pol}`;
+        const prev = seen.get(key);
+        if (prev !== undefined) {
+          if (prev !== pol) conflicts++;
+          continue;
+        }
+        seen.set(key, pol);
+        all.push(line);
+        added++;
+      }
+      perSource.push(`${m.tag ?? (m.url ?? m.local_file).split("/").pop()}: ${added}`);
+    }
+    if (conflicts) {
+      console.error(`WARN ${f.id}: ${conflicts} 条同名规则策略不一致，已保留先出现的那个`);
+    }
+    if (failed || all.length === 0) {
+      console.log(`跳过写入 ${f.local_file} —— ${existsSync(join(ROOT, f.local_file)) ? "已保留上一次的完整版本" : "无旧版本可保留"}`);
+      report.push({ id: f.id, ok: false, error: "部分来源失败或结果为空", file: f.local_file, kept: true });
+      continue;
+    }
+    const header = [
+      "# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑",
+      `# 合并来源（${f.merges.length} 个，按顺序优先）:`,
+      ...f.merges.map((m) => `#   ${m.tag ?? ""}  ${m.url ?? m.local_file}`),
+      "# 去重键: (类型, 值)；策略取先出现的来源",
+      `# 规则数: ${all.length}`,
+      "# 重新生成: bun tools/vendor-rules.mjs",
+      "",
+      ...all,
+      "",
+    ];
+    const file = join(ROOT, f.local_file);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, header.join("\n"));
+    console.log(`${all.length} 条（${perSource.join(" | ")}）-> ${f.local_file}`);
+    report.push({ id: f.id, ok: true, count: all.length, dropped: [], notes: [], file: f.local_file });
+  }
 }
 
 // ---- rewrite 合并组 --------------------------------------------------------

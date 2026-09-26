@@ -454,41 +454,40 @@
       "note": "移植自 Loon 插件 smzdm_remove_ads.lpx 的 [Rule] 段。"
     },
     {
-      "id": "filter-ads-fmz",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
-      "tag": "广告拦截合集",
-      "policy": "reject",
+      "id": "filter-ads-max",
+      "tag": "广告拦截合集MAX",
+      "policy": null,
+      "local_file": "QuantumultX/rules/filter/AdsBlockMAX.list",
       "parser": false,
       "enabled": true,
-      "note": "fmz 配置原有，约 9700 条 reject 规则。",
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png"
-    },
-    {
-      "id": "filter-advertising",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
-      "tag": "Advertising",
-      "policy": "reject",
-      "parser": false,
-      "enabled": true,
-      "note": "通用广告域名拦截（与上方广告拦截合集互补）。",
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png"
-    },
-    {
-      "id": "filter-awavenue",
-      "tag": "AWAvenue 秋风广告规则",
-      "policy": "reject",
-      "parser": false,
-      "enabled": true,
-      "note": "965 条广告拦截规则（上游实为 Surge 语法，已预转换为 QX 原生格式）。",
-      "upstream_url": "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
-      "vendor": true,
-      "vendored_as": "filter/AWAvenue.list",
-      "local_file": "QuantumultX/rules/filter/AWAvenue.list",
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png"
+      "merges": [
+        {
+          "local_file": "QuantumultX/rules/filter/kelee/BlockAdvertisers.list",
+          "tag": "广告平台拦截器（kelee，白名单优先）",
+          "preserve_policy": true
+        },
+        {
+          "tag": "AWAvenue 秋风广告规则（本仓库 vendor 产物）",
+          "force_policy": "reject",
+          "local_file": "QuantumultX/rules/filter/AWAvenue.list"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+          "tag": "广告拦截合集（fmz）",
+          "force_policy": "reject"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
+          "tag": "Advertising（blackmatrix7，策略列是字面量 advertising）",
+          "force_policy": "reject"
+        }
+      ],
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
+      "note": "AWAvenue + fmz filter.list + bm7 Advertising 合并；kelee 的 BlockAdvertisers 排最前，它自带的 direct 白名单（短信/推送验证类域名）优先且被保留。\n**不设 force-policy**：否则会把那些 direct 白名单一起改成 reject。"
     },
     {
       "id": "filter-ai-fmz",
-      "tag": "OpenAI & Anthropic",
+      "tag": "AI",
       "policy": "OpenAI & Anthropic",
       "enabled": true,
       "note": "AI 相关分流（fmz AI.list + bm7 OpenAI + bm7 Anthropic 合并）。",
@@ -547,39 +546,39 @@
     },
     {
       "id": "filter-github",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
       "tag": "GitHub",
       "policy": "GitHub",
       "parser": false,
       "enabled": true,
-      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/github_01.png"
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/github_01.png",
+      "local_file": "QuantumultX/rules/filter/GitHub.list"
     },
     {
       "id": "filter-twitter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
       "tag": "X",
       "policy": "X",
       "parser": false,
       "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png"
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png",
+      "local_file": "QuantumultX/rules/filter/X.list"
     },
     {
       "id": "filter-telegram",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
       "tag": "Telegram",
       "policy": "Telegram",
       "parser": false,
       "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png"
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png",
+      "local_file": "QuantumultX/rules/filter/Telegram.list"
     },
     {
       "id": "filter-spotify",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
       "tag": "Spotify",
       "policy": "Spotify",
       "parser": false,
       "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png"
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png",
+      "local_file": "QuantumultX/rules/filter/Spotify.list"
     },
     {
       "id": "filter-meta",
@@ -594,21 +593,21 @@
     },
     {
       "id": "filter-netflix",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list",
       "tag": "Netflix",
       "policy": "Netflix",
       "parser": false,
       "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png"
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Netflix.png",
+      "local_file": "QuantumultX/rules/filter/Netflix.list"
     },
     {
       "id": "filter-disney",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
       "tag": "Disney",
       "policy": "Disney",
       "parser": false,
       "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png"
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Disney.png",
+      "local_file": "QuantumultX/rules/filter/Disney.list"
     },
     {
       "id": "filter-lan",
@@ -1159,6 +1158,7 @@
       "out": "filter/AI.list",
       "policy": "OpenAI & Anthropic",
       "sources": [
+        "https://kelee.one/Tool/Loon/Lsr/AI.lsr",
         "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Loon/rule/AI.list",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Anthropic/Anthropic.list"
@@ -1189,8 +1189,9 @@
     {
       "id": "merge-google",
       "out": "filter/Google.list",
-      "policy": "新国节点",
+      "policy": "Google",
       "sources": [
+        "https://rule.kelee.one/Loon/Google.lsr",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list",
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list"
       ],
@@ -1230,6 +1231,60 @@
       ],
       "sources": [],
       "note": "Apple Account(4) + App Store(5)，内容对应 Loon 端的 AppleAccount/AppStore 列表。不再并入 bm7 的 1878 条大列表（用户核对后认为无必要）。Apple AI 与 APNs 独立。"
+    },
+    {
+      "id": "merge-github",
+      "out": "filter/GitHub.list",
+      "policy": "GitHub",
+      "sources": [
+        "https://rule.kelee.one/Loon/GitHub.lsr",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list"
+      ]
+    },
+    {
+      "id": "merge-x",
+      "out": "filter/X.list",
+      "policy": "X",
+      "sources": [
+        "https://rule.kelee.one/Loon/Twitter.lsr",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list"
+      ]
+    },
+    {
+      "id": "merge-telegram",
+      "out": "filter/Telegram.list",
+      "policy": "Telegram",
+      "sources": [
+        "https://rule.kelee.one/Loon/Telegram.lsr",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list"
+      ]
+    },
+    {
+      "id": "merge-spotify",
+      "out": "filter/Spotify.list",
+      "policy": "Spotify",
+      "sources": [
+        "https://rule.kelee.one/Loon/Spotify.lsr",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list"
+      ]
+    },
+    {
+      "id": "merge-netflix",
+      "out": "filter/Netflix.list",
+      "policy": "Netflix",
+      "sources": [
+        "https://rule.kelee.one/Loon/Netflix.lsr",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list"
+      ]
+    },
+    {
+      "id": "merge-disney",
+      "out": "filter/Disney.list",
+      "policy": "Disney",
+      "sources": [
+        "https://rule.kelee.one/Loon/Disney.lsr",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list"
+      ]
     }
   ],
   "output": {

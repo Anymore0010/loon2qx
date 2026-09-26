@@ -73,7 +73,25 @@ function collectResources() {
     if (f.url.startsWith("FILTER_")) continue; // built-in, cannot be mirrored
     add(f.id, f.url, "filter");
   }
-  for (const r of src.rewrites) { if (r.local_file) continue; add(r.id, r.url, "rewrite"); }
+  for (const r of src.rewrites) {
+    if (r.local_file) continue; // 产物在本仓库
+    add(r.id, r.url, "rewrite");
+  }
+  // **合并来源也必须镜像**：合并条目只有产物 local_file，其上游 url 藏在 merges[] 里。
+  // 不镜像的话，fetch-snapshot 的 prune 会把它们的快照删掉，下一轮 CI 的
+  // vendor-rules 就取不到内容 -> 跳过写入（保留旧版）-> 合并永久停更。
+  // 实测就是这样把 fmz 的 rewrite.snippet 与 bm7 的 Advertising.conf 裁掉了。
+  // 合并来源必须镜像，rewrites 与 filters **都要**收集：
+  // 不镜像 -> prune 会删掉它们的快照 -> 下一轮合并取不到内容 -> 永久冻结在引入那一刻。
+  for (const arr of [src.rewrites, src.filters]) {
+    for (const r of arr ?? []) {
+      for (const m of r.merges ?? []) {
+        if (m.url && !m.url.startsWith("FILTER_") && !m.local_file) {
+          add(`merge-${r.id}`, m.url, r === undefined ? "rewrite" : (arr === src.rewrites ? "rewrite" : "filter"));
+        }
+      }
+    }
+  }
   for (const t of src.tasks) add(t.id, t.url, "task");
 
   // The parser is a hard dependency for opt-parser=true resources.

@@ -58,8 +58,15 @@ function filterUrl(f) {
   return f.url;
 }
 
-/** Quantumult X comment marker. `#` is only valid as the first character. */
-const comment = (text) => `# ${text}`;
+/**
+ * Quantumult X comment marker. `#` is only valid as the first character.
+ *
+ * 必须逐行加前缀：note 里出现 `\n` 时，只给首行加 `#` 会留下裸行 ——
+ * 落在 [filter_remote]/[rewrite_remote] 里会被 QX 当成一条规则解析
+ * （既非注释也非合法规则，静默异常）。实测踩过：一条多行 note 的第三行
+ * 直接写在 default.conf 里成了裸文本。
+ */
+const comment = (text) => String(text).split("\n").map((l) => `# ${l}`.trimEnd()).join("\n");
 
 /**
  * Quantumult X requires literal `[section]` headers; a comment banner alone is

@@ -1,83 +1,11 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 149,
-  "mirrored": 149,
-  "failed": 0,
+  "total": 72,
+  "mirrored": 71,
+  "failed": 1,
   "exclusionMisses": [],
   "resources": [
-    {
-      "id": "filter-ads-fmz",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-advertising",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-github",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-twitter",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Twitter/Twitter.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-telegram",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Telegram/Telegram.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-spotify",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Spotify/Spotify.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-netflix",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-disney",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Disney/Disney.list",
-      "status": 200,
-      "error": null
-    },
     {
       "id": "rewrite-irongo-weatherkit",
       "kind": "rewrite",
@@ -93,6 +21,51 @@
       "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
       "snapshot": "snapshot/github.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
       "upstream_raw": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "merge-rewrite-httpdns-merged",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "merge-rewrite-ads-max",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": null,
+      "error": "The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()"
+    },
+    {
+      "id": "merge-rewrite-ads-max",
+      "kind": "rewrite",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "merge-filter-ads-max",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "merge-filter-ads-max",
+      "kind": "filter",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
+      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
+      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
       "status": 200,
       "error": null
     },
@@ -403,20 +376,11 @@
       "error": null
     },
     {
-      "id": "icon-filter-ads-fmz",
+      "id": "icon-filter-ads-max",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
       "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
       "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-filter-advertising",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png",
-      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/AdBlack.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png",
       "status": 200,
       "error": null
     },
@@ -687,663 +651,6 @@
       "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js",
       "snapshot": "snapshot/github.com/chavyleung/scripts/master/box/chavy.boxjs.js",
       "upstream_raw": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:12306.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/kokoryh/Script/master/js/12306.js",
-      "snapshot": "snapshot/github.com/kokoryh/Script/master/js/12306.js",
-      "upstream_raw": "https://raw.githubusercontent.com/kokoryh/Script/master/js/12306.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:51card.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/51card.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/51card.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/51card.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:555Ad.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/555Ad.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/555Ad.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/555Ad.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:myBlockAds.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/myBlockAds.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:cnftp.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/cnftp.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/cnftp.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/cnftp.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:baidumap.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/baidumap.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/baidumap.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/baidumap.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:tieba-json.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/tieba-json.js",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/js/tieba-json.js",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/tieba-json.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:bohe_ads.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bohe/bohe_ads.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/bohe/bohe_ads.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/bohe/bohe_ads.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:bilibiliManga.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/bilibiliManga.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/bilibiliManga.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/bilibiliManga.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:blued.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/blued.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/blued.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/blued.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:caixinAd.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/caixin/caixinAd.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/caixin/caixinAd.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/caixin/caixinAd.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:cainiao.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/cainiao/cainiao.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/cainiao/cainiao.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/cainiao/cainiao.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:dianping.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/dianping.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/dianping.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/dianping.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:didiAds.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/didi/didiAds.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/didi/didiAds.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/didi/didiAds.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:dianyinglieshou.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/dianyinglieshou.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/dianyinglieshou.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/dianyinglieshou.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:ddxq.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/ddxq.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/ddxq.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/ddxq.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:BahamutAnimeAds.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/NobyDa/Script/master/Bahamut/BahamutAnimeAds.js",
-      "snapshot": "snapshot/github.com/NobyDa/Script/master/Bahamut/BahamutAnimeAds.js",
-      "upstream_raw": "https://raw.githubusercontent.com/NobyDa/Script/master/Bahamut/BahamutAnimeAds.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:wechatApplet.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/wechatApplet.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/wechatApplet.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/wechatApplet.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:fly.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/fly.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/fly.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/fly.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:flyert.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/flyert.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/flyert.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/flyert.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:fenbi.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/fenbi.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/fenbi.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/fenbi.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:foliday.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/foliday.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/foliday.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/foliday.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:umetrip_ads.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/umetrip/umetrip_ads.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/umetrip/umetrip_ads.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/umetrip/umetrip_ads.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:freshippo.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/freshippo.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/freshippo.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/freshippo.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:huifutianxia_ads.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/huifutianxia_ads.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/huifutianxia_ads.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/huifutianxia_ads.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:ithome.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/ithome/ithome.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/ithome/ithome.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/ithome/ithome.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:ccblife.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/ccblife.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/ccblife.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/ccblife.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:alicdn.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/alicdn.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/alicdn.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/alicdn.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:jingxiAd.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/jingxiAd.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/jingxiAd.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/jingxiAd.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:coolapk.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/coolapk.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/coolapk.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/coolapk.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:kuwo.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/kuwo/kuwo.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/kuwo/kuwo.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/kuwo/kuwo.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:quark.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/quark.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/quark.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/quark.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:adsense.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/adsense.js",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/js/adsense.js",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/adsense.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:keep.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/keep.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/keep.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/keep.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:ltsst-ad.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/lvtusuishenting/ltsst-ad.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/lvtusuishenting/ltsst-ad.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/lvtusuishenting/ltsst-ad.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:lawson.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/lawson.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/lawson.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/lawson.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:mafengwo.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/mafengwo.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/mafengwo.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/mafengwo.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:mdb.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/mdb.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/mdb.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/mdb.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:maimai_ads.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/maimai/maimai_ads.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/maimai/maimai_ads.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/maimai/maimai_ads.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:mlxx.js",
-      "kind": "js",
-      "url": "https://github.com/fmz200/wool_scripts/raw/main/Scripts/mlxx/mlxx.js",
-      "snapshot": "snapshot/host/github.com/fmz200/wool_scripts/raw/main/Scripts/mlxx/mlxx.js",
-      "upstream_raw": null,
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:meiyou_ads.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/meiyou/meiyou_ads.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/meiyou/meiyou_ads.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/meiyou/meiyou_ads.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:miguvideo_ads.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/Scripts/miguvideo/miguvideo_ads.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/refs/heads/main/Scripts/miguvideo/miguvideo_ads.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/Scripts/miguvideo/miguvideo_ads.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:PupuSplashAds.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/PupuSplashAds.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/PupuSplashAds.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/PupuSplashAds.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:qmai.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/qmai.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/qmai.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/qmai.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:qidian.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/qidian.js",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/js/qidian.js",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/qidian.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:51job.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/51job.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/51job.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/51job.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:QuDa.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/QuDa.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/QuDa.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/QuDa.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:rrtv_json.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/rrtv_json.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/rrtv_json.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/rrtv_json.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:reddit.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/reddit.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/reddit.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/reddit.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:smzdm_ads.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/smzdm_ads.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:Smzdm.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/Smzdm.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/smzdm/Smzdm.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/smzdm/Smzdm.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:soda.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/soda.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/soda.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/soda.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:req_replace_body.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/template/req_replace_body.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/template/req_replace_body.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/template/req_replace_body.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:soul_ads.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/soul/soul_ads.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/soul/soul_ads.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/soul/soul_ads.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:spotify-json.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-json.js",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/js/spotify-json.js",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-json.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:qq-news.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/qq-news.js",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/js/qq-news.js",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/qq-news.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:tuhu.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/tuhu.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/tuhu.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/tuhu.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:vgtime.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/vgtime.js",
-      "snapshot": "snapshot/github.com/app2smile/rules/master/js/vgtime.js",
-      "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/vgtime.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:dict-youdao-ad.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/youdao/dict-youdao-ad.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/youdao/dict-youdao-ad.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/youdao/dict-youdao-ad.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:wyres.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/Keywos/rule/main/script/wy/js/wyres.js",
-      "snapshot": "snapshot/github.com/Keywos/rule/main/script/wy/js/wyres.js",
-      "upstream_raw": "https://raw.githubusercontent.com/Keywos/rule/main/script/wy/js/wyres.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:UnblockURLinWeChat.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zZPiglet/Task/master/asset/UnblockURLinWeChat.js",
-      "snapshot": "snapshot/github.com/zZPiglet/Task/master/asset/UnblockURLinWeChat.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zZPiglet/Task/master/asset/UnblockURLinWeChat.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:wnbz.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/Sliverkiss/QuantumultX/main/AdBlock/xmApp/wnbz.js",
-      "snapshot": "snapshot/github.com/Sliverkiss/QuantumultX/main/AdBlock/xmApp/wnbz.js",
-      "upstream_raw": "https://raw.githubusercontent.com/Sliverkiss/QuantumultX/main/AdBlock/xmApp/wnbz.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:xjsp.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/NobyDa/Script/master/QuantumultX/File/xjsp.js",
-      "snapshot": "snapshot/github.com/NobyDa/Script/master/QuantumultX/File/xjsp.js",
-      "upstream_raw": "https://raw.githubusercontent.com/NobyDa/Script/master/QuantumultX/File/xjsp.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:xmApp.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/Sliverkiss/QuantumultX/main/AdBlock/xmApp/xmApp.js",
-      "snapshot": "snapshot/github.com/Sliverkiss/QuantumultX/main/AdBlock/xmApp/xmApp.js",
-      "upstream_raw": "https://raw.githubusercontent.com/Sliverkiss/QuantumultX/main/AdBlock/xmApp/xmApp.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:xiaotucc.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/xiaotucc.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/xiaotucc.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/xiaotucc.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:usmile.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/usmile.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/usmile.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/usmile.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:yx.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/yx.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/yx.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/yx.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:zhangshanggongjiao.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhangshanggongjiao.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/zhangshanggongjiao.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhangshanggongjiao.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:cmschina.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/cmschina/cmschina.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/cmschina/cmschina.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/cmschina/cmschina.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:zhihu.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhihu/zhihu.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:airchina.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/airchina.js",
-      "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/airchina.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/airchina.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:picc_ads.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/picc/picc_ads.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/picc/picc_ads.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/picc/picc_ads.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:zhuanzhuan.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhuanzhuan/zhuanzhuan.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/zhuanzhuan/zhuanzhuan.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/zhuanzhuan/zhuanzhuan.js",
       "status": 200,
       "error": null
     }
