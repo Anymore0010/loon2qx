@@ -27,3 +27,5 @@ _*.js
 _*.mjs
 _*.json
 _*.conf
+_*.snippet
+_*.png

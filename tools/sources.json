@@ -279,7 +279,7 @@
       "policy": null,
       "parser": false,
       "enabled": true,
-      "note": "fmz 配置原有。规则自带 direct / proxy 策略，因此不设 force-policy。已排除两条与广告拦截冲突的规则（api-adservices.apple.com、msg.umengcloud.com —— 它们把本该 reject 的广告域改成 direct）。",
+      "note": "fmz 配置原有。规则自带 direct / proxy 策略，因此不设 force-policy。另排除 2 条与广告拦截冲突的规则（api-adservices.apple.com、msg.umengcloud.com）。**注**：广告拦截已排在本条目之前，那 2 条即便保留也会被广告的 reject 先命中（先匹配先赢），故此排除目前是**冗余的保险** —— 仅当你把本条目挪到广告之前时才起作用。",
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png",
       "exclude_rule_patterns": [
         "api-adservices\\.apple\\.com",
