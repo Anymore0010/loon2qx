@@ -12,16 +12,16 @@
 #
 # 本文件由手工维护：直接编辑即可，没有任何自动生成步骤会覆盖它。
 
-^https:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v1\/ecommerce-user\/get_shopping_info\? url reject-dict
+# [kelee 胜出] 已移除（与 kelee Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v1\/ecommerce-user\/get_shopping_i
 ^https:\/\/line3-h5-mobile-api\.biligame\.com\/game\/live\/large_card_material\? url reject-dict
-^https:\/\/api\.bilibili\.com\/x\/pd-proxy\/tracker\? url jsonjq-response-body '.data[][]?="stun.chat.bilibili.com:3478"'
-^https:\/\/api\.bilibili\.com\/pgc\/view\/v2\/app\/season\? url jsonjq-response-body 'del(.data.payment)'
-^https:\/\/api\.bilibili\.com\/pgc\/page\/channel\? url jsonjq-response-body '.data.modules |= map(select(.type != "TIP") | if .type == "BANNER" then .module_data.items |= map(select(.url | startswith("https://www.bilibili.com/blackboard/era/") | not)) else . end)'
-^https:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\? url jsonjq-response-body 'del(.data.common_equip)'
-^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/(list|show|event\/list2)\? url jsonjq-response-body '.data |= with_entries(if .key | IN("show", "event_list") then .value = [] else . end)'
-^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\? url jsonjq-response-body 'if .data.items then .data.items |= map(select((.banner_item == null) and (.ad_info == null) and (.card_goto == "av") and (.card_type | IN("small_cover_v2", "large_cover_single_v9", "large_cover_v1")))) end'
-^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\/story\? url jsonjq-response-body 'if .data.items then .data.items |= map(select((.ad_info == null) and (.card_goto | IN("vertical_ad_av", "vertical_ad_live", "vertical_ad_picture") | not)) | del(.story_cart_icon, .free_flow_toast, .image_infos, .course_info, .game_info)) end'
-^https:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\? url jsonjq-response-body '.data.vip |= if . != null and .status == 0 then . + { status: 1, type: 2, due_date: 9005270400000, role: 15 } else . end'
+# [kelee 胜出] 已移除（与 Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/api\.bilibili\.com\/x\/pd-proxy\/tracker\? url jsonjq-response-body '.data[][]?="stun.cha
+# [kelee 胜出] 已移除（与 Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/api\.bilibili\.com\/pgc\/view\/v2\/app\/season\? url jsonjq-response-body 'del(.data.paym
+# [kelee 胜出] 已移除（与 Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/api\.bilibili\.com\/pgc\/page\/channel\? url jsonjq-response-body '.data.modules |= map(s
+# [kelee 胜出] 已移除（与 kelee Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\? url jsonjq-response-body 'del(.data.common_
+# [kelee 胜出] 已移除（与 kelee Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/(list|show|event\/list2)\? url jsonjq-response-body '.
+# [kelee 胜出] 已移除（与 Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\? url jsonjq-response-body 'if .data.items then .d
+# [kelee 胜出] 已移除（与 Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index\/story\? url jsonjq-response-body 'if .data.items 
+# [kelee 胜出] 已移除（与 Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\? url jsonjq-response-body '.data.vip |= if . 
 ^https?:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.cainiao\.guoguo\.nbnetflow\.ads url reject
 ^https?:\/\/ap\.dongdianqiu\.com\/plat\/v4 url reject
 ^https?:\/\/api-one-wscn\.awtmt\.com\/apiv1\/advertising\/ads\/[0-9]+\/materials url reject-dict
@@ -59,14 +59,14 @@
 ^https:\/\/api\.zhihu\.com\/comment_v5\/(?:articles|answers)\/\d+\/list-headers url reject-dict
 ^https:\/\/link\.zhihu\.com\/\?target=(?:https?)?(?:%3A|:)?(?:\/\/|%2F%2F)?(.*) url 302 http://$1
 ^https:\/\/www\.zhihu\.com\/api\/v4/(?:answers|questions)\/\d+/related-readings url reject
-^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.community\.service\.dm\.v1\.DM\/DmSegMobile$ url script-request-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.request.js
-^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.(app\.viewunite\.v1\.View\/View|main\.community\.reply\.v1\.Reply\/MainList)$ url script-request-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.request.js
-^https:\/\/api\.live\.bilibili\.com\/xlive\/(app-interface\/v2\/index\/feed|app-room\/v1\/index\/getInfoBy(Room|User))\? url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.json.js
-^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.(app\.(show\.v1\.Popular\/Index|dynamic\.v2\.Dynamic\/DynAll|view(unite)?\.v1\.View\/(View|ViewProgress|RelatesFeed)|playurl\.v1\.PlayURL\/PlayView|playerunite\.v1\.Player\/PlayViewUnite)|polymer\.app\.search\.v1\.Search\/SearchAll|community\.service\.dm\.v1\.DM\/DmView|main\.community\.reply\.v1\.Reply\/MainList|pgc\.gateway\.player\.v2\.PlayURL\/PlayView)$ url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/kokoryh/Sparkle/refs/heads/master/dist/bilibili.protobuf.response.js
+# [kelee 胜出] 已移除（与 kelee Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.community\.service\.dm\.v1\.DM\/DmSegM
+# [kelee 胜出] 已移除（与 kelee Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.(app\.viewunite\.v1\.View\/View|main\.
+# [kelee 胜出] 已移除（与 kelee Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/api\.live\.bilibili\.com\/xlive\/(app-interface\/v2\/index\/feed|app-room\/v1\/index\/get
+# [kelee 胜出] 已移除（与 kelee Bilibili_remove_ads.lpx（源插件 Bilibili_remove_ads） 命中同一响应体）: ^https:\/\/(grpc\.biliapi\.net|app\.bilibili\.com)\/bilibili\.(app\.(show\.v1\.Popular\/Index|dynami
 ^https?:\/\/amdc\.m\.taobao\.com\/amdc\/mobileDispatch$ url script-response-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/fmz200/wool_scripts/main/Scripts/header.js
 ^https:\/\/www\.coolapk\.com\/link.* url script-request-header https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/VenenoSix24/Ivy-Script/refs/heads/main/Loon/script/Coolapk_Redirect.js
 ^https?:\/\/api\.gotokeep\.com\/config\/v\d\/basic url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/github.com/fmz200/wool_scripts/main/Scripts/keep.js
-^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/interaction\/comment\/video\/download\? url script-response-body https://raw.githubusercontent.com/Anymore0010/proxy-profile/master/snapshot/host/github.com/fmz200/wool_scripts/raw/main/Scripts/xiaohongshu/xiaohongshu.js
+# [kelee 胜出] 已移除（与 kelee RedPaper_remove_ads 命中同一响应体）: ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/interaction\/comment\/video\/download\? url script
 
 # ===== Anymore 自用规则区（手工维护）=====================================
 # 在这里添加你自己的规则（重写 / jsonjq / 分流）。本文件不再被自动生成，

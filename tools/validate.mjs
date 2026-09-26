@@ -138,8 +138,16 @@ function checkFilterOrder(p) {
   if (cnIdx !== -1 && after.length) {
     err(p.path, 0, `CN REGION 之后还有非 LAN 条目（第 ${cnIdx + 1}/${tags.length} 条，其后为 ${after.join(", ")}）—— Loon 原配置要求 CN REGION 必须在最后（LAN 除外）`);
   }
-  const adsIdx = tags.findIndex((t) => t.includes("广告拦截") || t === "Advertising");
-  if (adsIdx > 2) {
+  // 广告拦截应尽量靠前（先匹配先赢）。
+  // 注意 kelee 那批分流里本身就有一堆广告拦截器（BlockAdvertisers / Remove_ads_by_keli /
+  // Block_HTTPDNS …），它们排在最前同样满足"广告拦截在前"的意图，所以判据放宽为
+  // 「首个广告类条目出现在前 3 条内」，而不是只认名字含"广告拦截"的那一条。
+  const isAds = (t) =>
+    t.includes("广告") || t === "Advertising" || /HTTPDNS|Advertisers|可莉|广告平台/.test(t);
+  const adsIdx = tags.findIndex(isAds);
+  if (adsIdx === -1) {
+    warn(p.path, 0, "没有找到广告拦截类条目（filter_remote 里应至少有一个 reject 型广告规则）");
+  } else if (adsIdx > 2) {
     warn(p.path, 0, `广告拦截在第 ${adsIdx + 1} 条，建议放最前（与你的 QX 配置一致）`);
   }
 }

@@ -65,6 +65,26 @@ QX 确实没有对应语法、**必须显式跳过**的（转换器逐条记账�
 - `request/response if ${url} ~= ...` —— Loon 的脚本化写法（10 + 19 条）
 - 脚本镜像失败时**整条丢弃**（绝不回退成上游直链）：`CommonScript/replace-body.js` 已 404（1 条）
 
+### kelee 插件是**权威上游**（其它重写资源只补空缺）
+
+按用户要求「复刻插件效果」，优先级是**反转**的：kelee 条目排在 `[rewrite_remote]` / `[filter_remote]` 最前，
+其余资源（fmz 聚合、AnymoreEnhance 等）只负责 kelee 没覆盖的部分。
+
+两边命中同一响应体时，**kelee 胜出**：被顶掉的那条写成排除清单
+（`QuantumultX/rules/kelee/_exclusions.json`），由 `fetch-snapshot.mjs` 从对应资源里真的排掉。
+例：爱奇艺 `views_plt/3.0/player_tabs_v2` —— fmz 用通用脚本 `cnftp.js`，
+kelee 用针对性的 `del(.kv_pair.activity_tab)`；反转后跑的是插件那套。
+
+两点实现细节（都踩过）：
+
+- **只在真的有风险时排除**：两边都会改写响应体（`script-*` / `jsonjq-*`）才排，
+  因为同一个 body 被两套逻辑依次处理结果不可预期。`reject` 族重复是**幂等**的
+  （同策略同结果），保留即可、不做排除。
+- **`_raw` 原始副本**：排除是就地改写快照的，而转换器需要读「其他源的完整规则」来判重叠。
+  若它读被改写的快照，下轮就找不到重叠 → 清单自我清空 → 不再排除 → 上游原文回灌 → 每周振荡，
+  且每个断言都会通过。所以 `fetch-snapshot` 另存一份未排除的 `snapshot/_raw/` 给转换器读，
+  排除只作用于对外那一份。实测连跑两轮 `superseded` 稳定在 64、被排除的行不回流。
+
 ### 保真度提示：这三类行为与源插件不同（已在 `_conversion-report.json` 的 `notes` 里逐条列出）
 
 - **插件参数被丢弃**（11 条）：Loon 的 `argument=` / `[Argument]` 在 QX 没有等价物，脚本会走默认分支。

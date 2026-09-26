@@ -95,6 +95,7 @@ function cleanRule(line) {
 const skip = (plugin, section, line, reason) => skipReport.push({ plugin, section, line, reason });
 const stripQuotes = (s) => s.trim().replace(/^["']|["']$/g, "");
 
+
 // ---------------------------------------------------------------- 重写
 
 /** `a.b c.d` -> `del(.a.b, .c.d)` */
@@ -353,9 +354,14 @@ async function tryInlineJq(pattern, line, plugin) {
 const index = JSON.parse(readFileSync(join(VENDOR, "index.json"), "utf8"));
 mkdirSync(OUT, { recursive: true });
 
-const claimedSigs = [];      // 语义判据（复用 rule-target.mjs，与 validate 同一套）
-const claimedExact = new Map(); // 整行完全相同
+const claimedSigs = [];      // kelee 侧已产出的语义签名
+const claimedExact = new Map(); // kelee 侧已产出的整行
+const seeded = [];           // 参与比对的既有源（仅用于报告）
 const isBodyRewrite = (l) => /\surl\s+(script-|jsonjq-)/.test(l);
+/** 重写动作分类：reject 族重复是幂等的（同策略同结果），body 改写重复才有真风险。 */
+const REJECT_ACTIONS = new Set(["reject", "reject-dict", "reject-200", "reject-array", "reject-img", "reject-drop"]);
+const actionOf = (line) => (line.match(/\surl(?:-and-header)?\s+(\S+)/) ?? [])[1]?.toLowerCase() ?? "";
+const isRejectAction = (line) => REJECT_ACTIONS.has(actionOf(line));
 
 function snapshotPathFor(url) {
   const m = (url ?? "").match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
@@ -364,28 +370,56 @@ function snapshotPathFor(url) {
   return m2 ? `snapshot/host/${m2[1]}/${m2[2]}` : null;
 }
 
-/** 其他 rewrite_remote 资源已声明的规则，先登记（先匹配先赢，kelee 侧不再重复产出）。 */
-const seeded = [];
+/**
+ * 其他 rewrite_remote 资源已声明的规则。
+ *
+ * ⚠ 这里必须读**未排除的原始副本**（snapshot/_raw/），不能读对外快照：
+ * fetch-snapshot 会就地删掉被排除的行，若这里读对外快照，
+ * 下一轮就找不到重叠 -> 生成空 _exclusions.json -> 不再排除 -> 上游原文回灌 ->
+ * 清单再满，形成每周振荡，且每个断言都会通过（清空清单时无 per-pattern 断言）。
+ *
+ * 去重方向 = **kelee 胜出**（用户要求复刻插件效果）：kelee 条目排在这些资源**之前**，
+ * 并把被顶掉的重叠规则写成排除清单（_exclusions.json），由 fetch-snapshot 真的排掉。
+ */
+/**
+ * sources.json 里被**禁用**的 kelee 插件。
+ *
+ * vendor/loon-plugins/index.json 的 enabled 来自**源 Loon 配置**，而某个插件是否
+ * 真正启用由 sources.json 决定（例如 iRingo.WeatherKit：社区版保真度更高，
+ * 所以禁用了 kelee 移植版）。两者不一致时以 sources.json 为准 ——
+ * 否则会为已禁用的插件登记排除项，把真正在用的那个社区版规则误删。
+ */
+const disabledInSources = new Set();
+for (const r of JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8")).rewrites ?? []) {
+  if (r.kelee_plugin && r.enabled === false) disabledInSources.add(r.kelee_plugin);
+}
+
+const otherRules = []; // {from, target, pattern, line, sig}
+const exclusions = new Map(); // 目标资源（url 或 local_file） -> Map<kelee正则, 原因>
+
 for (const r of JSON.parse(readFileSync(join(ROOT, "tools", "sources.json"), "utf8")).rewrites ?? []) {
   if (r.kelee_plugin) continue;
-  const rel = r.local_file ?? snapshotPathFor(r.url);
-  if (!rel || !existsSync(join(ROOT, rel))) continue;
-  const from = rel.replace(/\\/g, "/");
-  let n = 0;
-  for (const raw of readFileSync(join(ROOT, rel), "utf8").split(/\r?\n/)) {
+  const snapRel = r.local_file ?? snapshotPathFor(r.url);
+  if (!snapRel) continue;
+  const rawRel = snapRel.startsWith("snapshot/") ? `snapshot/_raw/${snapRel.slice("snapshot/".length)}` : null;
+  const abs = rawRel && existsSync(join(ROOT, rawRel)) ? join(ROOT, rawRel) : join(ROOT, snapRel);
+  if (!existsSync(abs)) continue;
+  const from = (rawRel && existsSync(join(ROOT, rawRel)) ? rawRel : snapRel).replace(/\\/g, "/");
+  const target = r.local_file ?? r.url;
+  for (const raw of readFileSync(abs, "utf8").split(/\r?\n/)) {
     const t = raw.trim();
     if (!t || /^[#;]/.test(t) || !/\surl\s/.test(t)) continue;
-    n++;
     if (!isBodyRewrite(t)) continue;
-    claimedSigs.push({ sig: ruleSig(t.split(/\s+url\s+/)[0]), from });
-    if (!claimedExact.has(t)) claimedExact.set(t, from);
+    const pattern = t.split(/\s+url\s+/)[0];
+    otherRules.push({ from, target, pattern, line: t, sig: ruleSig(pattern) });
   }
-  if (n) seeded.push(from);
+  seeded.push(from);
 }
 
 const written = new Set();
 const allHostnames = new Set();
 let deduped = 0;
+let superseded = 0; // kelee 胜出、需要从其他源排掉的规则数
 
 for (const p of index.plugins) {
   if (!p.file) continue;
@@ -423,24 +457,50 @@ for (const p of index.plugins) {
     if (r) rewrites.push(r);
   }
 
-  // 语义去重（会改写 body 的才危险；reject 类重复无害）
+  // 去重方向 = **kelee 胜出**（用户要求复刻插件效果）。
+  // 与其他源命中同一响应体时：保留 kelee 这条，把被顶掉的那条记进排除清单，
+  // 由 fetch-snapshot 从对应资源里排掉（见 _exclusions.json）。
   const kept = [];
   for (const r of rewrites) {
-    if (!isBodyRewrite(r)) {
+    const pat = r.split(/\s+(?:url|url-and-header)\s+/)[0];
+    const isBody = isBodyRewrite(r);
+    if (!isBody) {
       kept.push(r);
       continue;
     }
-    const pat = r.split(/\s+url\s+/)[0];
-    const exactFrom = claimedExact.get(r);
-    const clash = claimedSigs.find((e) => e.from !== selfRel && sameTarget(ruleSig(pat), e.sig));
-    const from = exactFrom ?? clash?.from;
-    if (from && from !== selfRel) {
+    // 只在「会改写响应体」的动作上判重（reject 类重复无害）。
+    const sig = ruleSig(pat);
+    const clash = otherRules.find((e) => sameTarget(sig, e.sig))
+      ?? otherRules.find((e) => e.line === r);
+    const dupInKelee = claimedSigs.some((c) => sameTarget(sig, c.sig)) || claimedExact.has(r);
+    if (dupInKelee) {
       deduped++;
-      skip(p.name, "Rewrite", r, `与 ${from} 命中同一响应体、被其先处理（避免处理两次）`);
+      skip(p.name, "Rewrite", r, "与另一个 kelee 插件产出重复（保留先出现的那个）");
       continue;
     }
-    claimedSigs.push({ sig: ruleSig(pat), from: selfRel });
-    if (!claimedExact.has(r)) claimedExact.set(r, selfRel);
+    // kelee 胜出：只在**真的有风险**时才排掉别处的重复。
+    //
+    // 风险判据：两边都会改写响应体（script-* / jsonjq-*）。这时同一个 body 会被两套
+    // 处理逻辑依次跑一遍，结果不可预期（本仓库踩过的坑）。
+    //
+    // 反之，reject 族（reject / reject-dict / …）重复是**幂等**的：同策略同结果，
+    // 用户也明确说"策略一样就没事"。所以这类重叠不做排除 —— 少改动、少振荡。
+    if (disabledInSources.has(p.name)) {
+      // 该插件在 sources.json 里是禁用的 -> 不做"kelee 胜出"排除，别去动在用的那个来源
+      claimedSigs.push({ sig, from: selfRel });
+      claimedExact.set(r, selfRel);
+      kept.push(r);
+      continue;
+    }
+    const clashes = otherRules.filter((e) => sameTarget(sig, e.sig) || e.line === r);
+    for (const c of clashes) {
+      if (isRejectAction(r) || isRejectAction(c.line)) continue; // 同策略类，保留即可
+      if (!exclusions.has(c.target)) exclusions.set(c.target, new Map());
+      exclusions.get(c.target).set(pat, `${p.name.replace(/\.lpx$/, "")}`);
+      superseded++;
+    }
+    claimedSigs.push({ sig, from: selfRel });
+    claimedExact.set(r, selfRel);
     kept.push(r);
   }
 
@@ -491,6 +551,76 @@ for (const p of index.plugins) {
   pluginReport.push({ plugin: p.name, name: nm, enabled: true, rules: filters.length, rewrites: localized.length, hostnames: hosts.length });
 }
 
+// ---- kelee 胜出后的排除清单（fetch-snapshot.mjs 会读取并真的排掉） ----
+//
+// 空清单必须当**错误**：若转换器一个重叠都没找到，要么是它读错了数据源
+// （历史上就读过被就地改写的快照，导致清单自我清空、每周振荡），
+// 要么是非 kelee 源全被删了 —— 两种都需要人看一眼，而不是静默通过。
+if (superseded === 0 && otherRules.length > 0) {
+  console.error(
+    `ERROR 转换器在 ${otherRules.length} 条既有重写规则里没找到任何与 kelee 重叠的条目 —— ` +
+      "排除清单为空，说明比对数据源可疑（应读 snapshot/_raw/ 的原始副本）",
+  );
+  process.exitCode = 1;
+}
+if (otherRules.length === 0) {
+  console.error("ERROR 读不到任何既有的重写规则（snapshot 与 _raw 都不存在？）—— 去重无法判定");
+  process.exitCode = 1;
+}
+
+const localTargets = new Map(); // 绝对路径 -> Map<pattern, reason>
+for (const [target, m] of exclusions) {
+  if (!/^https?:/.test(target)) {
+    const abs = join(ROOT, target);
+    if (existsSync(abs)) localTargets.set(abs, m);
+  }
+}
+let prunedLines = 0;
+if (!CHECK) {
+  for (const [abs, m] of localTargets) {
+    const pats = [...m.keys()];
+    const entries = pats.map((pattern) => {
+      let re = null;
+      try { re = new RegExp(pattern, "i"); } catch { /* 非法正则只走语义判据 */ }
+      return { pattern, re, sig: ruleSig(pattern) };
+    });
+    const src = readFileSync(abs, "utf8").split(/\r?\n/);
+    const out = [];
+    for (const line of src) {
+      if (line.includes(" url ") && !line.trim().startsWith("#")) {
+        const linePat = line.trim().split(/\s+url(?:-and-header)?\s+/)[0];
+        const lineSig = ruleSig(linePat);
+        // 与 fetch-snapshot 用同一套判据（sameTarget），否则两边结论会不一致：
+        // 上游常把同一接口写成不同正则（`^https:\/\/x` vs `^https?:\/\/x`）。
+        const hit = entries.find((e) => (e.re && e.re.test(line)) || sameTarget(lineSig, e.sig));
+        if (hit) {
+          prunedLines++;
+          out.push(`# [kelee 胜出] 已移除（与 kelee ${m.get(hit.pattern) ?? ""} 命中同一响应体）: ${line.trim().slice(0, 100)}`);
+          continue;
+        }
+      }
+      out.push(line);
+    }
+    if (out.length !== src.length || out.some((l, i) => l !== src[i])) {
+      writeIfChanged(abs, out.join("\n"));
+    }
+  }
+}
+
+const upstreamExclusions = [...exclusions].filter(([t]) => /^https?:/.test(t));
+const exclusionDoc = {
+  generated_note:
+    "由 tools/convert-plugins.mjs 生成：kelee 插件胜出后，需要从其他 rewrite 资源里排掉的重叠规则。" +
+    "fetch-snapshot.mjs 会按这份清单做排除，并断言排除真的命中（否则报错，避免静默失效）。",
+  superseded,
+  targets: upstreamExclusions.map(([target, m]) => ({
+    target,
+    patterns: [...m.keys()],
+    reason: Object.fromEntries(m),
+  })),
+};
+writeIfChanged(join(OUT, "_exclusions.json"), JSON.stringify(exclusionDoc, null, 2) + "\n");
+
 writeIfChanged(
   join(OUT, "_hostnames.conf"),
   [
@@ -518,7 +648,7 @@ const totRules = pluginReport.reduce((a, b) => a + b.rules, 0);
 const totRew = pluginReport.reduce((a, b) => a + b.rewrites, 0);
 console.log(`转换完成: ${pluginReport.filter((p) => p.enabled).length}/${pluginReport.length} 个启用插件 -> ${written.size} 个文件`);
 console.log(`  分流 ${totRules} 条 / 重写 ${totRew} 条 / MITM 主机名 ${allHostnames.size} 个`);
-console.log(`  跨源去重跳过 ${deduped} 条；比对的既有源 ${seeded.length} 个`);
+console.log(`  kelee 侧内部去重跳过 ${deduped} 条；kelee 胜出、需从其他源排掉 ${superseded} 条；比对的既有源 ${seeded.length} 个`);
 if (pruned.length) console.log(`  清理孤儿产物 ${pruned.length} 个: ${pruned.join(", ")}`);
 
 const reasons = new Map();

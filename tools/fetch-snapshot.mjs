@@ -14,6 +14,7 @@ import { mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, rmSync
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveRepoBase } from "./repo-url.mjs";
+import { ruleSig, sameTarget } from "./lib/rule-target.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SNAP = join(ROOT, "snapshot");
@@ -150,6 +151,56 @@ function walkRules(dir, out = []) {
   return out;
 }
 
+/** 规则文件是否含 hostname 行 —— 决定它是否需要参与 MITM 汇总。 */
+function hasHostnameLine(text) {
+  return text.split(/\r?\n/).some((l) => /^\s*hostname\s*=/i.test(l));
+}
+
+/**
+ * 某个上游资源需要排掉的规则正则。
+ *
+ * 两个来源，合并返回：
+ *  1) sources.json 里该条目自己的 exclude_rule_patterns（历史用法）
+ *  2) QuantumultX/rules/kelee/_exclusions.json —— 转换器生成：kelee 插件胜出后，
+ *     把被 kelee 顶掉的重叠规则从聚合资源里排掉（用户要求"复刻插件效果"，
+ *     若不去重则同一响应体会被两套脚本各处理一次）。
+ * 排除都带「必须真的排掉」的断言：上游一改写法排除就会静默失效，必须报错而不是放过。
+ */
+/**
+ * 某个上游资源需要排掉的规则。
+ *
+ * 两个来源，合并返回（元素形如 `{pattern, re, sig}`）：
+ *  1) sources.json 里该条目自己的 exclude_rule_patterns（历史用法）
+ *  2) QuantumultX/rules/kelee/_exclusions.json —— 转换器生成：kelee 插件胜出后，
+ *     把被 kelee 顶掉的重叠规则从聚合资源里排掉（用户要求"复刻插件效果"，
+ *     若不去重则同一响应体会被两套脚本各处理一次）。
+ * 排除都带「必须真的命中」的断言：上游一改写法排除就会静默失效，必须报错而不是放过。
+ */
+function findExclusions(r) {
+  const raw = [];
+  const declared = [...src.rewrites, ...src.filters].find(
+    (x) => x.exclude_rule_patterns && x.url === r.url,
+  );
+  if (declared) raw.push(...declared.exclude_rule_patterns);
+
+  const manifest = join(ROOT, "QuantumultX", "rules", "kelee", "_exclusions.json");
+  if (existsSync(manifest)) {
+    try {
+      const doc = JSON.parse(readFileSync(manifest, "utf8"));
+      for (const t of doc.targets ?? []) {
+        if (t.target === r.url) raw.push(...t.patterns);
+      }
+    } catch {
+      console.error("WARN 读 _exclusions.json 失败（kelee 排除清单未生效）");
+    }
+  }
+  return raw.map((pattern) => {
+    let re = null;
+    try { re = new RegExp(pattern, "i"); } catch { /* 非法正则则只走语义判据 */ }
+    return { pattern, re, sig: ruleSig(pattern) };
+  });
+}
+
 const rewriteStats = { local: 0, kept: 0, missing: new Set() };
 /**
  * 声明了 exclude_rule_patterns、但一行都没排掉的上游。
@@ -252,40 +303,68 @@ for (const r of results) {
   // 仍指向外部，上游一挂规则就等于废掉。取不到的（kelee.one 403）保持原样。
   let body = r.body;
 
+  // 落盘一份**未做排除**的原始副本。
+  //
+  // 为什么必须留：排除是**就地改写**快照的（下面的 exclude 逻辑会把行删掉），
+  // 而 tools/convert-plugins.mjs 需要读「其他源的完整规则」来判定与 kelee 的重叠。
+  // 若它读的是已被排除的快照，就会找不到重叠 -> 生成空 _exclusions.json
+  // -> 下轮不再排除 -> fmz 重新下载的原文回灌 -> 清单再满：形成每周振荡，
+  // 而链上每个断言都会通过（清单空则无 per-pattern 断言），CI 全绿。
+  // 因此原始副本单独存一份，排除只作用于对外那一份。
+  const rawDest = join(SNAP, "_raw", r.local);
+  try {
+    mkdirSync(dirname(rawDest), { recursive: true });
+    writeFileSync(rawDest, r.body);
+  } catch { /* 原始副本只是给转换器用，失败不影响主流程 */ }
+
   // 从某个上游资源里排除若干规则行（按正则匹配 URL 正则部分）。
   // 用途：fmz 聚合与独立的 Spotify 条目命中同一批 URL，同一条 protobuf 响应体
   // 会被两套 script-response-body 依次处理。改由独立条目负责，故把聚合里的排除掉。
   // 排除是**按 sources.json 声明**做的，并且带「必须真的排掉」的断言 —— 否则
   // 上游一改写法，排除就会静默失效，重复处理又回来了。
-  const excl = [...src.rewrites, ...src.filters].find(
-    (x) => x.exclude_rule_patterns && x.url === r.url,
-  );
-  if (excl && /(\.snippet|\.conf|\.list)$/.test(r.local)) {
-    const res = excl.exclude_rule_patterns.map((p) => new RegExp(p));
-    const kept = [];
-    let dropped = 0;
-    for (const line of body.split(/\r?\n/)) {
-      const t = line.trim();
+  const excl = findExclusions(r);
+  if (excl && excl.length && /(\.snippet|\.conf|\.list)$/.test(r.local)) {
+    const lines = body.split(/\r?\n/);
+    const removeAt = new Set();
+    const perPatternHits = new Map(excl.map((e) => [e.pattern, 0]));
+    for (let i = 0; i < lines.length; i++) {
+      const t = lines[i].trim();
       // 匹配任何「规则行」（重写的 `url ...` 或分流的 `host-keyword, x, direct`），
-      // 但不匹配注释/空行/hostname 行。原先只匹配含 " url " 的行，
-      // 所以对「分流修正」这类纯分流资源的排除声明无效（静默失效）。
-      // 两类规则行都要覆盖：重写（`... url script-...`，**通常不含逗号**）
-      // 与分流（`host-keyword, x, direct`，靠逗号）。
-      // 只判逗号会把重写行漏掉（实测导致 Spotify 排除静默失效）。
+      // 但不匹配注释/空行/hostname 行。
       const isRule =
         t &&
         !t.startsWith("#") &&
         !/^hostname\s*=/i.test(t) &&
         (t.includes(",") || /\s+url(?:-and-header)?\s+/.test(t));
-      if (isRule && res.some((re) => re.test(t))) { dropped++; continue; }
-      kept.push(line);
+      if (!isRule) continue;
+      const linePat = t.split(/\s+url(?:-and-header)?\s+/)[0];
+      const lineSig = ruleSig(linePat);
+      // ⚠ 判定必须按**语义**（sameTarget），不能拿 kelee 的正则去 test 上游整行：
+      // 两边写法常不同（kelee `^https:\/\/x` vs fmz `^https?:\/\/x`，差一个 `s?`），
+      // 锚定的正则匹配不上，排除就静默失效 —— 而"全部 pattern 都没命中"这种粗断言
+      // 会被其它恰好命中的 pattern 掩盖（实测就有失灵的 pattern 没人发现）。
+      // 只对「URL 正则」型规则做语义比对；分流行没有域名/路径词元，
+      // sameTarget 恒为 false，靠 e.re 兜底即可。
+      let matched = false;
+      for (const e of excl) {
+        if ((e.re && e.re.test(lines[i])) || sameTarget(lineSig, e.sig)) {
+          // 命中计数按**原始行集**累加：一条上游行可能同时满足多个 kelee pattern，
+          // 若只对"存活行"计数，后面的 pattern 会因该行已被移除而误报"未命中"。
+          perPatternHits.set(e.pattern, perPatternHits.get(e.pattern) + 1);
+          matched = true;
+        }
+      }
+      if (matched) removeAt.add(i);
     }
-    if (dropped === 0) {
-      console.error(`ERROR 排除规则未命中任何行（上游可能改了写法，排除已失效）: ${r.url}`);
-      exclusionMisses.push(r.url);
-    } else {
-      console.log(`  排除 ${dropped} 行 <- ${r.url}`);
+    // 逐个 pattern 断言：任一 pattern 一条都没命中 = 上游改了写法、排除已失效 -> 必须报错。
+    for (const [pat, hits] of perPatternHits) {
+      if (hits === 0) {
+        console.error(`ERROR 排除规则未命中任何行（上游可能改了写法，排除已失效）: ${pat.slice(0, 100)}  <- ${r.url}`);
+        exclusionMisses.push(pat);
+      }
     }
+    const kept = lines.filter((_, i) => !removeAt.has(i));
+    if (removeAt.size) console.log(`  排除 ${removeAt.size} 行 <- ${r.url}`);
     body = kept.join("\n");
   }
 
@@ -389,6 +468,10 @@ if (criticalFailures === 0) {
     // 保留本脚本自己产出的文件
     const base = f.split(/[\\/]/).pop();
     if (base === "index.json") continue; // 本脚本自己产出的文件
+    // snapshot/_raw/ 是**未做排除**的原始副本，供 tools/convert-plugins.mjs 判定重叠。
+    // 它不是 sources.json 里的独立条目，若不显式保护会被当孤儿删掉，
+    // 于是转换器又只能读到已排除的快照 -> 排除清单自我清空 -> 每周振荡。
+    if (relative(SNAP, f).split(/[\\/]/)[0] === "_raw") continue;
     if (!expected.has(f)) {
       rmSync(f, { force: true });
       pruned++;

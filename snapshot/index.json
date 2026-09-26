@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 154,
-  "mirrored": 154,
+  "total": 163,
+  "mirrored": 163,
   "failed": 0,
   "exclusionMisses": [],
   "resources": [
@@ -115,65 +115,11 @@
       "error": null
     },
     {
-      "id": "rewrite-pinduoduo",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Pinduoduo.snippet",
-      "snapshot": "snapshot/github.com/ZenmoFeiShi/Qx/main/Pinduoduo.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Pinduoduo.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-weibo",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/weibo.snippet",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-amap",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/AmapAds.conf",
-      "snapshot": "snapshot/github.com/ddgksf2013/Rewrite/master/AdBlock/AmapAds.conf",
-      "upstream_raw": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/AdBlock/AmapAds.conf",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-bilibili",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/Bilibili_CC.conf",
-      "snapshot": "snapshot/github.com/ddgksf2013/Rewrite/master/Function/Bilibili_CC.conf",
-      "upstream_raw": "https://raw.githubusercontent.com/ddgksf2013/Rewrite/master/Function/Bilibili_CC.conf",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "rewrite-boxjs",
       "kind": "rewrite",
       "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
       "snapshot": "snapshot/github.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
       "upstream_raw": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-script-hub",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
-      "snapshot": "snapshot/github.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
-      "upstream_raw": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/modules/script-hub.beta.qx.conf",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "rewrite-sub-store",
-      "kind": "rewrite",
-      "url": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
-      "snapshot": "snapshot/github.com/sub-store-org/Sub-Store/master/config/QX.snippet",
-      "upstream_raw": "https://raw.githubusercontent.com/sub-store-org/Sub-Store/master/config/QX.snippet",
       "status": 200,
       "error": null
     },
@@ -322,6 +268,186 @@
       "error": null
     },
     {
+      "id": "icon-filter-kelee-12306_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/12306.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/12306.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/12306.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-AliYunDrive_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/AliYunDrive.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/AliYunDrive.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/AliYunDrive.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-Amap_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Amap.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Amap.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Amap.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-Bilibili_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Bilibili.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Bilibili.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Bilibili.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-BlockAdvertisers",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/Website_icon/120px/TencentAd.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/Website_icon/120px/TencentAd.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/Website_icon/120px/TencentAd.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-Block_HTTPDNS",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/HTTPDNS.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/Other_icon/120px/HTTPDNS.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/HTTPDNS.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-DragonRead_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/DragonRead.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/DragonRead.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/DragonRead.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-LoonGallery",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Loon.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Loon.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Loon.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-PinDuoDuo_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/PinDuoDuo.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/PinDuoDuo.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/PinDuoDuo.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-Prevent_DNS_Leaks",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/Prevent_DNS_Leaks.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/Other_icon/120px/Prevent_DNS_Leaks.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/Prevent_DNS_Leaks.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-QQMusic_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QQMusic.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/QQMusic.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QQMusic.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-Remove_ads_by_keli",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/KeLee.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/Other_icon/120px/KeLee.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/KeLee.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-Script-Hub",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/Script-Hub.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/Other_icon/120px/Script-Hub.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/Other_icon/120px/Script-Hub.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-Taobao_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Taobao.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Taobao.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Taobao.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-Tencent_Video_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Tencent_Video.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Tencent_Video.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Tencent_Video.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-Weibo_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weibo.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Weibo.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weibo.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-Weixin_Official_Accounts_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weixin.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Weixin.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weixin.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-iQiYi_Video_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/iQiYi_Video.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/iQiYi_Video.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/iQiYi_Video.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-iRingo.WeatherKit",
+      "kind": "icon",
+      "url": "https://developer.apple.com/assets/elements/icons/weatherkit/weatherkit-128x128.png",
+      "snapshot": "snapshot/host/developer.apple.com/assets/elements/icons/weatherkit/weatherkit-128x128.png",
+      "upstream_raw": null,
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-filter-kelee-smzdm_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/smzdm.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/smzdm.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/smzdm.png",
+      "status": 200,
+      "error": null
+    },
+    {
       "id": "icon-filter-ads-fmz",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
@@ -448,20 +574,128 @@
       "error": null
     },
     {
+      "id": "icon-rewrite-kelee-Cainiao_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Cainiao.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Cainiao.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Cainiao.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-CoolApk_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/CoolApk.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/CoolApk.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/CoolApk.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-FleaMarket_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/FleaMarket.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/FleaMarket.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/FleaMarket.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-JD_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/JD.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/JD.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-QuarkBrowser_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QuarkBrowser.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/QuarkBrowser.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/QuarkBrowser.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-QuickSearch",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Safari.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Safari.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Safari.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-RedPaper_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RedPaper.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/RedPaper.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RedPaper.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-RiskBird_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RiskBird.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/RiskBird.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RiskBird.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-Snowball_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Snowball.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Snowball.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Snowball.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-Spotify_lyrics_translation",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Spotify.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Spotify.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Spotify.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-XiaoHeiHe_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/XiaoHeiHe.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/XiaoHeiHe.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/XiaoHeiHe.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-YouTube_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/YouTube.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/YouTube.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/YouTube.png",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "icon-rewrite-kelee-Zhihu_remove_ads",
+      "kind": "icon",
+      "url": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Zhihu.png",
+      "snapshot": "snapshot/github.com/luestr/IconResource/main/App_icon/120px/Zhihu.png",
+      "upstream_raw": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Zhihu.png",
+      "status": 200,
+      "error": null
+    },
+    {
       "id": "icon-rewrite-irongo-weatherkit",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-rewrite-pinduoduo",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png",
-      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/China.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/China.png",
       "status": 200,
       "error": null
     },
@@ -475,47 +709,11 @@
       "error": null
     },
     {
-      "id": "icon-rewrite-weibo",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Weibo.png",
-      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Weibo.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Weibo.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-rewrite-bilibili",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/bilibili.png",
-      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/bilibili.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/bilibili.png",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "icon-rewrite-boxjs",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/BoxJS.png",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/BoxJS.png",
       "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/BoxJS.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-rewrite-sub-store",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/SubStore.png",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/SubStore.png",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/SubStore.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-rewrite-wechat-unlock",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WeChat.png",
-      "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/WeChat.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/WeChat.png",
       "status": 200,
       "error": null
     },
@@ -1267,128 +1465,11 @@
       "error": null
     },
     {
-      "id": "script:index.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/Keywos/rule/master/script/weibo_us/js/index.js",
-      "snapshot": "snapshot/github.com/Keywos/rule/master/script/weibo_us/js/index.js",
-      "upstream_raw": "https://raw.githubusercontent.com/Keywos/rule/master/script/weibo_us/js/index.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:weibo_ads.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_ads.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_ads.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_ads.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:weibo_main.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_main.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_main.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_main.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:weibo_launch.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zmqcherish/proxy-script/main/weibo_launch.js",
-      "snapshot": "snapshot/github.com/zmqcherish/proxy-script/main/weibo_launch.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zmqcherish/proxy-script/main/weibo_launch.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:weibo_main.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/zmqcherish/proxy-script/main/weibo_main.js",
-      "snapshot": "snapshot/github.com/zmqcherish/proxy-script/main/weibo_main.js",
-      "upstream_raw": "https://raw.githubusercontent.com/zmqcherish/proxy-script/main/weibo_main.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:weibo_vip.js",
-      "kind": "js",
-      "url": "https://github.com/fmz200/wool_scripts/raw/main/Scripts/weibo/weibo_vip.js",
-      "snapshot": "snapshot/host/github.com/fmz200/wool_scripts/raw/main/Scripts/weibo/weibo_vip.js",
-      "upstream_raw": null,
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:amdc.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/amdc.js",
-      "snapshot": "snapshot/github.com/ddgksf2013/Scripts/refs/heads/master/amdc.js",
-      "upstream_raw": "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/amdc.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:amap.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/amap.js",
-      "snapshot": "snapshot/github.com/ddgksf2013/Scripts/refs/heads/master/amap.js",
-      "upstream_raw": "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/amap.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:bilibili_cc.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/bilibili_cc.js",
-      "snapshot": "snapshot/github.com/ddgksf2013/Scripts/refs/heads/master/bilibili_cc.js",
-      "upstream_raw": "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/bilibili_cc.js",
-      "status": 200,
-      "error": null
-    },
-    {
       "id": "script:chavy.boxjs.js",
       "kind": "js",
       "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js",
       "snapshot": "snapshot/github.com/chavyleung/scripts/master/box/chavy.boxjs.js",
       "upstream_raw": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:Rewrite-Parser.beta.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/Rewrite-Parser.beta.js",
-      "snapshot": "snapshot/github.com/Script-Hub-Org/Script-Hub/main/Rewrite-Parser.beta.js",
-      "upstream_raw": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/Rewrite-Parser.beta.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:rule-parser.beta.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/rule-parser.beta.js",
-      "snapshot": "snapshot/github.com/Script-Hub-Org/Script-Hub/main/rule-parser.beta.js",
-      "upstream_raw": "https://raw.githubusercontent.com/Script-Hub-Org/Script-Hub/main/rule-parser.beta.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:sub-store-1.min.js",
-      "kind": "js",
-      "url": "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-1.min.js",
-      "snapshot": "snapshot/host/github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-1.min.js",
-      "upstream_raw": null,
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:sub-store-0.min.js",
-      "kind": "js",
-      "url": "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
-      "snapshot": "snapshot/host/github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
-      "upstream_raw": null,
       "status": 200,
       "error": null
     }

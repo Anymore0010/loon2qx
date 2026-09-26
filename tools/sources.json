@@ -245,16 +245,6 @@
   },
   "filters": [
     {
-      "id": "filter-ads-fmz",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
-      "tag": "广告拦截合集",
-      "policy": "reject",
-      "parser": false,
-      "enabled": true,
-      "note": "fmz 配置原有，约 9700 条 reject 规则。",
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png"
-    },
-    {
       "id": "filter-kelee-12306_remove_ads",
       "tag": "12306去广告(分流)",
       "local_file": "QuantumultX/rules/kelee/12306_remove_ads.list",
@@ -486,6 +476,16 @@
       "note": "移植自 Loon 插件 smzdm_remove_ads.lpx 的 [Rule] 段。"
     },
     {
+      "id": "filter-ads-fmz",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/filter.list",
+      "tag": "广告拦截合集",
+      "policy": "reject",
+      "parser": false,
+      "enabled": true,
+      "note": "fmz 配置原有，约 9700 条 reject 规则。",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png"
+    },
+    {
       "id": "filter-advertising",
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Advertising/Advertising.list",
       "tag": "Advertising",
@@ -654,43 +654,6 @@
     }
   ],
   "rewrites": [
-    {
-      "id": "rewrite-block-httpdns",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
-      "tag": "HTTPDNS拦截器(社区)",
-      "parser": false,
-      "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png"
-    },
-    {
-      "id": "rewrite-advertising",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
-      "tag": "广告拦截(通用)",
-      "parser": false,
-      "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png"
-    },
-    {
-      "id": "rewrite-fmz-ads",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
-      "tag": "广告拦截合集",
-      "parser": false,
-      "enabled": true,
-      "note": "fmz 聚合资源，覆盖约 730 款 App。实测包含原先按 App 拆分的 19/20 个片段，因此不再单独引用，避免同一响应体被重复处理。 【已排除 Spotify 规则】：该聚合的 Spotify 规则与独立条目「Spotify 解锁+歌词」命中同一批 URL（/bootstrap、/user-customization-service），同一条 protobuf 响应体会被两套脚本依次处理。改由独立条目负责。",
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
-      "exclude_rule_patterns": [
-        "spotify.*url script-"
-      ]
-    },
-    {
-      "id": "rewrite-irongo-weatherkit",
-      "url": "https://github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
-      "tag": "iRingo WeatherKit",
-      "parser": false,
-      "enabled": true,
-      "note": "替代 Loon 的 iRingo.WeatherKit.lpx。该项目自带 Quantumult X 版 snippet（官方文档有 QX 安装页），因此不再属于「未迁移」。注意它自带 hostname，QX 会自动并入 MITM。",
-      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png"
-    },
     {
       "id": "rewrite-kelee-12306_remove_ads",
       "tag": "12306去广告",
@@ -1011,27 +974,6 @@
       "note": "移植自 Loon 插件 smzdm_remove_ads.lpx（kelee.one）。由 tools/convert-plugins.mjs 转换。"
     },
     {
-      "id": "rewrite-anymore-enhance",
-      "url": null,
-      "local_file": "QuantumultX/rules/AnymoreEnhance.snippet",
-      "tag": "Anymore 自用增强",
-      "parser": false,
-      "enabled": true,
-      "self_maintained": true,
-      "count": 55,
-      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
-      "note": "手工维护的自用增强规则（不再自动生成，也不再有上游）。直接编辑 QuantumultX/rules/AnymoreEnhance.snippet。"
-    },
-    {
-      "id": "rewrite-boxjs",
-      "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
-      "tag": "BoxJs",
-      "parser": false,
-      "enabled": false,
-      "note": "对应 Loon 的 BoxJs.lpx；fmz 配置亦引用。",
-      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/BoxJS.png"
-    },
-    {
       "id": "rewrite-kelee-Amap_remove_ads",
       "tag": "高德地图去广告",
       "local_file": "QuantumultX/rules/kelee/Amap_remove_ads.conf",
@@ -1074,6 +1016,64 @@
       "source_url": "https://kelee.one/Tool/Loon/Lpx/Weibo_remove_ads.lpx",
       "icon": "https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/Weibo.png",
       "note": "移植自 Loon 插件 Weibo_remove_ads.lpx（kelee.one）。脚本已镜像到本仓库（kelee.one 对 QX 的 UA 返回 403）。"
+    },
+    {
+      "id": "rewrite-block-httpdns",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/BlockHTTPDNS/BlockHTTPDNS.conf",
+      "tag": "HTTPDNS拦截器(社区)",
+      "parser": false,
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AdBlack.png"
+    },
+    {
+      "id": "rewrite-advertising",
+      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Advertising/Advertising.conf",
+      "tag": "广告拦截(通用)",
+      "parser": false,
+      "enabled": true,
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png"
+    },
+    {
+      "id": "rewrite-fmz-ads",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/rewrite/rewrite.snippet",
+      "tag": "广告拦截合集",
+      "parser": false,
+      "enabled": true,
+      "note": "fmz 聚合资源，覆盖约 730 款 App。实测包含原先按 App 拆分的 19/20 个片段，因此不再单独引用，避免同一响应体被重复处理。 【已排除 Spotify 规则】：该聚合的 Spotify 规则与独立条目「Spotify 解锁+歌词」命中同一批 URL（/bootstrap、/user-customization-service），同一条 protobuf 响应体会被两套脚本依次处理。改由独立条目负责。",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Advertising.png",
+      "exclude_rule_patterns": [
+        "spotify.*url script-"
+      ]
+    },
+    {
+      "id": "rewrite-irongo-weatherkit",
+      "url": "https://github.com/NSRingo/WeatherKit/releases/latest/download/iRingo.WeatherKit.snippet",
+      "tag": "iRingo WeatherKit",
+      "parser": false,
+      "enabled": true,
+      "note": "替代 Loon 的 iRingo.WeatherKit.lpx。该项目自带 Quantumult X 版 snippet（官方文档有 QX 安装页），因此不再属于「未迁移」。注意它自带 hostname，QX 会自动并入 MITM。",
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Apple_Weather.png"
+    },
+    {
+      "id": "rewrite-anymore-enhance",
+      "url": null,
+      "local_file": "QuantumultX/rules/AnymoreEnhance.snippet",
+      "tag": "Anymore 自用增强",
+      "parser": false,
+      "enabled": true,
+      "self_maintained": true,
+      "count": 55,
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
+      "note": "手工维护的自用增强规则（不再自动生成，也不再有上游）。直接编辑 QuantumultX/rules/AnymoreEnhance.snippet。"
+    },
+    {
+      "id": "rewrite-boxjs",
+      "url": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
+      "tag": "BoxJs",
+      "parser": false,
+      "enabled": false,
+      "note": "对应 Loon 的 BoxJs.lpx；fmz 配置亦引用。",
+      "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/BoxJS.png"
     }
   ],
   "tasks": [

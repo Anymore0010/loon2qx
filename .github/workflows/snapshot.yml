@@ -32,9 +32,6 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Regenerate profile from manifest
-        run: bun tools/build.mjs
-
       # 抓取源 Loon 配置里 40 个 kelee 插件的原样副本（kelee.one 只对 Loon 的 UA 放行）。
       # 必须带 --force：默认「已存在则跳过」会让插件在仓库里永久冻结、上游更新永不跟进，
       # 而本次故障的成因之一正是「用的插件片段是 11 个月前的旧版」。
@@ -46,6 +43,11 @@ jobs:
       # （kelee.one 对 Quantumult X 的 UA 返回 403，直链会静默失效）。
       - name: Convert Loon plugins to Quantumult X resources
         run: bun tools/convert-plugins.mjs
+
+      # 必须在 convert-plugins 之后：build 要汇总转换产物的 hostname 进 [mitm]，
+      # 并引用 kelee/*.conf；排在转换前会生成反映旧转换结果的配置。
+      - name: Regenerate profile from manifest
+        run: bun tools/build.mjs
 
       # Converts upstream Loon/Surge rule lists into native QX rules committed
       # in QuantumultX/rules/, so the profile no longer needs the runtime parser.
