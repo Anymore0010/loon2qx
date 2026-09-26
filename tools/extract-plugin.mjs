@@ -22,6 +22,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveRepoBase } from "./repo-url.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -311,7 +312,25 @@ const dest = join(ROOT, outPath);
 mkdirSync(dirname(dest), { recursive: true });
 // hostname 放在最后，与其它 QX 重写资源（如 weibo.snippet）的写法一致。
 // 缺了它，上面的 script-* / jsonjq-* 规则永远不会触发（不报错，只是不生效）。
-const body = mitmHosts.length ? unique.concat(["", `hostname = ${mitmHosts.join(", ")}`]) : unique;
+// 脚本 URL 指向本仓库快照（与 fetch-snapshot 的改写保持一致）。
+// 否则这份被配置引用的文件仍依赖上游脚本，与「全部走本仓库」的目标矛盾。
+const repoBase = resolveRepoBase(ROOT).rawBase;
+const snapshotLocalFor = (url) => {
+  const m = url.match(/^https:\/\/raw\.githubusercontent\.com\/(.+)$/);
+  if (m) return `snapshot/github.com/${m[1]}`;
+  const m2 = url.match(/^https:\/\/([^/]+)\/(.+)$/);
+  return m2 ? `snapshot/host/${m2[1]}/${m2[2]}` : null;
+};
+const rewriteScripts = (line) =>
+  line.replace(/(url(?:-and-header)?\s+script-\S+\s+)(https?:\/\/\S+)/g, (full, prefix, url) => {
+    const clean = url.replace(/["'],$/, "");
+    const local = snapshotLocalFor(clean);
+    if (!local) return full;
+    // 只在该快照文件确实存在时才改写，避免指向不存在的路径
+    return existsSync(join(ROOT, local)) ? prefix + `${repoBase}/${local}` : full;
+  });
+const outRules = unique.map(rewriteScripts);
+const body = mitmHosts.length ? outRules.concat(["", `hostname = ${mitmHosts.join(", ")}`]) : outRules;
 writeFileSync(dest, header.concat(body).join("\n") + "\n");
 
 console.log(`提取 ${raw.length} 条 -> 转换 ${converted.length} -> 自身去重 ${beforeDedupe}`);

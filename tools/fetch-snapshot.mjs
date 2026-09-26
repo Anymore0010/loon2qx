@@ -78,27 +78,8 @@ function collectResources() {
   const geo = src.general.geo_location_checker.split(",").map((s) => s.trim())[1];
   if (geo && /^https?:/.test(geo)) add("geo-location-script", geo, "script");
 
-  // 抓取资源里被引用的外部 JS 脚本也一并镜像。
-  // 否则「重写规则兜底了，但规则指向的脚本仍在外面」—— 上游一挂，规则等于废掉。
-  // 说明：kelee.one 的脚本取不到（403，已知），这类只能记录、无法镜像。
-  const scriptRe = /url\s+script-\S+\s+(https?:\/\/\S+)/g;
-  const rulesFiles = [];
-  for (const x of out.values()) if (x.kind !== "icon") rulesFiles.push(x);
-  for (const r of rulesFiles) {
-    const p = join(SNAP, r.local);
-    if (!existsSync(p)) continue;
-    const text = readFileSync(p, "utf8");
-    for (const m of text.matchAll(scriptRe)) {
-      const u = m[1].replace(/["'],$/, "");
-      if (!/^https?:\/\//.test(u)) continue;
-      // 关键：跳过已改写为本仓库地址的脚本。
-      // 写入阶段会把规则里的脚本 URL 改写成 rawBase 前缀，下一轮扫描若不排除，
-      // 就会把这些本仓库地址当成新资源再镜像一遍 -> 目录每周向下嵌套一层。
-      if (u.startsWith(rawBase) || u.includes(repoInfo.slug)) continue;
-      if (!out.has(u)) out.set(u, { id: `script:${u.split("/").pop()}`, url: u, kind: "js", local: localPathFor(u) });
-    }
-  }
-
+  // 脚本镜像是**第二轮**完成的：见 collectScriptResources()。
+  // 这里只处理 sources.json 声明的资源。
   return [...out.values()];
 }
 
@@ -141,8 +122,56 @@ for (let i = 0; i < resources.length; i += CONCURRENCY) {
 
 
 // 脚本 URL -> 镜像记录（写入阶段改写规则文件时使用）
-const byUrlPre = new Map(results.filter((r) => r.ok).map((r) => [r.url, r]));
+
 const rewriteStats = { local: 0, kept: 0, missing: new Set() };
+
+
+// ---- 第二轮：从「刚抓到的内容」中发现脚本引用并补下载 ----------------------
+// 关键：必须基于 results 里的 body，而不是磁盘上的文件。
+// 因为写入阶段会把规则里的脚本 URL 改写成本仓库地址，若下一轮仍扫描磁盘，
+// 就会「找不到脚本 -> 不下载 -> 改写无从进行 -> 又写回上游地址」，
+// 配置每周在「本仓库 / 上游」之间来回摇摆。
+const scriptRe = /url(?:-and-header)?\s+script-\S+\s+(https?:\/\/\S+)/g;
+const scriptTargets = new Map(); // url -> {url, kind, local}
+{
+  const bodies = [];
+  for (const r of results) {
+    if (!r.ok) continue;
+    if (!/(\.snippet|\.conf|\.list)$/.test(r.local)) continue;
+    bodies.push(r.body);
+  }
+  // 本仓库自带的规则文件（如插件提取重写）也要参与
+  const localRulesDir = join(ROOT, "QuantumultX", "rules");
+  if (existsSync(localRulesDir)) {
+    for (const f of readdirSync(localRulesDir)) {
+      if (!/\.(snippet|conf|list)$/.test(f)) continue;
+      try { bodies.push(readFileSync(join(localRulesDir, f), "utf8")); } catch {}
+    }
+  }
+  for (const text of bodies) {
+    for (const line of text.split(/\r?\n/)) {
+      if (/^\s*[#;]/.test(line)) continue; // 注释/禁用的规则不参与
+      for (const m of line.matchAll(scriptRe)) {
+        const u = m[1].replace(/["'],$/, "");
+        if (!/^https?:\/\//.test(u)) continue;
+        if (u.startsWith(rawBase) || u.includes(repoInfo.slug)) continue; // 已是本仓库
+        if (scriptTargets.has(u)) continue;
+        scriptTargets.set(u, { id: `script:${u.split("/").pop()}`, url: u, kind: "js", local: localPathFor(u) });
+      }
+    }
+  }
+}
+if (scriptTargets.size) {
+  const extra = [...scriptTargets.values()];
+  for (let i = 0; i < extra.length; i += CONCURRENCY) {
+    const batch = extra.slice(i, i + CONCURRENCY);
+    results.push(...(await Promise.all(batch.map(fetchOne))));
+  }
+  console.log(`第二轮：发现并抓取被引用的脚本 ${extra.length} 个`);
+}
+
+// 脚本 URL -> 镜像记录（写入阶段改写规则时使用；必须含第二轮结果）
+const byUrlPre = new Map(results.filter((r) => r.ok).map((r) => [r.url, r]));
 
 let ok = 0;
 let failed = 0;
@@ -161,7 +190,7 @@ for (const r of results) {
   // 只镜像规则文件是不够的：规则里 `url script-response-body https://外部/x.js` 那段
   // 仍指向外部，上游一挂规则就等于废掉。取不到的（kelee.one 403）保持原样。
   let body = r.body;
-  if (/(\.snippet|\.conf|\.list)$/.test(r.local) && /url\s+script-/.test(body)) {
+  if (/(\.snippet|\.conf|\.list)$/.test(r.local) && /url(?:-and-header)?\s+script-/.test(body)) {
     const rw = rewriteScriptUrls(body, byUrlPre);
     body = rw.text;
     rewriteStats.local += rw.local;
@@ -198,7 +227,7 @@ function rewriteScriptUrls(text, byUrl) {
   let local = 0;
   let kept = 0;
   const missing = new Set();
-  out = out.replace(/(url\s+script-\S+\s+)(https?:\/\/\S+)/g, (full, prefix, url) => {
+  out = out.replace(/(url(?:-and-header)?\s+script-\S+\s+)(https?:\/\/\S+)/g, (full, prefix, url) => {
     const clean = url.replace(/["'],$/, "");
     const r = byUrl.get(clean);
     if (r) {
@@ -327,12 +356,15 @@ writeFileSync(join(SNAP, "offline.conf"), lines.join("\n") + "\n");
 // ---- machine-readable index -------------------------------------------------
 // No timestamp here on purpose: a volatile field would make every weekly run
 // commit a no-op diff. Use the git commit date as the authoritative "when".
+// 只有规则/脚本主体失败才算致命；引用脚本失效（上游已删）不影响可用性
+const criticalFailures = results.filter((r) => !r.ok && r.kind !== "js").length;
+
 const index = {
   repository: repoInfo.slug,
   ref: repoInfo.ref,
   total: results.length,
   mirrored: ok,
-  failed: failed,
+  failed: criticalFailures,
   resources: results.map((r) => ({
     id: r.id,
     kind: r.kind,
@@ -392,7 +424,7 @@ console.log(`Wrote ${relative(ROOT, join(SNAP, "index.json"))}`);
 // `--strict` exits non-zero for use in a dedicated check step.
 // 只有「规则/脚本主体」失败才算失败；纯脚本镜像取不到（上游已 404）
 // 不影响规则可用性，降级为提示，否则每周任务会因几个死链常年标红。
-const criticalFailures = results.filter((r) => !r.ok && r.kind !== "js").length;
+// index.json 的 failed 也只看致命失败，否则每周任务会因已死脚本常年标红
 if (failed > 0) {
   const notes = failed - criticalFailures;
   console.warn(`${failed} upstream resource(s) failed（其中 ${criticalFailures} 个为规则/脚本主体，${notes} 个为已失效的引用脚本）— see snapshot/index.json`);

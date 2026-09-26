@@ -1,9 +1,9 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 145,
-  "mirrored": 141,
-  "failed": 4,
+  "total": 166,
+  "mirrored": 145,
+  "failed": 0,
   "resources": [
     {
       "id": "filter-ads-fmz",
@@ -510,15 +510,6 @@
       "error": null
     },
     {
-      "id": "script:bdsrf.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/Keywos/rule/main/JS/bdsrf.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 404,
-      "error": "HTTP 404"
-    },
-    {
       "id": "script:tieba-json.js",
       "kind": "js",
       "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/tieba-json.js",
@@ -659,15 +650,6 @@
       "url": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/foliday.js",
       "snapshot": "snapshot/github.com/zirawell/R-Store/main/Res/Scripts/AntiAd/foliday.js",
       "upstream_raw": "https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/foliday.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:Flightradar24.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/scripts/Flightradar24.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/QuantumultX/scripts/Flightradar24.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/scripts/Flightradar24.js",
       "status": 200,
       "error": null
     },
@@ -861,15 +843,6 @@
       "error": null
     },
     {
-      "id": "script:PPX.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/PPX.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 404,
-      "error": "HTTP 404"
-    },
-    {
       "id": "script:PupuSplashAds.js",
       "kind": "js",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/PupuSplashAds.js",
@@ -895,15 +868,6 @@
       "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/qidian.js",
       "status": 200,
       "error": null
-    },
-    {
-      "id": "script:Qidian_my.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/Yu9191/Rewrite/main/Qidian_my.js",
-      "snapshot": null,
-      "upstream_raw": null,
-      "status": 404,
-      "error": "HTTP 404"
     },
     {
       "id": "script:51job.js",
@@ -1010,15 +974,6 @@
       "url": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-json.js",
       "snapshot": "snapshot/github.com/app2smile/rules/master/js/spotify-json.js",
       "upstream_raw": "https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-json.js",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "script:stay.js",
-      "kind": "js",
-      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/stay.js",
-      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/stay.js",
-      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/stay.js",
       "status": 200,
       "error": null
     },
@@ -1212,6 +1167,60 @@
       "error": null
     },
     {
+      "id": "script:index.js",
+      "kind": "js",
+      "url": "https://raw.githubusercontent.com/Keywos/rule/master/script/weibo_us/js/index.js",
+      "snapshot": "snapshot/github.com/Keywos/rule/master/script/weibo_us/js/index.js",
+      "upstream_raw": "https://raw.githubusercontent.com/Keywos/rule/master/script/weibo_us/js/index.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:weibo_ads.js",
+      "kind": "js",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_ads.js",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_ads.js",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_ads.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:weibo_main.js",
+      "kind": "js",
+      "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_main.js",
+      "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_main.js",
+      "upstream_raw": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/weibo/weibo_main.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:weibo_launch.js",
+      "kind": "js",
+      "url": "https://raw.githubusercontent.com/zmqcherish/proxy-script/main/weibo_launch.js",
+      "snapshot": "snapshot/github.com/zmqcherish/proxy-script/main/weibo_launch.js",
+      "upstream_raw": "https://raw.githubusercontent.com/zmqcherish/proxy-script/main/weibo_launch.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:weibo_main.js",
+      "kind": "js",
+      "url": "https://raw.githubusercontent.com/zmqcherish/proxy-script/main/weibo_main.js",
+      "snapshot": "snapshot/github.com/zmqcherish/proxy-script/main/weibo_main.js",
+      "upstream_raw": "https://raw.githubusercontent.com/zmqcherish/proxy-script/main/weibo_main.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:weibo_vip.js",
+      "kind": "js",
+      "url": "https://github.com/fmz200/wool_scripts/raw/main/Scripts/weibo/weibo_vip.js",
+      "snapshot": "snapshot/host/github.com/fmz200/wool_scripts/raw/main/Scripts/weibo/weibo_vip.js",
+      "upstream_raw": null,
+      "status": 200,
+      "error": null
+    },
+    {
       "id": "script:amdc.js",
       "kind": "js",
       "url": "https://raw.githubusercontent.com/ddgksf2013/Scripts/refs/heads/master/amdc.js",
@@ -1309,6 +1318,186 @@
       "upstream_raw": null,
       "status": 200,
       "error": null
+    },
+    {
+      "id": "script:12306_remove_ads.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/12306/12306_remove_ads.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:ShuQiCenterReader_remove_ads.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/ShuQiCenterReader/ShuQiCenterReader_remove_ads.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:RedPaper_remove_ads.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/RedPaper/RedPaper_remove_ads.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:kff.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/kff/kff.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:ems.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/ems/ems.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:xiaotucc.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/xiaotucc/xiaotucc.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:FamilyMart.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/FamilyMart/FamilyMart.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:lawson.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/lawson/lawson.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:chayanyuese_remove_ads.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/chayanyuese/chayanyuese_remove_ads.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:coco.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/coco/coco.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:qingju.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/qingju/qingju.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:alittle-tea.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/alittle-tea/alittle-tea.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:M_Stand.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/M_Stand/M_Stand.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:T3.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/T3/T3.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:ming.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/WexinMiniPrograms/ming/ming.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:SodaMusic_remove_ads.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/SodaMusic/SodaMusic_remove_ads.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:NeteaseCloudMusic_remove_ads.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/NeteaseCloudMusic/NeteaseCloudMusic_remove_ads.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:replace-body.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/CommonScript/replace-body.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:AliYunDrive_remove_ads.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/AliYunDrive/AliYunDrive_remove_ads.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
+    },
+    {
+      "id": "script:Amap_remove_ads.js",
+      "kind": "js",
+      "url": "https://kelee.one/Resource/JavaScript/Amap/Amap_remove_ads.js",
+      "snapshot": null,
+      "upstream_raw": null,
+      "status": 403,
+      "error": "HTTP 403"
     }
   ]
 }
