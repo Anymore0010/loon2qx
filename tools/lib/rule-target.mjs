@@ -50,12 +50,24 @@ export function ruleSig(pat) {
   return { domains, pathTokens };
 }
 
+/**
+ * 剥掉无区分度的首标签：`api.pinduoduo.com` -> `pinduoduo.com`。
+ * 注意：**不能**因此跳过整个域名 —— `api.*` 在广告类规则里极常见，
+ * 跳过会让「同 api 主机、同路径、不同写法」的重复全部漏报。
+ * 正确做法是剥掉前缀后参与比较（GENERIC 只影响「用哪个名字比」，不决定「比不比」）。
+ */
+function coreDomain(d) {
+  const parts = d.split(".");
+  // 至少保留「主域 + 后缀」两段
+  return parts.length > 2 && GENERIC.has(parts[0]) ? parts.slice(1).join(".") : d;
+}
+
 /** 两条域名是否指同一主机（相等，或一方是另一方的子域）。 */
 function sameHost(a, b) {
-  for (const x of a) {
-    if (GENERIC.has(x.split(".")[0])) continue;
-    for (const y of b) {
-      if (GENERIC.has(y.split(".")[0])) continue;
+  for (const x0 of a) {
+    const x = coreDomain(x0);
+    for (const y0 of b) {
+      const y = coreDomain(y0);
       if (x === y || x.endsWith(`.${y}`) || y.endsWith(`.${x}`)) return true;
     }
   }

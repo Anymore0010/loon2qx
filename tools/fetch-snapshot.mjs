@@ -348,7 +348,7 @@ if (criticalFailures === 0) {
   // 这里直接扫描已提交的规则文件，把其中指向本仓库 snapshot 的路径还原成磁盘路径。
   const referenced = new Set();
   // 扫描范围必须同时包含本仓库自带的规则目录：
-  // vendor-rules/extract-plugin 生成的 QuantumultX/rules/* 里引用的脚本，
+  // vendor-rules 生成的 QuantumultX/rules/* 里引用的脚本，
   // 若只扫 snapshot/ 就会被当成孤儿删掉 —— 而规则仍指向它们（静默失效）。
   const refScanRoots = [SNAP, join(ROOT, "QuantumultX", "rules")].filter(existsSync);
   for (const root of refScanRoots) for (const f of walkFiles(root)) {

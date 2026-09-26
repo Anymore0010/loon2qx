@@ -1,8 +1,8 @@
 {
   "repository": "Anymore0010/proxy-profile",
   "ref": "master",
-  "total": 161,
-  "mirrored": 161,
+  "total": 159,
+  "mirrored": 159,
   "failed": 0,
   "exclusionMisses": [],
   "resources": [
@@ -66,33 +66,6 @@
       "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
       "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
       "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GitHub/GitHub.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-apple",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-apple-account",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "filter-appstore",
-      "kind": "filter",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list",
-      "snapshot": "snapshot/github.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list",
-      "upstream_raw": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list",
       "status": 200,
       "error": null
     },
@@ -466,20 +439,11 @@
       "error": null
     },
     {
-      "id": "icon-filter-apple-ai",
+      "id": "icon-filter-apple",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png",
       "snapshot": "snapshot/github.com/Koolson/Qure/master/IconSet/Color/Apple.png",
       "upstream_raw": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png",
-      "status": 200,
-      "error": null
-    },
-    {
-      "id": "icon-filter-appstore",
-      "kind": "icon",
-      "url": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/appstore.png",
-      "snapshot": "snapshot/github.com/Orz-3/mini/master/Color/appstore.png",
-      "upstream_raw": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/appstore.png",
       "status": 200,
       "error": null
     },
@@ -538,7 +502,7 @@
       "error": null
     },
     {
-      "id": "icon-rewrite-plugin-extracted",
+      "id": "icon-rewrite-anymore-enhance",
       "kind": "icon",
       "url": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
       "snapshot": "snapshot/github.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
@@ -1452,6 +1416,24 @@
       "url": "https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
       "snapshot": "snapshot/host/github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js",
       "upstream_raw": null,
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:MmmCK.js",
+      "kind": "js",
+      "url": "https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
+      "snapshot": "snapshot/github.com/githubdulong/Script/master/MmmCK.js",
+      "upstream_raw": "https://raw.githubusercontent.com/githubdulong/Script/master/MmmCK.js",
+      "status": 200,
+      "error": null
+    },
+    {
+      "id": "script:jd_price.js",
+      "kind": "js",
+      "url": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
+      "snapshot": "snapshot/github.com/githubdulong/Script/master/jd_price.js",
+      "upstream_raw": "https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js",
       "status": 200,
       "error": null
     }

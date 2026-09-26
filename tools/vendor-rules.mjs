@@ -112,6 +112,7 @@ for (const g of mergeGroups) {
   const all = [];
   const seenKeys = new Set();
   let perSource = [];
+  let groupFailed = false; // 本组任一源失败 -> 不覆盖已提交的产物
   for (const u of g.sources) {
     try {
       const res = await fetch(u, { headers: { "User-Agent": "proxy-profile-vendor/1.0" } });
@@ -132,9 +133,24 @@ for (const g of mergeGroups) {
       perSource.push(`${u.split("/").slice(-2).join("/")}: ${added}`);
     } catch (e) {
       failures++;
+      groupFailed = true;
       console.log(`FAILED (${e.message})`);
       report.push({ id: g.id, url: u, ok: false, error: e.message });
     }
+  }
+  // 与 fetch-snapshot 的「抓全才覆盖」一致：只要有一个源失败（或结果为空），
+  // 就**跳过写入**，保留上一次提交的完整版本。
+  // 否则 merge-google 里 YouTube 源一挂，已提交的 Google.list 会被重写成只剩
+  // Google 的 711 条（YouTube 196 条消失），而 CI 是先 commit 再变红 ——
+  // 设备下周就会拉到残缺规则，直到下次成功才自愈。
+  if (groupFailed || all.length === 0) {
+    const keep = existsSync(join(ROOT, "QuantumultX", "rules", g.out))
+      ? "已保留上一次的完整版本"
+      : "无旧版本可保留（本次不写入）";
+    console.log(`跳过写入 ${g.out} —— ${keep}`);
+    report.push({ id: g.id, url: g.sources.join(" + "), ok: false,
+      error: groupFailed ? "部分来源失败，保留旧版" : "结果为空，保留旧版", file: g.out, kept: true });
+    continue;
   }
   const header = [
     "# 由 tools/vendor-rules.mjs 自动生成 —— 请勿手工编辑",

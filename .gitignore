@@ -17,11 +17,9 @@ local.secret
 *.key
 *.pfx
 # 插件包缓存（extract-plugin.mjs 下载用，417KB，不入库）
-_plugin_cache/
 _wk/
 
 # 插件包临时文件
-_p.plugin
 *.plugin
 
 # 临时分析文件（下划线开头）
@@ -29,5 +27,3 @@ _*.list
 _*.js
 _*.json
 _*.conf
-_*.plugin
-_*.snippet

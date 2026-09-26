@@ -14,6 +14,7 @@
 | https://raw.githubusercontent.com/githubdulong/Script/master/jd_price.js | `QuantumultX/rules/JD_price.list` | 2 | 0 |
 | https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Facebook/Facebook.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Instagram/Instagram.list | `QuantumultX/rules/Meta.list` | 574 | 0 |
 | https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Google/Google.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list | `QuantumultX/rules/Google.list` | 907 | 0 |
+| https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list + https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list | `QuantumultX/rules/Apple.list` | 1887 | 0 |
 
 ## 选项调整（规则保留）
 

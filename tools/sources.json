@@ -223,6 +223,17 @@
       "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/CN.png"
     },
     {
+      "id": "filter-apple",
+      "tag": "Apple",
+      "policy": "direct",
+      "parser": false,
+      "enabled": true,
+      "_local": true,
+      "local_file": "QuantumultX/rules/Apple.list",
+      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png",
+      "note": "由 rule_merges 的 merge-apple 生成（bm7 Apple + AppleID + AppStore）。"
+    },
+    {
       "id": "filter-apple-ai",
       "tag": "Apple AI",
       "policy": "全球手动策略",
@@ -235,33 +246,6 @@
       "local_file": "QuantumultX/rules/AppleIntelligence.list",
       "upstream_url": "https://raw.githubusercontent.com/ddgksf2013/Filter/refs/heads/master/AppleIntelligence.list",
       "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
-    },
-    {
-      "id": "filter-apple",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
-      "tag": "Apple Push Notification Service",
-      "policy": "direct",
-      "parser": false,
-      "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
-    },
-    {
-      "id": "filter-apple-account",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list",
-      "tag": "Apple Account",
-      "policy": "direct",
-      "parser": false,
-      "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png"
-    },
-    {
-      "id": "filter-appstore",
-      "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list",
-      "tag": "App Store",
-      "policy": "direct",
-      "parser": false,
-      "enabled": true,
-      "icon": "https://raw.githubusercontent.com/Orz-3/mini/master/Color/appstore.png"
     },
     {
       "id": "filter-netflix",
@@ -380,17 +364,16 @@
       "note": "对应你 Loon 的 Spotify_remove_ads.lpx + Spotify_lyrics_translation.lpx，合成一个条目。解锁部分取自 app2smile 官方 spotify.conf（4127★，QX 原生）：1.去播放广告 2.歌手/专辑列表正常展示 3.去随机播放。歌词翻译取自同仓库 js/spotify-lyric.js。**歌词需自填百度翻译密钥**（见文件内注释）：QX 无 Surge/Loon 的 argument= 字段，密钥只能写进脚本本体；不填也能用 —— 只是歌词不翻译（会在请求 /color-lyrics 时记一条日志）。注意两条规则的 URL 互不相交（解锁走 /bootstrap、/user-customization-service；歌词走 /color-lyrics），因此合在一个文件不会互相覆盖。为免与「广告拦截合集」重复处理，已把该聚合里的 Spotify 规则排除。"
     },
     {
-      "id": "rewrite-plugin-extracted",
+      "id": "rewrite-anymore-enhance",
       "url": null,
       "local_file": "QuantumultX/rules/AnymoreEnhance.snippet",
       "tag": "Anymore 自用增强",
       "parser": false,
       "enabled": true,
-      "generated_by": null,
-      "note": "**自维护文件**（已脱离上游管线）：内容源自一次性的插件提取（fmz200 官方 blockAds.plugin）+ 去重，之后不再自动拉取更新。你自己写的规则也维护在这里。该文件不再由 CI 重新生成 —— 直接编辑 QuantumultX/rules/AnymoreEnhance.snippet 即可。",
-      "count": 57,
+      "self_maintained": true,
+      "count": 55,
       "icon": "https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/Script-Hub.png",
-      "self_maintained": true
+      "note": "手工维护的自用增强规则（不再自动生成，也不再有上游）。直接编辑 QuantumultX/rules/AnymoreEnhance.snippet。"
     },
     {
       "id": "rewrite-weibo",
@@ -602,6 +585,17 @@
         "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list"
       ],
       "note": "Google 与 YouTube 同属 Google 系、同走「新国手动策略」，合并为一个列表（原 Loon 里 googlevideo.com/youtube.com 就是 新国手动策略）。"
+    },
+    {
+      "id": "merge-apple",
+      "out": "Apple.list",
+      "policy": "direct",
+      "sources": [
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apple/Apple.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppleID/AppleID.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AppStore/AppStore.list"
+      ],
+      "note": "Apple 系合并：主列表(1881) + Apple Account(4) + App Store(2)。三者策略同为 direct，合并为一个条目。AppleID/AppStore 各含独有域名（appleid.apple.com、itunes.apple.com 等 6 个），必须并进来否则会掉到兜底策略。APNs 与 Apple AI 仍独立。"
     }
   ],
   "output": {
